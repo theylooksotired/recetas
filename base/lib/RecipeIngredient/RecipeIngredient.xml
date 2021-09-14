@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure RecipeIngredient
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>RecipeIngredient</name>
+	<table>recipe_ingredient</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <order>true</order>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Recipe</refObject>
+		</attribute>
+		<attribute>
+            <name>amount</name>
+            <label>amount</label>
+            <type>text_number</type>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <label>type</label>
+            <type>select</type>
+            <values>
+                <value id="unit">unit</value>
+                <value id="teaspoon">teaspoon</value>
+            	<value id="tablespoon">tablespoon</value>
+                <value id="cup">cup</value>
+                <value id="milliliter">milliliter</value>
+                <value id="liter">liter</value>
+                <value id="deciliter">deciliter</value>
+                <value id="centiliter">centiliter</value>
+                <value id="pound">pound</value>
+                <value id="ounce">ounce</value>
+                <value id="milligram">milligram</value>
+                <value id="gram">gram</value>
+                <value id="kilogram">kilogram</value>
+            </values>
+        </attribute>
+        <attribute>
+            <name>ingredient</name>
+            <label>ingredient</label>
+            <type>text_long</type>
+            <required>not_empty</required>
+        </attribute>
+	</attributes>
+</object>

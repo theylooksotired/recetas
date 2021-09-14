@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure HtmlSection
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+    <name>HtmlSection</name>
+    <table>html_section</table>
+    <info>
+        <sql>
+            <primary>id</primary>
+        </sql>
+        <form>
+            <title>html_sections</title>
+            <information>html_sections_information</information>
+            <icon>code</icon>
+            <label>#title</label>
+            <orderBy>code</orderBy>
+            <templateItemAdmin>
+                <p class="tiny">_code : <strong>#code</strong></p>
+                <p class="accent"><strong>#title</strong></p>
+            </templateItemAdmin>
+        </form>
+    </info>
+    <attributes>
+        <attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+        <attribute>
+            <name>code</name>
+            <label>code</label>
+            <type>text_unchangeable</type>
+            <required>unique</required>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <label>title</label>
+            <language>true</language>
+            <required>not_empty</required>
+            <type>text</type>
+        </attribute>
+        <attribute>
+            <name>title_url</name>
+            <type>hidden_url</type>
+            <language>true</language>
+            <refAttribute>title</refAttribute>
+        </attribute>
+        <attribute>
+            <name>section</name>
+            <label>section</label>
+            <language>true</language>
+            <required>not_empty</required>
+            <type>textarea_ck</type>
+        </attribute>
+    </attributes>
+    <indexes>
+        <index>
+            <name>code</name>
+            <fields>code</fields>
+        </index>
+        <index>
+            <name>title_url</name>
+            <fields>title_url</fields>
+            <language>true</language>
+        </index>
+    </indexes>
+</object>

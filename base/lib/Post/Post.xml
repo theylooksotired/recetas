@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure Post
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+    <name>Post</name>
+    <table>post</table>
+    <info>
+        <sql>
+            <primary>id</primary>
+            <created>true</created>
+            <modified>true</modified>
+        </sql>
+        <form>
+            <title>posts</title>
+            <label>#title</label>
+            <icon>newspaper</icon>
+            <pager>50</pager>
+            <orderBy>created</orderBy>
+            <multipleActions>
+                <action icon="times">delete</action>
+                <action icon="check">activate</action>
+                <action>deactivate</action>
+            </multipleActions>
+            <templateItemAdmin>
+                #active
+                #image
+                <div class="item_information">
+                    <p class="accent"><strong>#title</strong></p>
+                    <p class="small">#id_language</p>
+                    <p class="small">#publish_date</p>
+                    <p class="small">#short_description</p>
+                </div>
+            </templateItemAdmin>
+        </form>
+    </info>
+    <attributes>
+        <attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+        <attribute>
+            <name>id_language</name>
+            <label>language</label>
+            <type>select</type>
+            <refObject>Language</refObject>
+        </attribute>
+        <attribute>
+            <name>id_user</name>
+            <type>linkid_autoincrement</type>
+            <label>user</label>
+            <layout>label</layout>
+            <refObject>User</refObject>
+        </attribute>
+        <attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+        <attribute>
+            <name>publish_date</name>
+            <label>publish_date</label>
+            <type>date_text</type>
+            <layout>publish_date</layout>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <label>title</label>
+            <type>text_long</type>
+            <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>title_url</name>
+            <type>hidden_url</type>
+            <refAttribute>title</refAttribute>
+        </attribute>
+        <attribute>
+            <name>short_description</name>
+            <label>short_description</label>
+            <type>textarea_long</type>
+            <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>description</name>
+            <label>description</label>
+            <type>textarea_ck</type>
+            <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>tags</name>
+            <label>tags</label>
+            <type>multiple_autocomplete</type>
+            <refObject>PostTag</refObject>
+            <linkAttribute>id_post</linkAttribute>
+            <autoCompleteObject>Tag</autoCompleteObject>
+            <autoCompleteAttribute>name</autoCompleteAttribute>
+            <onDelete>cascade</onDelete>
+        </attribute>
+        <attribute>
+            <name>categories</name>
+            <label>categories</label>
+            <type>multiple_checkbox</type>
+            <refObject>PostCategory</refObject>
+            <linkAttribute>id_post</linkAttribute>
+            <checkboxObject>Category</checkboxObject>>
+            <onDelete>cascade</onDelete>
+        </attribute>
+        <attribute>
+            <name>active</name>
+            <label>active</label>
+            <type>checkbox</type>
+        </attribute>
+    </attributes>
+</object>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure User
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+    <name>User</name>
+    <table>user</table>
+    <info>
+        <sql>
+            <primary>id</primary>
+            <created>true</created>
+            <modified>true</modified>
+        </sql>
+        <form>
+            <title>users</title>
+            <information>users_information</information>
+            <icon>users</icon>
+            <label>#name</label>
+            <orderBy>name</orderBy>
+            <publicUrl>usuario / #id _ #name_url</publicUrl>
+            <templateItemAdmin>
+                <div class="active active-##active">
+                    <p class="image">#image</p>
+                    <p class="accent"><strong>#name</strong></p>
+                    <p class="tiny">_email : <span class="accent">#email</span></p>
+                </div>
+            </templateItemAdmin>
+            <multipleActions>
+                <action>delete</action>
+                <action>activate</action>
+            </multipleActions>
+        </form>
+    </info>
+    <attributes>
+        <attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+        <attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <label>name</label>
+            <required>not_empty</required>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>name_url</name>
+            <type>hidden_url</type>
+            <refAttribute>name</refAttribute>
+        </attribute>
+        <attribute>
+            <name>email</name>
+            <label>email</label>
+            <required>email</required>
+            <type>text_email</type>
+        </attribute>
+        <attribute>
+            <name>new_email</name>
+            <label>new_email</label>
+            <type>text_email</type>
+        </attribute>
+        <attribute>
+            <name>new_email_code</name>
+            <label>new_email_code</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
+            <name>password</name>
+            <label>password</label>
+            <type>password</type>
+        </attribute>
+        <attribute>
+            <name>password_salt</name>
+            <type>hidden</type>
+        </attribute>
+        <attribute>
+            <name>password_temporary</name>
+            <type>hidden</type>
+        </attribute>
+        <attribute>
+            <name>last_login_date</name>
+            <label>last_login_date</label>
+            <type>date_text</type>
+            <hidden>true</hidden>
+        </attribute>
+        <attribute>
+            <name>short_description</name>
+            <label>short_description</label>
+            <type>textarea_long</type>
+        </attribute>
+        <attribute>
+            <name>link_web</name>
+            <label>link_web</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>link_facebook</name>
+            <label>link_facebook</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>link_instagram</name>
+            <label>link_instagram</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>link_twitter</name>
+            <label>link_twitter</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>link_tumblr</name>
+            <label>link_tumblr</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>active</name>
+            <label>active</label>
+            <type>checkbox</type>
+        </attribute>
+    </attributes>
+    <indexes>
+        <index>
+            <name>email</name>
+            <fields>email</fields>
+        </index>
+    </indexes>
+</object>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure PostTag
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>PostTag</name>
+	<table>post_tag</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <modified>true</modified>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_post</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Post</refObject>
+		</attribute>
+		<attribute>
+			<name>id_tag</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Tag</refObject>
+		</attribute>
+	</attributes>
+</object>

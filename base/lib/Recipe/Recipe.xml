@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure Recipe
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+    <name>Recipe</name>
+    <table>recipe</table>
+    <info>
+        <sql>
+            <primary>id</primary>
+            <created>true</created>
+            <modified>true</modified>
+        </sql>
+        <form>
+            <title>recipes</title>
+            <label>#title</label>
+            <icon>utensils</icon>
+            <pager>50</pager>
+            <orderBy>title,active,created</orderBy>
+            <publicUrl>receta / #id _ #title_url</publicUrl>
+            <multipleActions>
+                <action icon="times">delete</action>
+                <action icon="check">activate</action>
+                <action>deactivate</action>
+            </multipleActions>
+            <templateItemAdmin>
+                #active
+                #image
+                <div class="item_information">
+                    <p class="accent"><strong>#title</strong></p>
+                    <p class="small">#short_description</p>
+                </div>
+            </templateItemAdmin>
+        </form>
+    </info>
+    <attributes>
+        <attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+        <attribute>
+            <name>id_user</name>
+            <type>linkid_autoincrement</type>
+            <label>user</label>
+            <layout>label</layout>
+            <refObject>User</refObject>
+        </attribute>
+        <attribute>
+            <name>id_category</name>
+            <label>category</label>
+            <type>select</type>
+            <refObject>Category</refObject>
+        </attribute>
+        <attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <label>title</label>
+            <type>text_long</type>
+            <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>title_url</name>
+            <type>hidden_url</type>
+            <refAttribute>title</refAttribute>
+        </attribute>
+        <attribute>
+            <name>short_description</name>
+            <label>short_description</label>
+            <type>textarea_long</type>
+            <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>rating</name>
+            <label>rating</label>
+            <type>select</type>
+            <values>
+                <value id="5">5</value>
+                <value id="4">4</value>
+                <value id="3">3</value>
+                <value id="2">2</value>
+                <value id="1">1</value>
+            </values>
+        </attribute>
+        <attribute>
+            <name>cook_time</name>
+            <label>cook_time</label>
+            <type>select</type>
+            <values>
+                <value id=""></value>
+                <value id="5_minutes">5_minutes</value>
+                <value id="15_minutes">15_minutes</value>
+                <value id="30_minutes">30_minutes</value>
+                <value id="45_minutes">45_minutes</value>
+                <value id="1_hour">1_hour</value>
+                <value id="2_hours">2_hours</value>
+                <value id="3_hours">3_hours</value>
+                <value id="4_hours">4_hours</value>
+                <value id="5_hours">5_hours</value>
+                <value id="1_day">1_day</value>
+                <value id="2_days">2_days</value>
+            </values>
+        </attribute>
+        <attribute>
+            <name>cooking_method</name>
+            <label>cooking_method</label>
+            <type>select</type>
+            <values>
+                <value id=""></value>
+                <value id="fried">fried</value>
+                <value id="steamed">steamed</value>
+                <value id="boiled">boiled</value>
+                <value id="baked">baked</value>
+            </values>
+        </attribute>
+        <attribute>
+            <name>servings</name>
+            <label>servings</label>
+            <type>text_number</type>
+        </attribute>
+        <attribute>
+            <name>diet</name>
+            <label>diet</label>
+            <type>select</type>
+            <values>
+                <value id=""></value>
+                <value id="diabetic">diabetic</value>
+                <value id="gluten_free">gluten_free</value>
+                <value id="halal">halal</value>
+                <value id="hindu">hindu</value>
+                <value id="kosher">kosher</value>
+                <value id="low_calorie">low_calorie</value>
+                <value id="low_fat">low_fat</value>
+                <value id="low_lactose">low_lactose</value>
+                <value id="low_salt">low_salt</value>
+                <value id="vegan">vegan</value>
+                <value id="vegetarian">vegetarian</value>
+            </values>
+        </attribute>
+        <attribute>
+            <name>ingredients</name>
+            <label>ingredients</label>
+            <type>multiple_object</type>
+            <refObject>RecipeIngredient</refObject>
+            <linkAttribute>id_recipe</linkAttribute>
+            <onDelete>cascade</onDelete>
+            <class>multiple_items</class>
+        </attribute>
+        <attribute>
+            <name>preparation</name>
+            <label>preparation</label>
+            <type>multiple_object</type>
+            <refObject>RecipePreparation</refObject>
+            <linkAttribute>id_recipe</linkAttribute>
+            <onDelete>cascade</onDelete>
+            <class>multiple_items</class>
+        </attribute>
+        <attribute>
+            <name>tags</name>
+            <label>tags</label>
+            <type>multiple_autocomplete</type>
+            <refObject>RecipeTag</refObject>
+            <linkAttribute>id_recipe</linkAttribute>
+            <autoCompleteObject>Tag</autoCompleteObject>
+            <autoCompleteAttribute>name</autoCompleteAttribute>
+            <onDelete>cascade</onDelete>
+        </attribute>
+        <attribute>
+            <name>active</name>
+            <label>active</label>
+            <type>checkbox</type>
+        </attribute>
+    </attributes>
+    <indexes>
+        <index>
+            <name>title_url</name>
+            <fields>title_url</fields>
+        </index>
+        <index>
+            <name>id_category</name>
+            <fields>id_category</fields>
+        </index>
+        <index>
+            <name>search</name>
+            <fields>title,title_url,short_description</fields>
+            <type>FULLTEXT</type>
+        </index>
+    </indexes>
+</object>
