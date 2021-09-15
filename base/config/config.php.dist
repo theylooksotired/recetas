@@ -16,7 +16,7 @@
  * The ASTERION_TITLE constant defines the title of the page.
  * After the installation it is preferable to use the "title" parameter.
  */
-define('ASTERION_TITLE', #ASTERION_TITLE#);
+define('ASTERION_TITLE', '#ASTERION_TITLE#');
 
 /**
  * The following constants define the paths to the different
@@ -24,7 +24,7 @@ define('ASTERION_TITLE', #ASTERION_TITLE#);
  * The most important ones are ASTERION_LOCAL_URL and ASTERION_LOCAL_FILE
  * that must point to the public and private files of the website.
  */
-define('ASTERION_SERVER_URL', #ASTERION_SERVER_URL#);
+define('ASTERION_SERVER_URL', '#ASTERION_SERVER_URL#');
 define('ASTERION_BASE_STRING', '/');
 define('ASTERION_LOCAL_URL', ASTERION_SERVER_URL . ASTERION_BASE_STRING);
 define('ASTERION_LOCAL_FILE', $_SERVER['DOCUMENT_ROOT'] . ASTERION_BASE_STRING);
@@ -44,8 +44,8 @@ define('ASTERION_DEBUG_SCHEMA', false);
 /**
  * If we want Asterion to deal with only one language we just need to activate this constant.
  */
-define('ASTERION_LANGUAGE_ID', #ASTERION_LANGUAGE_ID#);
-define('ASTERION_LANGUAGE_NAME', #ASTERION_LANGUAGE_NAME#);
+define('ASTERION_LANGUAGE_ID', '#ASTERION_LANGUAGE_ID#');
+define('ASTERION_LANGUAGE_NAME', '#ASTERION_LANGUAGE_NAME#');
 
 /**
  * The system starts a session with a proper name for the website.
@@ -68,11 +68,11 @@ define('ASTERION_PAGER_URL_STRING', 'page');
  */
 define('ASTERION_DB_USE', true);
 define('ASTERION_DB_SERVER', 'localhost');
-define('ASTERION_DB_USER', #ASTERION_DB_USER#);
-define('ASTERION_DB_PASSWORD', #ASTERION_DB_PASSWORD#);
+define('ASTERION_DB_USER', '#ASTERION_DB_USER#');
+define('ASTERION_DB_PASSWORD', '#ASTERION_DB_PASSWORD#');
 define('ASTERION_DB_PORT', '3306');
-define('ASTERION_DB_NAME', #ASTERION_DB_NAME#);
-define('ASTERION_DB_PREFIX', #ASTERION_DB_PREFIX#);
+define('ASTERION_DB_NAME', '#ASTERION_DB_NAME#');
+define('ASTERION_DB_PREFIX', '#ASTERION_DB_PREFIX#');
 
 /**
  * The ASTERION_LOGO constant defines the path to the logo for the website.
@@ -108,10 +108,10 @@ define('ASTERION_WIDTH_SQUARE', 100);
  * After the installation it is preferable to use the "email" parameter.
  * We also define the constants for sending emails through the website.
  */
-define('ASTERION_EMAIL', #ASTERION_EMAIL#);
-define('ASTERION_MAIL_HOST', #ASTERION_MAIL_HOST#);
-define('ASTERION_MAIL_USERNAME', #ASTERION_MAIL_USERNAME#);
-define('ASTERION_MAIL_PASSWORD', #ASTERION_MAIL_PASSWORD#);
+define('ASTERION_EMAIL', '#ASTERION_EMAIL#');
+define('ASTERION_MAIL_HOST', '#ASTERION_MAIL_HOST#');
+define('ASTERION_MAIL_USERNAME', '#ASTERION_MAIL_USERNAME#');
+define('ASTERION_MAIL_PASSWORD', '#ASTERION_MAIL_PASSWORD#');
 
 /**
  * The ASTERION_ROUTER_CONTROLLERS constant defines the default action for certain Controllers.
