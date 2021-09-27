@@ -28,7 +28,7 @@ class Navigation_Ui extends Ui
                                 ' . $message_alert . '
                                 ' . $message . '
                                 ' . $content_top . '
-                                ' . (($this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
+                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
                                 ' . $this->breadCrumbs() . '
                                 <div class="content_ins">
                                     <div class="content_left">
@@ -36,7 +36,7 @@ class Navigation_Ui extends Ui
                                         ' . $content . '
                                     </div>
                                     <div class="content_right">
-                                        ' . (($this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
+                                        ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
                                         ' . $this->menuSide() . '
                                     </div>
                                 </div>
