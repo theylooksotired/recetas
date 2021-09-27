@@ -273,26 +273,27 @@ class Navigation_Controller extends Controller
                 $this->mode = 'ajax';
                 $this->checkAuthorization();
                 $url = "https://github.com/theylooksotired/recetas/archive/main.zip";
-                $zipFile = LOCAL_FILE."master.zip";
+                $zipFile = LOCAL_FILE . "master.zip";
                 file_put_contents($zipFile, fopen($url, 'r'));
                 $zip = new ZipArchive;
                 $res = $zip->open($zipFile);
-                if ($res === TRUE) {
+                if ($res === true) {
                     $zip->extractTo('.');
                     $zip->close();
                 }
                 unlink($zipFile);
-                shell_exec('cp -r '.LOCAL_FILE.'recetas-main/* '.LOCAL_FILE);
-                shell_exec('rm -rf '.LOCAL_FILE.'recetas-main');
+                shell_exec('cp -r ' . ASTERION_LOCAL_FILE . 'recetas-main/* ' . ASTERION_LOCAL_FILE);
+                shell_exec('rm -rf ' . ASTERION_LOCAL_FILE . 'recetas-main');
                 return 'DONE';
-            break;
+                break;
         }
     }
 
-    function checkAuthorization() {
+    public function checkAuthorization()
+    {
         $headers = apache_request_headers();
-        if (!isset($headers) || !isset($headers['Authorization']) || $headers['Authorization']!='plastic') {
-            header('Location: '.url(''));
+        if (!isset($headers) || !isset($headers['Authorization']) || $headers['Authorization'] != 'plastic') {
+            header('Location: ' . url(''));
             exit();
         }
     }
