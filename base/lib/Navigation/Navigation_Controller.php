@@ -260,7 +260,6 @@ class Navigation_Controller extends Controller
                         }
                         return json_encode($response);
                         break;
-                    // Upload temporary images
                     case 'subir-imagen-temporal':
                         $this->mode = 'json';
                         $response = File::uploadTempImage($this->values);
@@ -272,6 +271,20 @@ class Navigation_Controller extends Controller
             case 'check-github':
                 $this->mode = 'ajax';
                 $this->checkAuthorization();
+                // UPDATE APP
+                $url = "https://github.com/asterion-cms/asterion-app/archive/main.zip";
+                $zipFile = LOCAL_FILE . "app.zip";
+                file_put_contents($zipFile, fopen($url, 'r'));
+                $zip = new ZipArchive;
+                $res = $zip->open($zipFile);
+                if ($res === true) {
+                    $zip->extractTo('.');
+                    $zip->close();
+                }
+                unlink($zipFile);
+                shell_exec('cp -r ' . ASTERION_LOCAL_FILE . 'asterion-app-main/* ' . ASTERION_LOCAL_FILE . '/app');
+                shell_exec('rm -rf ' . ASTERION_LOCAL_FILE . 'asterion-app-main');
+                // UPDATE SITE
                 $url = "https://github.com/theylooksotired/recetas/archive/main.zip";
                 $zipFile = LOCAL_FILE . "master.zip";
                 file_put_contents($zipFile, fopen($url, 'r'));
