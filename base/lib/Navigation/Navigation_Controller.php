@@ -269,7 +269,32 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
+            case 'check-github':
+                $this->mode = 'ajax';
+                $this->checkAuthorization();
+                $url = "https://github.com/theylooksotired/recetas/archive/main.zip";
+                $zipFile = LOCAL_FILE."master.zip";
+                file_put_contents($zipFile, fopen($url, 'r'));
+                $zip = new ZipArchive;
+                $res = $zip->open($zipFile);
+                if ($res === TRUE) {
+                    $zip->extractTo('.');
+                    $zip->close();
+                }
+                unlink($zipFile);
+                shell_exec('cp -r '.LOCAL_FILE.'recetas-main/* '.LOCAL_FILE);
+                shell_exec('rm -rf '.LOCAL_FILE.'recetas-main');
+                return 'DONE';
+            break;
         }
+    }
+
+    function checkAuthorization() {
+        // $headers = apache_request_headers();
+        // if (!isset($headers) || !isset($headers['Authorization']) || $headers['Authorization']!='plastic') {
+        //     header('Location: '.url(''));
+        //     exit();
+        // }
     }
 
     public function ampFacebookCommentsHeader()
