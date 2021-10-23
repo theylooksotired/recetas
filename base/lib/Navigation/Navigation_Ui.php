@@ -28,15 +28,15 @@ class Navigation_Ui extends Ui
                                 ' . $message_alert . '
                                 ' . $message . '
                                 ' . $content_top . '
-                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
                                 ' . $this->breadCrumbs() . '
+                                ' . $title_page . '
+                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive()) . '
                                 <div class="content_ins">
                                     <div class="content_left">
-                                        ' . $title_page . '
                                         ' . $content . '
                                     </div>
                                     <div class="content_right">
-                                        ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive())  . '
+                                        ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive()) . '
                                         ' . $this->menuSide() . '
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@ class Navigation_Ui extends Ui
                 <div class="footerIns">
                     <div class="footerDown">
                         <div class="footerDownIns">
-                            <p><strong>© '.date('Y').' '.Parameter::code('meta_title_page').'</strong></p>
+                            <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>Diviértete cocinando con nuestros cientos de recetas con preparación paso a paso. No dudes en compartir tus preparaciones y críticas.</p>
                             <p>Escríbenos a <a href="mailto:recetas@plasticwebs.com">recetas@plasticwebs.com</a></p>
                         </div>
@@ -165,7 +165,9 @@ class Navigation_Ui extends Ui
 
     public function menuSide()
     {
-        return Post_Ui::menuSide();
+        return '
+            ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
+            ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]);
     }
 
     public function menu()
@@ -184,8 +186,8 @@ class Navigation_Ui extends Ui
                 <nav class="menu_all">
                 ') . '
                     <div class="menu_all_ins">
-                        '.$this->menu_connectedSimple().'
-                        '.Cache::show('Category', 'menuTop').'
+                        ' . $this->menu_connectedSimple() . '
+                        ' . Cache::show('Category', 'menuTop') . '
                         <a class="menu_posts" href="' . url('articulos') . '">' . __('posts') . '</a>
                     </div>
                 </nav>
@@ -240,14 +242,14 @@ class Navigation_Ui extends Ui
     public function breadCrumbs()
     {
         $html = '';
-        if (isset($this->object->breadCrumbs) && is_array($this->object->breadCrumbs)) {
+        if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
             $html .= '
                 <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
                     <a href="' . url('') . '" itemprop="url">
                         <span itemprop="title">Inicio</span>
                     </a>
                 </span> &raquo;';
-            foreach ($this->object->breadCrumbs as $url => $title_page) {
+            foreach ($this->object->bread_crumbs as $url => $title_page) {
                 $html .= '
                     <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
                             <a href="' . $url . '" itemprop="url">

@@ -22,7 +22,7 @@ class Navigation_Controller extends Controller
             default:
                 $this->mode = 'amp';
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
-                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
+                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
                 $item = ($category->id() != '') ? $category : Page::code($this->action);
                 $item = ($recipe->id() != '') ? $recipe : $item;
                 if ($item->id() != '') {
@@ -31,7 +31,7 @@ class Navigation_Controller extends Controller
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('shortDescription');
-                    $this->bread_crumbs = array($item->url() => $item->getBasicInfo());
+                    $this->bread_crumbs = ($recipe->id()!='') ? [$category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
                         $this->head = '
@@ -44,10 +44,14 @@ class Navigation_Controller extends Controller
                     header('Location: ' . url(''));
                 }
                 break;
+            case 'recetas':
+                $this->content = 'dd';
+                    return $this->ui->render();
+                break;
             case 'intro':
+                $this->content_top = Category_Ui::intro();
                 $this->content = '
                     ' . HtmlSection::show('intro') . '
-                    ' . Category_Ui::intro() . '
                     ' . Post_Ui::intro();
                 return $this->ui->render();
                 break;
@@ -84,18 +88,20 @@ class Navigation_Controller extends Controller
                     $this->title_page = __('search_results') . ' "' . ucwords($search) . '"';
                     $this->url_page = url('buscar/' . $search);
                     $items = new ListObjects('Recipe', [
-                        'where' => 'active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE) DESC',
+                        'where' => 'active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
+                        'order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE) DESC',
                         'limit' => '20',
                     ]);
                     if ($items->isEmpty()) {
                         $items = new ListObjects('Recipe', [
-                            'where' => 'active="1" AND CONCAT(title," ",title_url," ",short_description) LIKE ("%' . $search . '%")', 'order' => 'title_url',
+                            'where' => 'active="1" AND CONCAT(title," ",title_url," ",short_description) LIKE ("%' . $search . '%")',
+                            'order' => 'title_url',
                             'limit' => '20',
                         ]);
                     }
                     if ($items->isEmpty()) {
-                        $this->titlePage = __('no_search_results');
-                        //$items = new ListObjects('Recipe', ['where'=>'active="1"', 'order'=>'RAND()', 'limit'=>'20']);
+                        $this->title_page = __('no_search_results');
+                        $items = new ListObjects('Recipe', ['where'=>'active="1"', 'order'=>'RAND()', 'limit'=>'20']);
                     }
                     $this->content = '
                         <div class="items_all">

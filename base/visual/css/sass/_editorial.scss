@@ -18,32 +18,27 @@ img {
     max-width: 100%;
 }
 h1 {
-    font-weight: normal;
-    font-size: $fontSizeHuge * 8 / 10;
-    padding: 0 0 20px;
-    margin: 0 0 30px;
+    font-weight: bold;
+    font-size: $fontSizeHuge * 7 / 10;
+    padding: 0 0 10px;
+    margin: 0 0 20px;
     color: $colorAccent;
     position: relative;
     font-family: $fontFamily;
     max-width: 600px;
     line-height: 1em;
-    &:first-letter {
-        font-size: $fontSizeHuge * 9 / 10;
-    }
     &:after {
         width: 80px;
-        height: 5px;
+        height: 4px;
         background: rgba($colorMainAlt, 0.5);
         position: absolute;
         bottom: 0;
         left: 0;
         content: '';
+        border-top: 1px solid $colorMainAlt;
     }
     @include mobile {
         font-size: $fontSizeHuge * 7 / 10;
-        &:first-letter {
-            font-size: $fontSizeHuge * 7.5 / 10;
-        }
     }
 }
 
@@ -54,17 +49,18 @@ h2 {
     margin: 0 0 10px;
     color: $colorAccent;
     position: relative;
-    font-family: $fontFamilyAlt;
+    font-family: $fontFamily;
     line-height: 1em;
     max-width: 600px;
     &:after {
-        width: 100px;
-        height: 1px;
+        width: 200px;
+        height: 2px;
         background: rgba($colorMainAlt, 0.5);
         position: absolute;
         bottom: 0;
         left: 0;
         content: '';
+        border-top: 1px solid $colorMainAlt;
     }
 }
 
@@ -73,7 +69,7 @@ h3 {
     font-size: $fontSizeHuge * 7 / 10;
     margin: 0 0 20px;
     color: lighten($colorAccentAlt, 10%);
-    font-family: $fontFamilyAlt;
+    font-family: $fontFamily;
     line-height: 1em;
     max-width: 600px;
 }

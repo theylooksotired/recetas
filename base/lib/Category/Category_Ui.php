@@ -14,7 +14,9 @@ class Category_Ui extends Ui
         return '
             <div class="category">
                 <a href="' . $this->object->url() . '">
-                    <div class="category_image" style="background-image:url(' . $recipeInit->getImageUrl('image', 'web') . ')"></div>
+                    <div class="category_image">
+                        <div class="category_image_ins" style="background-image:url(' . $recipeInit->getImageUrl('image', 'web') . ')"></div>
+                    </div>
                     <div class="category_title">' . $this->object->get('name') . '</div>
                 </a>
                 <div class="category_recipes">' . $recipes->showList(['function' => 'Link']) . '</div>
@@ -37,8 +39,8 @@ class Category_Ui extends Ui
 
     public function renderComplete()
     {
-        $items = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '"', 'limit' => '10']);
-        return '<div class="recipes">' . $items->showList() . '</div>';
+        $items = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'results' => '12']);
+        return '<div class="recipes">' . $items->showListPager() . '</div>';
     }
 
     public static function getMenuItems()

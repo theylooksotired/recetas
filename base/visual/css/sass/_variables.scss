@@ -4,10 +4,10 @@ $black: #000;
 $colorText: #111111;
 $colorTextAlt: #999999;
 
-$colorMain: #FBBD0B;
+$colorMain: #FAC323;
 $colorMainAlt: #F9770D;
-$colorAccent: #09233D;
-$colorAccentAlt: lighten(#09233D, 30%);
+$colorAccent: #3b5998;
+$colorAccentAlt: #3b7bbf;
 
 $colorActive: #29C74D;
 $colorNotActive: #818181;
@@ -51,17 +51,18 @@ $colorTumblr: #35465C;
   src: url(https://fonts.gstatic.com/s/quicksand/v22/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* latin */
 @font-face {
-  font-family: 'Cinzel Decorative';
+  font-family: 'Festive';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/cinzeldecorative/v9/daaCSScvJGqLYhG8nNt8KPPswUAPni7TTMxpazyD.woff2) format('woff2');
+  src: url(https://fonts.gstatic.com/s/festive/v1/cY9Ffj6KX1xcoDWhJtDqyvPQgag.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 $fontFamily: 'Quicksand', sans-serif;
-$fontFamilyAlt: 'Cinzel Decorative', sans-serif;
+$fontFamilyAlt: 'Festive', sans-serif;
 $fontFamilyCode: monospace;
 
 $sizeDesktop: 1200px;

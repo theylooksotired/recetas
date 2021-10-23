@@ -33,12 +33,12 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public function renderIntro()
+    public function renderIntro($options = [])
     {
         return '
             <div class="post">
                 <a class="post_ins" href="' . $this->object->url() . '">
-                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrl('image', 'small') . ');"></div>
+                    <div class="post_image post_image_simple">' . $this->object->getImage('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
@@ -55,14 +55,15 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public function renderSide()
+    public function renderSide($options = [])
     {
         return '
             <div class="post_side">
                 <a class="post_side_ins" href="' . $this->object->url() . '">
-                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrl('image', 'web') . ');"></div>
+                    <div class="post_image">' . ((isset($options['amp']) && $options['amp'] == true) ? $this->object->getImageAmp('image', 'small') : $this->object->getImage('image', 'small')) . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
+                        <div class="post_short_description">' . $this->object->get('short_description') . '</div>
                         <div class="post_date">
                             <i class="fa fa-calendar"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
@@ -126,7 +127,7 @@ class Post_Ui extends Ui
 
     public static function intro()
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 3]);
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 8]);
         return '
             <div class="posts_intro">
                 <div class="posts_intro_title">' . __('last_posts') . '</div>
@@ -136,12 +137,12 @@ class Post_Ui extends Ui
 
     public static function menuSide()
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 6]);
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 4]);
         return '
-            <div class="posts_side">
-                <div class="posts_side_title">' . __('last_posts') . '</div>
-                <div class="posts_side_items">' . $items->showList(['function' => 'Side']) . '</div>
-                <div class="posts_side_button"><a href="' . url('articulos') . '">' . __('view_all_posts') . '</a></div>
+            <div class="items_side">
+                <div class="items_side_title">' . __('last_posts') . '</div>
+                <div class="items_side_items">' . $items->showList(['function' => 'Side']) . '</div>
+                <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_posts') . '</a></div>
             </div>';
     }
 

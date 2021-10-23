@@ -12,6 +12,7 @@ body {
     color: $colorText;
     line-height: normal;
     height: auto;
+    background: url(../../img/white_wall.jpg) repeat;
 }
 
 .header {
@@ -23,6 +24,7 @@ body {
     background: $white;
     z-index: 9999;
     background: $colorAccent;
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 20%),1) 0%, rgba($colorAccentAlt,1) 35%, rgba($colorAccent,1) 100%);
     &:before {
         position: absolute;
         bottom: 0;
@@ -60,66 +62,55 @@ body {
         height: 40px;
         display: block;
         font-family: $fontFamilyAlt;
+        position: relative;
         @include animate();
         &:hover {
             opacity: 0.7;
         }
         .logo_image {
-            width: 40px;
-            height: 40px;
-            background-image: url(../../img/logo.svg);
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background-image: url(../../img/logo_table.svg);
             background-repeat: no-repeat;
             background-position: left center;
             background-size: contain;
             text-indent: -5000px;
             overflow: hidden;
-            float: left;
         }
         .logo_title {
-            width: calc(100% - 60px);
-            float: right;
             display: block;
-            padding: 0 0 0 10px;
-            position: relative;
-            &:before {
-                content: '';
-                position: absolute;
-                left: 1px;
-                top: 0;
-                bottom: 0;
-                width: 1px;
-                height: 100%;
-                display: block;
-                background: rgba($white, 0.3);
-            }
-            &:after {
-                content: '';
-                position: absolute;
-                left: -1px;
-                top: 0;
-                bottom: 0;
-                width: 1px;
-                height: 100%;
-                display: block;
-                background: rgba($colorMain, 0.4);
-            }
+            height: 40px;
         }
         .logo_title_top {
+            position: absolute;
+            top: 0;
+            left: 40px;
             display: block;
             color: $white;
             height: 13px;
             font-size: 13px;
-            text-transform: uppercase;
             margin: 0 0 2px;
             line-height: 1em;
-            opacity: 0.8;
+            font-family: $fontFamily;
+            font-weight: bold;
+            color: $colorMain;
+            text-shadow: 1px 1px 3px rgba($black, 0.7);
+            z-index: 3;
         }
         .logo_title_bottom {
+            position: absolute;
+            bottom: -5px;
+            left: 5px;
             display: block;
             color: $white;
-            height: 25px;
-            font-size: 25px;
+            height: 45px;
+            font-size: 45px;
             line-height: 1em;
+            text-shadow: 1px 1px 5px rgba($black, 0.8);
+            z-index: 2;
         }
     }
     &.headerSimple {
@@ -164,9 +155,10 @@ body {
 .footer {
     font-size: $fontSizeSmall;
     background: $colorAccent;
-    border-top: 10px solid lighten($colorAccent, 20%);
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 20%),1) 0%, rgba($colorAccent,1) 100%);
+    border-top: 10px solid darken($colorAccent, 20%);
     color: $white;
-    margin: 100px 0 0 0;
+    margin: 0;
     @include clearer();
     a {
         color: $white;
@@ -186,13 +178,13 @@ body {
         width: 65%;
         padding: 40px 0 0 0;
         margin: 40px 0 0 0;
-        border-top: 20px solid rgba($white, 0.2);
+        border-top: 10px solid $colorMain;
         @include tablet {
             width: auto;
         }
         a {
             font-weight: bold;
-            color: lighten($colorMainAlt, 20%);
+            color: $colorMain;
             &:hover {
                 color: $colorMainAlt;
             }
@@ -267,7 +259,8 @@ body {
     }
 }
 .menu_all {
-    background: lighten($colorAccent, 10%);
+    background: darken($colorAccent, 10%);
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 10%),1) 0%, rgba(darken($colorAccent, 20%),1) 100%);
     text-align: center;
     height: 40px;
     &.menu_all_open {
@@ -468,7 +461,7 @@ body {
 }
 
 .content {
-    max-width: $sizeDesktop + 40px;
+    max-width: $sizeDesktop;
     margin: auto;
     padding: 90px 0 0 0;
     .list_results {
@@ -480,10 +473,11 @@ body {
 }
 
 .content_all {
-    margin: 0 20px;
+    margin: 20px;
     padding: 20px;
     background: $white;
     min-height: calc(100vh - 50px);
+    box-shadow: 4px 4px 20px rgba($black, 0.3);
     @include clearer();
     .content_left {
         width: calc(100% - 380px);
@@ -846,15 +840,15 @@ body {
 }
 
 .breadcrumbs {
-    font-style: italic;
     font-size: $fontSizeSmall;
     color: darken($white, 25%);
+    padding: 0 0 10px;
     a {
         font-weight: normal;
         color: darken($white, 35%);
         @include animate();
         &:hover {
-            color: darken($white, 40%);
+            color: darken($white, 50%);
         }
     }
 }
@@ -870,6 +864,7 @@ body {
 .adsense {
     text-align: center;
     margin: 0 auto 20px 0;
+    border: 1px solid rgba($black, 0.1);
 }
 .adsenselinksWrapper {
     @include clearer();
@@ -1764,14 +1759,30 @@ body {
         }
     }
     .post_image {
-        width: 300px;
-        height: 200px;
+        width: 280px;
         float: left;
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
         overflow: hidden;
+        transform: rotate(3deg);
+        padding: 5px;
+        background: $white;
+        box-shadow: 2px 3px 5px rgba($black, 0.3);
         @include animate();
+        &.post_image_simple {
+            img {
+                width: 100%;
+                display: block;
+            }
+        }
+    }
+    @for $i from 1 to 20 {
+        &:nth-child(#{$i}) {
+            .post_image {
+                transform: rotate(#{random(8) - 4}deg);
+            }
+        }
     }
     .post_information {
         width: calc(100% - 325px);
@@ -1822,7 +1833,7 @@ body {
     }
 }
 
-.posts_side {
+.items_side {
     margin: 20px 0 0 0;
     padding: 15px;
     background: rgba($colorMain, 0.02);
@@ -1831,7 +1842,7 @@ body {
     border-bottom: 6px solid rgba($colorMain, 0.1);
     box-sizing: border-box;
     @include borderRadius(10px);
-    .posts_side_title {
+    .items_side_title {
         margin: -15px -15px 20px -15px;
         padding: 10px;
         font-size: $fontSizeSmall;
@@ -1840,7 +1851,7 @@ body {
         color: $colorMain;
         background: rgba($colorMain, 0.05);
     }
-    .posts_side_button {
+    .items_side_button {
         margin: 20px 0 0 0;
         a {
             display: block;
@@ -1862,7 +1873,7 @@ body {
 .post_side {
     margin: 0 0 20px;
     padding: 0 0 20px;
-    border-bottom: 2px solid rgba($colorMain, 0.2);
+    border-bottom: 2px solid rgba($colorMain, 0.5);
     &:last-child {
         margin: 0;
         padding: 0;
@@ -1872,39 +1883,124 @@ body {
         font-weight: normal;
         display: block;
         @include clearer();
-        .post_image {
-            width: 70px;
-            float: left;
-            height: 50px;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .post_information {
-            width: calc(100% - 80px);
-            float: right;
-            color: rgba($black, 0.6);
-            font-size: $fontSizeSmall;
-            .post_title {
-                font-weight: bold;
-                font-size: $fontSizeNormal;
-                padding: 0 0 5px;
-                color: $colorMain;
-                @include animate();
-            }
-            .post_date {
-                font-size: $fontSizeSmall;
-                i {
-                    display: inline-block;
-                    width: 20px;
-                }
-            }
-        }
         &:hover {
             .post_information {
                 .post_title {
-                    color: $colorAccent;
+                    color: lighten($colorAccent, 30%);
                 }
+            }
+        }
+    }
+    .post_image {
+        width: 70px;
+        float: left;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 3px;
+        background: $white;
+        box-shadow: 2px 2px 3px rgba($black, 0.2);
+        img {
+            display: block;
+        }
+    }
+    @for $i from 1 to 20 {
+        &:nth-child(#{$i}) {
+            .post_image {
+                transform: rotate(#{random(8) - 4}deg);
+            }
+        }
+    }
+    .post_information {
+        width: calc(100% - 90px);
+        float: right;
+        color: darken($colorAccentAlt, 20%);
+        font-size: $fontSizeSmall;
+        .post_title {
+            font-weight: bold;
+            font-size: $fontSizeNormal;
+            padding: 0 0 5px;
+            color: lighten($colorAccentAlt, 10%);
+            @include animate();
+        }
+        .post_description {
+            font-size: $fontSizeSmall * 9 / 10;
+        }
+        .post_date {
+            padding: 10px 0 0 0;
+            font-size: $fontSizeTiny;
+            opacity: 0.8;
+            i {
+                display: inline-block;
+                width: 20px;
+            }
+        }
+    }
+}
+
+.recipe_side {
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: 2px solid rgba($colorMain, 0.5);
+    &:last-child {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    a {
+        font-weight: normal;
+        display: block;
+        @include clearer();
+        &:hover {
+            .recipe_information {
+                .recipe_title {
+                    color: lighten($colorAccent, 30%);
+                }
+            }
+        }
+    }
+    .recipe_image {
+        width: 70px;
+        float: left;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 3px;
+        background: $white;
+        box-shadow: 2px 2px 3px rgba($black, 0.2);
+        img {
+            display: block;
+        }
+    }
+    @for $i from 1 to 20 {
+        &:nth-child(#{$i}) {
+            .recipe_image {
+                transform: rotate(#{random(8) - 4}deg);
+            }
+        }
+    }
+    .recipe_information {
+        width: calc(100% - 90px);
+        float: right;
+        color: darken($colorAccentAlt, 20%);
+        font-size: $fontSizeSmall;
+        .recipe_title {
+            font-weight: bold;
+            font-size: $fontSizeNormal;
+            padding: 0 0 5px;
+            color: lighten($colorAccentAlt, 10%);
+            @include animate();
+        }
+        .recipe_description {
+            font-size: $fontSizeSmall * 9 / 10;
+        }
+        .recipe_date {
+            padding: 10px 0 0 0;
+            font-size: $fontSizeTiny;
+            opacity: 0.8;
+            i {
+                display: inline-block;
+                width: 20px;
             }
         }
     }
@@ -2011,7 +2107,9 @@ body {
 }
 
 .related {
-    padding: 100px 0;
+    .related_block {
+        padding: 0 0 50px;
+    }
     .related_title {
         font-size: $fontSizeNormal;
         padding: 10px 0 40px 0;
@@ -2702,9 +2800,7 @@ body {
 }
 
 .categories {
-    margin: 30px 0 0 0;
-    padding: 50px 0 0 0;
-    border-top: 1px solid rgba($black, 0.2);
+    margin: 0 0 20px;
     .categories_ins {
         margin: 0 -10px;
         @include clearer();
@@ -2717,7 +2813,7 @@ body {
             width: calc(100%/2 - 20px);
         }
         > a {
-            font-size: $fontSizeSmall * 1.1;
+            font-size: $fontSizeBig;
             color: $colorAccent;
             font-weight: bold;
             @include animate();
@@ -2727,11 +2823,23 @@ body {
             }
         }
         .category_image {
-            padding: 0 0 60%;
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            margin: 0 0 10px;
+            padding: 5px;
+            background: $white;
+            margin: 0 0 20px;
+            box-shadow: 1px 2px 5px rgba($black, 0.3);
+            .category_image_ins {
+                padding: 0 0 60%;
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+        }
+        @for $i from 1 to 6 {
+            &:nth-child(#{$i}) {
+                .category_image {
+                    transform: rotate(#{random(4) - 2}deg);
+                }
+            }
         }
         .category_recipes {
             margin: 10px 0 0 0;
@@ -2808,13 +2916,14 @@ body {
 }
 
 .recipe {
-    margin: 0 0 40px;
-    padding: 0 0 40px;
-    border-bottom: 1px solid rgba($black, 0.1);
+    padding: 15px 15px 10px 15px;
+    margin: 0 0 15px;
+    background: rgba($colorAccent, 0.05);
+    border: rgba($colorAccent, 0.3);
+    box-shadow: 2px 2px 5px rgba($black, 0.1);
+    @include borderRadius(3px);
     &:last-child {
         margin: 0;
-        padding: 0;
-        border-bottom: 0;
     }
     .recipe_ins {
         display: block;
@@ -2824,14 +2933,29 @@ body {
             .recipe_title {
                 color: $colorAccentAlt;
             }
+            .recipe_image {
+                transform: rotate(0deg);
+            }
         }
     }
     .recipe_image {
-        width: 120px;
+        width: 140px;
         float: left;
+        transform: rotate(3deg);
+        padding: 5px;
+        background: $white;
+        box-shadow: 2px 3px 5px rgba($black, 0.3);
+        @include animate();
+    }
+    @for $i from 1 to 20 {
+        &:nth-child(#{$i}) {
+            .recipe_image {
+                transform: rotate(#{random(8) - 4}deg);
+            }
+        }
     }
     .recipe_information {
-        width: calc(100% - 130px);
+        width: calc(100% - 160px);
         float: right;
     }
     .recipe_title {
@@ -2852,7 +2976,7 @@ body {
             width: 60px;
         }
         .recipe_information {
-            width: calc(100% - 70px);
+            width: calc(100% - 80px);
         }
     }
 }
@@ -2865,13 +2989,18 @@ body {
         padding: 0 0 10px;
     }
     .recipe_complete_info {
+        padding: 0 0 10px;
         @include clearer();
         .recipe_complete_info_left {
-            width: 120px;
+            width: 150px;
             float: left;
+            transform: rotate(-2deg);
+            padding: 5px;
+            background: $white;
+            box-shadow: 2px 3px 5px rgba($black, 0.3);
         }
         .recipe_complete_info_right {
-            width: calc(100% - 130px);
+            width: calc(100% - 170px);
             float: right;
         }
         @include mobile {
@@ -2905,34 +3034,37 @@ body {
 }
 
 .recipe_wrapper {
-    padding: 30px 0 0 0;
     @include clearer();
     h2 {
-        font-size: $fontSizeNormal;
+        font-size: $fontSizeMedium;
         margin: 0 0 10px;
-        padding: 0 0 10px;
-        &:first-letter {
-            font-size: $fontSizeMedium;
+        padding: 10px 0 10px 0;
+        &:after {
+            bottom: auto;
+            top: 0;
         }
     }
     .recipe_ingredients {
         margin: 0 0 20px;
         p {
+            font-size: $fontSizeNormal;
             color: $colorAccentAlt;
             margin: 0;
             padding: 0;
         }
         .ingredient_ingredient {
             color: darken($colorAccentAlt, 20%);
+            font-weight: bold;
         }
     }
     .recipe_preparation {
         h2 {
-            margin: 30px 0 10px 0;
+            margin: 20px 0 10px 0;
         }
         p {
             padding: 0 0 20px;
             margin: 0;
+            font-size: $fontSizeMedium;
             &:last-child {
                 padding: 0;
                 margin: 0;
@@ -2940,8 +3072,12 @@ body {
         }
         .preparation_step_number {
             font-size: $fontSizeTiny;
-            color: rgba($black, 0.7);
+            color: rgba($black, 0.3);
+            font-weight: bold;
             display: block;
+            padding: 0;
+            margin: 0;
+            line-height: 1em;
         }
     }
 }
@@ -3002,14 +3138,23 @@ body {
 }
 
 .posts_intro {
-    margin: 50px 0 0 0;
-    padding: 50px 0 0 0;
-    border-top: 1px solid rgba($black, 0.2);
     .posts_intro_title {
-        text-align: center;
-        color: $colorAccentAlt;
-        padding: 0 0 50px;
+        font-size: $fontSizeNormal;
+        padding: 10px 0 40px 0;
+        color: $colorFacebook;
         font-weight: bold;
-        font-size: $fontSizeSmall;
+        position: relative;
+        text-align: center;
+        &:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100px;
+            height: 1px;
+            background: rgba($black, 0.2);
+            margin: auto;
+            content: '';
+        }
     }
 }
