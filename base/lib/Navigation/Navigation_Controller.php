@@ -23,7 +23,7 @@ class Navigation_Controller extends Controller
                 $this->mode = 'amp';
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
                 $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
-                $item = ($category->id() != '') ? $category : Page::code($this->action);
+                $item = ($category->id() != '') ? $category : new Category();
                 $item = ($recipe->id() != '') ? $recipe : $item;
                 if ($item->id() != '') {
                     $this->title_page = $item->getBasicInfo();
@@ -31,7 +31,7 @@ class Navigation_Controller extends Controller
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('shortDescription');
-                    $this->bread_crumbs = ($recipe->id()!='') ? [$category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($recipe->id()!='') ? [url($this->action) => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url($this->action) => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
                         $this->head = '
@@ -41,12 +41,15 @@ class Navigation_Controller extends Controller
                     return $this->ui->render();
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");
-                    header('Location: ' . url(''));
+                    header('Location: ' . url('intro'));
                 }
                 break;
             case 'recetas':
-                $this->content = 'dd';
-                    return $this->ui->render();
+                $this->mode = 'amp';
+                $this->title_page = __('recipes');
+                $this->bread_crumbs = [url($this->action) => __('recipes')];
+                $this->content = Category_Ui::all();
+                return $this->ui->render();
                 break;
             case 'intro':
                 $this->content_top = Category_Ui::intro();
@@ -279,7 +282,7 @@ class Navigation_Controller extends Controller
                 $this->checkAuthorization();
                 // UPDATE APP
                 $url = "https://github.com/asterion-cms/asterion-app/archive/main.zip";
-                $zipFile = LOCAL_FILE . "app.zip";
+                $zipFile = ASTERION_LOCAL_FILE . "app.zip";
                 file_put_contents($zipFile, fopen($url, 'r'));
                 $zip = new ZipArchive;
                 $res = $zip->open($zipFile);
@@ -292,7 +295,7 @@ class Navigation_Controller extends Controller
                 shell_exec('rm -rf ' . ASTERION_LOCAL_FILE . 'asterion-app-main');
                 // UPDATE SITE
                 $url = "https://github.com/theylooksotired/recetas/archive/main.zip";
-                $zipFile = LOCAL_FILE . "master.zip";
+                $zipFile = ASTERION_LOCAL_FILE . "master.zip";
                 file_put_contents($zipFile, fopen($url, 'r'));
                 $zip = new ZipArchive;
                 $res = $zip->open($zipFile);

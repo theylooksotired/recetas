@@ -251,13 +251,13 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
-    public static function menuSide()
+    public static function menuSide($options = [])
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'created DESC', 'limit' => 4]);
         return '
             <div class="items_side">
                 <div class="items_side_title">' . __('popular_recipes') . '</div>
-                <div class="items_side_items">' . $items->showList(['function' => 'Side']) . '</div>
+                <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
             </div>';
     }
 

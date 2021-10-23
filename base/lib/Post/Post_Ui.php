@@ -135,13 +135,13 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public static function menuSide()
+    public static function menuSide($options = [])
     {
         $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 4]);
         return '
             <div class="items_side">
                 <div class="items_side_title">' . __('last_posts') . '</div>
-                <div class="items_side_items">' . $items->showList(['function' => 'Side']) . '</div>
+                <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
                 <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_posts') . '</a></div>
             </div>';
     }

@@ -43,6 +43,12 @@ class Category_Ui extends Ui
         return '<div class="recipes">' . $items->showListPager() . '</div>';
     }
 
+    static public function all()
+    {
+        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
+        return '<div class="recipes">' . $items->showListPager() . '</div>';
+    }
+
     public static function getMenuItems()
     {
         return [];
