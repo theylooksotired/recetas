@@ -31,7 +31,7 @@ class Navigation_Controller extends Controller
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('shortDescription');
-                    $this->bread_crumbs = ($recipe->id()!='') ? [url($this->action) => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url($this->action) => __('recipes'), $item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($recipe->id()!='') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
                         $this->head = '
