@@ -117,4 +117,11 @@
             <type>checkbox</type>
         </attribute>
     </attributes>
+    <indexes>
+        <index>
+            <name>search</name>
+            <fields>title,title_url,short_description</fields>
+            <type>FULLTEXT</type>
+        </index>
+    </indexes>
 </object>
