@@ -140,7 +140,7 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
-        $posts = new ListObjects('Post', array('order'=>'MATCH (title, titleUrl, description) AGAINST ("'.$this->object->getBasicInfo().'") DESC', 'limit'=>'5'));
+        $posts = new ListObjects('Post', array('order'=>'MATCH (title, title_url, description) AGAINST ("'.$this->object->getBasicInfo().'") DESC', 'limit'=>'5'));
         $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order'=>'RAND()', 'limit'=>'5'));
         $items = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         return '<div class="related">
