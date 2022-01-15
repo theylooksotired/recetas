@@ -242,6 +242,37 @@ body {
             }
         }
     }
+    .footerLinks {
+        max-width: $sizeDesktop;
+        padding: 0 0 20px;
+        margin: 0 auto 20px auto;
+        border-bottom: 1px solid rgba($white, 0.4);
+        &:last-child {
+            padding: 0;
+            margin: 0;
+            border-bottom: 0;
+        }
+        h3 {
+            display: block;
+            font-size: $fontSizeTiny;
+            padding: 0 0 10px;
+        }
+        a {
+            display: inline-block;
+            margin: 0 10px 10px 0;
+            padding: 5px 10px;
+            font-size: $fontSizeSmall;
+            background: rgba($white, 0.2);
+            color: $white;
+            font-weight: normal;
+            @include borderRadius(5px);
+            @include animate();
+            &:hover {
+                background: rgba($white, 0.4);
+                color: $colorMainAlt;
+            }
+        }
+    }
 }
 
 .menu_trigger {
