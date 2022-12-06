@@ -27,17 +27,30 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderPublicSimple()
+    {
+        return '
+            <div class="recipe_simple">
+                <a class="recipe_ins" href="' . $this->object->url() . '">
+                    <div class="recipe_image">' . $this->object->getImageAmp('image', 'small') . '</div>
+                    <div class="recipe_information">
+                        <div class="recipe_rating">' . $this->renderRating() . '</div>
+                        <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
+                        <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
+                        <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
+                    </div>
+                </a>
+            </div>';
+    }
+
     public function renderSide($options = [])
     {
         return '
-            <div class="recipe_side">
-                <a class="recipe_side_ins" href="' . $this->object->url() . '">
-                    <div class="recipe_image">' . ((isset($options['amp']) && $options['amp'] == true) ? $this->object->getImageAmp('image', 'small') : $this->object->getImage('image', 'small')) . '</div>
-                    <div class="recipe_information">
-                        <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
-                        <div class="recipe_rating">' . $this->renderRating() . '</div>
-                    </div>
+            <div class="post_minimal">
+                <a href="' . $this->object->url() . '" class="post_minimal_ins">
+                    <div class="post_background" style="background-image:url(' . $this->object->getImageUrl('image', 'web') . ');"></div>
+                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrl('image', 'web') . ');"></div>
+                    <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';
     }
@@ -74,9 +87,8 @@ class Recipe_Ui extends Ui
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
                 ' . $this->share(['share' => ['facebook', 'twitter']]) . '
-                ' . Navigation_Ui::facebookComments($this->object->url()) . '
-            </div>
-            ' . $this->renderRelated();
+            </div>';
+                // ' . Navigation_Ui::facebookComments($this->object->url()) . '
     }
 
     public function renderInfo()
@@ -140,17 +152,17 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
-        $posts = new ListObjects('Post', ['order'=>'MATCH (title, title_url, short_description) AGAINST ("'.$this->object->getBasicInfo().'") DESC', 'limit'=>'5']);
+        $posts = new ListObjects('Post', ['order'=>'MATCH (title, title_url, short_description) AGAINST ("'.$this->object->getBasicInfo().'") DESC', 'limit'=>'6']);
         $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order'=>'RAND()', 'limit'=>'5'));
-        $items = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         return '<div class="related">
                     <div class="related_block">
-                        <div class="related_title">' . __('other_posts') . '</div>
-                        <div class="recipes">' . $posts->showList() . '</div>
+                        <div class="related_title">' . __('other_recipes') . '</div>
+                        <div class="posts">' . $recipes->showList(['function' => 'PublicSimple']) . '</div>
                     </div>
                     <div class="related_block">
-                        <div class="related_title">' . __('other_recipes') . '</div>
-                        <div class="recipes">' . $items->showList() . '</div>
+                        <div class="related_title">' . __('other_posts') . '</div>
+                        <div class="posts">' . $posts->showList(['function' => 'PublicSimple']) . '</div>
                     </div>
                 </div>';
     }

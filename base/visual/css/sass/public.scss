@@ -163,10 +163,10 @@ body {
     a {
         color: $white;
     }
-    .footerListWrapper {
+    .footer_list_wrapper {
         @include clearer();
     }
-    .footerIns {
+    .footer_ins {
         padding: 50px 20px;
         max-width: $sizeDesktop - 40px;
         margin: auto;
@@ -174,7 +174,7 @@ body {
             padding: 30px 20px;
         }
     }
-    .footerDown {
+    .footer_down {
         width: 65%;
         padding: 40px 0 0 0;
         margin: 40px 0 0 0;
@@ -189,30 +189,12 @@ body {
                 color: $colorMainAlt;
             }
         }
-        .btnContact {
-            width: 250px;
-            margin-bottom: 20px;
-            a {
-                display: block;
-                background: $white;
-                color: $colorText;
-                text-align: center;
-                font-weight: bold;
-                padding: 20px;
-                text-transform: uppercase;
-                @include borderRadius(3px);
-                @include animate();
-                &:hover {
-                    background: rgba($white, 0.8);
-                }
-            }
-        }
     }
-    .footerList {
+    .footer_list {
         width: 35%;
         float: left;
         padding-right: 15%;
-        .footerTitle {
+        .footer_title {
             font-weight: bold;
             text-transform: uppercase;
             padding: 0 0 10px;
@@ -232,7 +214,7 @@ body {
                 color: $white;
             }
         }
-        .footerListItems {
+        .footer_list_items {
             @include clearer();
             p {
                 padding: 0;
@@ -242,11 +224,11 @@ body {
             }
         }
     }
-    .footerLinks {
+    .footer_links {
         max-width: $sizeDesktop;
         padding: 0 0 20px;
         margin: 0 auto 20px auto;
-        border-bottom: 1px solid rgba($white, 0.4);
+        border-bottom: 1px solid rgba($white, 0.1);
         &:last-child {
             padding: 0;
             margin: 0;
@@ -254,18 +236,20 @@ body {
         }
         h3 {
             display: block;
-            font-size: $fontSizeTiny;
+            font-size: $fontSizeSmall;
             padding: 0 0 10px;
+            color: lighten($colorAccent, 30%);
         }
         a {
             display: inline-block;
             margin: 0 10px 10px 0;
             padding: 5px 10px;
             font-size: $fontSizeSmall;
-            background: rgba($white, 0.2);
+            background: rgba($white, 0.1);
+            border: 1px solid rgba($white, 0.12);
             color: $white;
             font-weight: normal;
-            @include borderRadius(5px);
+            @include borderRadius(10px);
             @include animate();
             &:hover {
                 background: rgba($white, 0.4);
@@ -510,6 +494,9 @@ body {
     min-height: calc(100vh - 50px);
     box-shadow: 4px 4px 20px rgba($black, 0.3);
     @include clearer();
+    .content_ins {
+        @include clearer();
+    }
     .content_left {
         width: calc(100% - 380px);
         float: left;
@@ -1864,38 +1851,100 @@ body {
     }
 }
 
+.post_simple {
+    .post_ins {
+        font-weight: normal;
+        display: block;
+        @include animate();
+        @include clearer();
+        &:hover {
+            .post_image {
+                filter: grayscale(100%);
+            }
+            .post_information {
+                color: lighten($colorAccent, 20%);
+                .post_date {
+                    color: rgba(lighten($colorAccent, 20%), 0.5);
+                }
+            }
+        }
+    }
+    .post_image {
+        height: 200px;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        margin: 0 0 10px;
+        @include animate();
+    }
+    .post_information {
+        color: $colorAccent;
+        @include animate();
+        .post_title {
+            font-size: $fontSizeMedium;
+            font-weight: bold;
+            padding: 0 0 5px;
+            line-height: 1.2em;
+        }
+        .post_date {
+            font-size: $fontSizeSmall;
+            color: rgba($colorAccent, 0.5);
+            padding: 0 0 10px;
+            @include animate();
+            i {
+                display: inline-block;
+                width: 20px;
+            }
+        }
+        .post_short_description {
+            font-size: $fontSizeNormal;
+            color: $colorAccent;
+            padding: 0 0 10px;
+            @include animate();
+        }
+    }
+}
+
 .items_side {
     margin: 20px 0 0 0;
-    padding: 15px;
-    background: rgba($colorMain, 0.02);
-    border: 3px solid rgba($colorMain, 0.1);
-    border-right: 6px solid rgba($colorMain, 0.1);
-    border-bottom: 6px solid rgba($colorMain, 0.1);
+    background: rgba($colorMain, 0.6);
+    border: 1px solid rgba($colorMain, 0.8);
+    border-right: 3px solid rgba($colorMain, 0.8);
+    border-bottom: 3px solid rgba($colorMain, 0.8);
     box-sizing: border-box;
     @include borderRadius(10px);
     .items_side_title {
-        margin: -15px -15px 20px -15px;
         padding: 10px;
         font-size: $fontSizeSmall;
         font-weight: bold;
         text-align: center;
-        color: $colorMain;
-        background: rgba($colorMain, 0.05);
+        background: rgba($colorMainAlt, 0.2);
+        color: $white;
+    }
+    .items_side_items {
+        padding: 5px;
+        .post_minimal {
+            margin: 0 0 5px;
+            &:last-child {
+                margin: 0;
+            }
+        }
     }
     .items_side_button {
-        margin: 20px 0 0 0;
+        margin: 10px;
         a {
             display: block;
             padding: 10px;
             text-align: center;
-            background: $colorMain;
+            background: darken($colorMainAlt, 5%);
             color: $white;
             font-weight: bold;
             text-align: center;
             @include borderRadius(5px);
             @include animate();
             &:hover {
-                background: $colorAccent;
+                background: darken($colorMainAlt, 15%);
             }
         }
     }
@@ -2138,27 +2187,20 @@ body {
 }
 
 .related {
-    .related_block {
-        padding: 0 0 50px;
-    }
     .related_title {
         font-size: $fontSizeNormal;
-        padding: 10px 0 40px 0;
+        padding: 40px 0 40px 0;
+        margin: 40px 0 0 0;
         color: $colorFacebook;
         font-weight: bold;
         position: relative;
         text-align: center;
-        &:before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100px;
-            height: 1px;
-            background: rgba($black, 0.2);
-            margin: auto;
-            content: '';
-        }
+        border-top: 5px solid rgba($colorAccent, 0.1);
+    }
+    .posts {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
     }
 }
 
@@ -2831,45 +2873,32 @@ body {
 }
 
 .categories {
-    margin: 0 0 20px;
+    padding: 20px 0 20px 0;
+    border-top: 5px solid rgba($colorAccent, 0.1);
+    .categories_title {
+        text-align: center;
+        color: $colorAccent;
+        font-size: $fontSizeSmall;
+        padding: 0 0 20px;
+        font-weight: bold;
+    }
     .categories_ins {
-        margin: 0 -10px;
-        @include clearer();
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 10px;
     }
     .category {
-        width: calc(100%/3 - 20px);
-        float: left;
-        margin: 0 10px 20px 10px;
-        @include mobile {
-            width: calc(100%/2 - 20px);
-        }
         > a {
-            font-size: $fontSizeBig;
             color: $colorAccent;
             font-weight: bold;
             @include animate();
             &:hover {
                 opacity: 0.7;
-                color: darken($colorAccent, 20%);
+                color: $colorMainAlt;
             }
-        }
-        .category_image {
-            padding: 5px;
-            background: $white;
-            margin: 0 0 20px;
-            box-shadow: 1px 2px 5px rgba($black, 0.3);
-            .category_image_ins {
-                padding: 0 0 60%;
-                background-size: cover;
-                background-position: center center;
-                background-repeat: no-repeat;
-            }
-        }
-        @for $i from 1 to 6 {
-            &:nth-child(#{$i}) {
-                .category_image {
-                    transform: rotate(#{random(4) - 2}deg);
-                }
+            > img {
+                display: block;
+                height: 60px;
             }
         }
         .category_recipes {
@@ -2880,17 +2909,14 @@ body {
                 color: $colorAccentAlt;
                 font-size: $fontSizeSmall;
                 padding: 0 0 5px;
+                @include animate();
                 &:last-child {
                     padding: 0;
                 }
+                &:hover {
+                    color: $colorMainAlt;
+                }
             }
-        }
-    }
-    @include mobile {
-        .category {
-            width: auto;
-            float: none;
-            margin: 0 0 20px;
         }
     }
 }
@@ -3012,8 +3038,52 @@ body {
     }
 }
 
+.recipe_simple {
+    .recipe_ins {
+        display: block;
+        font-weight: normal;
+        @include clearer();
+        &:hover {
+            .recipe_title {
+                color: $colorAccentAlt;
+            }
+            .recipe_image {
+                transform: rotate(0deg);
+            }
+        }
+    }
+    .recipe_image {
+        height: 160px;
+        overflow: hidden;
+        margin: 0 0 10px;
+        position: relative;
+        @include animate();
+        img {
+            object-fit: cover;
+        }
+    }
+    .recipe_title {
+        font-weight: bold;
+        color: $colorAccent;
+        padding: 0 0 5px;
+        font-size: $fontSizeMedium;
+    }
+    .recipe_short_description {
+        font-size: $fontSizeSmall;
+        padding: 0 0 5px;
+    }
+    .rating {
+        text-align: center;
+        padding: 0 0 5px;
+    }
+    .recipe_extra_info {
+        text-align: center;
+    }
+}
+
 .recipe_complete {
     .recipe_short_description {
+        font-size: $fontSizeNormal;
         padding: 0 0 10px;
     }
     .rating {
@@ -3168,6 +3238,58 @@ body {
     }
 }
 
+.post_minimal {
+    .post_minimal_ins {
+        height: 100%;
+        display: block;
+        font-weight: normal;
+        position: relative;
+        overflow: hidden;
+        @include animate();
+    }
+    .post_image {
+        height: 200px;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        z-index: 3;
+    }
+    .post_background {
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: scaleX(1.15) scaleY(-1.15);
+        filter: blur(15px);
+        z-index: 1;
+        &:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            content: '';
+            display: block;
+            background: rgba($black, 0.5);
+        }
+    }
+    .post_title {
+        font-size: $fontSizeMedium;
+        font-weight: bold;
+        color: $white;
+        padding: 20px 10px;
+        position: relative;
+        z-index: 3;
+        text-shadow: 1px 1px 2px rgba($black, 0.5);
+    }
+}
+
 .posts_intro {
     .posts_intro_title {
         font-size: $fontSizeNormal;
@@ -3186,6 +3308,76 @@ body {
             background: rgba($black, 0.2);
             margin: auto;
             content: '';
+        }
+    }
+    .posts_intro_button {
+        padding: 60px 0 20px 0;
+        text-align: center;
+        a {
+            background: $colorMainAlt;
+            color: $white;
+            font-size: $fontSizeMedium;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+            padding: 10px 20px;
+            @include animate();
+            @include borderRadius(5px);
+            &:hover {
+                background: $colorAccent;
+            }
+        }
+    }
+}
+
+.posts_top_wrapper {
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: 5px solid rgba($colorAccent, 0.1);
+    @include clearer();
+    .post_top {
+        float: right;
+        width: calc(40% - 20px);
+        overflow: hidden;
+        .post_top_ins {
+            display: block;
+            height: 190px;
+            font-weight: normal;
+            position: relative;
+            .post_information {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 10px;
+                background: rgba($black, 0.8);
+                .post_title {
+                    font-size: $fontSizeMedium;
+                    font-weight: bold;
+                    color: $white;
+                    padding: 0 0 5px;
+                }
+                .post_short_description {
+                    font-size: $fontSizeSmall;
+                    color: rgba($white, 0.7);
+                    display: none;
+                }
+            }
+        }
+        &:first-child {
+            float: left;
+            width: 60%;
+            .post_top_ins {
+                height: 400px;
+                .post_information {
+                    .post_short_description {
+                        display: block;
+                    }
+                }
+            }
+        }
+        &:nth-child(2) {
+            margin: 0 0 20px;
         }
     }
 }

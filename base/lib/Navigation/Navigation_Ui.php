@@ -15,6 +15,7 @@ class Navigation_Ui extends Ui
         $message_error = ($message_error != '') ? '<div class="message message_error">' . $message_error . '</div>' : '';
         $content = (isset($this->object->content)) ? $this->object->content : '';
         $content_top = (isset($this->object->content_top)) ? '<div class="content_top">' . $this->object->content_top . '</div>' : '';
+        $content_bottom = (isset($this->object->content_bottom)) ? '<div class="content_bottom">' . $this->object->content_bottom . '</div>' : '';
         $contentExtra = (isset($this->object->contentExtra)) ? $this->object->contentExtra : '';
         $idInside = (isset($this->object->idInside)) ? $this->object->idInside : '';
         switch ($layout_page) {
@@ -40,6 +41,7 @@ class Navigation_Ui extends Ui
                                         ' . $this->menuSide() . '
                                     </div>
                                 </div>
+                                ' . $content_bottom . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -55,6 +57,7 @@ class Navigation_Ui extends Ui
                                 ' . $message_alert . '
                                 ' . $message . '
                                 ' . $content . '
+                                ' . $content_bottom . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -76,6 +79,7 @@ class Navigation_Ui extends Ui
                                         ' . $message_alert . '
                                         ' . $message . '
                                         ' . $content . '
+                                        ' . $content_bottom . '
                                     </div>
                                 </div>
                             </div>
@@ -106,33 +110,33 @@ class Navigation_Ui extends Ui
                     </div>
                     <div class="headerRight">
                         <div class="headerRightIns">
-                            ' . (($login->isConnected()) ? '
-                            <div class="menuUser">
-                                <a href="' . url('cuenta') . '" class="menuUserAccount">
-                                    <i class="fa fa-user"></i>
-                                    <span>' . __('my_account') . '</span>
-                                </a>
-                                <a href="' . $user->urlLogout . '" class="menuUserLogout">
-                                    <i class="fa fa-power-off"></i>
-                                    <span>' . __('logout') . '</span>
-                                </a>
-                            </div>' : '
-                            <div class="menuUser">
-                                <a href="' . $user->urlRegister . '" class="menuUserRegister">
-                                    <i class="fa fa-user"></i>
-                                    <span>' . __('register') . '</span>
-                                </a>
-                                <a href="' . $user->urlLogin . '" class="menuUserLogin">
-                                    <i class="fa fa-user"></i>
-                                    <span>' . __('login') . '</span>
-                                </a>
-                            </div>') . '
                             <div class="searchTop">' . Navigation_Ui::search() . '</div>
                         </div>
                     </div>
                 </div>
                 <div class="headerMenu">' . $this->menu() . '</div>
             </header>';
+        // ' . (($login->isConnected()) ? '
+        // <div class="menuUser">
+        //     <a href="' . url('cuenta') . '" class="menuUserAccount">
+        //         <i class="fa fa-user"></i>
+        //         <span>' . __('my_account') . '</span>
+        //     </a>
+        //     <a href="' . $user->urlLogout . '" class="menuUserLogout">
+        //         <i class="fa fa-power-off"></i>
+        //         <span>' . __('logout') . '</span>
+        //     </a>
+        // </div>' : '
+        // <div class="menuUser">
+        //     <a href="' . $user->urlRegister . '" class="menuUserRegister">
+        //         <i class="fa fa-user"></i>
+        //         <span>' . __('register') . '</span>
+        //     </a>
+        //     <a href="' . $user->urlLogin . '" class="menuUserLogin">
+        //         <i class="fa fa-user"></i>
+        //         <span>' . __('login') . '</span>
+        //     </a>
+        // </div>') . '
     }
 
     public function headerSimple()
@@ -151,9 +155,9 @@ class Navigation_Ui extends Ui
     {
         return '
             <footer class="footer">
-                <div class="footerIns">
-                    <div class="footerLinksWrapper">
-                        <div class="footerLinks">
+                <div class="footer_ins">
+                    <div class="footer_links_wrapper">
+                        <div class="footer_links">
                             <h3>Otros sitios de cocina por países</h3>
                             <a href="https://www.recetas-argentinas.com" target="_blank" title="Recetas de Argentina">Argentina</a>
                             <a href="https://www.cocina-boliviana.com" target="_blank" title="Recetas de Bolivia">Bolivia</a>
@@ -180,7 +184,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.cocina-uruguaya.com" target="_blank" title="Recetas de Uruguay">Uruguay</a>
                             <a href="https://www.recetas-venezolanas.com" target="_blank" title="Recetas de Venezuela">Venezuela</a>
                         </div>
-                        <div class="footerLinks">
+                        <div class="footer_links">
                             <h3>Otros sitios de cocina por tipos</h3>
                             <a href="https://www.recetas-arabes.com" target="_blank" title="Recetas árabes">Árabes</a>
                             <a href="https://www.recetasdiabetes.com" target="_blank" title="Recetas para diabéticos">Diabetes</a>
@@ -191,8 +195,8 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetas-veganas.com" target="_blank" title="Recetas veganas">Veganas</a>
                         </div>
                     </div>
-                    <div class="footerDown">
-                        <div class="footerDownIns">
+                    <div class="footer_down">
+                        <div class="footer_down_ins">
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>Diviértete cocinando con nuestros cientos de recetas con preparación paso a paso. No dudes en compartir tus preparaciones y críticas.</p>
                             <p>Escríbenos a <a href="mailto:recetas@plasticwebs.com">recetas@plasticwebs.com</a></p>
@@ -204,9 +208,15 @@ class Navigation_Ui extends Ui
 
     public function menuSide()
     {
+        $showPosts = true;
+        $showRecipes = true;
+        $showPosts = ($this->object->action == 'intro') ? false : $showPosts;
+        $showPosts = ($this->object->action == 'articulos') ? false : $showPosts;
+        $showRecipes = ($this->object->action == 'recetas') ? false : $showRecipes;
+        $showRecipes = (isset($this->object->hide_side_recipes)) ? false : $showRecipes;
         return '
-            ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
-            ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]);
+            ' . (($showPosts) ? Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) : '') . '
+            ' . (($showRecipes) ? Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) : '');
     }
 
     public function menu()

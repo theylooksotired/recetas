@@ -9,14 +9,12 @@ class Category_Ui extends Ui
 
     public function renderPublic()
     {
-        $recipes = new ListObjects('Recipe', ['where' => 'id_category=:id_category AND active="1"', 'order' => 'rating DESC', 'limit'=>'3'], ['id_category' => $this->object->id()]);
+        $recipes = new ListObjects('Recipe', ['where' => 'id_category=:id_category AND active="1"', 'order' => 'rating DESC', 'limit' => '3'], ['id_category' => $this->object->id()]);
         $recipeInit = (count($recipes->list) > 0) ? $recipes->list[0] : new Recipe();
         return '
             <div class="category">
                 <a href="' . $this->object->url() . '">
-                    <div class="category_image">
-                        <div class="category_image_ins" style="background-image:url(' . $recipeInit->getImageUrl('image', 'web') . ')"></div>
-                    </div>
+                    <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg"/>
                     <div class="category_title">' . $this->object->get('name') . '</div>
                 </a>
                 <div class="category_recipes">' . $recipes->showList(['function' => 'Link']) . '</div>
@@ -43,7 +41,7 @@ class Category_Ui extends Ui
         return '<div class="recipes">' . $items->showListPager() . '</div>';
     }
 
-    static public function all()
+    public static function all()
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
         return '<div class="recipes">' . $items->showListPager() . '</div>';
@@ -77,6 +75,7 @@ class Category_Ui extends Ui
         $categories = new ListObjects('Category', ['order' => 'ord']);
         return '
             <div class="categories">
+                <div class="categories_title">' . __('check_our_categories') . '</div>
                 <div class="categories_ins">' . $categories->showList() . '</div>
             </div>';
     }

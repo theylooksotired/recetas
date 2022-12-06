@@ -31,12 +31,12 @@ class Navigation_Controller extends Controller
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('shortDescription');
-                    $this->bread_crumbs = ($recipe->id()!='') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
-                        $this->head = '
-                            ' . $item->showUi('JsonHeader') . '
-                            ' . $this->ampFacebookCommentsHeader();
+                        $this->head = $item->showUi('JsonHeader');
+                        $this->hide_side_recipes = true;
+                        $this->content_bottom = $recipe->showUi('Related');
                     }
                     return $this->ui->render();
                 } else {
@@ -52,7 +52,11 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'intro':
-                $this->content_top = Category_Ui::intro();
+                $this->mode = 'amp';
+                $this->content_top = '
+                    ' . Post_Ui::introTop() . '
+                    ' . HtmlSection::show('intro_top') . '
+                    ' . Category_Ui::intro();
                 $this->content = '
                     ' . HtmlSection::show('intro') . '
                     ' . Post_Ui::intro();
@@ -67,10 +71,9 @@ class Navigation_Controller extends Controller
                     $this->meta_description = $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');
-                    $this->head = '
-                        ' . $post->showUi('JsonHeader') . '
-                        ' . $this->ampFacebookCommentsHeader();
+                    $this->head = $post->showUi('JsonHeader');
                     $this->content = $post->showUi('Complete');
+                    $this->content_bottom = $post->showUi('Related');
                 } else {
                     $this->title_page = __('posts');
                     $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'results' => '10']);
@@ -104,7 +107,7 @@ class Navigation_Controller extends Controller
                     }
                     if ($items->isEmpty()) {
                         $this->title_page = __('no_search_results');
-                        $items = new ListObjects('Recipe', ['where'=>'active="1"', 'order'=>'RAND()', 'limit'=>'20']);
+                        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
                     }
                     $this->content = '
                         <div class="items_all">
