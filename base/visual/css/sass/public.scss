@@ -2201,6 +2201,9 @@ body {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 20px;
+        @include mobile {
+            grid-template-columns: 1fr;
+        }
     }
 }
 
@@ -2886,6 +2889,12 @@ body {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         gap: 10px;
+        @include tablet {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @include mobile {
+            grid-template-columns: 1fr 1fr;
+        }
     }
     .category {
         > a {
@@ -3378,6 +3387,39 @@ body {
         }
         &:nth-child(2) {
             margin: 0 0 20px;
+        }
+    }
+    @include mobile {
+        .post_top {
+            float: none;
+            width: auto;
+            margin: 0 0 10px;
+            &:last-child {
+                margin: 0;
+            }
+            .post_top_ins {
+                height: 220px;
+                .post_information {
+                    .post_title {
+                        font-size: $fontSizeNormal;
+                    }
+                }
+            }
+            &:first-child {
+                float: none;
+                width: auto;
+                .post_top_ins {
+                    height: 220px;
+                    .post_information {
+                        .post_short_description {
+                            display: hidden;
+                        }
+                    }
+                }
+            }
+            &:nth-child(2) {
+                margin: 0 0 10px;
+            }
         }
     }
 }
