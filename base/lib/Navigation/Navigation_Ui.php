@@ -295,7 +295,7 @@ class Navigation_Ui extends Ui
             $html .= '
                 <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
                     <a href="' . url('') . '" itemprop="url">
-                        <span itemprop="title">Inicio</span>
+                        <span itemprop="title">' . __('home') . '</span>
                     </a>
                 </span> &raquo;';
             foreach ($this->object->bread_crumbs as $url => $title_page) {
