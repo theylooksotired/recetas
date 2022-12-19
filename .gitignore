@@ -1,2 +1,5 @@
-base/config/config.php
-base/stock
+.DS_Store
+base/config/
+base/cache/
+base/stock/
+app
