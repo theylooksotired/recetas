@@ -328,7 +328,7 @@ class Navigation_Ui extends Ui
     {
         return '
             <amp-analytics type="googleanalytics">
-                <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_id') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
+                <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
             </amp-analytics>';
     }
 
