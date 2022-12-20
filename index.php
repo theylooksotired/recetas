@@ -61,7 +61,6 @@ try {
     $mode = 'ajax';
     $content = (ASTERION_DEBUG) ? '<pre>' . $e->getMessage() . '</pre><pre>' . $e->getTraceAsString() . '</pre>' : '';
 }
-
 /**
  * Asterion checks the "mode" variable to return the response.
  * By default it uses the public.php template, however it is possible to
@@ -86,6 +85,10 @@ switch ($mode) {
         break;
     case 'json':
         header('Content-Type: application/json');
+        echo $content;
+        break;
+    case 'xml':
+        header('Content-Type: text/xml');
         echo $content;
         break;
     case 'js':

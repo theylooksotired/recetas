@@ -262,6 +262,12 @@ class Post_Ui extends Ui
             </div>';
     }
 
+    public static function sitemapUrls()
+    {
+        $items = (new Post)->readList(['where' => 'publish_date<=NOW() AND active="1"']);
+        return Sitemap::getUrls($items);
+    }
+
     public function renderJsonHeader()
     {
         $info = [

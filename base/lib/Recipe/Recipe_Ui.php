@@ -273,6 +273,12 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public static function sitemapUrls()
+    {
+        $items = (new Recipe)->readList(['where' => 'active="1"']);
+        return Sitemap::getUrls($items);
+    }
+
     public function renderJsonHeader()
     {
         $ingredients = [];

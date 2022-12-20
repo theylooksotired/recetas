@@ -280,36 +280,12 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
-            case 'check-github':
-                $this->mode = 'ajax';
-                $this->checkAuthorization();
-                // UPDATE APP
-                $url = "https://github.com/asterion-cms/asterion-app/archive/main.zip";
-                $zipFile = ASTERION_LOCAL_FILE . "app.zip";
-                file_put_contents($zipFile, fopen($url, 'r'));
-                $zip = new ZipArchive;
-                $res = $zip->open($zipFile);
-                if ($res === true) {
-                    $zip->extractTo('.');
-                    $zip->close();
-                }
-                unlink($zipFile);
-                shell_exec('cp -r ' . ASTERION_LOCAL_FILE . 'asterion-app-main/* ' . ASTERION_LOCAL_FILE . '/app');
-                shell_exec('rm -rf ' . ASTERION_LOCAL_FILE . 'asterion-app-main');
-                // UPDATE SITE
-                $url = "https://github.com/theylooksotired/recetas/archive/main.zip";
-                $zipFile = ASTERION_LOCAL_FILE . "master.zip";
-                file_put_contents($zipFile, fopen($url, 'r'));
-                $zip = new ZipArchive;
-                $res = $zip->open($zipFile);
-                if ($res === true) {
-                    $zip->extractTo('.');
-                    $zip->close();
-                }
-                unlink($zipFile);
-                shell_exec('cp -r ' . ASTERION_LOCAL_FILE . 'recetas-main/* ' . ASTERION_LOCAL_FILE);
-                shell_exec('rm -rf ' . ASTERION_LOCAL_FILE . 'recetas-main');
-                return 'DONE';
+            case 'sitemap':
+                $this->mode = 'xml';
+                $urls = [url('')];
+                $urls = array_merge($urls, Post_Ui::sitemapUrls());
+                $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
+                return Sitemap::generate($urls);
                 break;
         }
     }
