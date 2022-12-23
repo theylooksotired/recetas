@@ -164,15 +164,19 @@ class Navigation_Ui extends Ui
                             <a href="https://www.cocina-brasilena.com" target="_blank" title="Recetas de Brasil">Brasil</a>
                             <a href="https://www.receitas-brasil.com" target="_blank" title="Receitas do Brasil">Brasil [PT]</a>
                             <a href="https://www.cocina-chilena.com" target="_blank" title="Recetas de Chile">Chile</a>
+                            <a href="https://www.recetas-chilenas.com" target="_blank" title="Recetas chilenas">Chilenas</a>
                             <a href="https://www.recetas-chinas.com" target="_blank" title="Recetas de China">China</a>
                             <a href="https://www.cocina-colombiana.com" target="_blank" title="Recetas de Colombia">Colombia</a>
                             <a href="https://www.recetascostarica.com" target="_blank" title="Recetas de Costa Rica">Costa Rica</a>
                             <a href="https://www.cocina-cubana.com" target="_blank" title="Recetas de Cuba">Cuba</a>
                             <a href="https://www.cocina-ecuatoriana.com" target="_blank" title="Recetas de Ecuador">Ecuador</a>
+                            <a href="https://www.recetas-ecuatorianas.com" target="_blank" title="Recetas ecuatorianas">Ecuatorianas</a>
                             <a href="https://www.recetas-espana.com" target="_blank" title="Recetas de España">España</a>
                             <a href="https://www.recetassalvador.com" target="_blank" title="Recetas del Salvador">El Salvador</a>
+                            <a href="https://www.recetas-francesas.com" target="_blank" title="Recetas de Francia">Francia</a>
                             <a href="https://www.recetas-guatemala.com" target="_blank" title="Recetas de Guatemala">Guatemala</a>
                             <a href="https://www.recetashonduras.com" target="_blank" title="Recetas de Honduras">Honduras</a>
+                            <a href="https://www.recetas-india.com" target="_blank" title="Recetas de India">India</a>
                             <a href="https://www.recetas-italia.com" target="_blank" title="Recetas de Italia">Italia</a>
                             <a href="https://www.recetas-japonesas.com" target="_blank" title="Recetas de Japón">Japón</a>
                             <a href="https://www.la-cocina-mexicana.com" target="_blank" title="Recetas de México">México</a>
@@ -188,6 +192,7 @@ class Navigation_Ui extends Ui
                             <h3>Otros sitios de cocina por tipos</h3>
                             <a href="https://www.recetas-arabes.com" target="_blank" title="Recetas árabes">Árabes</a>
                             <a href="https://www.recetasdiabetes.com" target="_blank" title="Recetas para diabéticos">Diabetes</a>
+                            <a href="https://www.recetas-sin-gluten.com" target="_blank" title="Recetas sin gluten">Sin gluten</a>
                             <a href="https://www.recetas-judias.com" target="_blank" title="Recetas judías">Judías</a>
                             <a href="https://www.recetaspizzas.com" target="_blank" title="Recetas de Pizzas">Pizzas</a>
                             <a href="https://www.recetas-simples.com" target="_blank" title="Recetas simples">Simples</a>
