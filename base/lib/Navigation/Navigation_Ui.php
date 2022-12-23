@@ -176,7 +176,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetas-francesas.com" target="_blank" title="Recetas de Francia">Francia</a>
                             <a href="https://www.recetas-guatemala.com" target="_blank" title="Recetas de Guatemala">Guatemala</a>
                             <a href="https://www.recetashonduras.com" target="_blank" title="Recetas de Honduras">Honduras</a>
-                            <a href="https://www.recetas-india.com" target="_blank" title="Recetas de India">India</a>
+                            <a href="https://www.recetas-indias.com" target="_blank" title="Recetas de India">India</a>
                             <a href="https://www.recetas-italia.com" target="_blank" title="Recetas de Italia">Italia</a>
                             <a href="https://www.recetas-japonesas.com" target="_blank" title="Recetas de Japón">Japón</a>
                             <a href="https://www.la-cocina-mexicana.com" target="_blank" title="Recetas de México">México</a>
