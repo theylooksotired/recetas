@@ -252,8 +252,8 @@ body {
             @include borderRadius(10px);
             @include animate();
             &:hover {
-                background: rgba($white, 0.4);
-                color: $colorMainAlt;
+                background: $colorMainAlt;
+                color: $white;
             }
         }
     }
