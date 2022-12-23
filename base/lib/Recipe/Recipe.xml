@@ -61,6 +61,7 @@
             <type>file_drag</type>
             <layout>image</layout>
             <maxDimensions>true</maxDimensions>
+            <allowPaste>true</allowPaste>
         </attribute>
         <attribute>
             <name>title</name>
@@ -178,6 +179,11 @@
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>
+        </attribute>
+        <attribute>
+            <name>preparation_old</name>
+            <label>preparation_old</label>
+            <type>textarea_long</type>
         </attribute>
     </attributes>
     <indexes>

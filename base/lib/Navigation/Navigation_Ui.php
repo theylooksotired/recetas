@@ -293,22 +293,21 @@ class Navigation_Ui extends Ui
         $html = '';
         if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
             $html .= '
-                <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <a href="' . url('') . '" itemprop="url">
-                        <span itemprop="title">' . __('home') . '</span>
-                    </a>
+                <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="' . url('') . '" itemprop="item"><span itemprop="name">' . __('home') . '</span></a>
+                    <meta itemprop="position" content="1" />
                 </span> &raquo;';
-            foreach ($this->object->bread_crumbs as $url => $title_page) {
+            $i = 2;
+            foreach ($this->object->bread_crumbs as $url => $title) {
                 $html .= '
-                    <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                            <a href="' . $url . '" itemprop="url">
-                                <span itemprop="title">' . $title_page . '</span>
-                            </a>
-                        </span> &raquo;';
+                    <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <a href="' . $url . '" itemprop="item"><span itemprop="name">' . $title . '</span></a>
+                        <meta itemprop="position" content="' . $i . '" />
+                    </span> &raquo;';
+                $i++;
             }
-            $html = '<div class="breadcrumbs">' . substr($html, 0, -8) . '</div>';
+            return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
         }
-        return $html;
     }
 
     public static function search()

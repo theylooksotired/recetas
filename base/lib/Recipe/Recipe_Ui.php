@@ -100,7 +100,7 @@ class Recipe_Ui extends Ui
                 <span>' . __($this->object->get('cook_time')) . '</span>
             </div>
             ' : '') . '
-            ' . (($this->object->get('cook_time') != '') ? '
+            ' . (($this->object->get('cooking_method') != '') ? '
             <div class="recipe_cooking_method">
                 <i class="fa fa-cutlery"></i>
                 <span>' . __($this->object->get('cooking_method')) . '</span>
@@ -124,12 +124,19 @@ class Recipe_Ui extends Ui
     {
         $html = '';
         foreach ($this->object->get('ingredients') as $ingredient) {
-            $html .= '
-                <p class="ingredient">
-                    <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
-                    <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
-                    <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
-                </p>';
+            if ($ingredient->get('amount')!='') {
+                $html .= '
+                    <p class="ingredient">
+                        <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
+                        <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
+                        <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
+                    </p>';
+            } else {
+                $html .= '
+                    <p class="ingredient">
+                        <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
+                    </p>';
+            }
         }
         return $html;
     }

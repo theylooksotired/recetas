@@ -32,7 +32,7 @@
 		<attribute>
             <name>amount</name>
             <label>amount</label>
-            <type>text_number</type>
+            <type>text</type>
         </attribute>
         <attribute>
             <name>type</name>
@@ -52,6 +52,7 @@
                 <value id="milligram">milligram</value>
                 <value id="gram">gram</value>
                 <value id="kilogram">kilogram</value>
+                <value id="pinch">pinch</value>
             </values>
         </attribute>
         <attribute>
@@ -59,6 +60,11 @@
             <label>ingredient</label>
             <type>text_long</type>
             <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>ingredient_old</name>
+            <label>ingredient_old</label>
+            <type>text_long</type>
         </attribute>
 	</attributes>
 </object>

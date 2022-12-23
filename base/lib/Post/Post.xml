@@ -62,6 +62,7 @@
             <type>file_drag</type>
             <layout>image</layout>
             <maxDimensions>true</maxDimensions>
+            <allowPaste>true</allowPaste>
         </attribute>
         <attribute>
             <name>publish_date</name>

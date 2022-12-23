@@ -46,6 +46,18 @@ class Navigation_Controller extends Controller
                 break;
             case 'recetas':
                 $this->mode = 'amp';
+                $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
+                $recipe = ($this->extraId != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $category->id()]) : new Recipe();
+                if ($recipe->id() != '') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $recipe->url());
+                    exit();
+                }
+                if ($category->id() != '') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $category->url());
+                    exit();
+                }
                 $this->title_page = __('recipes');
                 $this->bread_crumbs = [url($this->action) => __('recipes')];
                 $this->content = Category_Ui::all();
