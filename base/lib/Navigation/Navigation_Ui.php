@@ -325,7 +325,6 @@ class Navigation_Ui extends Ui
 
     public static function analyticsAmp()
     {
-        return '<amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . Parameter::code('google_analytics_code') . '" data-credentials="include"></amp-analytics>';
         return '
             <amp-analytics type="googleanalytics">
                 <script type="application/json">{"vars": {"gtag_id": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
