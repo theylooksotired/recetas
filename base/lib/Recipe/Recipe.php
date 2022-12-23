@@ -58,6 +58,12 @@ class Recipe extends Db_Object
         return $this->get('id_category_object')->url() . '/' . $this->get('title_url');
     }
 
+    public function urlFacebook()
+    {
+        $this->loadMultipleValuesSingleAttribute('id_category');
+        return url('recetas/' . $this->get('id_category_object')->get('name_url') . '/' . $this->get('title_url'));
+    }
+
     public function urlUploadTempImagePublic()
     {
         return url('cuenta/subir-imagen-temporal');
