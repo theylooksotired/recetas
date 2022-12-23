@@ -330,6 +330,7 @@ class Navigation_Ui extends Ui
                 <script type="application/json">
                     {
                         "vars": {
+                            "apid": "' . Parameter::code('google_analytics_code') . '",
                             "gtag_id": "' . Parameter::code('google_analytics_code') . '",
                             "config": {
                                 "' . Parameter::code('google_analytics_code') . '": { "groups": "default" }
