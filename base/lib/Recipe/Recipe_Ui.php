@@ -87,8 +87,8 @@ class Recipe_Ui extends Ui
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
                 ' . $this->share(['share' => ['facebook', 'twitter']]) . '
+                ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
-                // ' . Navigation_Ui::facebookComments($this->object->url()) . '
     }
 
     public function renderInfo()

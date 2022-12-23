@@ -327,7 +327,7 @@ class Navigation_Ui extends Ui
     {
         return '
             <amp-analytics type="googleanalytics">
-                <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
+                <script type="application/json">{"vars": {"gtag_id": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
             </amp-analytics>';
     }
 
@@ -338,7 +338,9 @@ class Navigation_Ui extends Ui
 
     public static function facebookComments($url)
     {
-        return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
+        if (Parameter::code('facebook_comments') == 'true') {
+            return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
+        }
     }
 
 }
