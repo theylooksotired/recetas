@@ -34,7 +34,7 @@ class Navigation_Controller extends Controller
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
-                        $this->head = $item->showUi('JsonHeader');
+                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
                         $this->hide_side_recipes = true;
                         $this->content_bottom = $recipe->showUi('Related');
                     }
@@ -313,7 +313,9 @@ class Navigation_Controller extends Controller
 
     public function ampFacebookCommentsHeader()
     {
-        return '<script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>';
+        if (Parameter::code('facebook_comments') == 'true') {
+            return '<script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>';
+        }
     }
 
     public function ampListHeader()
