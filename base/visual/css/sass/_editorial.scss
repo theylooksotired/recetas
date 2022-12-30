@@ -19,8 +19,8 @@ img {
 }
 h1 {
     font-weight: bold;
-    font-size: $fontSizeHuge * 7 / 10;
-    padding: 0 0 10px;
+    font-size: $fontSizeHuge * 9 / 10;
+    padding: 0 0 20px;
     margin: 0 0 20px;
     color: $colorAccent;
     position: relative;
@@ -28,7 +28,7 @@ h1 {
     max-width: 600px;
     line-height: 1em;
     &:after {
-        width: 80px;
+        width: 200px;
         height: 4px;
         background: rgba($colorMainAlt, 0.5);
         position: absolute;
@@ -44,7 +44,7 @@ h1 {
 
 h2 {
     font-weight: bold;
-    font-size: $fontSizeHuge * 7 / 10;
+    font-size: $fontSizeHuge * 6 / 10;
     padding: 0 0 10px;
     margin: 0 0 10px;
     color: $colorAccent;
@@ -53,7 +53,7 @@ h2 {
     line-height: 1em;
     max-width: 600px;
     &:after {
-        width: 200px;
+        width: 20px;
         height: 2px;
         background: rgba($colorMainAlt, 0.5);
         position: absolute;
@@ -66,7 +66,7 @@ h2 {
 
 h3 {
     font-weight: bold;
-    font-size: $fontSizeHuge * 7 / 10;
+    font-size: $fontSizeHuge * 5 / 10;
     margin: 0 0 20px;
     color: lighten($colorAccentAlt, 10%);
     font-family: $fontFamily;

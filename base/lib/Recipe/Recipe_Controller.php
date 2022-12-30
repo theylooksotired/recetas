@@ -92,6 +92,7 @@ class Recipe_Controller extends Controller
                 $item = (new RecipeIngredient)->read($this->values['id']);
                 if ($item->id() != '') {
                     $item->persistSimple('ingredient', $this->values['ingredient_new']);
+                    $item->persistSimple('ingredient_old', $this->values['ingredient_new']);
                     echo 1;
                 }
                 echo 0;
@@ -114,6 +115,7 @@ class Recipe_Controller extends Controller
                     $type = $item->get('type');
                     if ($type == '') {
                         $type = (strpos($ingredient, ' cda ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cdas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cuchara ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cucharas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cdta ') !== false) ? 'teaspoon' : $type;
@@ -150,7 +152,7 @@ class Recipe_Controller extends Controller
                     }
                     $typeEmpty = ($type == '') ? true : false;
                     $type = ($typeEmpty) ? 'unit' : $type;
-                    $remove = [' cda ', ' cuchara ', ' cucharas ', ' cdta ', ' cucharadita ', ' cucharaditas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml '];
+                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cdta ', ' cucharadita ', ' cucharaditas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml '];
                     $ingredient_new = str_replace($remove, '', $ingredient);
                     $ingredient_new = str_replace($amount, '', $ingredient_new);
                     $ingredient_new = trim($ingredient_new);
