@@ -156,7 +156,7 @@
             <refObject>RecipeIngredient</refObject>
             <linkAttribute>id_recipe</linkAttribute>
             <onDelete>cascade</onDelete>
-            <class>multiple_items</class>
+            <class>multiple_items_ingredients</class>
         </attribute>
         <attribute>
             <name>preparation</name>
@@ -165,7 +165,7 @@
             <refObject>RecipePreparation</refObject>
             <linkAttribute>id_recipe</linkAttribute>
             <onDelete>cascade</onDelete>
-            <class>multiple_items</class>
+            <class>multiple_items_preparation</class>
         </attribute>
         <attribute>
             <name>tags</name>

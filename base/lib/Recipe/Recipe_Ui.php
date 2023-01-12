@@ -77,6 +77,7 @@ class Recipe_Ui extends Ui
                             <h2>' . __('ingredients') . '</h2>
                             <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                         </div>
+                        ' . Adsense::amp() . '
                         <div class="recipe_preparation">
                             <h2>' . __('preparation') . '</h2>
                             <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
