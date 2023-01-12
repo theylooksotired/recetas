@@ -120,6 +120,8 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' cucharas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cdta ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cdtas ') !== false) ? 'teaspoon' : $type;
+                        $type = (strpos($ingredient, ' cdita ') !== false) ? 'teaspoon' : $type;
+                        $type = (strpos($ingredient, ' cditas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharadita ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharaditas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' vaso ') !== false) ? 'cup' : $type;
@@ -152,7 +154,7 @@ class Recipe_Controller extends Controller
                     }
                     $typeEmpty = ($type == '') ? true : false;
                     $type = ($typeEmpty) ? 'unit' : $type;
-                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cdta ', ' cucharadita ', ' cucharaditas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml '];
+                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml '];
                     $ingredient_new = str_replace($remove, '', $ingredient);
                     $ingredient_new = str_replace($amount, '', $ingredient_new);
                     $ingredient_new = trim($ingredient_new);

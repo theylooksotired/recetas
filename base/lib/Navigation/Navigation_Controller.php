@@ -48,19 +48,27 @@ class Navigation_Controller extends Controller
                 $this->mode = 'amp';
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $recipe = ($this->extraId != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $category->id()]) : new Recipe();
-                if ($recipe->id() != '') {
-                    header("HTTP/1.1 301 Moved Permanently");
-                    header('Location: ' . $recipe->url());
-                    exit();
+                $item = ($category->id() != '') ? $category : new Category();
+                $item = ($recipe->id() != '') ? $recipe : $item;
+                if ($item->id() != '') {
+                    $this->title_page = $item->getBasicInfo();
+                    $this->url_page = $item->url();
+                    $this->meta_url = $item->url();
+                    $this->meta_image = $item->getImageUrl('image', 'web');
+                    $this->meta_description = $item->get('shortDescription');
+                    $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
+                    $this->content = $item->showUi('Complete');
+                    if ($recipe->id() != '') {
+                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
+                        $this->hide_side_recipes = true;
+                        $this->content_bottom = $recipe->showUi('Related');
+                    }
+                    return $this->ui->render();
+                } else {
+                    $this->title_page = __('recipes');
+                    $this->bread_crumbs = [url($this->action) => __('recipes')];
+                    $this->content = Category_Ui::all();
                 }
-                if ($category->id() != '') {
-                    header("HTTP/1.1 301 Moved Permanently");
-                    header('Location: ' . $category->url());
-                    exit();
-                }
-                $this->title_page = __('recipes');
-                $this->bread_crumbs = [url($this->action) => __('recipes')];
-                $this->content = Category_Ui::all();
                 return $this->ui->render();
                 break;
             case 'intro':
