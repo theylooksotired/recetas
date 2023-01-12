@@ -2493,7 +2493,6 @@ body {
         }
         .ingredient_ingredient {
             color: darken($colorAccentAlt, 20%);
-            font-weight: bold;
         }
     }
     .recipe_preparation {
@@ -2512,7 +2511,6 @@ body {
         .preparation_step_number {
             font-size: $fontSizeTiny;
             color: rgba($black, 0.3);
-            font-weight: bold;
             display: block;
             padding: 0;
             margin: 0;

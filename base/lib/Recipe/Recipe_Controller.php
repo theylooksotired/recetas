@@ -101,15 +101,20 @@ class Recipe_Controller extends Controller
             case 'ingredients':
                 $table = '';
                 foreach ((new RecipeIngredient)->readList(['order' => 'ingredient']) as $item) {
-                    $ingredient = $item->get('ingredient_old');
+                    $ingredient = ($item->get('ingredient_old') == 'Sal y pimienta' || $item->get('ingredient_old') == '') ? $item->get('ingredient') : $item->get('ingredient_old');
                     $amount = $item->get('amount');
                     if ($amount == '') {
                         $amount = ($amount == '' && strpos($ingredient, '1 ½') !== false) ? '1 ½' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1½') !== false) ? '1 ½' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '2 ½') !== false) ? '2 ½' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1 ¼') !== false) ? '1 ¼' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1¼') !== false) ? '1 ¼' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '2 ¼') !== false) ? '2 ¼' : $amount;
                         $amount = ($amount == '' && floatval($ingredient) > 0) ? intval($ingredient) : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '½') !== false) ? '½' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '⅓') !== false) ? '⅓' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '¼') !== false) ? '¼' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '⅛') !== false) ? '⅛' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '¾') !== false) ? '¾' : $amount;
                     }
                     $type = $item->get('type');
@@ -118,12 +123,16 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' cdas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cuchara ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cucharas ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cucharada ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cucharadas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cdta ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cdtas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cdita ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cditas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharadita ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharaditas ') !== false) ? 'teaspoon' : $type;
+                        $type = (strpos($ingredient, ' cucharilla ') !== false) ? 'teaspoon' : $type;
+                        $type = (strpos($ingredient, ' cucharillas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' vaso ') !== false) ? 'cup' : $type;
                         $type = (strpos($ingredient, ' vasos ') !== false) ? 'cup' : $type;
                         $type = (strpos($ingredient, ' vasitos ') !== false) ? 'cup' : $type;
@@ -151,10 +160,12 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' pizcas ') !== false) ? 'pinch' : $type;
                         $type = (strpos($ingredient, ' cc ') !== false) ? 'centiliter' : $type;
                         $type = (strpos($ingredient, ' ml ') !== false) ? 'milliliter' : $type;
+                        $type = (strpos($ingredient, ' lata ') !== false) ? 'can' : $type;
+                        $type = (strpos($ingredient, ' latas ') !== false) ? 'can' : $type;
                     }
                     $typeEmpty = ($type == '') ? true : false;
                     $type = ($typeEmpty) ? 'unit' : $type;
-                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml '];
+                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cucharada ', ' cucharadas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' cucharilla ', ' cucharillas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml ', ' lata ', ' latas '];
                     $ingredient_new = str_replace($remove, '', $ingredient);
                     $ingredient_new = str_replace($amount, '', $ingredient_new);
                     $ingredient_new = trim($ingredient_new);

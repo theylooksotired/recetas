@@ -53,6 +53,7 @@
                 <value id="gram">gram</value>
                 <value id="kilogram">kilogram</value>
                 <value id="pinch">pinch</value>
+                <value id="can">can</value>
             </values>
         </attribute>
         <attribute>

@@ -22,6 +22,8 @@
             <pager>50</pager>
             <orderBy>title,active,created</orderBy>
             <publicUrl>receta / #id _ #title_url</publicUrl>
+            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQuery>
+            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQueryCount>
             <multipleActions>
                 <action icon="times">delete</action>
                 <action icon="check">activate</action>

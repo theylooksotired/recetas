@@ -124,11 +124,13 @@ class Recipe_Ui extends Ui
     {
         $html = '';
         foreach ($this->object->get('ingredients') as $ingredient) {
-            if ($ingredient->get('amount')!='') {
+            if ($ingredient->get('amount') != '') {
                 $html .= '
                     <p class="ingredient">
                         <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
+                        ' . (($ingredient->get('type') != 'unit') ? '
                         <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
+                        ' : '') . '
                         <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
                     </p>';
             } else {
@@ -159,8 +161,8 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
-        $posts = new ListObjects('Post', ['order'=>'MATCH (title, title_url, short_description) AGAINST ("'.$this->object->getBasicInfo().'") DESC', 'limit'=>'6']);
-        $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order'=>'RAND()', 'limit'=>'5'));
+        $posts = new ListObjects('Post', ['order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $this->object->getBasicInfo() . '") DESC', 'limit' => '6']);
+        $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order' => 'RAND()', 'limit' => '5'));
         $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         return '<div class="related">
                     <div class="related_block">
