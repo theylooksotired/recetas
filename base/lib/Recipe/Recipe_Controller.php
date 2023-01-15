@@ -31,14 +31,15 @@ class Recipe_Controller extends Controller
                 foreach ((new Recipe)->readList(['order' => 'title']) as $item) {
                     Db::execute('DELETE FROM ' . (new RecipePreparation)->tableName . ' WHERE id_recipe="' . $item->id() . '"');
                     $dom = new DOMDocument();
-                    $dom->loadHTML($item->get('preparation_old'));
+                    $dom->loadHTML(html_entity_decode($item->get('preparation_old')));
                     $steps = $dom->getElementsByTagName('li');
                     if ($steps->length > 1) {
                         foreach ($steps as $key => $step) {
-                            if ((string) $step->nodeValue != '') {
+                            $nodeValue = (string) $step->nodeValue;
+                            if ($nodeValue != '') {
                                 $preparation = new RecipePreparation([
                                     'id_recipe' => $item->id(),
-                                    'step' => (string) $step->nodeValue,
+                                    'step' => utf8_decode($nodeValue),
                                 ]);
                                 $preparation->persist();
                             }
@@ -142,7 +143,9 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' unidades ') !== false) ? 'unit' : $type;
                         $type = (strpos($ingredient, ' l ') !== false) ? 'liter' : $type;
                         $type = (strpos($ingredient, ' lt ') !== false) ? 'liter' : $type;
+                        $type = (strpos($ingredient, ' lts ') !== false) ? 'liter' : $type;
                         $type = (strpos($ingredient, ' litro ') !== false) ? 'liter' : $type;
+                        $type = (strpos($ingredient, ' litros ') !== false) ? 'liter' : $type;
                         $type = (strpos($ingredient, ' tza ') !== false) ? 'cup' : $type;
                         $type = (strpos($ingredient, ' taza ') !== false) ? 'cup' : $type;
                         $type = (strpos($ingredient, ' tazas ') !== false) ? 'cup' : $type;
@@ -165,7 +168,7 @@ class Recipe_Controller extends Controller
                     }
                     $typeEmpty = ($type == '') ? true : false;
                     $type = ($typeEmpty) ? 'unit' : $type;
-                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cucharada ', ' cucharadas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' cucharilla ', ' cucharillas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' litro ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml ', ' lata ', ' latas '];
+                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cucharada ', ' cucharadas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' cucharilla ', ' cucharillas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' lts ', ' litro ', ' litros ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml ', ' lata ', ' latas '];
                     $ingredient_new = str_replace($remove, '', $ingredient);
                     $ingredient_new = str_replace($amount, '', $ingredient_new);
                     $ingredient_new = trim($ingredient_new);
