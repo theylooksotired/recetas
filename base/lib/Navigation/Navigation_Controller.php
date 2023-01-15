@@ -53,7 +53,7 @@ class Navigation_Controller extends Controller
                 if ($item->id() != '') {
                     $this->title_page = $item->getBasicInfo();
                     $this->url_page = $item->url();
-                    $this->meta_url = $item->url();
+                    $this->meta_url = $item->url() . (isset($this->parameters['pagina']) ? '?pagina=' . $this->parameters['pagina'] : '');
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('shortDescription');
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
@@ -68,6 +68,7 @@ class Navigation_Controller extends Controller
                     $this->title_page = __('recipes');
                     $this->bread_crumbs = [url($this->action) => __('recipes')];
                     $this->content = Category_Ui::all();
+                    $this->meta_url = url($this->action) . (isset($this->parameters['pagina']) ? '?pagina=' . $this->parameters['pagina'] : '');
                 }
                 return $this->ui->render();
                 break;
