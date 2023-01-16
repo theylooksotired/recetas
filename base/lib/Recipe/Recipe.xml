@@ -168,16 +168,6 @@
             <class>multiple_items_preparation</class>
         </attribute>
         <attribute>
-            <name>tags</name>
-            <label>tags</label>
-            <type>multiple_autocomplete</type>
-            <refObject>RecipeTag</refObject>
-            <linkAttribute>id_recipe</linkAttribute>
-            <autoCompleteObject>Tag</autoCompleteObject>
-            <autoCompleteAttribute>name</autoCompleteAttribute>
-            <onDelete>cascade</onDelete>
-        </attribute>
-        <attribute>
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>

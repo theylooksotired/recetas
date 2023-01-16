@@ -304,7 +304,7 @@ class Recipe_Ui extends Ui
             '@type' => 'Recipe',
             'name' => $this->object->getBasicInfo(),
             'image' => $this->object->getImageUrl('image', 'web'),
-            'description' => $this->object->get('description'),
+            'description' => $this->object->get('short_description'),
             'aggregateRating' => [
                 '@type' => 'AggregateRating',
                 'ratingValue' => $this->object->get('rating'),

@@ -39,6 +39,7 @@
             <label>type</label>
             <type>select</type>
             <values>
+                <value id=""></value>
                 <value id="unit">unit</value>
                 <value id="teaspoon">teaspoon</value>
             	<value id="tablespoon">tablespoon</value>
