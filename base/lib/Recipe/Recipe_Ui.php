@@ -321,6 +321,7 @@ class Recipe_Ui extends Ui
             ],
             'datePublished' => $this->object->get('created'),
             'dateModified' => $this->object->get('modified'),
+            'recipeCuisine' => $this->object->label('type'),
             'recipeCategory' => $this->object->get('id_category_object')->getBasicInfo(),
             'recipeYield' => $this->object->getServings(),
             'recipeIngredient' => $ingredients,
