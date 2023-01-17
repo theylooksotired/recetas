@@ -22,12 +22,13 @@
             <pager>50</pager>
             <orderBy>title,active,created</orderBy>
             <publicUrl>receta / #id _ #title_url</publicUrl>
-            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQuery>
-            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQueryCount>
+            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
+            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQueryCount>
+            <filterByUser>id_user</filterByUser>
             <multipleActions>
                 <action icon="times">delete</action>
-                <action icon="check">activate</action>
-                <action>deactivate</action>
+                <action icon="eye">activate</action>
+                <action icon="eye-slash">deactivate</action>
             </multipleActions>
             <templateItemAdmin>
                 #active
@@ -46,10 +47,10 @@
         </attribute>
         <attribute>
             <name>id_user</name>
-            <type>linkid_autoincrement</type>
+            <type>hidden_user_admin</type>
             <label>user</label>
             <layout>label</layout>
-            <refObject>User</refObject>
+            <refObject>UserAdmin</refObject>
         </attribute>
         <attribute>
             <name>id_category</name>
@@ -63,7 +64,6 @@
             <type>file_drag</type>
             <layout>image</layout>
             <maxDimensions>true</maxDimensions>
-            <allowPaste>true</allowPaste>
         </attribute>
         <attribute>
             <name>title</name>
@@ -171,6 +171,7 @@
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>
+            <managesPermissions>true</managesPermissions>
         </attribute>
         <attribute>
             <name>preparation_old</name>
