@@ -101,6 +101,7 @@ class Recipe_Controller extends Controller
                 break;
             case 'ingredients':
                 $table = '';
+                // foreach ((new RecipeIngredient)->readList(['where'=>'type IS NULL OR type=""', 'order' => 'ingredient']) as $item) {
                 foreach ((new RecipeIngredient)->readList(['order' => 'ingredient']) as $item) {
                     $ingredient = ($item->get('ingredient_old') == 'Sal y pimienta' || $item->get('ingredient_old') == '') ? $item->get('ingredient') : $item->get('ingredient_old');
                     $amount = $item->get('amount');

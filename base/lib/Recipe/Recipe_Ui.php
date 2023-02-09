@@ -58,6 +58,37 @@ class Recipe_Ui extends Ui
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
+        $otherVersions = '';
+        if ($this->object->get('check_versions') == 1) {
+            $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+            if (count($versions) > 0) {
+                foreach ($versions as $version) {
+                    $version->loadMultipleValuesSingleAttribute('ingredients');
+                    $version->loadMultipleValuesSingleAttribute('preparation');
+                    // $version->loadMultipleValues();
+                    $versionUi = new Recipe_Ui($version);
+                    $otherVersions .= '
+                        <div class="recipe_wrapper">
+                            <h3>' . $version->getBasicInfo() . '</h3>
+                            ' . $version->get('short_description') . '
+                            <div class="recipe_ingredients">
+                                <h4>' . __('ingredients') . '</h4>
+                                <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
+                            </div>
+                            <div class="recipe_preparation">
+                                <h4>' . __('preparation') . '</h4>
+                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
+                            </div>
+                        </div>';
+                }
+                $otherVersions = '
+                    <div class="recipe_versions">
+                        <h2>' . __('other_versions') . '</h2>
+                        <p>' . __('other_versions_message') . '</p>
+                        ' . $otherVersions . '
+                    </div>';
+            }
+        }
         return '
             <div class="recipe_complete">
                 <div class="recipe_complete_ins">
@@ -72,6 +103,7 @@ class Recipe_Ui extends Ui
                         </div>
                     </div>
                     ' . Adsense::amp() . '
+                    ' . $this->object->get('description') . '
                     <div class="recipe_wrapper">
                         <div class="recipe_ingredients">
                             <h2>' . __('ingredients') . '</h2>
@@ -85,6 +117,7 @@ class Recipe_Ui extends Ui
                     </div>
                 </div>
             </div>
+            ' . $otherVersions . '
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
                 ' . $this->share(['share' => ['facebook', 'twitter']]) . '
@@ -164,11 +197,16 @@ class Recipe_Ui extends Ui
     {
         $posts = new ListObjects('Post', ['order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $this->object->getBasicInfo() . '") DESC', 'limit' => '6']);
         $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order' => 'RAND()', 'limit' => '5'));
-        $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        $recipes = (new Recipe)->readList(['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        $recipesHtml = '';
+        foreach ($recipes as $recipe) {
+            $recipe->loadCategoryManually($this->object->get('id_category_object'));
+            $recipesHtml .= $recipe->showUi('PublicSimple');
+        }
         return '<div class="related">
                     <div class="related_block">
                         <div class="related_title">' . __('other_recipes') . '</div>
-                        <div class="posts">' . $recipes->showList(['function' => 'PublicSimple']) . '</div>
+                        <div class="posts">' . $recipesHtml . '</div>
                     </div>
                     <div class="related_block">
                         <div class="related_title">' . __('other_posts') . '</div>
@@ -275,7 +313,7 @@ class Recipe_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'created DESC', 'limit' => 4]);
+        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 4]);
         return '
             <div class="items_side">
                 <div class="items_side_title">' . __('popular_recipes') . '</div>

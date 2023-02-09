@@ -171,7 +171,7 @@ class Post_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => 3]);
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
             <div class="items_side">
                 <div class="items_side_title">' . __('last_posts') . '</div>

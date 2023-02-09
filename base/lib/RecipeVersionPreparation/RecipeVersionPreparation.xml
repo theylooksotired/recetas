@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure RecipeVersionPreparation
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>RecipeVersionPreparation</name>
+	<table>recipe_version_preparation</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <order>true</order>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_recipe_version</name>
+			<type>linkid_autoincrement</type>
+			<refObject>RecipeVersion</refObject>
+		</attribute>
+		<attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+		<attribute>
+            <name>step</name>
+            <label>step</label>
+            <type>textarea_long</type>
+            <required>not_empty</required>
+        </attribute>
+	</attributes>
+</object>

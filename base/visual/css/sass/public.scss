@@ -2421,7 +2421,7 @@ body {
 
 .recipe_complete {
     .recipe_short_description {
-        font-size: $fontSizeNormal;
+        font-size: $fontSizeMedium;
         padding: 0 0 10px;
     }
     .rating {
@@ -2457,7 +2457,8 @@ body {
 }
 
 .recipe_extra_info {
-    font-size: $fontSizeSmall;
+    margin: 0 -10px;
+    font-size: $fontSizeNormal;
     > div {
         margin: 0 5px 5px;
         padding: 3px 5px;
@@ -2475,7 +2476,6 @@ body {
 .recipe_wrapper {
     @include clearer();
     h2 {
-        font-size: $fontSizeMedium;
         margin: 0 0 10px;
         padding: 10px 0 10px 0;
         &:after {
@@ -2516,6 +2516,18 @@ body {
             margin: 0;
             line-height: 1em;
         }
+    }
+}
+
+.recipe_versions {
+    margin: 40px 0 0 0;
+    padding: 40px 0 0 0;
+    border-top: 2px solid rgba($colorAccent, 0.1);
+    .recipe_wrapper {
+        padding: 20px;
+        margin: 0 -20px 20px -20px;
+        background: rgba($black, 0.02);
+        @include borderRadius(10px);
     }
 }
 
@@ -2584,7 +2596,7 @@ body {
         @include animate();
     }
     .post_image {
-        height: 200px;
+        height: 160px;
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -2616,10 +2628,10 @@ body {
         }
     }
     .post_title {
-        font-size: $fontSizeMedium;
+        font-size: $fontSizeNormal;
         font-weight: bold;
         color: $white;
-        padding: 20px 10px;
+        padding: 10px;
         position: relative;
         z-index: 3;
         text-shadow: 1px 1px 2px rgba($black, 0.5);

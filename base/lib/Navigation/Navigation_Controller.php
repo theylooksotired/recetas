@@ -34,8 +34,8 @@ class Navigation_Controller extends Controller
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
-                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
                         $this->hide_side_recipes = true;
+                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
                         $this->content_bottom = $recipe->showUi('Related');
                     }
                     return $this->ui->render();
@@ -48,6 +48,9 @@ class Navigation_Controller extends Controller
                 $this->mode = 'amp';
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $recipe = ($this->extraId != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $category->id()]) : new Recipe();
+                if ($recipe->id()!='') {
+                    $recipe->loadCategoryManually($category);
+                }
                 $item = ($category->id() != '') ? $category : new Category();
                 $item = ($recipe->id() != '') ? $recipe : $item;
                 if ($item->id() != '') {
@@ -59,8 +62,8 @@ class Navigation_Controller extends Controller
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
-                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
                         $this->hide_side_recipes = true;
+                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
                         $this->content_bottom = $recipe->showUi('Related');
                     }
                     return $this->ui->render();

@@ -54,8 +54,15 @@ class Recipe extends Db_Object
 
     public function url()
     {
-        $this->loadMultipleValuesSingleAttribute('id_category');
+        if (!is_object($this->get('id_category_object'))) {
+            $this->loadMultipleValuesSingleAttribute('id_category');
+        }
         return url('recetas/' . $this->get('id_category_object')->get('name_url') . '/' . $this->get('title_url'));
+    }
+
+    public function loadCategoryManually($category)
+    {
+        $this->set('id_category_object', $category);
     }
 
     public function urlUploadTempImagePublic()
