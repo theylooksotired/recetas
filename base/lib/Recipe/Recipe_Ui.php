@@ -65,7 +65,6 @@ class Recipe_Ui extends Ui
                 foreach ($versions as $version) {
                     $version->loadMultipleValuesSingleAttribute('ingredients');
                     $version->loadMultipleValuesSingleAttribute('preparation');
-                    // $version->loadMultipleValues();
                     $versionUi = new Recipe_Ui($version);
                     $otherVersions .= '
                         <div class="recipe_wrapper">
@@ -162,7 +161,7 @@ class Recipe_Ui extends Ui
                 $html .= '
                     <p class="ingredient">
                         <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
-                        ' . (($ingredient->get('type') != 'unit') ? '
+                        ' . (($ingredient->get('type') != 'unit' && ($ingredient->get('type') != '') ? '
                         <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
                         ' : '') . '
                         <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
