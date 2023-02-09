@@ -30,7 +30,7 @@ class User_Ui extends Ui
             <div class="item_complete">
                 <div class="item_info">
                     <div class="item_info_ins">
-                        <div class="item_info_image">' . $this->object->getImageAmp('image', 'small') . '</div>
+                        <div class="item_info_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                         <div class="item_info_wrapper">
                             <h1>' . $this->object->getBasicInfo() . '</h1>
                             ' . (($this->object->get('short_description') != '') ? '

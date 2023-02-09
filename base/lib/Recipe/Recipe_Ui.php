@@ -16,7 +16,7 @@ class Recipe_Ui extends Ui
         return '
             <div class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
                         <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
@@ -32,7 +32,7 @@ class Recipe_Ui extends Ui
         return '
             <div class="recipe_simple">
                 <a class="recipe_ins" href="' . $this->object->url() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
@@ -48,8 +48,8 @@ class Recipe_Ui extends Ui
         return '
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" class="post_minimal_ins">
-                    <div class="post_background" style="background-image:url(' . $this->object->getImageUrl('image', 'web') . ');"></div>
-                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrl('image', 'web') . ');"></div>
+                    <div class="post_background" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
+                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';
@@ -93,7 +93,7 @@ class Recipe_Ui extends Ui
                 <div class="recipe_complete_ins">
                     <div class="recipe_complete_info">
                         <div class="recipe_complete_info_left">
-                            ' . $this->object->getImageAmp('image', 'web') . '
+                            ' . $this->object->getImageAmpWebp('image', 'web') . '
                         </div>
                         <div class="recipe_complete_info_right">
                             <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
@@ -185,7 +185,7 @@ class Recipe_Ui extends Ui
                 <p class="preparation">
                     <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
                     <span class="preparation_step">' . $preparation->get('step') . '</span>
-                    ' . $preparation->getImageAmp('image', 'web') . '
+                    ' . $preparation->getImageAmpWebp('image', 'web') . '
                 </p>';
             $i++;
         }
@@ -340,7 +340,7 @@ class Recipe_Ui extends Ui
             '@context' => 'http://schema.org/',
             '@type' => 'Recipe',
             'name' => $this->object->getBasicInfo(),
-            'image' => $this->object->getImageUrl('image', 'web'),
+            'image' => $this->object->getImageUrlWebp('image', 'web'),
             'description' => $this->object->get('short_description'),
             'aggregateRating' => [
                 '@type' => 'AggregateRating',
