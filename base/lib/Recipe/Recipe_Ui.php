@@ -313,7 +313,7 @@ class Recipe_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 5]);
+        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 4]);
         return '
             <div class="items_side">
                 <div class="items_side_title">' . __('popular_recipes') . '</div>
