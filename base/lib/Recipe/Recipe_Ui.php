@@ -161,7 +161,7 @@ class Recipe_Ui extends Ui
                 $html .= '
                     <p class="ingredient">
                         <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
-                        ' . (($ingredient->get('type') != 'unit' && ($ingredient->get('type') != '') ? '
+                        ' . (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? '
                         <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
                         ' : '') . '
                         <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
