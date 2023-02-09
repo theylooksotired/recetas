@@ -92,8 +92,7 @@ class Post_Ui extends Ui
         return '
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" class="post_minimal_ins">
-                    <div class="post_background" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
-                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
+                    <div class="post_image_amp">'.$this->object->getImageAmpWebp('image', 'small').'</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';

@@ -48,8 +48,7 @@ class Recipe_Ui extends Ui
         return '
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" class="post_minimal_ins">
-                    <div class="post_background" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
-                    <div class="post_image" style="background-image:url(' . $this->object->getImageUrlWebp('image', 'web') . ');"></div>
+                    <div class="post_image_amp">'.$this->object->getImageAmpWebp('image', 'small').'</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';
@@ -67,9 +66,9 @@ class Recipe_Ui extends Ui
                     $version->loadMultipleValuesSingleAttribute('preparation');
                     $versionUi = new Recipe_Ui($version);
                     $otherVersions .= '
-                        <div class="recipe_wrapper">
+                        <div class="recipe_wrapper recipe_version">
                             <h3>' . $version->getBasicInfo() . '</h3>
-                            ' . $version->get('short_description') . '
+                            ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
                             <div class="recipe_ingredients">
                                 <h4>' . __('ingredients') . '</h4>
                                 <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
