@@ -31,7 +31,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive()) . '
+                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::ampDesktop() : Adsense::responsive()) . '
                                 <div class="content_ins">
                                     <div class="content_left">
                                         ' . $content . '
