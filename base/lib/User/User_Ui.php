@@ -20,7 +20,7 @@ class User_Ui extends Ui
                 $socialLinksHtml .= '
                     <div class="item_info_link user_info_' . $socialLink . '">
                         <a href="' . Url::format($this->object->get($socialLink)) . '" target="_blank">
-                            <i class="fa fa-' . str_replace('link_', '', $socialLink) . '"></i>
+                            <i class="icon icon-' . str_replace('link_', '', $socialLink) . '"></i>
                         </a>
                     </div>';
             }

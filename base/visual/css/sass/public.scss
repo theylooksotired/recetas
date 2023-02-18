@@ -3,6 +3,7 @@
 @import "_variables.scss";
 @import "_common.scss";
 @import "_mixins.scss";
+@import "_icons.scss";
 
 @import "_editorial.scss";
 
@@ -2260,18 +2261,18 @@ body {
 }
 
 .rating {
-    .fa-star {
+    .icon-star {
         color: rgba($black, 0.1);
     }
     &.rating_1 {
-        .fa-star {
+        .icon-star {
             &:nth-child(1) {
                 color: $colorMain;
             }
         }
     }
     &.rating_2 {
-        .fa-star {
+        .icon-star {
             &:nth-child(1),
             &:nth-child(2) {
                 color: $colorMain;
@@ -2279,7 +2280,7 @@ body {
         }
     }
     &.rating_3 {
-        .fa-star {
+        .icon-star {
             &:nth-child(1),
             &:nth-child(2),
             &:nth-child(3) {
@@ -2288,7 +2289,7 @@ body {
         }
     }
     &.rating_4 {
-        .fa-star {
+        .icon-star {
             &:nth-child(1),
             &:nth-child(2),
             &:nth-child(3),
@@ -2298,7 +2299,7 @@ body {
         }
     }
     &.rating_5 {
-        .fa-star {
+        .icon-star {
             &:nth-child(1),
             &:nth-child(2),
             &:nth-child(3),

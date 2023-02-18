@@ -21,20 +21,6 @@ class Category_Ui extends Ui
             </div>';
     }
 
-    public function renderMedium()
-    {
-        return '
-            <div class="itemMedium">
-                <a href="' . $this->object->url() . '">
-                    <i class="fa fa-mail-bulk"></i>
-                    <div class="itemInfo">
-                        <div class="itemTitle">' . $this->object->get('name') . '</div>
-                        <div class="itemDescription">' . $this->object->get('shortDescription') . '</div>
-                    </div>
-                </a>
-            </div>';
-    }
-
     public function renderComplete()
     {
         $items = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'results' => '12']);
@@ -45,29 +31,6 @@ class Category_Ui extends Ui
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
         return '<div class="recipes">' . $items->showListPager() . '</div>';
-    }
-
-    public static function getMenuItems()
-    {
-        return [];
-    }
-
-    public static function menuItems()
-    {
-        $action = (isset($_GET['action'])) ? $_GET['action'] : '';
-        $items = Category_Ui::getMenuItems();
-        $itemsHtml = '';
-        foreach ($items as $itemValues) {
-            $item = new Category($itemValues);
-            $class = ($item->get('name_url') == $action) ? 'selected' : '';
-            $classImportant = ($itemValues['numResults'] > 4) ? 'important' : '';
-            $itemsHtml .= '
-                <a href="' . $item->url() . '" class="' . $class . ' ' . $classImportant . '">
-                    <i class="fa fa-angle-right"></i>
-                    <span>' . $item->getBasicInfo() . ' <em>(' . $itemValues['numResults'] . ')</em></span>
-                </a>';
-        }
-        return $itemsHtml;
     }
 
     public static function intro()
@@ -99,43 +62,6 @@ class Category_Ui extends Ui
                 <div class="menu_side_title">' . __('categories') . '</div>
                 <div class="menu_side_items">' . Category_Ui::menuItems() . '</div>
             </nav>';
-    }
-
-    /**
-     * @cache
-     */
-    public static function menuAmp()
-    {
-        $itemsHtml = '';
-        $items = Category_Ui::getMenuItems();
-        foreach ($items as $itemValues) {
-            $item = new Category($itemValues);
-            $itemsHtml .= '
-                <li>
-                    <a href="' . $item->url() . '">
-                        <i class="fa fa-angle-right"></i>
-                        <span>' . $item->getBasicInfo() . ' <em>(' . $itemValues['numResults'] . ')</em></span>
-                    </a>
-                </li>';
-        }
-        return '
-            <amp-nested-menu layout="fill">
-                <ul>
-                    <li>
-                        <a href="' . url('') . '" class="menuHome">
-                            <i class="fa fa-envelope-open-text"></i>
-                            <span>' . __('home') . '</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="' . url('articulos') . '" class="menuPosts">
-                            <i class="fa fa-mail-bulk"></i>
-                            <span>' . __('posts') . '</span>
-                        </a>
-                    </li>
-                    ' . $itemsHtml . '
-                </ul>
-            </amp-nested-menu>';
     }
 
     public function renderJsonHeader()

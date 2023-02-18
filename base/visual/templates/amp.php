@@ -22,8 +22,7 @@
     <noscript>
         <style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style>
     </noscript>
-    <style amp-custom><?php echo str_replace('../../img/', ASTERION_BASE_URL.'visual/img/', file_get_contents(ASTERION_BASE_FILE.'visual/css/stylesheets/public.css'));?></style>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <style amp-custom><?php echo str_replace('../fonts/', ASTERION_BASE_URL.'visual/css/fonts/', str_replace('../../img/', ASTERION_BASE_URL.'visual/img/', file_get_contents(ASTERION_BASE_FILE.'visual/css/stylesheets/public.css')));?></style>
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>

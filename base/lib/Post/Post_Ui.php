@@ -21,11 +21,11 @@ class Post_Ui extends Ui
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
                         <div class="post_date">
-                            <i class="fa fa-calendar"></i>
+                            <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
                         <div class="post_reading_time">
-                            <i class="fa fa-clock-o"></i>
+                            <i class="icon icon-time"></i>
                             <span>' . Text::readingTime($this->object->get('description')) . '</span>
                         </div>
                     </div>
@@ -43,7 +43,7 @@ class Post_Ui extends Ui
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
                         <div class="post_date">
-                            <i class="fa fa-calendar"></i>
+                            <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
                     </div>
@@ -61,11 +61,11 @@ class Post_Ui extends Ui
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
                         <div class="post_date">
-                            <i class="fa fa-calendar"></i>
+                            <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
                         <div class="post_reading_time">
-                            <i class="fa fa-clock-o"></i>
+                            <i class="icon icon-time"></i>
                             <span>' . Text::readingTime($this->object->get('description')) . '</span>
                         </div>
                     </div>
@@ -115,21 +115,29 @@ class Post_Ui extends Ui
                 <div class="post_short_info">
                     <div class="post_short_info_left">
                         <div class="post_date">
-                            <i class="fa fa-calendar"></i>
+                            <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
                         <div class="post_reading_time">
-                            <i class="fa fa-clock-o"></i>
+                            <i class="icon icon-time"></i>
                             <span>' . Text::readingTime($this->object->get('description')) . '</span>
                         </div>
                     </div>
-                    <div class="post_short_info_right">' . Ui::share(['share' => ['facebook', 'twitter']]) . '</div>
+                    <div class="post_short_info_right">
+                    ' . $this->share(['share' => [
+                        ['key'=>'facebook', 'icon'=>'<i class="icon icon-facebook"></i>'],
+                        ['key'=>'twitter', 'icon'=>'<i class="icon icon-twitter"></i>']
+                    ]]) . '
+                    </div>
                 </div>
                 <div class="editorial">' . $this->object->get('description') . '</div>
             </div>
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
-                ' . $this->share(['share' => ['facebook', 'twitter']]) . '
+                ' . $this->share(['share' => [
+                    ['key'=>'facebook', 'icon'=>'<i class="icon icon-facebook"></i>'],
+                    ['key'=>'twitter', 'icon'=>'<i class="icon icon-twitter"></i>']
+                ]]) . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }
@@ -205,7 +213,7 @@ class Post_Ui extends Ui
                 </div>
                     <div class="itemEditDelete">
                         <a href="' . url('cuenta/borrar-articulo/' . $this->object->id()) . '" class="confirm" data-confirm="' . __('are_you_sure_delete') . '">
-                            <i class="fa fa-times"></i>
+                            <i class="icon icon-delete"></i>
                             <span>' . __('delete') . '</span>
                         </a>
                     </div>
@@ -248,13 +256,13 @@ class Post_Ui extends Ui
             <div class="group_connected_top">
                 ' . ((in_array('upload', $options)) ? '
                     <a href="' . url('cuenta/subir-articulo') . '" class="group_connected_insert">
-                        <i class="fa fa-plus"></i>
+                        <i class="icon icon-plus"></i>
                         <span>' . __('add') . '</span>
                     </a>
                 ' : '') . '
                 ' . ((in_array('list', $options)) ? '
                     <a href="' . url('cuenta/articulos') . '">
-                        <i class="fa fa-list"></i>
+                        <i class="icon icon-list"></i>
                         <span>' . __('view_list') . '</span>
                     </a>
                 ' : '') . '

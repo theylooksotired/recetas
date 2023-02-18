@@ -230,12 +230,12 @@ class Navigation_Ui extends Ui
             <div class="menuWrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
                 <div class="menu_trigger" role="button" tabindex="1" on="tap:AMP.setState({menuVisible: !menuVisible})">
-                    <i [class]="menuVisibleButton ? \'fa fa-times\' : \'fa fa-bars\'" class="fa fa-bars"></i>
+                    <i [class]="menuVisibleButton ? \'icon icon-close\' : \'icon icon-menu\'" class="icon icon-menu"></i>
                 </div>
                 <nav [class]="menuVisible ? \'menu_all menu_all_open\' : \'menu_all\'" class="menu_all">
                 ' : '
                 <div class="menu_trigger">
-                    <i class="fa fa-bars"></i>
+                    <i class="icon icon-menu"></i>
                 </div>
                 <nav class="menu_all">
                 ') . '
@@ -250,35 +250,36 @@ class Navigation_Ui extends Ui
 
     public function menu_connected()
     {
-        return '
-            <div class="menu_connected">
-                <a href="' . url('cuenta/recetas') . '" class="menu_connected_item">
-                    <i class="fa fa-cutlery"></i>
-                    <span>' . __('recipes') . '</span>
-                </a>
-                <a href="' . url('cuenta/articulos') . '" class="menu_connected_item">
-                    <i class="fa fa-folder"></i>
-                    <span>' . __('posts') . '</span>
-                </a>
-                <hr/>
-                <a href="' . url('cuenta/perfil') . '" class="menu_connected_item">
-                    <i class="fa fa-user"></i>
-                    <span>' . __('profile') . '</span>
-                </a>
-                <a href="' . url('cuenta/cambiar-email') . '" class="menu_connected_item">
-                    <i class="fa fa-envelope"></i>
-                    <span>' . __('update_email') . '</span>
-                </a>
-                <a href="' . url('cuenta/contrasena') . '" class="menu_connected_item">
-                    <i class="fa fa-lock"></i>
-                    <span>' . __('update_password') . '</span>
-                </a>
-                <hr/>
-                <a href="' . url('salir') . '" class="menu_connected_item menu_connected_logout">
-                    <i class="fa fa-power-off"></i>
-                    <span>' . __('logout') . '</span>
-                </a>
-            </div>';
+        return '';
+        // return '
+        //     <div class="menu_connected">
+        //         <a href="' . url('cuenta/recetas') . '" class="menu_connected_item">
+        //             <i class="fa fa-cutlery"></i>
+        //             <span>' . __('recipes') . '</span>
+        //         </a>
+        //         <a href="' . url('cuenta/articulos') . '" class="menu_connected_item">
+        //             <i class="fa fa-folder"></i>
+        //             <span>' . __('posts') . '</span>
+        //         </a>
+        //         <hr/>
+        //         <a href="' . url('cuenta/perfil') . '" class="menu_connected_item">
+        //             <i class="fa fa-user"></i>
+        //             <span>' . __('profile') . '</span>
+        //         </a>
+        //         <a href="' . url('cuenta/cambiar-email') . '" class="menu_connected_item">
+        //             <i class="fa fa-envelope"></i>
+        //             <span>' . __('update_email') . '</span>
+        //         </a>
+        //         <a href="' . url('cuenta/contrasena') . '" class="menu_connected_item">
+        //             <i class="fa fa-lock"></i>
+        //             <span>' . __('update_password') . '</span>
+        //         </a>
+        //         <hr/>
+        //         <a href="' . url('salir') . '" class="menu_connected_item menu_connected_logout">
+        //             <i class="fa fa-power-off"></i>
+        //             <span>' . __('logout') . '</span>
+        //         </a>
+        //     </div>';
     }
 
     public function menu_connectedSimple()
@@ -323,7 +324,7 @@ class Navigation_Ui extends Ui
                     <div class="text formField ">
                         <input type="text" size="50" name="search" placeholder="' . __('search') . '">
                     </div>
-                    <button type="submit" class="formSubmit"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="formSubmit"><i class="icon icon-search"></i></button>
                 </fieldset>
             </form>';
     }

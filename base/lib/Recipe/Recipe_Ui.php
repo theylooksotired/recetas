@@ -118,7 +118,10 @@ class Recipe_Ui extends Ui
             ' . $otherVersions . '
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
-                ' . $this->share(['share' => ['facebook', 'twitter']]) . '
+                ' . $this->share(['share' => [
+                    ['key'=>'facebook', 'icon'=>'<i class="icon icon-facebook"></i>'],
+                    ['key'=>'twitter', 'icon'=>'<i class="icon icon-twitter"></i>']
+                ]]) . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }
@@ -132,25 +135,25 @@ class Recipe_Ui extends Ui
         return '
             ' . (($this->object->get('cook_time') != '') ? '
             <div class="recipe_cook_time">
-                <i class="fa fa-clock-o"></i>
+                <i class="icon icon-time"></i>
                 <span>' . __($this->object->get('cook_time')) . '</span>
             </div>
             ' : '') . '
             ' . (($this->object->get('cooking_method') != '') ? '
             <div class="recipe_cooking_method">
-                <i class="fa fa-cutlery"></i>
+                <i class="icon icon-cutlery"></i>
                 <span>' . __($this->object->get('cooking_method')) . '</span>
             </div>
             ' : '') . '
             ' . (($this->object->get('servings') != '') ? '
             <div class="recipe_servings">
-                <i class="fa fa-users"></i>
+                <i class="icon icon-group"></i>
                 <span>' . $this->object->getServings() . '</span>
             </div>
             ' : '') . '
             ' . (($this->object->get('diet') != '') ? '
             <div class="recipe_diet">
-                <i class="fa fa-globe"></i>
+                <i class="icon icon-globe"></i>
                 <span>' . __($this->object->get('diet')) . '</span>
             </div>
             ' : '') . '';
@@ -243,7 +246,7 @@ class Recipe_Ui extends Ui
                 </div>
                     <div class="itemEditDelete">
                         <a href="' . url('cuenta/borrar-receta/' . $this->object->id()) . '" class="confirm" data-confirm="' . __('are_you_sure_delete') . '">
-                            <i class="fa fa-times"></i>
+                            <i class="icon icon-delete"></i>
                             <span>' . __('delete') . '</span>
                         </a>
                     </div>
@@ -255,11 +258,11 @@ class Recipe_Ui extends Ui
         return '
             <div class="rating rating_' . $this->object->get('rating') . '">
                 <div class="rating_ins">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
+                    <i class="icon icon-star"></i>
+                    <i class="icon icon-star"></i>
+                    <i class="icon icon-star"></i>
+                    <i class="icon icon-star"></i>
+                    <i class="icon icon-star"></i>
                 </div>
             </div>';
     }
@@ -300,13 +303,13 @@ class Recipe_Ui extends Ui
             <div class="group_connected_top">
                 ' . ((in_array('upload', $options)) ? '
                     <a href="' . url('cuenta/subir-receta') . '" class="group_connected_insert">
-                        <i class="fa fa-plus"></i>
+                        <i class="icon icon-plus"></i>
                         <span>' . __('add') . '</span>
                     </a>
                 ' : '') . '
                 ' . ((in_array('list', $options)) ? '
                     <a href="' . url('cuenta/recetas') . '">
-                        <i class="fa fa-list"></i>
+                        <i class="icon icon-list"></i>
                         <span>' . __('view_list') . '</span>
                     </a>
                 ' : '') . '
