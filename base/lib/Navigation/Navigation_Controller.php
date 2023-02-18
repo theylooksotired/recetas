@@ -63,7 +63,7 @@ class Navigation_Controller extends Controller
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
                         $this->hide_side_recipes = true;
-                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader');
+                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
                         $this->content_bottom = $recipe->showUi('Related');
                     }
                     return $this->ui->render();

@@ -12,7 +12,7 @@ body {
     color: $colorText;
     line-height: normal;
     height: auto;
-    background: url(../../img/white_wall.jpg) repeat;
+    background: darken($white, 4%);
 }
 
 .header {

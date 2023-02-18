@@ -123,6 +123,10 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderPreloadImage() {
+        return '<link rel="preload" as="image" href="'.$this->object->getImageUrlWebp('image', 'web').'">';
+    }
+
     public function renderInfo()
     {
         return '
