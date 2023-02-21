@@ -30,7 +30,7 @@ class Navigation_Controller extends Controller
                     $this->url_page = $item->url();
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
-                    $this->meta_description = $item->get('shortDescription');
+                    $this->meta_description = $item->get('short_description');
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
@@ -58,7 +58,7 @@ class Navigation_Controller extends Controller
                     $this->url_page = $item->url();
                     $this->meta_url = $item->url() . (isset($this->parameters['pagina']) ? '?pagina=' . $this->parameters['pagina'] : '');
                     $this->meta_image = $item->getImageUrl('image', 'web');
-                    $this->meta_description = $item->get('shortDescription');
+                    $this->meta_description = $item->get('short_description');
                     $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($recipe->id() != '') {
