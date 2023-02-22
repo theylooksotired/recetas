@@ -229,7 +229,7 @@ class Navigation_Ui extends Ui
         return '
             <div class="menuWrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
-                <div class="menu_trigger" role="button" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
+                <div class="menu_trigger" role="button" tabindex="0" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
                     <i [class]="menuVisibleButton ? \'icon icon-close\' : \'icon icon-menu\'" class="icon icon-menu"></i>
                 </div>
                 <nav [class]="menuVisible ? \'menu_all menu_all_open\' : \'menu_all\'" class="menu_all">
