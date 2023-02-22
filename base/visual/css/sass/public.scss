@@ -690,10 +690,10 @@ body {
     padding: 0 0 10px;
     a {
         font-weight: normal;
-        color: darken($white, 35%);
+        color: rgba($black, 0.6);
         @include animate();
         &:hover {
-            color: darken($white, 50%);
+            color: rgba($black, 0.7);
         }
     }
 }
@@ -814,7 +814,7 @@ body {
         display: inline-block;
         margin: 0 0 0 10px;
         padding: 10px 15px;
-        font-weight: normal;
+        font-weight: bold;
         color: $white;
         background: $colorText;
         position: relative;
@@ -834,9 +834,9 @@ body {
             }
         }
         &.share_option_twitter {
-            background: $colorTwitter;
+            background: darken($colorTwitter, 20%);
             &:hover {
-                background: darken($colorTwitter, 10%);
+                background: darken($colorTwitter, 30%);
             }
         }
     }
@@ -1101,7 +1101,7 @@ body {
             .post_information {
                 color: lighten($colorAccent, 20%);
                 .post_date {
-                    color: rgba(lighten($colorAccent, 20%), 0.5);
+                    color: lighten($colorAccent, 10%);
                 }
             }
         }
@@ -1145,7 +1145,7 @@ body {
         }
         .post_date {
             font-size: $fontSizeSmall;
-            color: rgba($colorAccent, 0.5);
+            color: rgba($colorAccent, 0.8);
             padding: 0 0 10px;
             @include animate();
             i {
@@ -1194,7 +1194,7 @@ body {
             .post_information {
                 color: lighten($colorAccent, 20%);
                 .post_date {
-                    color: rgba(lighten($colorAccent, 20%), 0.5);
+                    color: lighten($colorAccent, 10%);
                 }
             }
         }
@@ -1219,7 +1219,7 @@ body {
         }
         .post_date {
             font-size: $fontSizeSmall;
-            color: rgba($colorAccent, 0.5);
+            color: darken($colorAccent, 10%);
             padding: 0 0 10px;
             @include animate();
             i {
@@ -1249,7 +1249,7 @@ body {
         font-size: $fontSizeSmall;
         font-weight: bold;
         text-align: center;
-        background: rgba($colorMainAlt, 0.2);
+        background: darken($colorMainAlt, 30%);
         color: $white;
     }
     .items_side_items {
@@ -1267,14 +1267,14 @@ body {
             display: block;
             padding: 10px;
             text-align: center;
-            background: darken($colorMainAlt, 5%);
+            background: darken($colorMainAlt, 30%);
             color: $white;
             font-weight: bold;
             text-align: center;
             @include borderRadius(5px);
             @include animate();
             &:hover {
-                background: darken($colorMainAlt, 15%);
+                background: darken($colorMainAlt, 40%);
             }
         }
     }
@@ -1339,7 +1339,6 @@ body {
         .post_date {
             padding: 10px 0 0 0;
             font-size: $fontSizeTiny;
-            opacity: 0.8;
             i {
                 display: inline-block;
                 width: 20px;
@@ -2493,7 +2492,7 @@ body {
         margin: 0 0 20px;
         p {
             font-size: $fontSizeMedium;
-            color: $colorAccentAlt;
+            color: darken($colorAccentAlt, 10%);
             margin: 0;
             padding: 0;
         }
@@ -2515,8 +2514,8 @@ body {
             }
         }
         .preparation_step_number {
-            font-size: $fontSizeTiny;
-            color: rgba($black, 0.3);
+            font-size: $fontSizeSmall;
+            color: rgba($black, 0.7);
             display: block;
             padding: 0;
             margin: 0;

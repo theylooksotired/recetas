@@ -69,4 +69,10 @@
             <type>text_long</type>
         </attribute>
 	</attributes>
+    <indexes>
+        <index>
+            <name>id_recipe</name>
+            <fields>id_recipe</fields>
+        </index>
+    </indexes>
 </object>

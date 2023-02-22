@@ -52,18 +52,6 @@ class Category_Ui extends Ui
         return $categories->showList(['function' => 'Link']);
     }
 
-    /**
-     * @cache
-     */
-    public static function menuSide()
-    {
-        return '
-            <nav class="menu_side">
-                <div class="menu_side_title">' . __('categories') . '</div>
-                <div class="menu_side_items">' . Category_Ui::menuItems() . '</div>
-            </nav>';
-    }
-
     public function renderJsonHeader()
     {
         $info = array("@context" => "http://schema.org/",

@@ -229,7 +229,7 @@ class Navigation_Ui extends Ui
         return '
             <div class="menuWrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
-                <div class="menu_trigger" role="button" tabindex="1" on="tap:AMP.setState({menuVisible: !menuVisible})">
+                <div class="menu_trigger" role="button" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
                     <i [class]="menuVisibleButton ? \'icon icon-close\' : \'icon icon-menu\'" class="icon icon-menu"></i>
                 </div>
                 <nav [class]="menuVisible ? \'menu_all menu_all_open\' : \'menu_all\'" class="menu_all">
@@ -324,7 +324,7 @@ class Navigation_Ui extends Ui
                     <div class="text formField ">
                         <input type="text" size="50" name="search" placeholder="' . __('search') . '">
                     </div>
-                    <button type="submit" class="formSubmit"><i class="icon icon-search"></i></button>
+                    <button type="submit" class="formSubmit" role="button" aria-label="' . __('search') . '"><i class="icon icon-search"></i></button>
                 </fieldset>
             </form>';
     }

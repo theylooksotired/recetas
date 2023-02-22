@@ -43,4 +43,10 @@
             <required>not_empty</required>
         </attribute>
 	</attributes>
+    <indexes>
+        <index>
+            <name>id_recipe</name>
+            <fields>id_recipe</fields>
+        </index>
+    </indexes>
 </object>
