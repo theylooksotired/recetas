@@ -235,7 +235,7 @@ body {
             margin: 0;
             border-bottom: 0;
         }
-        h3 {
+        .footer_links_title {
             display: block;
             font-size: $fontSizeSmall;
             padding: 0 0 10px;
@@ -1145,7 +1145,7 @@ body {
         }
         .post_date {
             font-size: $fontSizeSmall;
-            color: rgba($colorAccent, 0.8);
+            color: darken($colorAccent, 10%);
             padding: 0 0 10px;
             @include animate();
             i {
@@ -1161,7 +1161,7 @@ body {
         }
         .post_reading_time {
             font-size: $fontSizeSmall;
-            color: rgba($colorAccentAlt, 0.9);
+            color: darken($colorAccentAlt, 10%);
             i {
                 display: inline-block;
                 width: 20px;
@@ -1255,10 +1255,7 @@ body {
     .items_side_items {
         padding: 5px;
         .post_minimal {
-            margin: 0 0 5px;
-            &:last-child {
-                margin: 0;
-            }
+            margin: 0 0 10px;
         }
     }
     .items_side_button {
@@ -1419,7 +1416,7 @@ body {
     max-width: $sizeTablet;
     margin: auto;
     .post_short_description {
-        color: $colorAccentAlt;
+        color: darken($colorAccentAlt, 20%);
         font-size: $fontSizeBig * 0.9;
         margin: 0 0 50px;
         padding: 0;
@@ -2222,7 +2219,7 @@ body {
             grid-template-columns: 1fr 1fr 1fr;
         }
         @include mobile {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
         }
     }
     .category {
@@ -2244,13 +2241,11 @@ body {
             a {
                 display: block;
                 font-weight: normal;
-                color: $colorAccentAlt;
+                color: darken($colorAccentAlt, 30%);
                 font-size: $fontSizeSmall;
-                padding: 0 0 5px;
+                margin: 0 0 5px;
+                padding: 10px 0;
                 @include animate();
-                &:last-child {
-                    padding: 0;
-                }
                 &:hover {
                     color: $colorMainAlt;
                 }
@@ -2645,7 +2640,8 @@ body {
     .post_image_amp {
         max-height: 160px;
         overflow: hidden;
-        img {
+        img,
+        amp-img {
             object-fit: cover;
         }
     }
@@ -2675,7 +2671,7 @@ body {
         padding: 60px 0 20px 0;
         text-align: center;
         a {
-            background: $colorMainAlt;
+            background: darken($colorMainAlt, 40%);
             color: $white;
             font-size: $fontSizeMedium;
             font-weight: bold;

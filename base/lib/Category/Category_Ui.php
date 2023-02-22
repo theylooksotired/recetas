@@ -14,7 +14,7 @@ class Category_Ui extends Ui
         return '
             <div class="category">
                 <a href="' . $this->object->url() . '">
-                    <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg"/>
+                    <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                     <div class="category_title">' . $this->object->get('name') . '</div>
                 </a>
                 <div class="category_recipes">' . $recipes->showList(['function' => 'Link']) . '</div>

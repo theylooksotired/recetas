@@ -66,13 +66,15 @@ class Navigation_Controller extends Controller
                 break;
             case 'intro':
                 $this->mode = 'amp';
+                $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->content_top = '
-                    ' . Post_Ui::introTop() . '
+                    ' . Post_Ui::introTop(['items' => $items]) . '
                     ' . HtmlSection::show('intro_top') . '
                     ' . Category_Ui::intro();
                 $this->content = '
                     ' . HtmlSection::show('intro') . '
                     ' . Post_Ui::intro();
+                $this->head = $items->showList(['function' => 'PreloadImage']);
                 return $this->ui->render();
                 break;
             case 'articulos':

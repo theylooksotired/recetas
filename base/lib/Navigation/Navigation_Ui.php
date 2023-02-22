@@ -158,7 +158,7 @@ class Navigation_Ui extends Ui
                 <div class="footer_ins">
                     <div class="footer_links_wrapper">
                         <div class="footer_links">
-                            <h3>Otros sitios de cocina por países</h3>
+                            <div class="footer_links_title">Otros sitios de cocina por países</div>
                             <a href="https://www.recetas-argentinas.com" target="_blank" title="Recetas de Argentina">Argentina</a>
                             <a href="https://www.cocina-boliviana.com" target="_blank" title="Recetas de Bolivia">Bolivia</a>
                             <a href="https://www.cocina-brasilena.com" target="_blank" title="Recetas de Brasil">Brasil</a>
@@ -189,7 +189,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetas-venezolanas.com" target="_blank" title="Recetas de Venezuela">Venezuela</a>
                         </div>
                         <div class="footer_links">
-                            <h3>Otros sitios de cocina por tipos</h3>
+                            <div class="footer_links_title">Otros sitios de cocina por tipos</div>
                             <a href="https://www.recetas-arabes.com" target="_blank" title="Recetas árabes">Árabes</a>
                             <a href="https://www.recetasdiabetes.com" target="_blank" title="Recetas para diabéticos">Diabetes</a>
                             <a href="https://www.recetas-sin-gluten.com" target="_blank" title="Recetas sin gluten">Sin gluten</a>

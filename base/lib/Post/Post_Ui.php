@@ -87,6 +87,10 @@ class Post_Ui extends Ui
             </div>';
     }
 
+    public function renderPreloadImage() {
+        return '<link rel="preload" as="image" href="'.$this->object->getImageUrlWebp('image', 'web').'">';
+    }
+
     public function renderSide($options = [])
     {
         return '
@@ -157,15 +161,15 @@ class Post_Ui extends Ui
         return url('cuenta/borrar-imagen-articulo/' . $this->object->id());
     }
 
-    public static function introTop()
+    public static function introTop($options = [])
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
+        $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
         return '<div class="posts_top_wrapper">' . $items->showList(['function' => 'IntroTop']) . '</div>';
     }
 
-    public static function intro()
+    public static function intro($options = [])
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3, 3']);
+        $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3, 3']);
         return '
             <div class="posts_intro">
                 <div class="posts_intro_title">' . __('last_posts') . '</div>
