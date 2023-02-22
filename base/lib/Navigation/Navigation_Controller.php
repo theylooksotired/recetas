@@ -67,6 +67,7 @@ class Navigation_Controller extends Controller
             case 'intro':
                 $this->mode = 'amp';
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
+                $this->meta_url = url('');
                 $this->content_top = '
                     ' . Post_Ui::introTop(['items' => $items]) . '
                     ' . HtmlSection::show('intro_top') . '
