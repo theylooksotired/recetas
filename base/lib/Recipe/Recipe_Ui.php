@@ -346,7 +346,7 @@ class Recipe_Ui extends Ui
             '@context' => 'http://schema.org/',
             '@type' => 'Recipe',
             'name' => $this->object->getBasicInfo(),
-            'image' => $this->object->getImageUrlWebp('image', 'web'),
+            'image' => $this->object->getImageUrl('image', 'web'),
             'description' => $this->object->get('short_description'),
             'aggregateRating' => [
                 '@type' => 'AggregateRating',
