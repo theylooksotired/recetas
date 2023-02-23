@@ -87,6 +87,7 @@ class Navigation_Controller extends Controller
                     $this->meta_description = $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');
+                    $this->meta_image = ($this->meta_image!='') ? $this->meta_image : $post->getImageUrl('image', 'web');
                     $this->head = $this->ampFacebookCommentsHeader() . $post->showUi('JsonHeader');
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
