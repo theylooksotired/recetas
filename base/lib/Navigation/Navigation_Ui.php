@@ -37,7 +37,6 @@ class Navigation_Ui extends Ui
                                         ' . $content . '
                                     </div>
                                     <div class="content_right">
-                                        ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::amp() : Adsense::responsive()) . '
                                         ' . $this->menuSide() . '
                                     </div>
                                 </div>
