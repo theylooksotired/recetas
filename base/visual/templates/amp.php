@@ -11,6 +11,7 @@
     <meta property="og:title" content="<?php echo $title;?>" />
     <meta property="og:description" content="<?php echo $metaDescription;?>" />
     <meta property="og:url" content="<?php echo $metaUrl;?>" />
+    <meta property="og:type" content="article" />
     <?php echo $metaImage;?>
 
     <link rel="shortcut icon" href="<?php echo ASTERION_BASE_URL;?>visual/img/favicon.ico"/>

@@ -15,7 +15,7 @@ class Recipe_Ui extends Ui
     {
         return '
             <div class="recipe">
-                <a class="recipe_ins" href="' . $this->object->url() . '">
+                <a class="recipe_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
                         <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
@@ -31,7 +31,7 @@ class Recipe_Ui extends Ui
     {
         return '
             <div class="recipe_simple">
-                <a class="recipe_ins" href="' . $this->object->url() . '">
+                <a class="recipe_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
@@ -47,7 +47,7 @@ class Recipe_Ui extends Ui
     {
         return '
             <div class="post_minimal">
-                <a href="' . $this->object->url() . '" class="post_minimal_ins">
+                <a href="' . $this->object->url() . '" title="'.$this->object->getBasicInfo().'" class="post_minimal_ins">
                     <div class="post_image_amp">'.$this->object->getImageAmpWebp('image', 'small').'</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>

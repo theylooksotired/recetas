@@ -15,7 +15,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post">
-                <a class="post_ins" href="' . $this->object->url() . '">
+                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -37,7 +37,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post_simple">
-                <a class="post_ins" href="' . $this->object->url() . '">
+                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -55,7 +55,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post">
-                <a class="post_ins" href="' . $this->object->url() . '">
+                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -77,7 +77,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post_top">
-                <a class="post_top_ins" href="' . $this->object->url() . '">
+                <a class="post_top_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -95,7 +95,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post_minimal">
-                <a href="' . $this->object->url() . '" class="post_minimal_ins">
+                <a href="' . $this->object->url() . '" title="'.$this->object->getBasicInfo().'" class="post_minimal_ins">
                     <div class="post_image_amp">'.$this->object->getImageAmpWebp('image', 'small').'</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
