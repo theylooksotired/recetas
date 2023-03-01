@@ -15,7 +15,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post">
-                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
+                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -37,7 +37,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post_simple">
-                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
+                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -55,7 +55,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post">
-                <a class="post_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
+                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -77,7 +77,7 @@ class Post_Ui extends Ui
     {
         return '
             <div class="post_top">
-                <a class="post_top_ins" title="'.$this->object->getBasicInfo().'" href="' . $this->object->url() . '">
+                <a class="post_top_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
@@ -87,16 +87,17 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public function renderPreloadImage() {
-        return '<link rel="preload" as="image" href="'.$this->object->getImageUrlWebp('image', 'web').'">';
+    public function renderPreloadImage()
+    {
+        return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
     }
 
     public function renderSide($options = [])
     {
         return '
             <div class="post_minimal">
-                <a href="' . $this->object->url() . '" title="'.$this->object->getBasicInfo().'" class="post_minimal_ins">
-                    <div class="post_image_amp">'.$this->object->getImageAmpWebp('image', 'small').'</div>
+                <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
+                    <div class="post_image_amp">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';
@@ -129,9 +130,9 @@ class Post_Ui extends Ui
                     </div>
                     <div class="post_short_info_right">
                     ' . $this->share(['share' => [
-                        ['key'=>'facebook', 'icon'=>'<i class="icon icon-facebook"></i>'],
-                        ['key'=>'twitter', 'icon'=>'<i class="icon icon-twitter"></i>']
-                    ]]) . '
+            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
+        ]]) . '
                     </div>
                 </div>
                 <div class="editorial">' . $this->object->get('description') . '</div>
@@ -139,9 +140,9 @@ class Post_Ui extends Ui
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
                 ' . $this->share(['share' => [
-                    ['key'=>'facebook', 'icon'=>'<i class="icon icon-facebook"></i>'],
-                    ['key'=>'twitter', 'icon'=>'<i class="icon icon-twitter"></i>']
-                ]]) . '
+            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
+        ]]) . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }

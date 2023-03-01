@@ -10,6 +10,12 @@
  */
 class Post extends Db_Object
 {
+
+    public function getBasicInfoTitle()
+    {
+        return str_replace('"', '', $this->getBasicInfo());
+    }
+
     public function url()
     {
         return url('articulos/' . $this->get('title_url'));

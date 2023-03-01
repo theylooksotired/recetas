@@ -184,6 +184,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetasparaguay.com/" rel="nofollow" title="Recetas de Paraguay">Paraguay</a>
                             <a href="https://www.comida-peruana.com" rel="nofollow" title="Recetas de Peru">Peru</a>
                             <a href="https://www.recetas-puertorico.com" rel="nofollow" title="Recetas de Puerto Rico">Puerto Rico</a>
+                            <a href="https://www.recetas-dominicanas.com" rel="nofollow" title="Recetas de República Dominicana">República Dominicana</a>
                             <a href="https://www.cocina-uruguaya.com" rel="nofollow" title="Recetas de Uruguay">Uruguay</a>
                             <a href="https://www.recetas-venezolanas.com" rel="nofollow" title="Recetas de Venezuela">Venezuela</a>
                         </div>
