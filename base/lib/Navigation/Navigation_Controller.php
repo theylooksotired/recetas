@@ -39,6 +39,9 @@ class Navigation_Controller extends Controller
                 $recipe = ($this->extraId != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $category->id()]) : new Recipe();
                 if ($recipe->id() != '') {
                     $recipe->loadCategoryManually($category);
+                    if ($recipe->get('friend_links') == '') {
+                        FriendSite::saveFriends($recipe);
+                    }
                 }
                 $item = ($category->id() != '') ? $category : new Category();
                 $item = ($recipe->id() != '') ? $recipe : $item;
@@ -87,7 +90,7 @@ class Navigation_Controller extends Controller
                     $this->meta_description = $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');
-                    $this->meta_image = ($this->meta_image!='') ? $this->meta_image : $post->getImageUrl('image', 'web');
+                    $this->meta_image = ($this->meta_image != '') ? $this->meta_image : $post->getImageUrl('image', 'web');
                     $this->head = $this->ampFacebookCommentsHeader() . $post->showUi('JsonHeader');
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
@@ -144,6 +147,45 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
+
+            // case 'friends':
+            //     $this->mode = 'ajax';
+            //     $sites = FriendSite::allLess();
+            //     foreach ($sites as $key=>$site) {
+            //         $sites[$key]['title'] = '';
+            //         $sites[$key]['description'] = '';
+            //         $sites[$key]['image'] = '';
+            //         $dom = new DOMDocument();
+            //         if (@$dom->loadHTMLFile($site['url'])) {
+            //             $xpath = new DOMXPath($dom);
+            //             $sites[$key]['title'] = $dom->getElementsByTagName("title")->item(0)->textContent;
+            //             $sites[$key]['description'] = $xpath->evaluate('//meta[@name="description"]/@content')->item(0)->textContent;
+            //             $sites[$key]['image'] = $dom->getElementsByTagName("amp-img")->item(0)->getAttribute('src');
+            //         }
+            //         // break;
+            //     }
+            //     //====
+            //     // dd(FriendSite::random('sopas'));
+            //     //=====
+            //     // $sites = FriendSite::all();
+            //     // dump(count($sites));
+            //     // //576
+            //     // // $categories = [];
+            //     // foreach ($sites as $key => $site) {
+            //     //     $info = explode('/', $site['url']);
+            //     //     $category = $info[4];
+            //     //     $sites[$key]['category'] = $info[4];
+            //     //     // if (!in_array($info[4], $categories)) {
+            //     //     //     $categories[] = ;
+            //     //     // }
+            //     // }
+            //     //Echo as PHP
+            //     foreach ($sites as $site) {
+            //         echo "['site'=>'".$site['site']."', 'url'=>'".$site['url']."', 'category'=>'".$site['category']."', 'image'=>'".$site['image']."', 'title'=>'".$site['title']."', 'description'=>'".$site['description']."'],\n";
+            //     }
+
+            //     exit();
+            //     break;
         }
     }
 

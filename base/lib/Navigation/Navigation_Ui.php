@@ -174,6 +174,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetassalvador.com" rel="nofollow" title="Recetas del Salvador">El Salvador</a>
                             <a href="https://www.recetas-francesas.com" rel="nofollow" title="Recetas de Francia">Francia</a>
                             <a href="https://www.recetas-guatemala.com" rel="nofollow" title="Recetas de Guatemala">Guatemala</a>
+                            <a href="https://www.recetas-haitianas.com" rel="nofollow" title="Recetas de Haití">Haití</a>
                             <a href="https://www.recetashonduras.com" rel="nofollow" title="Recetas de Honduras">Honduras</a>
                             <a href="https://www.recetas-indias.com" rel="nofollow" title="Recetas de India">India</a>
                             <a href="https://www.recetas-italia.com" rel="nofollow" title="Recetas de Italia">Italia</a>

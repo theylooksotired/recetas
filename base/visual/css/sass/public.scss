@@ -2779,3 +2779,14 @@ body {
         }
     }
 }
+
+.recipe_complete_link_friend,
+.recipe_complete_link_friend_bottom {
+    font-size: $fontSizeMedium;
+    a {
+        color: $colorAccent;
+    }
+}
+.recipe_complete_link_friend {
+    margin: 0 0 20px;
+}

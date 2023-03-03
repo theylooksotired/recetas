@@ -173,6 +173,11 @@
             <class>multiple_items_preparation</class>
         </attribute>
         <attribute>
+            <name>friend_links</name>
+            <label>friend_links</label>
+            <type>textarea_long</type>
+        </attribute>
+        <attribute>
             <name>check_versions</name>
             <label>check_versions</label>
             <type>checkbox</type>
@@ -183,11 +188,6 @@
             <label>active</label>
             <type>checkbox</type>
             <managesPermissions>true</managesPermissions>
-        </attribute>
-        <attribute>
-            <name>preparation_old</name>
-            <label>preparation_old</label>
-            <type>textarea_long</type>
         </attribute>
     </attributes>
     <indexes>
