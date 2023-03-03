@@ -23,7 +23,7 @@ class FriendSite
     public static function random($category, $size = 5)
     {
         $category = ($category == 'platos-principales') ? 'plato-principal' : $category;
-        $category = ($category == 'reposteria') ? 'postres' : $category;
+        $category = ($category == 'reposteria') ? 'plato-principal' : $category;
         $sites = FriendSite::all();
         shuffle($sites);
         $results = [];
