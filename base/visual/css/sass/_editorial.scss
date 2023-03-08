@@ -19,13 +19,12 @@ img {
 }
 h1 {
     font-weight: bold;
-    font-size: $fontSizeHuge * 9 / 10;
-    padding: 0 0 20px;
-    margin: 0 0 20px;
+    font-size: $fontSizeHuge * 8 / 10;
+    padding: 0 0 15px;
+    margin: 0 0 15px;
     color: $colorAccent;
     position: relative;
     font-family: $fontFamily;
-    max-width: 600px;
     line-height: 1em;
     &:after {
         width: 200px;

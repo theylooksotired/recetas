@@ -11,6 +11,11 @@
 class Recipe extends Db_Object
 {
 
+    public function getTitlePage()
+    {
+        return $this->getBasicInfo();
+    }
+
     public function getBasicInfoTitle()
     {
         return str_replace('"', '', $this->getBasicInfo());

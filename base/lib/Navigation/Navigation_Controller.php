@@ -35,32 +35,48 @@ class Navigation_Controller extends Controller
                 break;
             case 'recetas':
                 $this->mode = 'amp';
-                $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
-                $recipe = ($this->extraId != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $category->id()]) : new Recipe();
-                if ($recipe->id() != '') {
-                    $recipe->loadCategoryManually($category);
-                    if ($recipe->get('friend_links') == '') {
-                        FriendSite::saveFriends($recipe);
+                $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
+                $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
+                if ($this->recipe->id() != '') {
+                    $this->recipe->loadCategoryManually($this->category);
+                    if ($this->recipe->get('friend_links') == '') {
+                        FriendSite::saveFriends($this->recipe);
                     }
                 }
-                $item = ($category->id() != '') ? $category : new Category();
-                $item = ($recipe->id() != '') ? $recipe : $item;
+                $item = ($this->category->id() != '') ? $this->category : new Category();
+                $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {
-                    $this->title_page = $item->getBasicInfo();
+                    $this->title_page = $item->getTitlePage();
+                    if ($this->recipe->id() != '') {
+                        $this->layout_page = 'recipe';
+                    } else {
+                        $this->layout_page = 'recipe_category';
+                        $this->hide_title_page_appendix = true;
+                    }
                     $this->url_page = $item->url();
-                    $this->meta_url = $item->url() . (isset($this->parameters['pagina']) ? '?pagina=' . $this->parameters['pagina'] : '');
+                    $this->meta_url = $item->url();
+                    if (isset($this->parameters['pagina']) && $this->parameters['pagina'] > 1) {
+                        $this->title_page_content = $this->title_page;
+                        $this->title_page .= ' - ' . __('page') . ' ' . $this->parameters['pagina'];
+                        $this->meta_url .= '?pagina=' . $this->parameters['pagina'];
+                    }
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = $item->get('short_description');
-                    $this->bread_crumbs = ($recipe->id() != '') ? [url('recetas') => __('recipes'), $category->url() => $category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($this->recipe->id() != '') ? [url('recetas') => __('recipes'), $this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
-                    if ($recipe->id() != '') {
+                    if ($this->content == '') {
+                        header("HTTP/1.1 301 Moved Permanently");
+                        header('Location: ' . url(''));
+                    }
+                    if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
                         $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
-                        $this->content_bottom = $recipe->showUi('Related');
+                        $this->content_bottom = $this->recipe->showUi('Related');
                     }
                     return $this->ui->render();
                 } else {
-                    $this->title_page = __('recipes');
+                    $this->title_page = __('recipes_list');
+                    $this->layout_page = 'recipe_category';
                     $this->bread_crumbs = [url($this->action) => __('recipes')];
                     $this->content = Category_Ui::all();
                     $this->meta_url = url($this->action) . (isset($this->parameters['pagina']) ? '?pagina=' . $this->parameters['pagina'] : '');
@@ -86,16 +102,18 @@ class Navigation_Controller extends Controller
                 $this->layout_page = 'posts';
                 $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
                 if ($post->id() != '') {
-                    $this->title_page = $post->getBasicInfo();
+                    $this->title_page = $post->getBasicInfoTitle();
                     $this->meta_description = $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');
                     $this->meta_image = ($this->meta_image != '') ? $this->meta_image : $post->getImageUrl('image', 'web');
                     $this->head = $this->ampFacebookCommentsHeader() . $post->showUi('JsonHeader');
+                    $this->bread_crumbs = [url('articulos') => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
                 } else {
-                    $this->title_page = __('posts');
+                    $this->title_page = __('posts_list');
+                    $this->bread_crumbs = [url('articulos') => __('posts')];
                     $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'results' => '10']);
                     $this->content = '<div class="posts">' . $items->showListPager() . '</div>';
                 }
@@ -148,44 +166,44 @@ class Navigation_Controller extends Controller
                 return Sitemap::generate($urls);
                 break;
 
-            // case 'friends':
-            //     $this->mode = 'ajax';
-            //     $sites = FriendSite::allLess();
-            //     foreach ($sites as $key=>$site) {
-            //         $sites[$key]['title'] = '';
-            //         $sites[$key]['description'] = '';
-            //         $sites[$key]['image'] = '';
-            //         $dom = new DOMDocument();
-            //         if (@$dom->loadHTMLFile($site['url'])) {
-            //             $xpath = new DOMXPath($dom);
-            //             $sites[$key]['title'] = $dom->getElementsByTagName("title")->item(0)->textContent;
-            //             $sites[$key]['description'] = $xpath->evaluate('//meta[@name="description"]/@content')->item(0)->textContent;
-            //             $sites[$key]['image'] = $dom->getElementsByTagName("amp-img")->item(0)->getAttribute('src');
-            //         }
-            //         // break;
-            //     }
-            //     //====
-            //     // dd(FriendSite::random('sopas'));
-            //     //=====
-            //     // $sites = FriendSite::all();
-            //     // dump(count($sites));
-            //     // //576
-            //     // // $categories = [];
-            //     // foreach ($sites as $key => $site) {
-            //     //     $info = explode('/', $site['url']);
-            //     //     $category = $info[4];
-            //     //     $sites[$key]['category'] = $info[4];
-            //     //     // if (!in_array($info[4], $categories)) {
-            //     //     //     $categories[] = ;
-            //     //     // }
-            //     // }
-            //     //Echo as PHP
-            //     foreach ($sites as $site) {
-            //         echo "['site'=>'".$site['site']."', 'url'=>'".$site['url']."', 'category'=>'".$site['category']."', 'image'=>'".$site['image']."', 'title'=>'".$site['title']."', 'description'=>'".$site['description']."'],\n";
-            //     }
+                // case 'friends':
+                //     $this->mode = 'ajax';
+                //     $sites = FriendSite::allLess();
+                //     foreach ($sites as $key=>$site) {
+                //         $sites[$key]['title'] = '';
+                //         $sites[$key]['description'] = '';
+                //         $sites[$key]['image'] = '';
+                //         $dom = new DOMDocument();
+                //         if (@$dom->loadHTMLFile($site['url'])) {
+                //             $xpath = new DOMXPath($dom);
+                //             $sites[$key]['title'] = $dom->getElementsByTagName("title")->item(0)->textContent;
+                //             $sites[$key]['description'] = $xpath->evaluate('//meta[@name="description"]/@content')->item(0)->textContent;
+                //             $sites[$key]['image'] = $dom->getElementsByTagName("amp-img")->item(0)->getAttribute('src');
+                //         }
+                //         // break;
+                //     }
+                //     //====
+                //     // dd(FriendSite::random('sopas'));
+                //     //=====
+                //     // $sites = FriendSite::all();
+                //     // dump(count($sites));
+                //     // //576
+                //     // // $categories = [];
+                //     // foreach ($sites as $key => $site) {
+                //     //     $info = explode('/', $site['url']);
+                //     //     $category = $info[4];
+                //     //     $sites[$key]['category'] = $info[4];
+                //     //     // if (!in_array($info[4], $categories)) {
+                //     //     //     $categories[] = ;
+                //     //     // }
+                //     // }
+                //     //Echo as PHP
+                //     foreach ($sites as $site) {
+                //         echo "['site'=>'".$site['site']."', 'url'=>'".$site['url']."', 'category'=>'".$site['category']."', 'image'=>'".$site['image']."', 'title'=>'".$site['title']."', 'description'=>'".$site['description']."'],\n";
+                //     }
 
-            //     exit();
-            //     break;
+                //     exit();
+                //     break;
         }
     }
 

@@ -7,6 +7,7 @@ class Navigation_Ui extends Ui
         $layout_page = (isset($this->object->layout_page)) ? $this->object->layout_page : '';
         $title_page = (isset($this->object->title_page)) ? '<h1>' . $this->object->title_page . '</h1>' : '';
         $title_page = (isset($this->object->hide_title_page)) ? '' : $title_page;
+        $title_page = (isset($this->object->title_page_content)) ? '<h1>' . $this->object->title_page_content . '</h1>' : $title_page;
         $message = (isset($this->object->message) && $this->object->message != '') ? $this->object->message : Session::getFlashInfo();
         $message_alert = (isset($this->object->message_alert) && $this->object->message_alert != '') ? $this->object->message_alert : Session::getFlashAlert();
         $message_error = (isset($this->object->message_error) && $this->object->message_error != '') ? $this->object->message_error : Session::getFlashError();
@@ -31,7 +32,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? Adsense::ampDesktop() : Adsense::responsive()) . '
+                                ' . Adsense::amp() . '
                                 <div class="content_ins">
                                     <div class="content_left">
                                         ' . $content . '
@@ -62,24 +63,22 @@ class Navigation_Ui extends Ui
                         ' . $this->footer() . '
                     </div>';
                 break;
-            case 'connected':
+            case 'recipe':
                 return '
                     <div class="content_format content_format_' . $layout_page . '">
                         ' . $this->header() . '
                         <div class="content">
-                            <div class="contentConnected">
+                            <div class="content_all">
+                                ' . $message_error . '
+                                ' . $message_alert . '
+                                ' . $message . '
+                                ' . $content_top . '
+                                ' . $this->breadCrumbs() . '
+                                ' . $title_page . '
+                                ' . Adsense::amp() . '
                                 <div class="content_ins">
-                                    <div class="content_left">
-                                        ' . $this->menu_connected() . '
-                                    </div>
-                                    <div class="content_right">
-                                        ' . $title_page . '
-                                        ' . $message_error . '
-                                        ' . $message_alert . '
-                                        ' . $message . '
-                                        ' . $content . '
-                                        ' . $content_bottom . '
-                                    </div>
+                                    ' . $content . '
+                                    ' . $content_bottom . '
                                 </div>
                             </div>
                         </div>
@@ -91,58 +90,37 @@ class Navigation_Ui extends Ui
 
     public function header()
     {
-        $login = User_Login::getInstance();
-        $user = new User();
         return '
             <header class="header">
-                <div class="headerIns">
-                    <div class="headerLeft">
-                        <div class="logo">
-                            <a href="' . url('') . '">
-                                <span class="logo_image"></span>
-                                <span class="logo_title">
-                                    <span class="logo_title_top">' . Parameter::code('meta_title_header_top') . '</span>
-                                    <span class="logo_title_bottom">' . Parameter::code('meta_title_header_bottom') . '</span>
-                                </span>
-                            </a>
+                <div class="header_top">
+                    <div class="header_ins">
+                        <div class="header_left">
+                            <div class="logo">
+                                <a href="' . url('') . '">
+                                    <span class="logo_image"></span>
+                                    <span class="logo_title">
+                                        <span class="logo_title_top">' . Parameter::code('meta_title_header_top') . '</span>
+                                        <span class="logo_title_bottom">' . Parameter::code('meta_title_header_bottom') . '</span>
+                                    </span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="headerRight">
-                        <div class="headerRightIns">
-                            <div class="searchTop">' . Navigation_Ui::search() . '</div>
+                        <div class="header_right">
+                            <div class="header_rightIns">
+                                <div class="searchTop">' . Navigation_Ui::search() . '</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="headerMenu">' . $this->menu() . '</div>
+                <div class="header_menu">' . $this->menu() . '</div>
             </header>';
-        // ' . (($login->isConnected()) ? '
-        // <div class="menuUser">
-        //     <a href="' . url('cuenta') . '" class="menuUserAccount">
-        //         <i class="fa fa-user"></i>
-        //         <span>' . __('my_account') . '</span>
-        //     </a>
-        //     <a href="' . $user->urlLogout . '" class="menuUserLogout">
-        //         <i class="fa fa-power-off"></i>
-        //         <span>' . __('logout') . '</span>
-        //     </a>
-        // </div>' : '
-        // <div class="menuUser">
-        //     <a href="' . $user->urlRegister . '" class="menuUserRegister">
-        //         <i class="fa fa-user"></i>
-        //         <span>' . __('register') . '</span>
-        //     </a>
-        //     <a href="' . $user->urlLogin . '" class="menuUserLogin">
-        //         <i class="fa fa-user"></i>
-        //         <span>' . __('login') . '</span>
-        //     </a>
-        // </div>') . '
     }
 
-    public function headerSimple()
+    public function header_simple()
     {
         return '
-            <header class="header headerSimple">
-                <div class="headerIns">
+            <header class="header header_simple">
+                <div class="header_ins">
                     <div class="logo">
                         <a href="' . url('') . '">' . Parameter::code('meta_title_page') . '</a>
                     </div>
@@ -204,7 +182,7 @@ class Navigation_Ui extends Ui
                     <div class="footer_down">
                         <div class="footer_down_ins">
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
-                            <p>Diviértete cocinando con nuestros cientos de recetas con preparación paso a paso. No dudes en compartir tus preparaciones y críticas.</p>
+                            <p>' . Parameter::code('meta_description') . ' Diviértete cocinando y no dudes en compartir tus preparaciones y críticas.</p>
                             <p>Escríbenos a <a href="mailto:recetas@plasticwebs.com">recetas@plasticwebs.com</a></p>
                         </div>
                     </div>
@@ -214,20 +192,16 @@ class Navigation_Ui extends Ui
 
     public function menuSide()
     {
-        $showPosts = true;
-        $showRecipes = true;
-        $showPosts = ($this->object->action == 'intro') ? false : $showPosts;
-        $showPosts = ($this->object->action == 'articulos') ? false : $showPosts;
-        $showRecipes = ($this->object->action == 'recetas') ? false : $showRecipes;
-        $showRecipes = (isset($this->object->hide_side_recipes)) ? false : $showRecipes;
         return '
-            ' . (($showPosts) ? Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) : '') . '
-            ' . (($showRecipes) ? Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) : '');
-    }
+            ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
+            ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
+            ';
+}
 
-    public function menu()
+public function menu()
     {
-        return '
+    $menu = Cache::show('Category', 'menuTop');
+    return '
             <div class="menuWrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
                 <div class="menu_trigger" role="button" tabindex="0" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
@@ -241,85 +215,39 @@ class Navigation_Ui extends Ui
                 <nav class="menu_all">
                 ') . '
                     <div class="menu_all_ins">
-                        ' . $this->menu_connectedSimple() . '
-                        ' . Cache::show('Category', 'menuTop') . '
+                        <a href="' . url('') . '">' . __('home') . '</a>
+                        ' . $menu . '
                         <a class="menu_posts" href="' . url('articulos') . '">' . __('posts') . '</a>
                     </div>
                 </nav>
             </div>';
-    }
+}
 
-    public function menu_connected()
+public function breadCrumbs()
     {
-        return '';
-        // return '
-        //     <div class="menu_connected">
-        //         <a href="' . url('cuenta/recetas') . '" class="menu_connected_item">
-        //             <i class="fa fa-cutlery"></i>
-        //             <span>' . __('recipes') . '</span>
-        //         </a>
-        //         <a href="' . url('cuenta/articulos') . '" class="menu_connected_item">
-        //             <i class="fa fa-folder"></i>
-        //             <span>' . __('posts') . '</span>
-        //         </a>
-        //         <hr/>
-        //         <a href="' . url('cuenta/perfil') . '" class="menu_connected_item">
-        //             <i class="fa fa-user"></i>
-        //             <span>' . __('profile') . '</span>
-        //         </a>
-        //         <a href="' . url('cuenta/cambiar-email') . '" class="menu_connected_item">
-        //             <i class="fa fa-envelope"></i>
-        //             <span>' . __('update_email') . '</span>
-        //         </a>
-        //         <a href="' . url('cuenta/contrasena') . '" class="menu_connected_item">
-        //             <i class="fa fa-lock"></i>
-        //             <span>' . __('update_password') . '</span>
-        //         </a>
-        //         <hr/>
-        //         <a href="' . url('salir') . '" class="menu_connected_item menu_connected_logout">
-        //             <i class="fa fa-power-off"></i>
-        //             <span>' . __('logout') . '</span>
-        //         </a>
-        //     </div>';
-    }
-
-    public function menu_connectedSimple()
-    {
-        $login = User_Login::getInstance();
-        if ($login->isConnected()) {
-            return '
-                <a class="menu_account" href="' . url('cuenta/perfil') . '">' . __('profile') . '</a>
-                <a class="menu_account" href="' . url('cuenta/cambiar-email') . '">' . __('update_email') . '</a>
-                <a class="menu_account" href="' . url('cuenta/contrasena') . '">' . __('update_password') . '</a>
-                <a class="menu_account menu_account_logout" href="' . url('cuenta/salir') . '">' . __('logout') . '</a>';
-        }
-    }
-
-    public function breadCrumbs()
-    {
-        $html = '';
-        if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
-            $html .= '
+    $html = '';
+    if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
+        $html .= '
                 <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                     <a href="' . url('') . '" itemprop="item"><span itemprop="name">' . __('home') . '</span></a>
                     <meta itemprop="position" content="1" />
                 </span> &raquo;';
-            $i = 2;
-            foreach ($this->object->bread_crumbs as $url => $title) {
-                $html .= '
+        $i = 2;
+        foreach ($this->object->bread_crumbs as $url => $title) {
+            $html .= '
                     <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                         <a href="' . $url . '" itemprop="item"><span itemprop="name">' . $title . '</span></a>
                         <meta itemprop="position" content="' . $i . '" />
                     </span> &raquo;';
-                $i++;
-            }
-            return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
+            $i++;
         }
+        return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
     }
+}
 
-    public static function search()
+public static function search()
     {
-        return '
+    return '
             <form accept-charset="UTF-8" class="formSearchSimple" action="' . url('buscar') . '" method="GET" target="_top">
                 <fieldset>
                     <div class="text formField ">
@@ -328,15 +256,15 @@ class Navigation_Ui extends Ui
                     <button type="submit" class="formSubmit" role="button" aria-label="' . __('search') . '"><i class="icon icon-search"></i></button>
                 </fieldset>
             </form>';
-    }
+}
 
-    public static function analyticsAmp()
+public static function analyticsAmp()
     {
-        return '
+    return '
             <amp-analytics type="googleanalytics">
                 <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
             </amp-analytics>';
-        return '
+    return '
             <amp-analytics type="gtag" data-credentials="include">
                 <script type="application/json">
                     {
@@ -356,18 +284,18 @@ class Navigation_Ui extends Ui
                     }
                 </script>
             </amp-analytics>';
-    }
+}
 
-    public static function autoadsAmp()
+public static function autoadsAmp()
     {
-        return '<amp-auto-ads type="adsense" data-ad-client="ca-pub-7429223453905389"></amp-auto-ads>';
-    }
+    return '<amp-auto-ads type="adsense" data-ad-client="ca-pub-7429223453905389"></amp-auto-ads>';
+}
 
-    public static function facebookComments($url)
+public static function facebookComments($url)
     {
-        if (Parameter::code('facebook_comments') == 'true') {
-            return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
-        }
+    if (Parameter::code('facebook_comments') == 'true') {
+        return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
     }
+}
 
 }

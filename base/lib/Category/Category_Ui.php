@@ -24,13 +24,19 @@ class Category_Ui extends Ui
     public function renderComplete()
     {
         $items = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'results' => '12']);
-        return '<div class="recipes">' . $items->showListPager() . '</div>';
+        if (!$items->isEmpty()) {
+            return '
+                '.(($this->object->get('description')!='') ? '
+                <div class="recipes_description">'.$this->object->get('description').'</div>
+                ' : '').'
+                <div class="recipes">' . $items->showListPager(['middle'=>Adsense::amp(), 'middleRepetitions'=>2]) . '</div>';
+        }
     }
 
     public static function all()
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
-        return '<div class="recipes">' . $items->showListPager() . '</div>';
+        return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::amp(), 'middleRepetitions'=>2]) . '</div>';
     }
 
     public static function intro()

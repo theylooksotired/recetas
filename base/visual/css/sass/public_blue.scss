@@ -13,7 +13,7 @@ body {
     color: $colorText;
     line-height: normal;
     height: auto;
-    background: $colorGreen;
+    background: darken($white, 4%);
 }
 
 .header {
@@ -22,15 +22,25 @@ body {
     left: 0;
     right: 0;
     padding: 0;
+    background: $white;
     z-index: 9999;
-    .header_top {
-        background: $colorRed;
+    background: $colorAccent;
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 20%),1) 0%, rgba($colorAccentAlt,1) 35%, rgba($colorAccent,1) 100%);
+    &:before {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        width: 100%;
+        background: $colorMain;
+        content: '';
     }
     .header_ins {
-        max-width: $sizeDesktop;
+        max-width: $sizeDesktop - 40px;
         margin: auto;
-        padding: 5px 0px;
-        height: 30px;
+        padding: 5px 20px;
+        height: 40px;
         @include clearer();
         @include tablet {
             padding: 5px 10px;
@@ -38,7 +48,6 @@ body {
     }
     .header_left {
         width: 200px;
-        height: 35px;
         float: left;
     }
     .header_right {
@@ -47,6 +56,62 @@ body {
         text-align: right;
         .header_rightIns {
             @include clearer();
+        }
+    }
+    .logo a {
+        width: 200px;
+        height: 40px;
+        display: block;
+        font-family: $fontFamilyAlt;
+        position: relative;
+        @include animate();
+        &:hover {
+            opacity: 0.7;
+        }
+        .logo_image {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background-image: url(../../img/logo_table.svg);
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: contain;
+            text-indent: -5000px;
+            overflow: hidden;
+        }
+        .logo_title {
+            display: block;
+            height: 40px;
+        }
+        .logo_title_top {
+            position: absolute;
+            top: 0;
+            left: 40px;
+            display: block;
+            color: $white;
+            height: 13px;
+            font-size: 13px;
+            margin: 0 0 2px;
+            line-height: 1em;
+            font-family: $fontFamily;
+            font-weight: bold;
+            color: $colorMain;
+            text-shadow: 1px 1px 3px rgba($black, 0.7);
+            z-index: 3;
+        }
+        .logo_title_bottom {
+            position: absolute;
+            bottom: -5px;
+            left: 5px;
+            display: block;
+            color: $white;
+            height: 45px;
+            font-size: 45px;
+            line-height: 1em;
+            text-shadow: 1px 1px 5px rgba($black, 0.8);
+            z-index: 2;
         }
     }
     &.header_simple {
@@ -64,64 +129,35 @@ body {
     }
 }
 
-.logo a {
-    width: 200px;
-    height: 40px;
-    display: block;
-    font-family: $fontFamilyAlt;
-    position: relative;
-    .logo_image {
-        position: absolute;
-        top: -25px;
-        left: 0;
-        width: 80px;
-        height: 70px;
-        background-image: url(../../img/logo_table_red.svg);
-        background-repeat: no-repeat;
-        background-position: left center;
-        background-size: contain;
-        text-indent: -5000px;
-        overflow: hidden;
-    }
-    .logo_title {
+.menuCategories {
+    background: lighten($colorText, 20%);
+    padding: 10px;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    column-count: 4;
+    column-gap: 10px;
+    display: none;
+    a {
         display: block;
-        height: 40px;
-    }
-    .logo_title_top {
-        position: absolute;
-        top: 0;
-        left: 40px;
-        display: block;
-        color: $white;
-        height: 13px;
-        font-size: 13px;
-        margin: 0 0 2px;
-        line-height: 1em;
-        font-family: $fontFamily;
-        font-weight: bold;
-        color: $colorMain;
-        text-shadow: 1px 1px 3px rgba($black, 0.7);
-        z-index: 3;
-    }
-    .logo_title_bottom {
-        position: absolute;
-        bottom: 0;
-        left: 5px;
-        display: block;
-        color: $white;
-        height: 40px;
-        font-size: 40px;
-        line-height: 1em;
-        text-shadow: 1px 1px 5px rgba($black, 0.8);
-        z-index: 2;
-        overflow: hidden;
+        padding: 3px 5px;
+        font-size: $fontSizeSmall;
+        color: rgba($white, 0.8);
+        font-weight: normal;
+        @include borderRadius(3px);
+        @include animate();
+        &:hover {
+            color: $white;
+        }
     }
 }
 
 .footer {
     font-size: $fontSizeSmall;
-    background: darken($colorGreenDark, 5%);
-    border-top: 10px solid lighten($colorGreenDark, 15%);
+    background: $colorAccent;
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 20%),1) 0%, rgba($colorAccent,1) 100%);
+    border-top: 10px solid darken($colorAccent, 20%);
     color: $white;
     margin: 0;
     @include clearer();
@@ -132,89 +168,94 @@ body {
         @include clearer();
     }
     .footer_ins {
-        padding: 30px 20px;
-        max-width: $sizeDesktop;
+        padding: 50px 20px;
+        max-width: $sizeDesktop - 40px;
         margin: auto;
+        @include tablet {
+            padding: 30px 20px;
+        }
     }
     .footer_down {
         width: 65%;
-        padding: 20px 0 0 0;
-        margin: 20px 0 0 0;
+        padding: 40px 0 0 0;
+        margin: 40px 0 0 0;
         border-top: 10px solid $colorMain;
         @include tablet {
             width: auto;
         }
         a {
             font-weight: bold;
+            color: $colorMain;
             &:hover {
-                color: $colorMain;
+                color: $colorMainAlt;
             }
         }
     }
-}
-.footer_list {
-    width: 35%;
-    float: left;
-    padding-right: 15%;
-    .footer_title {
-        font-weight: bold;
-        text-transform: uppercase;
-        padding: 0 0 10px;
-        margin: 0 0 10px;
-        border-bottom: 2px solid rgba($white, 0.5);
-        color: rgba($white, 0.5);
-    }
-    a {
-        font-weight: normal;
-        display: block;
-        width: 50%;
+    .footer_list {
+        width: 35%;
         float: left;
-        padding: 5px 0;
-        color: rgba($white, 0.5);
-        @include textEllipsis();
-        &:hover {
-            color: $white;
+        padding-right: 15%;
+        .footer_title {
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0 0 10px;
+            margin: 0 0 10px;
+            border-bottom: 2px solid rgba($white, 0.5);
+            color: rgba($white, 0.5);
+        }
+        a {
+            font-weight: normal;
+            display: block;
+            width: 50%;
+            float: left;
+            padding: 5px 0;
+            color: rgba($white, 0.5);
+            @include textEllipsis();
+            &:hover {
+                color: $white;
+            }
+        }
+        .footer_list_items {
+            @include clearer();
+            p {
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+                @include clearer();
+            }
         }
     }
-    .footer_list_items {
-        @include clearer();
-        p {
+    .footer_links {
+        max-width: $sizeDesktop;
+        padding: 0 0 20px;
+        margin: 0 auto 20px auto;
+        border-bottom: 1px solid rgba($white, 0.1);
+        &:last-child {
             padding: 0;
             margin: 0;
-            line-height: 1;
-            @include clearer();
+            border-bottom: 0;
         }
-    }
-}
-.footer_links {
-    max-width: $sizeDesktop;
-    padding: 0 0 20px;
-    margin: 0 auto 20px auto;
-    border-bottom: 1px solid rgba($white, 0.1);
-    &:last-child {
-        padding: 0;
-        margin: 0;
-        border-bottom: 0;
-    }
-    .footer_links_title {
-        display: block;
-        font-size: $fontSizeSmall;
-        padding: 0 0 10px;
-        color: $white;
-    }
-    a {
-        display: inline-block;
-        margin: 0 10px 10px 0;
-        padding: 5px 10px;
-        font-size: $fontSizeSmall;
-        background: darken($colorGreenDark, 10%);
-        color: $white;
-        font-weight: normal;
-        @include borderRadius(10px);
-        @include animate();
-        &:hover {
-            background: $colorBlue;
+        .footer_links_title {
+            display: block;
+            font-size: $fontSizeSmall;
+            padding: 0 0 10px;
+            color: lighten($colorAccent, 30%);
+        }
+        a {
+            display: inline-block;
+            margin: 0 10px 10px 0;
+            padding: 5px 10px;
+            font-size: $fontSizeSmall;
+            background: rgba($white, 0.1);
+            border: 1px solid rgba($white, 0.12);
             color: $white;
+            font-weight: normal;
+            @include borderRadius(10px);
+            @include animate();
+            &:hover {
+                background: $colorMainAlt;
+                color: $white;
+            }
         }
     }
 }
@@ -234,46 +275,70 @@ body {
     }
 }
 .menu_all {
-    background: $colorYellow;
+    background: darken($colorAccent, 10%);
+    background: linear-gradient(130deg, rgba(darken($colorAccent, 10%),1) 0%, rgba(darken($colorAccent, 20%),1) 100%);
     text-align: center;
-    height: 35px;
-    max-width: $sizeDesktop;
-    margin: auto;
+    height: 40px;
     &.menu_all_open {
         display: block;
     }
     .menu_all_ins {
         max-width: $sizeDesktop;
         margin: auto;
-        text-align: center;
-        display: table;
-        width: 100%;
-        table-layout: fixed;
     }
-    a {
-        display: table-cell;
+    a,
+    span {
+        display: inline-block;
         cursor: pointer;
         padding: 5px 10px;
-        line-height: 25px;
+        line-height: 30px;
         color: $white;
         font-size: $fontSizeSmall;
         font-weight: bold;
-        color: $black;
+        text-transform: uppercase;
+        @include borderRadius(3px);
         @include animate();
+        @include mobile {
+            @include borderRadius(0);
+        }
         &:hover {
-            color: $colorBlue;
+            color: rgba($white, 0.6);
         }
         &.menu_posts {
-            background: $colorOrange;
+            color: lighten($colorMain, 10%);
             &:hover {
-                color: $colorBlue;
+                color: lighten($colorMain, 30%);
             }
         }
-        &.menu_active {
-            &,
+        &.menu_series {
+            color: lighten($colorMain, 40%);
             &:hover {
-                background: $white;
+                color: lighten($colorMain, 50%);
             }
+        }
+        &.menu_account {
+            display: none;
+            @include mobile {
+                display: block;
+                background: rgba($white, 0.9);
+                color: $colorAccent;
+                &:hover {
+                    background: $white;
+                }
+                &.menu_account_logout {
+                    &,
+                    &:hover {
+                        color: $colorError;
+                    }
+                }
+            }
+        }
+    }
+    span {
+        background: rgba($white, 0.2);
+        i {
+            display: inline-block;
+            padding: 0 0 0 5px;
         }
     }
     @include mobile {
@@ -296,20 +361,69 @@ body {
     }
 }
 
+.menu_connected {
+    background: rgba($colorAccent, 0.01);
+    border: 2px solid rgba($colorAccent, 0.05);
+    border-right: 4px solid rgba($colorAccent, 0.05);
+    border-bottom: 4px solid rgba($colorAccent, 0.05);
+    padding: 5px 10px;
+    @include mobile {
+        display: none;
+    }
+    a {
+        display: block;
+        color: $colorAccent;
+        font-size: $fontSizeSmall;
+        padding: 5px 0;
+        font-weight: normal;
+        i {
+            display: inline-block;
+            width: 20px;
+            color: lighten($colorAccent, 20%);
+            @include animate();
+        }
+        span {
+            display: inline-block;
+        }
+        @include animate();
+        &:hover {
+            color: lighten($colorAccent, 30%);
+            i {
+                color: lighten($colorAccent, 30%);
+            }
+        }
+        &.menu_connected_logout {
+            color: $colorError;
+            i {
+                color: $colorError; 
+            }
+            &:hover {
+                color: lighten($colorError, 30%);
+            }
+        }
+    }
+    hr {
+        padding: 0;
+        margin: 10px 0;
+        display: block;
+        border: 1px solid rgba($colorAccent, 0.1);
+    }
+}
+
 .content {
     max-width: $sizeDesktop;
     margin: auto;
-    padding: 75px 0 0 0;
+    padding: 90px 0 0 0;
     .list_results {
         display: none;
     }
     @include mobile {
-        padding: 40px 0 0 0;
+        padding: 50px 0 0 0;
     }
 }
 
 .content_all {
-    margin: 0 0 20px;
+    margin: 20px;
     padding: 20px;
     background: $white;
     min-height: calc(100vh - 50px);
@@ -319,35 +433,73 @@ body {
         @include clearer();
     }
     .content_left {
-        width: calc(100% - 400px);
+        width: calc(100% - 380px);
         float: left;
     }
     .content_right {
-        width: 380px;
+        width: 340px;
         float: right;
     }
     @include mobile {
         margin: 0;
         padding: 10px;
         .content_left {
-            width: 100%;
+            width: auto;
             float: none;
             margin: 0 0 20px;
         }
         .content_right {
-            width: 100%;
+            width: auto;
             float: none;
         }
     }
 }
 
-.content_format_recipe_category,
-.content_format_posts {
-    .content_left {
-        float: right;
+.menu_side {
+    padding: 10px;
+    margin: 0 0 20px;
+    background: rgba($colorAccent, 0.02);
+    border: 3px solid rgba($colorAccent, 0.1);
+    border-right: 6px solid rgba($colorAccent, 0.1);
+    border-bottom: 6px solid rgba($colorAccent, 0.1);
+    box-sizing: border-box;
+    @include borderRadius(10px);
+    .menu_side_title {
+        margin: -10px -10px 20px -10px;
+        padding: 10px 0;
+        background: rgba($colorAccent, 0.1);
+        text-align: center;
+        color: rgba($colorAccent, 0.8);
+        font-weight: bold;
+        text-transform: uppercase;
     }
-    .content_right {
-        float: left;
+    a {
+        display: block;
+        margin: 0 0 10px;
+        font-weight: normal;
+        font-size: $fontSizeSmall;
+        @include animate();
+        @include clearer();
+        &:last-child {
+            margin: 0;
+        }
+        &:hover {
+            color: $colorMain;
+            &:before {
+                color: $colorMain;
+            }
+        }
+        i {
+            display: inline-block;
+            padding: 0 10px 0 0;
+            color: $colorMainAlt;
+            @include animate();
+        }
+        em {
+            font-size: $fontSizeSmall;
+            color: rgba($black, 0.5);
+            font-style: normal;
+        }
     }
 }
 
@@ -534,14 +686,14 @@ body {
 
 .breadcrumbs {
     font-size: $fontSizeSmall;
-    color: darken($white, 60%);
-    padding: 0 0 5px;
+    color: darken($white, 25%);
+    padding: 0 0 10px;
     a {
         font-weight: normal;
-        color: rgba($black, 0.8);
+        color: rgba($black, 0.6);
         @include animate();
         &:hover {
-            color: $black;
+            color: rgba($black, 0.7);
         }
     }
 }
@@ -634,7 +786,7 @@ body {
 }
 
 .item_complete_share {
-    padding: 20px 0;
+    padding: 50px 0;
     text-align: center;
     .item_complete_share_title {
         font-size: $fontSizeNormal;
@@ -695,7 +847,7 @@ body {
     vertical-align: middle;
     width: 270px;
     float: right;
-    margin: 0;
+    margin: 3px 0 0 0;
     @include tablet {
         display: none;
     }
@@ -712,10 +864,11 @@ body {
         input {
             display: inline-block;
             font-size: $fontSizeNormal;
-            border: 0;
+            border: 1px solid $colorAccent;
+            border-right: 0;
             padding: 5px;
-            line-height: 30px;
-            height: 30px;
+            line-height: 34px;
+            height: 34px;
             width: 100%;
             font-family: $fontFamily;
             box-sizing: border-box;
@@ -746,12 +899,12 @@ body {
     }
     .formSubmit {
         width: 40px;
-        height: 30px;
+        height: 34px;
         line-height: 30px;
         display: block;
         float: right;
         vertical-align: middle;
-        background: darken($colorRed, 20%);
+        background: lighten($colorAccent, 20%);
         color: $white;
         display: block;
         border: 0px;
@@ -759,7 +912,91 @@ body {
         @include borderRadius(3px);
         @include animate();
         &:hover {
-            background: darken($colorRed, 30%);
+            background: lighten($colorAccent, 30%);
+        }
+    }
+}
+
+.menuUser {
+    vertical-align: middle;
+    float: right;
+    margin: 0 0 0 10px;
+    padding: 0 0 0 10px;
+    position: relative;
+    &:before {
+        width: 2px;
+        height: 40px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        content: '';
+        display: block;
+        background: rgba($white, 0.1);
+        @include mobile {
+            display: none;
+        }
+    }
+    a {
+        display: inline-block;
+        margin: 5px 0 0 0;
+        padding: 0 5px;
+        line-height: 30px;
+        height: 30px;
+        background: darken($colorAccent, 10%);
+        color: $white;
+        font-size: $fontSizeSmall;
+        font-weight: normal;
+        text-transform: uppercase;
+        @include animate();
+        @include borderRadius(3px);
+        &:hover {
+            background: darken($colorAccent, 20%);
+        }
+        &.menuUserRegister,
+        &.menuUserAccount {
+            background: lighten($colorAccent, 10%);
+            &:hover {
+                background: lighten($colorAccent, 20%);
+            }
+        }
+        &.menuUserLogout {
+            background: darken($white, 60%);
+            &:hover {
+                background: $colorError;
+            }
+        }
+    }
+    @include mobile {
+        position: fixed;
+        top: 10px;
+        right: 50px;
+        padding: 0;
+        margin: 0;
+        float: none;
+        .menuUserLogout,
+        .menuUserRegister,
+        span {
+            display: none;
+        }
+        a {
+            margin: 0 0 0 10px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            font-size: 30px;
+            line-height: 30px;
+            background: transparent;
+            border: 0;
+            text-align: center;
+            color: $colorMain;
+            &.menuUserRegister,
+            &.menuUserAccount,
+            &.menuUserLogout {
+                &,
+                &:hover {
+                    background: transparent;
+                }
+            }
         }
     }
 }
@@ -933,12 +1170,12 @@ body {
     }
     @include mobile {
         .post_image {
-            width: 100%;
+            width: auto;
             float: none;
             margin: 0 0 10px;
         }
         .post_information {
-            width: 100%;
+            width: auto;
             float: none;
         }
     }
@@ -1000,8 +1237,11 @@ body {
 }
 
 .items_side {
-    margin: 20px 0;
-    background: $colorYellow;
+    margin: 20px 0 0 0;
+    background: rgba($colorMain, 0.6);
+    border: 1px solid rgba($colorMain, 0.8);
+    border-right: 3px solid rgba($colorMain, 0.8);
+    border-bottom: 3px solid rgba($colorMain, 0.8);
     box-sizing: border-box;
     @include borderRadius(10px);
     .items_side_title {
@@ -1015,10 +1255,11 @@ body {
     .items_side_items {
         padding: 5px;
         .post_minimal {
-            margin: 0 0 5px;
+            margin: 0 0 10px;
         }
     }
     .items_side_button {
+        margin: 10px;
         a {
             display: block;
             padding: 10px;
@@ -1198,20 +1439,15 @@ body {
         }
         @include mobile {
             .post_short_info_left {
-                width: 100%;
+                width: auto;
                 float: none;
                 margin: 0 0 30px;
             }
             .post_short_info_right {
-                width: 100%;
+                width: auto;
                 float: none;
             }
         }
-    }
-    .post_image_complete {
-        margin: 0 auto 20px auto;
-        text-align: center;
-        max-width: 400px;
     }
     .post_date {
         font-size: $fontSizeSmall;
@@ -1279,8 +1515,8 @@ body {
 .related {
     .related_title {
         font-size: $fontSizeNormal;
-        padding: 20px 0;
-        margin: 20px 0 0 0;
+        padding: 40px 0 40px 0;
+        margin: 40px 0 0 0;
         color: $colorFacebook;
         font-weight: bold;
         position: relative;
@@ -1585,6 +1821,180 @@ body {
             }
             &:last-child {
                 margin: 0;
+            }
+        }
+    }
+}
+
+//Multiple forms
+.nested_form_field {
+    margin: 10px 0 0 0;
+    padding: 10px 0;
+    border-top: 1px solid rgba($colorText, 0.3);
+    > label {
+        display: block;
+        margin: 0 0 5px;
+    }
+    .nested_form_field_ins {
+        @include clearer();
+    }
+    .nested_form_field_object {
+        padding: 10px;
+        background: rgba($colorText, 0.1);
+        border: 1px solid rgba($colorText, 0.15);
+        margin: 10px 0px;
+        position: relative;
+        .nested_form_field_options {
+            text-align: right;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            .nested_form_field_delete,
+            .nested_form_field_order {
+                cursor: pointer;
+                color: $colorMain;
+                opacity: 0.6;
+                display: inline-block;
+                margin: 0 0 0 10px;
+                &:hover {
+                    opacity: 1;
+                }
+            }
+            .nested_form_field_delete {
+                color: $colorError;
+            }
+        }
+    }
+    .nested_form_field_add,
+    .nested_form_field_add_multiple {
+        border: 0px;
+        display: inline-block;
+        padding: 7px 20px;
+        margin: 0 10px 0 0;
+        text-align: center;
+        color: $white;
+        background: $colorAccept;
+        margin-top: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: $fontSizeSmall;
+        @include borderRadius(5px);
+        &:hover {
+            background: $colorAccent;
+        }
+    }
+    .nested_form_field_add_multiple_wrapper {
+        display: inline-block;
+    }
+    .nested_form_field_add_multiple {
+        background: darken($white, 60%);
+        &:hover {
+            background: darken($white, 70%);
+        }
+    }
+    .nested_form_field_add_multiple_file {
+        display: none;
+    }
+    .nested_form_field_empty {
+        display: none;
+    }
+}
+
+.nested_count {
+    padding: 0 0 10px;
+    p {
+        margin: 0;
+        padding: 0 0 10px;
+        font-size: $fontSizeSmall;
+        &:last-child {
+            padding: 0;
+        }
+    }
+}
+
+.content {
+    .nested_form_field_multiple_items  {
+        position: relative;
+        .nested_form_field_options {
+            padding: 5px;
+            background: rgba($white, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: right;
+            .nested_form_field_delete,
+            .nested_form_field_order {
+                position: static;
+                margin: 0 0 0 10px;
+                padding: 0;
+                display: inline-block;
+            }
+        }
+        .nested_form_field_content {
+            padding-top: 25px;
+        }
+        .nested_form_field_object {
+            width: calc(100% / 2 - 10px);
+            margin: 0 10px 20px 0;
+            float: left;
+            @include borderBox();
+            &:nth-child(3n+3) {
+                margin: 0 0 10px 0;
+            }
+            input,
+            select,
+            textarea {
+                width: 100%;
+            }
+        }
+        .form_field_langs {
+            margin: 0;
+            .form_field {
+                width: auto;
+                float: none;
+                padding: 0 0 10px;
+            }
+        }
+    }
+    .recipe_form_ingredients {
+        .nested_form_field_multiple_items  {
+            .nested_form_field_object {
+                width: auto;
+                margin: 0 0 10px;
+                float: none;
+                .nested_form_field_content {
+                    margin: 0 -5px;
+                    @include clearer();
+                }
+                .form_field {
+                    width: calc(100%/3 - 10px);
+                    margin: 0 5px;
+                    float: left;
+                }
+            }
+        }
+    }
+    .recipe_form_preparation {
+        .nested_form_field_multiple_items  {
+            .nested_form_field_object {
+                width: auto;
+                margin: 0 0 10px;
+                float: none;
+                .nested_form_field_content {
+                    margin: 0 -5px;
+                    @include clearer();
+                }
+                .form_field {
+                    margin: 0 5px;
+                    float: left;
+                    &:nth-child(4) {
+                        width: calc(2*100%/5 - 10px);
+                    }
+                    &:nth-child(5) {
+                        width: calc(3*100%/5 - 10px);
+                    }
+                }
             }
         }
     }
@@ -1943,17 +2353,10 @@ body {
         color: $colorAccent;
         padding: 0 0 5px;
         font-size: $fontSizeMedium;
-        line-height: normal;
-        margin: 0;
-        max-width: 100%;
-        &:after {
-            display: none;
-        }
     }
     .recipe_short_description {
         font-size: $fontSizeSmall;
         padding: 0 0 5px;
-        line-height: normal;
     }
     .rating {
         padding: 0 0 5px;
@@ -2051,23 +2454,13 @@ body {
 .recipe_extra_info {
     margin: 0 -10px;
     font-size: $fontSizeNormal;
-    > div,
-    > a {
+    > div {
         margin: 0 5px 5px;
         padding: 3px 5px;
         display: inline-block;
         color: $colorAccent;
         background: rgba($colorAccent, 0.05);
-        font-weight: normal;
         @include borderRadius(10px);
-    }
-    > a {
-        color: darken($colorAccent, 10%);
-        background: rgba(darken($colorAccent, 10%), 0.1);
-        &:hover {
-            color: darken($colorAccent, 20%);
-            background: rgba(darken($colorAccent, 20%), 0.1);
-        }
     }
     i {
         display: inline-block;
@@ -2075,50 +2468,14 @@ body {
     }
 }
 
-.recipe {
-    .recipe_extra_info {
-        margin: 0;
-        > div,
-        > a {
-            margin: 0 3px 3px;
-            padding: 3px 5px;
-            font-size: $fontSizeSmall;
-        }
-    }
-}
-
-
-.recipe_wrapper_all {
-    margin: 0 0 20px;
-    @include clearer();
-    .recipe_wrapper_all_left {
-        width: 340px;
-        float: left;
-    }
-    .recipe_wrapper_all_right {
-        width: calc(100% - 350px);
-        float: right;
-    }
-    @include mobile() {
-        .recipe_wrapper_all_left,
-        .recipe_wrapper_all_right {
-            width: auto;
-            float: none;
-        }
-    }
-}
 .recipe_wrapper {
-    padding: 15px;
-    background: rgba($colorAccent, 0.05);
-    @include borderRadius(5px);
     @include clearer();
     h2 {
         margin: 0 0 10px;
         padding: 10px 0 10px 0;
-        font-size: $fontSizeMedium;
-        &:after,
-        &:before {
-            display: none;
+        &:after {
+            bottom: auto;
+            top: 0;
         }
     }
     h4 {
@@ -2127,28 +2484,22 @@ body {
         padding: 0;
     }
     .recipe_ingredients {
-        width: 200px;
-        float: left;
         margin: 0 0 20px;
         p {
-            font-size: $fontSizeNormal;
+            font-size: $fontSizeMedium;
             color: darken($colorAccentAlt, 10%);
             margin: 0;
             padding: 0;
-            &:before {
-                content: '• ';
-                color: rgba(lighten($colorAccentAlt, 10%), 0.5);
-            }
         }
         .ingredient_ingredient {
             color: darken($colorAccentAlt, 20%);
         }
     }
     .recipe_preparation {
-        width: calc(100% - 230px);
-        float: right;
-        padding: 0 0 0 15px;
-        border-left: 1px solid rgba($colorAccent, 0.1);
+        margin: 0 0 20px;
+        h2 {
+            margin: 20px 0 10px 0;
+        }
         p {
             padding: 0 0 20px;
             margin: 0;
@@ -2165,17 +2516,6 @@ body {
             padding: 0;
             margin: 0;
             line-height: 1em;
-        }
-    }
-    @include mobile() {
-        .recipe_ingredients,
-        .recipe_preparation {
-            width: auto;
-            float: none;
-        }
-        .recipe_preparation {
-            padding: 0;
-            border-left: 0;
         }
     }
 }
@@ -2449,52 +2789,4 @@ body {
 }
 .recipe_complete_link_friend {
     margin: 0 0 20px;
-}
-
-.recipes_minimal {
-    margin: 0 -5px;
-    @include clearer();
-    .recipe_minimal {
-        width: calc(100%/6);
-        float: left;
-        a {
-            display: block;
-            padding: 5px;
-            margin: 0 5px;
-            background: rgba($colorAccent, 0.05);
-            border: 1px solid rgba($colorAccent, 0.1);
-            text-align: center;
-            color: $colorAccent;
-            @include animate();
-            @include borderRadius(3px);
-            .recipe_image {
-                margin: 0 0 10px;
-                height: 120px;
-                img,
-                amp-img {
-                    height: 120px;
-                    object-fit: cover;
-                }
-            }
-            p {
-                font-size: $fontSizeSmall;
-                line-height: auto;
-                padding: 0;
-                margin: 0;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-            &:hover {
-                background: rgba($colorAccent, 0.1);
-                border: 1px solid rgba($colorAccent, 0.3);
-            }
-        }
-    }
-    @include mobile() {
-        .recipe_minimal {
-            width: calc(100%/2);
-            margin: 0 0 10px;
-        }
-    }
 }

@@ -15,11 +15,11 @@ class Recipe_Ui extends Ui
     {
         return '
             <div class="recipe">
-                <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
+                <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
-                        <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
+                        <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
+                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
                     </div>
@@ -36,9 +36,20 @@ class Recipe_Ui extends Ui
                     <div class="recipe_information">
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
-                        <div class="recipe_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
+                        <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
+                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
+                </a>
+            </div>';
+    }
+
+    public function renderMinimal()
+    {
+        return '
+            <div class="recipe_minimal">
+                <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
+                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <p>' . $this->object->getBasicInfo() . '</p>
                 </a>
             </div>';
     }
@@ -49,7 +60,7 @@ class Recipe_Ui extends Ui
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
                     <div class="post_image_amp">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
-                    <div class="post_title">' . $this->object->getBasicInfo() . '</div>
+                    <h2 class="post_title">' . $this->object->getBasicInfo() . '</h2>
                 </a>
             </div>';
     }
@@ -113,23 +124,27 @@ class Recipe_Ui extends Ui
                         <div class="recipe_complete_info_right">
                             <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
                             <div class="recipe_rating">' . $this->renderRating() . '</div>
-                            <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
+                            <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
+                        </div>
+                    </div>
+                    ' . $this->object->get('description') . '
+                    ' . $friendSiteLink1 . '
+                    <div class="recipe_wrapper_all">
+                        <div class="recipe_wrapper_all_left">' . Adsense::amp() . '</div>
+                        <div class="recipe_wrapper_all_right">
+                            <div class="recipe_wrapper">
+                                <div class="recipe_ingredients">
+                                    <h2>' . __('ingredients') . '</h2>
+                                    <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
+                                </div>
+                                <div class="recipe_preparation">
+                                    <h2>' . __('preparation') . '</h2>
+                                    <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     ' . Adsense::amp() . '
-                    ' . $this->object->get('description') . '
-                    ' . $friendSiteLink1 . '
-                    <div class="recipe_wrapper">
-                        <div class="recipe_ingredients">
-                            <h2>' . __('ingredients') . '</h2>
-                            <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
-                        </div>
-                        <div class="recipe_preparation">
-                            <h2>' . __('preparation') . '</h2>
-                            <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
-                        </div>
-                        ' . Adsense::amp() . '
-                    </div>
                     ' . $friendSiteLink2 . '
                 </div>
             </div>
@@ -149,9 +164,20 @@ class Recipe_Ui extends Ui
         return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
     }
 
-    public function renderInfo()
+    public function renderInfo($complete = false)
     {
         return '
+            '.(($complete) ? '
+                <a class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                    <i class="icon icon-cutlery"></i>
+                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                </a>
+            ' : '
+                <div class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                    <i class="icon icon-cutlery"></i>
+                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                </div>
+            ').'
             ' . (($this->object->get('cook_time') != '') ? '
             <div class="recipe_cook_time">
                 <i class="icon icon-time"></i>
@@ -219,22 +245,20 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
-        $posts = new ListObjects('Post', ['order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $this->object->getBasicInfo() . '") DESC', 'limit' => '6']);
-        $posts = (!$posts->isEmpty()) ? $posts : new ListObjects('Post', array('order' => 'RAND()', 'limit' => '5'));
-        $recipes = (new Recipe)->readList(['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
-        $recipesHtml = '';
-        foreach ($recipes as $recipe) {
-            $recipe->loadCategoryManually($this->object->get('id_category_object'));
-            $recipesHtml .= $recipe->showUi('PublicSimple');
-        }
+        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
+        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         return '<div class="related">
                     <div class="related_block">
                         <div class="related_title">' . __('other_recipes') . '</div>
-                        <div class="posts">' . $recipesHtml . '</div>
+                        <div class="recipes_minimal">' . $recipes->showList(['function' => 'Minimal']) . '</div>
                     </div>
                     <div class="related_block">
-                        <div class="related_title">' . __('other_posts') . '</div>
-                        <div class="posts">' . $posts->showList(['function' => 'PublicSimple']) . '</div>
+                        <div class="related_title">' . __('other_posts_related') . ' <strong>' . $this->object->getBasicInfo() . '</strong></div>
+                        <div class="posts">
+                            ' . $posts->showList(['function' => 'PublicSimple']) . '
+                            ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
+                        </div>
                     </div>
                 </div>';
     }
@@ -337,11 +361,13 @@ class Recipe_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 4]);
+        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
+            ' . Adsense::amp() . '
             <div class="items_side">
                 <div class="items_side_title">' . __('popular_recipes') . '</div>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
+                <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_recipes') . '</a></div>
             </div>';
     }
 

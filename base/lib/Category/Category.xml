@@ -41,6 +41,11 @@
 			<refAttribute>name</refAttribute>
 		</attribute>
 		<attribute>
+			<name>title</name>
+			<label>title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
 			<name>short_description</name>
 			<label>short_description</label>
 			<type>textarea</type>

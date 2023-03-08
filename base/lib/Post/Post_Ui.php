@@ -14,6 +14,24 @@ class Post_Ui extends Ui
     public function renderPublic()
     {
         return '
+            <div class="recipe">
+                <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
+                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="recipe_information">
+                        <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
+                        <p class="recipe_short_description">
+                            <i class="icon icon-date"></i>
+                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
+                        </p>
+                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
+                    </div>
+                </a>
+            </div>';
+    }
+
+    public function renderMedium()
+    {
+        return '
             <div class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
@@ -114,6 +132,10 @@ class Post_Ui extends Ui
         foreach ($this->object->get('categories') as $category) {
             $categories .= $category->link() . ' ';
         }
+        $share = $this->share(['share' => [
+            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
+        ]]);
         return '
             <div class="post_complete">
                 <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
@@ -129,20 +151,16 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                     <div class="post_short_info_right">
-                    ' . $this->share(['share' => [
-            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
-        ]]) . '
+                    ' . $share . '
                     </div>
                 </div>
+                <div class="post_image_complete">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
                 <div class="editorial">' . $this->object->get('description') . '</div>
             </div>
+            ' . Adsense::amp() . '
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
-                ' . $this->share(['share' => [
-            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
-        ]]) . '
+                ' . $share . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }
@@ -183,8 +201,9 @@ class Post_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 4]);
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
+            ' . Adsense::amp() . '
             <div class="items_side">
                 <div class="items_side_title">' . __('last_posts') . '</div>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
