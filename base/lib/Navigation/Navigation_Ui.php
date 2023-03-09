@@ -196,12 +196,12 @@ class Navigation_Ui extends Ui
             ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
             ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
             ';
-}
+    }
 
-public function menu()
+    public function menu()
     {
-    $menu = Cache::show('Category', 'menuTop');
-    return '
+        $menu = Cache::show('Category', 'menuTop');
+        return '
             <div class="menuWrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
                 <div class="menu_trigger" role="button" tabindex="0" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
@@ -221,33 +221,33 @@ public function menu()
                     </div>
                 </nav>
             </div>';
-}
+    }
 
-public function breadCrumbs()
+    public function breadCrumbs()
     {
-    $html = '';
-    if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
-        $html .= '
+        $html = '';
+        if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
+            $html .= '
                 <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                     <a href="' . url('') . '" itemprop="item"><span itemprop="name">' . __('home') . '</span></a>
                     <meta itemprop="position" content="1" />
                 </span> &raquo;';
-        $i = 2;
-        foreach ($this->object->bread_crumbs as $url => $title) {
-            $html .= '
+            $i = 2;
+            foreach ($this->object->bread_crumbs as $url => $title) {
+                $html .= '
                     <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                         <a href="' . $url . '" itemprop="item"><span itemprop="name">' . $title . '</span></a>
                         <meta itemprop="position" content="' . $i . '" />
                     </span> &raquo;';
-            $i++;
+                $i++;
+            }
+            return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
         }
-        return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
     }
-}
 
-public static function search()
+    public static function search()
     {
-    return '
+        return '
             <form accept-charset="UTF-8" class="formSearchSimple" action="' . url('buscar') . '" method="GET" target="_top">
                 <fieldset>
                     <div class="text formField ">
@@ -256,15 +256,15 @@ public static function search()
                     <button type="submit" class="formSubmit" role="button" aria-label="' . __('search') . '"><i class="icon icon-search"></i></button>
                 </fieldset>
             </form>';
-}
+    }
 
-public static function analyticsAmp()
+    public static function analyticsAmp()
     {
-    return '
+        return '
             <amp-analytics type="googleanalytics">
                 <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
             </amp-analytics>';
-    return '
+        return '
             <amp-analytics type="gtag" data-credentials="include">
                 <script type="application/json">
                     {
@@ -284,18 +284,18 @@ public static function analyticsAmp()
                     }
                 </script>
             </amp-analytics>';
-}
-
-public static function autoadsAmp()
-    {
-    return '<amp-auto-ads type="adsense" data-ad-client="ca-pub-7429223453905389"></amp-auto-ads>';
-}
-
-public static function facebookComments($url)
-    {
-    if (Parameter::code('facebook_comments') == 'true') {
-        return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
     }
-}
+
+    public static function autoadsAmp()
+    {
+        return '<amp-auto-ads type="adsense" data-ad-client="ca-pub-7429223453905389"></amp-auto-ads>';
+    }
+
+    public static function facebookComments($url)
+    {
+        if (Parameter::code('facebook_comments') == 'true') {
+            return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
+        }
+    }
 
 }

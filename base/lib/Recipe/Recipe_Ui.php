@@ -173,7 +173,7 @@ class Recipe_Ui extends Ui
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
                 </a>
             ' : '
-                <div class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                <div class="recipe_cook_category">
                     <i class="icon icon-cutlery"></i>
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
                 </div>
