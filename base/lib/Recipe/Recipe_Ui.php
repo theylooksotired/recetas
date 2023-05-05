@@ -78,6 +78,7 @@ class Recipe_Ui extends Ui
                     $versionUi = new Recipe_Ui($version);
                     $otherVersions .= '
                         <div class="recipe_wrapper recipe_version">
+                            ' . Adsense::amp() . '
                             <h3>' . $version->getBasicInfo() . '</h3>
                             ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
                             <div class="recipe_ingredients">
@@ -167,7 +168,7 @@ class Recipe_Ui extends Ui
     public function renderInfo($complete = false)
     {
         return '
-            '.(($complete) ? '
+            ' . (($complete) ? '
                 <a class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
                     <i class="icon icon-cutlery"></i>
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
@@ -177,7 +178,7 @@ class Recipe_Ui extends Ui
                     <i class="icon icon-cutlery"></i>
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
                 </div>
-            ').'
+            ') . '
             ' . (($this->object->get('cook_time') != '') ? '
             <div class="recipe_cook_time">
                 <i class="icon icon-time"></i>
