@@ -261,6 +261,22 @@ class Navigation_Ui extends Ui
     public static function analyticsAmp()
     {
         return '
+            <amp-analytics type="googleanalytics" config="' . ASTERION_BASE_URL . 'libjs/ga4.json" data-credentials="include">
+            <script type="application/json">
+            {
+                "vars": {
+                            "GA4_MEASUREMENT_ID": "' . Parameter::code('google_analytics_code_g4') . '",
+                            "GA4_ENDPOINT_HOSTNAME": "www.google-analytics.com",
+                            "DEFAULT_PAGEVIEW_ENABLED": true,
+                            "GOOGLE_CONSENT_ENABLED": false,
+                            "WEBVITALS_TRACKING": false,
+                            "PERFORMANCE_TIMING_TRACKING": false,
+                            "SEND_DOUBLECLICK_BEACON": false
+                }
+            }
+            </script>
+            </amp-analytics>';
+        return '
             <amp-analytics type="googleanalytics">
                 <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
             </amp-analytics>';
