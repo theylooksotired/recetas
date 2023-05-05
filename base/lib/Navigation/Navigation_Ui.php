@@ -261,6 +261,10 @@ class Navigation_Ui extends Ui
     public static function analyticsAmp()
     {
         return '
+            ' . ((Parameter::code('gtag') != '') ? '
+            <amp-analytics type="gtag" data-credentials="include">
+                <script type="application/json"> { "vars": { "gtag_id": "' . Parameter::code('gtag') . '", "config": { "AW-1035000466": { "groups": "default" } } }, "triggers": { } } </script> </amp-analytics>
+            ' : '') . '
             <amp-analytics type="googleanalytics" config="' . ASTERION_BASE_URL . 'libjs/ga4.json" data-credentials="include">
             <script type="application/json">
             {
@@ -275,30 +279,6 @@ class Navigation_Ui extends Ui
                 }
             }
             </script>
-            </amp-analytics>';
-        return '
-            <amp-analytics type="googleanalytics">
-                <script type="application/json">{"vars": {"account": "' . Parameter::code('google_analytics_code') . '"}, "triggers": { "trackPageview": { "on": "visible", "request": "pageview"}}}</script>
-            </amp-analytics>';
-        return '
-            <amp-analytics type="gtag" data-credentials="include">
-                <script type="application/json">
-                    {
-                        "vars": {
-                            "apid": "' . Parameter::code('google_analytics_code') . '",
-                            "gtag_id": "' . Parameter::code('google_analytics_code') . '",
-                            "config": {
-                                "' . Parameter::code('google_analytics_code') . '": { "groups": "default" }
-                            }
-                        },
-                        "triggers": {
-                            "trackPageview": {
-                                "on": "visible",
-                                "request": "pageview"
-                            }
-                        }
-                    }
-                </script>
             </amp-analytics>';
     }
 
