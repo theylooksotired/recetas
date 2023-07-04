@@ -138,7 +138,7 @@ class Post_Ui extends Ui
         ]]);
         return '
             <article class="post_complete">
-                <div class="post_complete_ins"  id="post-container">
+                <div class="post_complete_ins post-content" id="post-container">
                     <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                     <div class="post_short_info">
                         <div class="post_short_info_left">
