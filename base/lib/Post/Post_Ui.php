@@ -137,25 +137,27 @@ class Post_Ui extends Ui
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
         return '
-            <article class="post_complete" id="post-container">
-                <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
-                <div class="post_short_info">
-                    <div class="post_short_info_left">
-                        <div class="post_date">
-                            <i class="icon icon-date"></i>
-                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
+            <article class="post_complete">
+                <div class="post_complete_ins"  id="post-container">
+                    <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
+                    <div class="post_short_info">
+                        <div class="post_short_info_left">
+                            <div class="post_date">
+                                <i class="icon icon-date"></i>
+                                <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
+                            </div>
+                            <div class="post_reading_time">
+                                <i class="icon icon-time"></i>
+                                <span>' . Text::readingTime($this->object->get('description')) . '</span>
+                            </div>
                         </div>
-                        <div class="post_reading_time">
-                            <i class="icon icon-time"></i>
-                            <span>' . Text::readingTime($this->object->get('description')) . '</span>
+                        <div class="post_short_info_right">
+                        ' . $share . '
                         </div>
                     </div>
-                    <div class="post_short_info_right">
-                    ' . $share . '
-                    </div>
+                    <div class="post_image_complete">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
+                    <div class="editorial">' . $this->object->get('description') . '</div>
                 </div>
-                <div class="post_image_complete">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
-                <div class="editorial">' . $this->object->get('description') . '</div>
             </article>
             ' . Adsense::amp() . '
             <div class="item_complete_share">

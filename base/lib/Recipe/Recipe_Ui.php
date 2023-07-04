@@ -116,8 +116,8 @@ class Recipe_Ui extends Ui
             }
         }
         return '
-            <article class="recipe_complete" id="post-container">
-                <div class="recipe_complete_ins">
+            <article class="recipe_complete">
+                <div class="recipe_complete_ins" id="post-container">
                     <div class="recipe_complete_info">
                         <div class="recipe_complete_info_left">
                             ' . $this->object->getImageAmpWebp('image', 'web') . '
