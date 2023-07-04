@@ -263,22 +263,34 @@ class Navigation_Ui extends Ui
         return '
             ' . ((Parameter::code('gtag') != '') ? '
             <amp-analytics type="gtag" data-credentials="include">
-                <script type="application/json"> { "vars": { "gtag_id": "' . Parameter::code('gtag') . '", "config": { "AW-1035000466": { "groups": "default" } } }, "triggers": { } } </script> </amp-analytics>
+                <script type="application/json"> { "vars": { "gtag_id": "' . Parameter::code('gtag') . '", "config": { "AW-1035000466": { "groups": "default" } } }, "triggers": {
+                        "C_CQ6RLtKBSQQ": {
+                          "on": "visible",
+                          "vars": {
+                            "event_name": "conversion",
+                            "value": 0.01,
+                            "currency": "USD",
+                            "send_to": ["AW-1035000466/KPllCIyJ250YEJK1w-0D"]
+                          }
+                        }
+                    } }
+                </script>
+            </amp-analytics>
             ' : '') . '
             <amp-analytics type="googleanalytics" config="' . ASTERION_BASE_URL . 'libjs/ga4.json" data-credentials="include">
-            <script type="application/json">
-            {
-                "vars": {
-                            "GA4_MEASUREMENT_ID": "' . Parameter::code('google_analytics_code_g4') . '",
-                            "GA4_ENDPOINT_HOSTNAME": "www.google-analytics.com",
-                            "DEFAULT_PAGEVIEW_ENABLED": true,
-                            "GOOGLE_CONSENT_ENABLED": false,
-                            "WEBVITALS_TRACKING": false,
-                            "PERFORMANCE_TIMING_TRACKING": false,
-                            "SEND_DOUBLECLICK_BEACON": false
+                <script type="application/json">
+                {
+                    "vars": {
+                                "GA4_MEASUREMENT_ID": "' . Parameter::code('google_analytics_code_g4') . '",
+                                "GA4_ENDPOINT_HOSTNAME": "www.google-analytics.com",
+                                "DEFAULT_PAGEVIEW_ENABLED": true,
+                                "GOOGLE_CONSENT_ENABLED": false,
+                                "WEBVITALS_TRACKING": false,
+                                "PERFORMANCE_TIMING_TRACKING": false,
+                                "SEND_DOUBLECLICK_BEACON": false
+                    }
                 }
-            }
-            </script>
+                </script>
             </amp-analytics>';
     }
 
