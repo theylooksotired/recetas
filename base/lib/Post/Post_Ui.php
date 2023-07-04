@@ -137,7 +137,7 @@ class Post_Ui extends Ui
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
         return '
-            <article class="post_complete">
+            <article class="post_complete" id="post-container">
                 <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                 <div class="post_short_info">
                     <div class="post_short_info_left">

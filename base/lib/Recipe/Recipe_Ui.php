@@ -116,7 +116,7 @@ class Recipe_Ui extends Ui
             }
         }
         return '
-            <article class="recipe_complete">
+            <article class="recipe_complete" id="post-container">
                 <div class="recipe_complete_ins">
                     <div class="recipe_complete_info">
                         <div class="recipe_complete_info_left">
