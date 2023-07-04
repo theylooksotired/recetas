@@ -14,7 +14,7 @@ class Post_Ui extends Ui
     public function renderPublic()
     {
         return '
-            <div class="recipe">
+            <article class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
@@ -26,13 +26,13 @@ class Post_Ui extends Ui
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderMedium()
     {
         return '
-            <div class="post">
+            <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
@@ -48,13 +48,13 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderPublicSimple()
     {
         return '
-            <div class="post_simple">
+            <article class="post_simple">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
@@ -66,13 +66,13 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderIntro($options = [])
     {
         return '
-            <div class="post">
+            <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="post_information">
@@ -88,7 +88,7 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderIntroTop($options = [])
@@ -137,7 +137,7 @@ class Post_Ui extends Ui
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
         return '
-            <div class="post_complete">
+            <article class="post_complete">
                 <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                 <div class="post_short_info">
                     <div class="post_short_info_left">
@@ -156,7 +156,7 @@ class Post_Ui extends Ui
                 </div>
                 <div class="post_image_complete">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
                 <div class="editorial">' . $this->object->get('description') . '</div>
-            </div>
+            </article>
             ' . Adsense::amp() . '
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>

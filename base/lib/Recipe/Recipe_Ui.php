@@ -14,7 +14,7 @@ class Recipe_Ui extends Ui
     public function renderPublic()
     {
         return '
-            <div class="recipe">
+            <article class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
@@ -24,13 +24,13 @@ class Recipe_Ui extends Ui
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderPublicSimple()
     {
         return '
-            <div class="recipe_simple">
+            <article class="recipe_simple">
                 <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
                     <div class="recipe_information">
@@ -40,7 +40,7 @@ class Recipe_Ui extends Ui
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
                 </a>
-            </div>';
+            </article>';
     }
 
     public function renderMinimal()
@@ -116,7 +116,7 @@ class Recipe_Ui extends Ui
             }
         }
         return '
-            <div class="recipe_complete">
+            <article class="recipe_complete">
                 <div class="recipe_complete_ins">
                     <div class="recipe_complete_info">
                         <div class="recipe_complete_info_left">
@@ -148,7 +148,7 @@ class Recipe_Ui extends Ui
                     ' . Adsense::amp() . '
                     ' . $friendSiteLink2 . '
                 </div>
-            </div>
+            </article>
             ' . $otherVersions . '
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
