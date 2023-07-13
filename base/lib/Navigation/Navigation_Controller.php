@@ -18,9 +18,9 @@ class Navigation_Controller extends Controller
     {
         $this->login = User_Login::getInstance();
         $this->ui = new Navigation_Ui($this);
+        $this->mode = (Parameter::code('mode')!='') ? Parameter::code('mode') : 'amp';
         switch ($this->action) {
             default:
-                $this->mode = 'amp';
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
                 $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
                 $item = ($category->id() != '') ? $category : new Category();
@@ -34,7 +34,6 @@ class Navigation_Controller extends Controller
                 }
                 break;
             case 'recetas':
-                $this->mode = 'amp';
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
                 if ($this->recipe->id() != '') {
@@ -84,7 +83,6 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'intro':
-                $this->mode = 'amp';
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->meta_url = url('');
                 $this->content_top = '
@@ -98,7 +96,6 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'articulos':
-                $this->mode = 'amp';
                 $this->layout_page = 'posts';
                 $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
                 if ($post->id() != '') {
@@ -120,7 +117,6 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'buscar':
-                $this->mode = 'amp';
                 if (isset($_GET['search']) && $_GET['search'] != '') {
                     $search = Text::simpleUrl($_GET['search']);
                     header("HTTP/1.1 301 Moved Permanently");
@@ -149,7 +145,6 @@ class Navigation_Controller extends Controller
                     }
                     $this->content = '
                         <div class="items_all">
-                            ' . Adsense::amp() . '
                             ' . $items->showList(['middle' => Adsense::amp(), 'middleRepetitions' => 2]) . '
                         </div>';
                     return $this->ui->render();
@@ -218,16 +213,18 @@ class Navigation_Controller extends Controller
 
     public function ampFacebookCommentsHeader()
     {
-        if (Parameter::code('facebook_comments') == 'true') {
+        if ($this->mode == 'amp' && Parameter::code('facebook_comments') == 'true') {
             return '<script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>';
         }
     }
 
     public function ampListHeader()
     {
-        return '
-            <script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
-            <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>';
+        if ($this->mode == 'amp') {
+            return '
+                <script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
+                <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>';
+        }
     }
 
 }

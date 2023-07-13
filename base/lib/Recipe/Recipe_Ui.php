@@ -13,10 +13,12 @@ class Recipe_Ui extends Ui
 
     public function renderPublic()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $image . '</div>
                     <div class="recipe_information">
                         <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
@@ -29,10 +31,12 @@ class Recipe_Ui extends Ui
 
     public function renderPublicSimple()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="recipe_simple">
                 <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $image . '</div>
                     <div class="recipe_information">
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
@@ -45,10 +49,12 @@ class Recipe_Ui extends Ui
 
     public function renderMinimal()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="recipe_minimal">
                 <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $image . '</div>
                     <p>' . $this->object->getBasicInfo() . '</p>
                 </a>
             </div>';
@@ -56,10 +62,12 @@ class Recipe_Ui extends Ui
 
     public function renderSide($options = [])
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
-                    <div class="post_image_amp">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="post_image_amp">' . $image . '</div>
                     <h2 class="post_title">' . $this->object->getBasicInfo() . '</h2>
                 </a>
             </div>';
@@ -115,19 +123,17 @@ class Recipe_Ui extends Ui
                     </div>';
             }
         }
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         return '
             <article class="recipe_complete">
                 <div class="recipe_complete_ins post-content" id="post-container">
                     <div class="recipe_complete_info">
-                        <div class="recipe_complete_info_left">
-                            ' . $this->object->getImageAmpWebp('image', 'web') . '
-                        </div>
-                        <div class="recipe_complete_info_right">
-                            <div class="recipe_short_description">' . $this->object->get('short_description') . '</div>
-                            <div class="recipe_rating">' . $this->renderRating() . '</div>
-                            <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
-                        </div>
+                        ' . $image . '
+                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
+                    <div class="recipe_rating">' . $this->renderRating() . '</div>
+                    <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
@@ -268,7 +274,7 @@ class Recipe_Ui extends Ui
     {
         $html = '
             <div class="itemEditInsWrapper">
-                <div class="itemEditImage">' . $this->object->getImage('image', 'small') . '</div>
+                <div class="itemEditImage">' . $this->object->getImageWidth('image', 'small') . '</div>
                 <div class="itemEditInformation">
                     <div class="itemEditTitle">' . $this->object->getBasicInfo() . '</div>
                     <div class="itemEditCreated">' . __('created') . ' : ' . Date::sqlText($this->object->get('created')) . '</div>

@@ -13,10 +13,12 @@ class Post_Ui extends Ui
 
     public function renderPublic()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
-                    <div class="recipe_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="recipe_image">' . $image . '</div>
                     <div class="recipe_information">
                         <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
                         <p class="recipe_short_description">
@@ -31,10 +33,12 @@ class Post_Ui extends Ui
 
     public function renderMedium()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="post_image">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
@@ -53,17 +57,15 @@ class Post_Ui extends Ui
 
     public function renderPublicSimple()
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="post_simple">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="post_image">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
-                        <div class="post_date">
-                            <i class="icon icon-date"></i>
-                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
-                        </div>
                     </div>
                 </a>
             </article>';
@@ -71,10 +73,12 @@ class Post_Ui extends Ui
 
     public function renderIntro($options = [])
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
@@ -93,10 +97,12 @@ class Post_Ui extends Ui
 
     public function renderIntroTop($options = [])
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         return '
             <div class="post_top">
                 <a class="post_top_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image post_image_simple">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
+                    <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
@@ -112,10 +118,12 @@ class Post_Ui extends Ui
 
     public function renderSide($options = [])
     {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="post_minimal">
                 <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
-                    <div class="post_image_amp">' . $this->object->getImageAmpWebp('image', 'small') . '</div>
+                    <div class="post_image_amp">' . $image . '</div>
                     <div class="post_title">' . $this->object->getBasicInfo() . '</div>
                 </a>
             </div>';
@@ -136,6 +144,8 @@ class Post_Ui extends Ui
             ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
@@ -155,7 +165,7 @@ class Post_Ui extends Ui
                         ' . $share . '
                         </div>
                     </div>
-                    <div class="post_image_complete">' . $this->object->getImageAmpWebp('image', 'web') . '</div>
+                    <div class="post_image_complete">' . $image . '</div>
                     <div class="editorial">' . $this->object->get('description') . '</div>
                 </div>
             </article>
@@ -217,7 +227,7 @@ class Post_Ui extends Ui
     {
         $html = '
             <div class="itemEditInsWrapper">
-                <div class="itemEditImage">' . $this->object->getImage('image', 'small') . '</div>
+                <div class="itemEditImage">' . $this->object->getImageWidth('image', 'small') . '</div>
                 <div class="itemEditInformation">
                     <div class="itemEditTitle">' . $this->object->getBasicInfo() . '</div>
                     <div class="itemEditCreated">' . __('created') . ' : ' . Date::sqlText($this->object->get('created')) . '</div>

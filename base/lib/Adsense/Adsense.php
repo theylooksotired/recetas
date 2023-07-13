@@ -11,6 +11,10 @@
 class Adsense {
 
     static public function amp() {
+        $mode = (Parameter::code('mode')!='') ? Parameter::code('mode') : 'amp';
+        if ($mode != 'amp') {
+            return Adsense::responsive();
+        }
         if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">ad</div>';
         if (!isMobile()) return Adsense::ampDesktop();
         return '<div class="adsense">
