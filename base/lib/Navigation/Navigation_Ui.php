@@ -301,7 +301,8 @@ class Navigation_Ui extends Ui
 
     public static function facebookComments($url)
     {
-        if (Parameter::code('facebook_comments') == 'true') {
+        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
+        if ($mode == 'amp' && Parameter::code('facebook_comments') == 'true') {
             return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
         }
     }
