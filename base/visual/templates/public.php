@@ -19,8 +19,6 @@
 
     <title><?php echo $title;?></title>
 
-<!--     <link href="<?php echo ASTERION_BASE_URL;?>visual/css/stylesheets/public.css" rel="stylesheet" type="text/css" />
- -->
     <style><?php echo str_replace('../fonts/', ASTERION_BASE_URL.'visual/css/fonts/', str_replace('../../img/', ASTERION_BASE_URL.'visual/img/', file_get_contents(ASTERION_BASE_FILE.'visual/css/stylesheets/public.css')));?></style>
 
 
