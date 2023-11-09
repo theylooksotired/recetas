@@ -184,6 +184,11 @@
             <managesPermissions>true</managesPermissions>
         </attribute>
         <attribute>
+            <name>views</name>
+            <label>views</label>
+            <type>text_integer</type>
+        </attribute>
+        <attribute>
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>

@@ -48,6 +48,7 @@ class Navigation_Controller extends Controller
                     $this->title_page = $item->getTitlePage();
                     if ($this->recipe->id() != '') {
                         $this->layout_page = 'recipe';
+                        $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
                     } else {
                         $this->layout_page = 'recipe_category';
                         $this->hide_title_page_appendix = true;
