@@ -11,4 +11,14 @@
 class RecipeIngredient extends Db_Object
 {
 
+    public function labelSimple()
+    {
+        if ($this->get('amount') != '') {
+            $type = (($this->get('type') != 'unit' && $this->get('type') != '') ? strtolower((intval($this->get('amount')) > 1) ? __($this->get('type') . '_plural') : __($this->get('type'))) . ' ' . __('of') : '');
+            return $this->get('amount') . ' ' .  (($type != '') ? $type . ' ' : '') . $this->get('ingredient');
+        } else {
+            return $this->get('ingredient');
+        }
+    }
+
 }

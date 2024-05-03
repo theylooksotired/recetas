@@ -161,6 +161,95 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
+            
+            case 'json-mobile':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $countryCode = Parameter::code('country_code');
+                $info = [
+                    'site' => [
+                        'title' => Parameter::code('meta_title_page'),
+                        'titleCountry' => Parameter::code('meta_title_header_bottom'),
+                        'description' => Parameter::code('meta_description'),
+                        'country' => $countryCode,
+                        'url' => url(''),
+                        'version' => '14.0.0'
+                    ],
+                    'categories' => [],
+                    'recipes' => []
+                ];
+                $items = (new Category)->readList(['order' => 'ord']);
+                $categories = [];
+                foreach($items as $item) {
+                    $infoIns = (array)$item->values;
+                    unset($infoIns['created']);
+                    unset($infoIns['modified']);
+                    unset($infoIns['image']);
+                    unset($infoIns['description']);
+                    unset($infoIns['name_url']);
+                    unset($infoIns['title']);
+                    unset($infoIns['ord']);
+                    $info['categories'][] = $infoIns;
+                    $categories[$item->id()] = $item->getBasicInfo();
+                }
+                $items = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'title_url']);
+                $errorStep = '';
+                foreach($items as $item) {
+                    $infoIns = (array)$item->values;
+                    unset($infoIns['created']);
+                    unset($infoIns['modified']);
+                    unset($infoIns['image']);
+                    unset($infoIns['title_url']);
+                    unset($infoIns['active']);
+                    unset($infoIns['ord']);
+                    unset($infoIns['preparation_old']);
+                    unset($infoIns['id_user']);
+                    unset($infoIns['friend_links']);
+                    unset($infoIns['description_bottom']);
+                    
+                    $infoIns['country'] = $countryCode;
+                    $infoIns['url'] = $item->url();
+                    $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
+
+                    $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+                    $infoIns['ingredients'] = [];
+                    foreach ($ingredients as $ingredient) {
+                        $infoIngredient = (array)$ingredient->values;
+                        unset($infoIngredient['id']);
+                        unset($infoIngredient['created']);
+                        unset($infoIngredient['modified']);
+                        unset($infoIngredient['id_recipe']);
+                        unset($infoIngredient['ord']);
+                        unset($infoIngredient['ingredient_old']);
+                        $infoIngredient['label'] = $ingredient->labelSimple();
+                        
+                        $infoIns['ingredients'][] = $infoIngredient;
+                    }
+
+                    $preparation = (new RecipePreparation)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+                    $infoIns['preparation'] = [];
+                    foreach ($preparation as $step) {
+                        $infoStep = (array)$step->values;
+                        unset($infoStep['id']);
+                        unset($infoStep['created']);
+                        unset($infoStep['modified']);
+                        unset($infoStep['id_recipe']);
+                        unset($infoStep['ord']);
+                        unset($infoStep['image']);
+                        unset($infoStep['description']);
+                        unset($infoStep['description_old']);
+                        unset($infoStep['image_old']);
+                        $infoIns['preparation'][] = $infoStep;
+                    }
+
+                    $info['recipes'][] = $infoIns;
+                }
+                if ($errorStep!='') {
+                    return "ERROR STEP - \n".$errorStep;
+                }
+                $content = json_encode($info, JSON_PRETTY_PRINT);
+                return $content;
+            break;
 
                 // case 'friends':
                 //     $this->mode = 'ajax';

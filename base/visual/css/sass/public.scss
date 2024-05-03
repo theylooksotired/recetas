@@ -2062,6 +2062,12 @@ body {
     }
 }
 
+.recipe_complete_bottom {
+    padding: 20px 0 0 0;
+    margin: 20px 0 0 0;
+    border-top: 1px solid rgba($colorAccent, 0.1);
+}
+
 .recipe_extra_info {
     margin: 0 -10px;
     font-size: $fontSizeNormal;

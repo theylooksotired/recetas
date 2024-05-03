@@ -88,6 +88,11 @@
             <type>textarea_ck_simple</type>
         </attribute>
         <attribute>
+            <name>description_bottom</name>
+            <label>description_bottom</label>
+            <type>textarea_ck_simple</type>
+        </attribute>
+        <attribute>
             <name>rating</name>
             <label>rating</label>
             <type>select</type>
@@ -187,6 +192,11 @@
             <name>views</name>
             <label>views</label>
             <type>text_integer</type>
+        </attribute>
+        <attribute>
+            <name>most_searched</name>
+            <label>most_searched</label>
+            <type>checkbox</type>
         </attribute>
         <attribute>
             <name>active</name>
