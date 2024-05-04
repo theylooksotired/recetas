@@ -20,7 +20,8 @@
             <label>#title</label>
             <icon>utensils</icon>
             <pager>50</pager>
-            <orderBy>title,active,created</orderBy>
+            <orderBy>title,views</orderBy>
+            <viewPublic>true</viewPublic>
             <publicUrl>receta / #id _ #title_url</publicUrl>
             <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
             <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQueryCount>
@@ -36,6 +37,7 @@
                 <div class="item_information">
                     <p class="accent"><strong>#title</strong></p>
                     <p class="small">#short_description</p>
+                    <p class="small">#views _views</p>
                 </div>
             </templateItemAdmin>
         </form>
