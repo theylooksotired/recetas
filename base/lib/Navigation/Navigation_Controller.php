@@ -171,6 +171,7 @@ class Navigation_Controller extends Controller
             // Other actions
             case 'refresh-db':
                 $this->mode = 'json';
+                $this->checkAuthorization();
                 $result = [];
                 foreach (Init::errorsDatabase() as $item) {
                     $result[] = $item['query'];
