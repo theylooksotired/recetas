@@ -35,9 +35,11 @@
                 #active
                 #image
                 <div class="item_information">
+                    <p class="accent_alt">#title_page</p>
                     <p class="accent"><strong>#title</strong></p>
                     <p class="small">#short_description</p>
-                    <p class="small">#views _views</p>
+                    <p class="accent">#meta_description</p>
+                    <p class="small accent">#views _views</p>
                 </div>
             </templateItemAdmin>
         </form>
@@ -77,6 +79,20 @@
             <name>title_url</name>
             <type>hidden_url</type>
             <refAttribute>title</refAttribute>
+        </attribute>
+        <attribute>
+            <name>title_page</name>
+            <label>title_page</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>meta_description</name>
+            <label>meta_description</label>
+            <type>textarea</type>
+            <countLength>true</countLength>
+            <showCountCharactersMeta>true</showCountCharactersMeta>
+            <minlength>110</minlength>
+            <maxlength>160</maxlength>
         </attribute>
         <attribute>
             <name>short_description</name>

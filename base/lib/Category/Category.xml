@@ -46,6 +46,15 @@
 			<type>text_long</type>
 		</attribute>
 		<attribute>
+            <name>meta_description</name>
+            <label>meta_description</label>
+            <type>textarea</type>
+            <countLength>true</countLength>
+            <showCountCharactersMeta>true</showCountCharactersMeta>
+            <minlength>110</minlength>
+            <maxlength>160</maxlength>
+        </attribute>
+		<attribute>
 			<name>short_description</name>
 			<label>short_description</label>
 			<type>textarea</type>

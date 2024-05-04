@@ -45,7 +45,12 @@ class Navigation_Controller extends Controller
                 $item = ($this->category->id() != '') ? $this->category : new Category();
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {
-                    $this->title_page = $item->getTitlePage();
+                    if ($item->get('title_page') != '') {
+                        $this->title_page = $item->get('title_page');
+                        $this->hide_title_page_appendix = true;
+                    } else {
+                        $this->title_page = $item->getTitlePage();
+                    }
                     if ($this->recipe->id() != '') {
                         $this->layout_page = 'recipe';
                         $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
@@ -61,7 +66,7 @@ class Navigation_Controller extends Controller
                         $this->meta_url .= '?pagina=' . $this->parameters['pagina'];
                     }
                     $this->meta_image = $item->getImageUrl('image', 'web');
-                    $this->meta_description = $item->get('short_description');
+                    $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
                     $this->bread_crumbs = ($this->recipe->id() != '') ? [url('recetas') => __('recipes'), $this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($this->content == '') {
@@ -161,7 +166,18 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
-            
+
+
+            // Other actions
+            case 'refresh-db':
+                $this->mode = 'json';
+                $result = [];
+                foreach (Init::errorsDatabase() as $item) {
+                    $result[] = $item['query'];
+                    Db::execute($item['query']);
+                }
+                return json_encode($result);
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();
