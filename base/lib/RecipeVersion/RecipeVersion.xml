@@ -57,13 +57,6 @@
             <refObject>Category</refObject>
         </attribute>
         <attribute>
-            <name>image</name>
-            <label>image</label>
-            <type>file_drag</type>
-            <layout>image</layout>
-            <maxDimensions>true</maxDimensions>
-        </attribute>
-        <attribute>
             <name>title</name>
             <label>title</label>
             <type>text_long</type>
@@ -79,18 +72,6 @@
             <label>short_description</label>
             <type>textarea_long</type>
             <required>not_empty</required>
-        </attribute>
-        <attribute>
-            <name>rating</name>
-            <label>rating</label>
-            <type>select</type>
-            <values>
-                <value id="5">5</value>
-                <value id="4">4</value>
-                <value id="3">3</value>
-                <value id="2">2</value>
-                <value id="1">1</value>
-            </values>
         </attribute>
         <attribute>
             <name>cook_time</name>
@@ -148,6 +129,11 @@
             </values>
         </attribute>
         <attribute>
+            <name>ingredients_raw</name>
+            <label>ingredients_raw</label>
+            <type>textarea_long</type>
+        </attribute>
+        <attribute>
             <name>ingredients</name>
             <label>ingredients</label>
             <type>multiple_object</type>
@@ -155,6 +141,11 @@
             <linkAttribute>id_recipe_version</linkAttribute>
             <onDelete>cascade</onDelete>
             <class>multiple_items_ingredients</class>
+        </attribute>
+        <attribute>
+            <name>preparation_raw</name>
+            <label>preparation_raw</label>
+            <type>textarea_long</type>
         </attribute>
         <attribute>
             <name>preparation</name>
