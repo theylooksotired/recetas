@@ -32,14 +32,12 @@
 		<attribute>
             <name>image</name>
             <label>image</label>
-            <type>file_drag</type>
-            <layout>image</layout>
-            <maxDimensions>true</maxDimensions>
+            <type>hidden</type>
         </attribute>
 		<attribute>
             <name>step</name>
             <label>step</label>
-            <type>textarea_long</type>
+            <type>textarea_small</type>
             <required>not_empty</required>
         </attribute>
 	</attributes>

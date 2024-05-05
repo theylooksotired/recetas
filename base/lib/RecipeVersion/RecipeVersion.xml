@@ -20,15 +20,8 @@
             <label>#title</label>
             <icon>utensils</icon>
             <pager>50</pager>
-            <orderBy>title,active,created</orderBy>
-            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
-            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQueryCount>
-            <filterByUser>id_user</filterByUser>
-            <multipleActions>
-                <action icon="times">delete</action>
-                <action icon="eye">activate</action>
-                <action icon="eye-slash">deactivate</action>
-            </multipleActions>
+            <group>id_recipe</group>
+            <groupHideEmpty>true</groupHideEmpty>
             <templateItemAdmin>
                 #active
                 #image
