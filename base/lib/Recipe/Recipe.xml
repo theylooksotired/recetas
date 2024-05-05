@@ -212,11 +212,6 @@
             <type>text_integer</type>
         </attribute>
         <attribute>
-            <name>most_searched</name>
-            <label>most_searched</label>
-            <type>checkbox</type>
-        </attribute>
-        <attribute>
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>

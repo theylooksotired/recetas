@@ -20,7 +20,8 @@
             <label>#title</label>
             <icon>newspaper</icon>
             <pager>50</pager>
-            <orderBy>created</orderBy>
+            <viewPublic>true</viewPublic>
+            <orderBy>publish_date,views</orderBy>
             <multipleActions>
                 <action icon="times">delete</action>
                 <action icon="check">activate</action>
@@ -34,6 +35,8 @@
                     <p class="small">#id_language</p>
                     <p class="small">#publish_date</p>
                     <p class="small">#short_description</p>
+                    <p class="accent">#meta_description</p>
+                    <p class="small accent">#views _views</p>
                 </div>
             </templateItemAdmin>
         </form>
@@ -81,6 +84,15 @@
             <refAttribute>title</refAttribute>
         </attribute>
         <attribute>
+            <name>meta_description</name>
+            <label>meta_description</label>
+            <type>textarea</type>
+            <countLength>true</countLength>
+            <showCountCharactersMeta>true</showCountCharactersMeta>
+            <minlength>110</minlength>
+            <maxlength>160</maxlength>
+        </attribute>
+        <attribute>
             <name>short_description</name>
             <label>short_description</label>
             <type>textarea_long</type>
@@ -110,6 +122,11 @@
             <linkAttribute>id_post</linkAttribute>
             <checkboxObject>Category</checkboxObject>>
             <onDelete>cascade</onDelete>
+        </attribute>
+        <attribute>
+            <name>views</name>
+            <label>views</label>
+            <type>text_integer</type>
         </attribute>
         <attribute>
             <name>active</name>
