@@ -948,6 +948,7 @@ body {
 }
 
 .post_simple {
+    position: relative;
     .post_ins {
         font-weight: normal;
         display: block;
@@ -986,8 +987,9 @@ body {
         .post_title {
             font-size: $fontSizeMedium;
             font-weight: bold;
-            padding: 0 0 5px;
+            padding: 0 0 10px;
             line-height: 1.2em;
+            margin: 0;
         }
         .post_date {
             font-size: $fontSizeSmall;
@@ -1004,6 +1006,19 @@ body {
             color: $colorAccent;
             padding: 0 0 10px;
             @include animate();
+        }
+        a {
+            display: block;
+            font-size: $fontSizeMedium;
+            color: $colorAccent;
+            &::before {
+                inset: 0px;
+                content: "";
+                overflow: hidden;
+                position: absolute;
+                white-space: nowrap;
+                z-index: 1;
+            }
         }
     }
     @include mobile {
@@ -1056,21 +1071,22 @@ body {
     margin: 0 0 20px;
     padding: 0 0 20px;
     border-bottom: 2px solid rgba($colorMain, 0.5);
+    position: relative;
     &:last-child {
         margin: 0;
         padding: 0;
         border: 0;
     }
     a {
-        font-weight: normal;
         display: block;
-        @include clearer();
-        &:hover {
-            .post_information {
-                .post_title {
-                    color: lighten($colorAccent, 30%);
-                }
-            }
+        color: $white;
+        &::before {
+            inset: 0px;
+            content: "";
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            z-index: 1;
         }
     }
     .post_image {
@@ -1272,6 +1288,9 @@ body {
         position: relative;
         text-align: center;
         border-top: 5px solid rgba($colorAccent, 0.1);
+        &:after {
+            display: none;
+        }
     }
     .posts {
         display: grid;
@@ -1918,6 +1937,7 @@ body {
     background: rgba($colorAccent, 0.05);
     border: rgba($colorAccent, 0.3);
     box-shadow: 2px 2px 5px rgba($black, 0.1);
+    position: relative;
     @include borderRadius(3px);
     &:last-child {
         margin: 0;
@@ -1969,6 +1989,18 @@ body {
     }
     .rating {
         padding: 0 0 5px;
+    }
+    a {
+        display: block;
+        color: $colorAccent;
+        &::before {
+            inset: 0px;
+            content: "";
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            z-index: 1;
+        }
     }
     @include mobile {
         .recipe_image {
@@ -2278,6 +2310,7 @@ body {
 }
 
 .post_minimal {
+    position: relative;
     .post_minimal_ins {
         height: 100%;
         display: block;
@@ -2323,7 +2356,6 @@ body {
         font-weight: bold;
         color: $white;
         padding: 10px;
-        position: relative;
         z-index: 3;
         text-shadow: 1px 1px 2px rgba($black, 0.5);
         background: rgba($black, 0.7);
@@ -2335,6 +2367,18 @@ body {
             object-fit: cover;
             width: 100%;
             height: 160px;
+        }
+    }
+    a {
+        display: block;
+        color: $white;
+        &::before {
+            inset: 0px;
+            content: "";
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            z-index: 1;
         }
     }
 }
@@ -2495,7 +2539,8 @@ body {
     .recipe_minimal {
         width: calc(100%/6);
         float: left;
-        a {
+        position: relative;
+        .recipe_ins {
             display: block;
             padding: 5px;
             margin: 0 5px;
@@ -2526,6 +2571,19 @@ body {
             &:hover {
                 background: rgba($colorAccent, 0.1);
                 border: 1px solid rgba($colorAccent, 0.3);
+            }
+            a {
+                display: block;
+                font-size: $fontSizeSmall;
+                color: $colorAccent;
+                &::before {
+                    inset: 0px;
+                    content: "";
+                    overflow: hidden;
+                    position: absolute;
+                    white-space: nowrap;
+                    z-index: 1;
+                }
             }
         }
     }

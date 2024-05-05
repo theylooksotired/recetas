@@ -50,20 +50,8 @@ h2 {
     padding: 0 0 10px;
     margin: 0 0 10px;
     color: $colorAccent;
-    position: relative;
     font-family: $fontFamily;
     line-height: 1em;
-    max-width: 600px;
-    &:after {
-        width: 20px;
-        height: 2px;
-        background: rgba($colorMainAlt, 0.5);
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        content: '';
-        border-top: 1px solid $colorMainAlt;
-    }
     @include mobile {
         font-size: $fontSizeBig * 8 / 10;
     }
@@ -76,7 +64,6 @@ h3 {
     color: lighten($colorAccentAlt, 10%);
     font-family: $fontFamily;
     line-height: 1em;
-    max-width: 600px;
     @include mobile {
         font-size: $fontSizeBig * 8 / 10;
     }

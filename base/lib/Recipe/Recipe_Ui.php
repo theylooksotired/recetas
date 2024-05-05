@@ -17,15 +17,15 @@ class Recipe_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="recipe">
-                <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
+                <div class="recipe_ins">
                     <div class="recipe_image">' . $image . '</div>
                     <div class="recipe_information">
-                        <h2 class="recipe_title">' . $this->object->getBasicInfo() . '</h2>
+                        <h3 class="recipe_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a></h3>
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                         <div class="recipe_rating">' . $this->renderRating() . '</div>
                         <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
                     </div>
-                </a>
+                </div>
             </article>';
     }
 
@@ -53,10 +53,10 @@ class Recipe_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="recipe_minimal">
-                <a class="recipe_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
+                <div class="recipe_ins">
                     <div class="recipe_image">' . $image . '</div>
-                    <p>' . $this->object->getBasicInfo() . '</p>
-                </a>
+                    <h3><a title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                </div>
             </div>';
     }
 
@@ -66,10 +66,10 @@ class Recipe_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="post_minimal">
-                <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
+                <div class="post_minimal_ins">
                     <div class="post_image_amp">' . $image . '</div>
-                    <h2 class="post_title">' . $this->object->getBasicInfo() . '</h2>
-                </a>
+                    <h3 class="post_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                </div>
             </div>';
     }
 
@@ -258,11 +258,11 @@ class Recipe_Ui extends Ui
         $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 6], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         return '<div class="related">
                     <div class="related_block">
-                        <div class="related_title">' . __('other_recipes') . '</div>
+                        <h2 class="related_title">' . __('other_recipes') . '</h2>
                         <div class="recipes_minimal">' . $recipes->showList(['function' => 'Minimal']) . '</div>
                     </div>
                     <div class="related_block">
-                        <div class="related_title">' . __('other_posts_related') . ' <strong>' . $this->object->getBasicInfo() . '</strong></div>
+                        <h2 class="related_title">' . __('other_posts_related') . ' <strong>' . $this->object->getBasicInfo() . '</strong></h2>
                         <div class="posts">
                             ' . $posts->showList(['function' => 'PublicSimple']) . '
                             ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
@@ -373,7 +373,7 @@ class Recipe_Ui extends Ui
         return '
             ' . Adsense::amp() . '
             <div class="items_side">
-                <div class="items_side_title">' . __('popular_recipes') . '</div>
+                <h2 class="items_side_title">' . __('popular_recipes') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
                 <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_recipes') . '</a></div>
             </div>';

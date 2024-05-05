@@ -29,6 +29,7 @@ class Category_Ui extends Ui
                 '.(($this->object->get('description')!='') ? '
                 <div class="recipes_description">'.$this->object->get('description').'</div>
                 ' : '').'
+                <h2>' . __('recipes_list') . '</h2>
                 <div class="recipes">' . $items->showListPager(['middle'=>Adsense::amp(), 'middleRepetitions'=>2]) . '</div>';
         }
     }

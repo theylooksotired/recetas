@@ -61,13 +61,15 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <article class="post_simple">
-                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
+                <div class="post_ins">
                     <div class="post_image">' . $image . '</div>
                     <div class="post_information">
-                        <div class="post_title">' . $this->object->getBasicInfo() . '</div>
+                        <h3 class="post_title">
+                            <a title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">' . $this->object->getBasicInfo() . '</a>
+                        </h3>
                         <div class="post_short_description">' . $this->object->get('short_description') . '</div>
                     </div>
-                </a>
+                </div>
             </article>';
     }
 
@@ -122,10 +124,10 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         return '
             <div class="post_minimal">
-                <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '" class="post_minimal_ins">
+                <div class="post_minimal_ins">
                     <div class="post_image_amp">' . $image . '</div>
-                    <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                </a>
+                    <h3 class="post_title"><a a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                </div>
             </div>';
     }
 
@@ -217,7 +219,7 @@ class Post_Ui extends Ui
         return '
             ' . Adsense::amp() . '
             <div class="items_side">
-                <div class="items_side_title">' . __('last_posts') . '</div>
+                <h2 class="items_side_title">' . __('last_posts') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
                 <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_posts') . '</a></div>
             </div>';
