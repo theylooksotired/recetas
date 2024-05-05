@@ -75,7 +75,7 @@ class Navigation_Controller extends Controller
                     }
                     if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
-                        $this->head = $this->ampFacebookCommentsHeader() . $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
+                        $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
                         $this->content_bottom = $this->recipe->showUi('Related');
                     }
                     return $this->ui->render();
@@ -107,11 +107,11 @@ class Navigation_Controller extends Controller
                 if ($post->id() != '') {
                     $post->persistSimple('views', $post->get('views') + 1);
                     $this->title_page = $post->getBasicInfoTitle();
-                    $this->meta_description = $post->get('short_description');
+                    $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');
                     $this->meta_image = ($this->meta_image != '') ? $this->meta_image : $post->getImageUrl('image', 'web');
-                    $this->head = $this->ampFacebookCommentsHeader() . $post->showUi('JsonHeader');
+                    $this->head = $post->showUi('JsonHeader');
                     $this->bread_crumbs = [url('articulos') => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
@@ -316,22 +316,6 @@ class Navigation_Controller extends Controller
         if (!isset($headers) || !isset($headers['Authorization']) || $headers['Authorization'] != 'plastic') {
             header('Location: ' . url(''));
             exit();
-        }
-    }
-
-    public function ampFacebookCommentsHeader()
-    {
-        if ($this->mode == 'amp' && Parameter::code('facebook_comments') == 'true') {
-            return '<script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>';
-        }
-    }
-
-    public function ampListHeader()
-    {
-        if ($this->mode == 'amp') {
-            return '
-                <script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
-                <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>';
         }
     }
 
