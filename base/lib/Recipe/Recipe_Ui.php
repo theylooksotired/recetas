@@ -160,9 +160,9 @@ class Recipe_Ui extends Ui
             <div class="item_complete_share">
                 <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
                 ' . $this->share(['share' => [
-            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
-        ]]) . '
+                    ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+                    ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
+                ]]) . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }

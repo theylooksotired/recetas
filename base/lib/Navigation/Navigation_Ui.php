@@ -130,6 +130,7 @@ class Navigation_Ui extends Ui
 
     public function footer()
     {
+        $facebookCommentsHtml = (isset($this->object->recipe) && $this->object->recipe->id() != '' && Parameter::code('facebook_comments') == 'true') ? '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v19.0&appId=168728593755836" nonce="aPczU4ie"></script>' : '';
         return '
             <footer class="footer">
                 <div class="footer_ins">
@@ -187,7 +188,8 @@ class Navigation_Ui extends Ui
                         </div>
                     </div>
                 </div>
-            </footer>';
+            </footer>
+            ' . $facebookCommentsHtml;
     }
 
     public function menuSide()
@@ -258,52 +260,10 @@ class Navigation_Ui extends Ui
             </form>';
     }
 
-    public static function analyticsAmp()
-    {
-        return '
-            ' . ((Parameter::code('gtag') != '') ? '
-            <amp-analytics type="gtag" data-credentials="include">
-                <script type="application/json"> { "vars": { "gtag_id": "' . Parameter::code('gtag') . '", "config": { "AW-1035000466": { "groups": "default" } } }, "triggers": {
-                        "C_CQ6RLtKBSQQ": {
-                          "on": "visible",
-                          "vars": {
-                            "event_name": "conversion",
-                            "value": 0.01,
-                            "currency": "USD",
-                            "send_to": ["AW-1035000466/KPllCIyJ250YEJK1w-0D"]
-                          }
-                        }
-                    } }
-                </script>
-            </amp-analytics>
-            ' : '') . '
-            <amp-analytics type="googleanalytics" config="' . ASTERION_BASE_URL . 'libjs/ga4.json" data-credentials="include">
-                <script type="application/json">
-                {
-                    "vars": {
-                                "GA4_MEASUREMENT_ID": "' . Parameter::code('google_analytics_code_g4') . '",
-                                "GA4_ENDPOINT_HOSTNAME": "www.google-analytics.com",
-                                "DEFAULT_PAGEVIEW_ENABLED": true,
-                                "GOOGLE_CONSENT_ENABLED": false,
-                                "WEBVITALS_TRACKING": false,
-                                "PERFORMANCE_TIMING_TRACKING": false,
-                                "SEND_DOUBLECLICK_BEACON": false
-                    }
-                }
-                </script>
-            </amp-analytics>';
-    }
-
-    public static function autoadsAmp()
-    {
-        return '<amp-auto-ads type="adsense" data-ad-client="ca-pub-7429223453905389"></amp-auto-ads>';
-    }
-
     public static function facebookComments($url)
     {
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        if ($mode == 'amp' && Parameter::code('facebook_comments') == 'true') {
-            return '<amp-facebook-comments layout="responsive" height="300" width="600" data-href="' . $url . '"></amp-facebook-comments>';
+        if (Parameter::code('facebook_comments') == 'true') {
+            return '<div class="fb-comments" data-href="' . $url . '" data-width="100%" data-numposts="5" data-lazy="true" data-colorscheme="light"></div>';
         }
     }
 
