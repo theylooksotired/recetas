@@ -158,7 +158,7 @@ class Recipe_Ui extends Ui
             ' . $otherVersions . '
             ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '') . '
             <div class="item_complete_share">
-                <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
+                <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
                 ' . $this->share(['share' => [
                     ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
                     ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],

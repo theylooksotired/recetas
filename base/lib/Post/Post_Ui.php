@@ -173,7 +173,7 @@ class Post_Ui extends Ui
             </article>
             ' . Adsense::amp() . '
             <div class="item_complete_share">
-                <div class="item_complete_share_title">' . __('help_us_sharing') . '</div>
+                <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
                 ' . $share . '
                 ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';

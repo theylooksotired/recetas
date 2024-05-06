@@ -52,6 +52,7 @@ class Navigation_Controller extends Controller
                         $this->title_page = $item->getTitlePage();
                     }
                     if ($this->recipe->id() != '') {
+                        $this->facebookCommentsFooter = true;
                         $this->layout_page = 'recipe';
                         $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
                     } else {
@@ -115,6 +116,7 @@ class Navigation_Controller extends Controller
                     $this->bread_crumbs = [url('articulos') => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
+                    $this->facebookCommentsFooter = true;
                 } else {
                     $this->title_page = __('posts_list');
                     $this->bread_crumbs = [url('articulos') => __('posts')];

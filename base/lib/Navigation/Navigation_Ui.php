@@ -130,7 +130,7 @@ class Navigation_Ui extends Ui
 
     public function footer()
     {
-        $facebookCommentsHtml = (isset($this->object->recipe) && $this->object->recipe->id() != '' && Parameter::code('facebook_comments') == 'true') ? '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v19.0&appId=168728593755836" nonce="aPczU4ie"></script>' : '';
+        $facebookCommentsHtml = (isset($this->object->facebookCommentsFooter) && $this->object->facebookCommentsFooter && Parameter::code('facebook_comments') == 'true') ? '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v19.0&appId=168728593755836" nonce="aPczU4ie"></script>' : '';
         return '
             <footer class="footer">
                 <div class="footer_ins">
