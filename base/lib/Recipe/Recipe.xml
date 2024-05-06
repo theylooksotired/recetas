@@ -68,6 +68,7 @@
             <type>file_drag</type>
             <layout>image</layout>
             <maxDimensions>true</maxDimensions>
+            <fileFieldName>title_url</fileFieldName>
         </attribute>
         <attribute>
             <name>title</name>

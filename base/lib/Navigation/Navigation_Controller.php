@@ -172,6 +172,43 @@ class Navigation_Controller extends Controller
 
 
             // Other actions
+            case 'rename-images':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $recipes = (new Recipe)->readList();
+                $directoryBase = ASTERION_BASE_FILE . 'stock/Recipe/';
+                $foldersToRetain = [];
+                foreach ($recipes as $recipe) {
+                    $foldersToRetain[] = $recipe->get('image');
+                }
+                $directories = glob($directoryBase . '*', GLOB_ONLYDIR);
+                foreach ($directories as $directory) {
+                    $folderName = basename($directory);
+                    if (!in_array($folderName, $foldersToRetain)) {
+                        $directoryToDelete = $directoryBase . $folderName;
+                        if (is_dir($directoryToDelete)) {
+                            $files = glob($directoryToDelete . '/*');
+                            foreach ($files as $file) {
+                                if (is_file($file)) {
+                                    unlink($file);
+                                }
+                            }
+                            rmdir($directoryToDelete);
+                        }
+                    }
+                }
+                foreach ($recipes as $recipe) {
+                    $oldName = $recipe->get('image');
+                    $toUpdate = (strpos($oldName, '-image') !== false) ? true : false;
+                    if ($toUpdate) {
+                        $image = $recipe->getImageUrl('image', 'web');
+                        $recipe->saveImage($image, 'image');
+                        Image_File::deleteImage('Recipe', $oldName);
+                        dump($oldName);
+                    }
+                }
+                dd('DONE');
+                break;
             case 'refresh-db':
                 $this->mode = 'json';
                 $this->checkAuthorization();
