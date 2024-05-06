@@ -263,7 +263,7 @@ class Navigation_Ui extends Ui
     public static function facebookComments($url)
     {
         if (Parameter::code('facebook_comments') == 'true') {
-            return '<div class="fb-comments" data-href="' . $url . '" data-width="100%" data-numposts="5" data-lazy="true" data-colorscheme="light"></div>';
+            return '<div class="fb-comments" data-href="' . $url . '" data-width="100%" data-numposts="5" data-lazy="true" data-colorscheme="light" data-order-by="reverse-time"></div>';
         }
     }
 
