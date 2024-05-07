@@ -26,6 +26,20 @@ class Recipe_Controller extends Controller
             default:
                 return parent::getContent();
                 break;
+            case 'load-ai-data':
+                $this->mode = 'json';
+                $recipe = (new Recipe)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '' && $recipe->get('description') == '') {
+                    $questionDescription = 'Escribe una descripcion sobre el origen, historia y significado de la receta ' . $recipe->getBasicInfo() . ' de ' . Parameter::code('meta_title_header_bottom') . ', sin decir como se prepara. En el primer parrafo escribe que vas a explicar como se prepara la receta, cuales son los pasos a seguir y las instrucciones. Evita usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural.';
+                    $response['description'] = $this->callChatGPT($questionDescription);
+                    $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . $response['description'];
+                    $response['meta_description'] = $this->callChatGPT($questionMetaDescription);
+                    $questionShortDescription = 'Haz este texto mas lindo, sin usar signos de admiracion: ' . $recipe->getBasicInfo() . ' ' . $recipe->get('short_description');
+                    $response['short_description'] = $this->callChatGPT($questionShortDescription);
+                }
+                return json_encode($response);
+                break;
             case 'preparation':
                 $table = '';
                 foreach ((new Recipe)->readList(['order' => 'title']) as $item) {
@@ -251,6 +265,42 @@ class Recipe_Controller extends Controller
                     });
                 });
             </script>';
+    }
+
+    public function callChatGPT($question)
+    {
+        
+        $url = 'https://api.openai.com/v1/chat/completions';
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . Parameter::code('openai_api')
+        ];
+        $data = [
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'Eres un escritor latinoamericano de un sitio de recetas, tu publico es amigable y te gusta escribir de forma calmada.'
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $question
+                ]
+            ],
+            'n' => 1
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $response = json_decode($response, true);
+        return (isset($response['choices'][0]['message']['content'])) ? $response['choices'][0]['message']['content'] : '';
     }
 
 }
