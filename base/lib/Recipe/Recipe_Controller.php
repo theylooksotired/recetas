@@ -31,8 +31,10 @@ class Recipe_Controller extends Controller
                 $recipe = (new Recipe)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '' && $recipe->get('description') == '') {
-                    $questionDescription = 'Escribe una descripcion sobre el origen, historia y significado de la receta ' . $recipe->getBasicInfo() . ' de ' . Parameter::code('meta_title_header_bottom') . ', sin decir como se prepara. En el primer parrafo escribe que vas a explicar como se prepara la receta, cuales son los pasos a seguir y las instrucciones. Evita usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural.';
-                    $response['description'] = $this->callChatGPT($questionDescription);
+                    $questionDescription = 'Escribe una descripcion de tres lineas sobre el origen, historia y significado de la receta ' . $recipe->getBasicInfo() . ' de ' . Parameter::code('meta_title_header_bottom') . ', sin decir como se prepara. Evita usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion también, el texto " ' . $recipe->get('short_description') . ' "';
+                    $response['description'] = '<p>' . $this->callChatGPT($questionDescription) . '</p>';
+                    $questionDescription = 'Escribe una linea de invitacion a preparar una receta, como "Animate a preparala", "Esperamos que sea de tu agrado", "Lista para cocinar esta delicia?". Dirigete a la tercera persona en plural.';
+                    $response['description'] .= '<p>' . $this->callChatGPT($questionDescription) . '</p>';
                     $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . $response['description'];
                     $response['meta_description'] = $this->callChatGPT($questionMetaDescription);
                     $questionShortDescription = 'Haz este texto mas lindo, sin usar signos de admiracion: ' . $recipe->getBasicInfo() . ' ' . $recipe->get('short_description');
@@ -269,7 +271,6 @@ class Recipe_Controller extends Controller
 
     public function callChatGPT($question)
     {
-        
         $url = 'https://api.openai.com/v1/chat/completions';
         $headers = [
             'Content-Type: application/json',
