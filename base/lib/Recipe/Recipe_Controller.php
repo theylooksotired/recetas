@@ -277,7 +277,7 @@ class Recipe_Controller extends Controller
             'Authorization: Bearer ' . Parameter::code('openai_api')
         ];
         $data = [
-            'model' => 'gpt-4-turbo',
+            'model' => 'gpt-3.5-turbo',
             'messages' => [
                 [
                     'role' => 'system',
