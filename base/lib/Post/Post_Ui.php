@@ -36,13 +36,14 @@ class Post_Ui extends Ui
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
+        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="post_short_description">' . $this->object->get('short_description') . '</div>
+                        <div class="post_short_description">' . $shortDescription . '</div>
                         <div class="post_date">
                             <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
@@ -60,6 +61,7 @@ class Post_Ui extends Ui
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
+        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <article class="post_simple">
                 <div class="post_ins">
@@ -68,7 +70,7 @@ class Post_Ui extends Ui
                         <h3 class="post_title">
                             <a title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">' . $this->object->getBasicInfo() . '</a>
                         </h3>
-                        <div class="post_short_description">' . $this->object->get('short_description') . '</div>
+                        <div class="post_short_description">' . $shortDescription . '</div>
                     </div>
                 </div>
             </article>';
@@ -78,13 +80,14 @@ class Post_Ui extends Ui
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
+        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <article class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="post_short_description">' . $this->object->get('short_description') . '</div>
+                        <div class="post_short_description">' . $shortDescription . '</div>
                         <div class="post_date">
                             <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
@@ -102,13 +105,14 @@ class Post_Ui extends Ui
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
+        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <div class="post_top">
                 <a class="post_top_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
                         <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="post_short_description">' . $this->object->get('short_description') . '</div>
+                        <div class="post_short_description">' . $shortDescription . '</div>
                     </div>
                 </a>
             </div>';
