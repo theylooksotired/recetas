@@ -331,7 +331,7 @@ class Post_Ui extends Ui
                 'logo' => Parameter::code('meta_image'),
             ],
             'datePublished' => $this->object->get('publish_date'),
-            'dateModified' => $this->object->get('publish_date'),
+            'dateModified' => $this->object->get('modified'),
             'articleBody' => strip_tags($this->object->get('description')),
         ];
         return '<script type="application/ld+json">' . json_encode($info) . '</script>';

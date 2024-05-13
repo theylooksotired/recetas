@@ -107,7 +107,7 @@ class Navigation_Controller extends Controller
                 $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
                 if ($post->id() != '') {
                     $post->persistSimple('views', $post->get('views') + 1);
-                    $this->title_page = $post->getBasicInfoTitle();
+                    $this->title_page = ($post->get('title_page') != '') ? $post->get('title_page') : $post->getBasicInfoTitle();
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'huge');

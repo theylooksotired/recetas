@@ -84,6 +84,11 @@
             <refAttribute>title</refAttribute>
         </attribute>
         <attribute>
+            <name>title_page</name>
+            <label>title_page</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
             <name>meta_description</name>
             <label>meta_description</label>
             <type>textarea</type>
