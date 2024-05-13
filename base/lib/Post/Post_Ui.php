@@ -15,6 +15,7 @@ class Post_Ui extends Ui
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
+        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <article class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
@@ -25,7 +26,7 @@ class Post_Ui extends Ui
                             <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </p>
-                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
+                        <p class="recipe_short_description">' . $shortDescription . '</p>
                     </div>
                 </a>
             </article>';
