@@ -224,19 +224,6 @@ class Recipe_Controller extends Controller
                 $this->head = $this->loadFormAjax();
                 return $this->ui->render();
                 break;
-            case 'ingredient-ajax':
-                dd($this->values);
-                // $tag = (new Tag)->read($this->values['id']);
-                // if ($tag->id() != '') {
-                //     $category = (new Category)->readFirst(['where' => 'name=:name'], ['name' => $this->values['category']]);
-                //     if ($category->id() != '') {
-                //         $tag->persistSimple('id_category', $category->id());
-                //         echo 1;
-                //     }
-                // }
-                // echo 0;
-                exit();
-                break;
         }
     }
 

@@ -1,14 +1,14 @@
 <?php
 /**
- * @class TagForm
+ * @class PostImage_Form
  *
- * This class manages the forms for the Tag objects.
+ * This class defines the forms for the project users.
  *
  * @author Leano Martinet <info@asterion-cms.com>
  * @package Asterion\Base
  * @version 4.0.0
  */
-class Tag_Form extends Form
+class PostImage_Form extends Form
 {
 
 }

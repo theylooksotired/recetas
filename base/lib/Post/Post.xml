@@ -110,23 +110,13 @@
             <required>not_empty</required>
         </attribute>
         <attribute>
-            <name>tags</name>
-            <label>tags</label>
-            <type>multiple_autocomplete</type>
-            <refObject>PostTag</refObject>
+            <name>images</name>
+            <label>images</label>
+            <type>multiple_object</type>
+            <refObject>PostImage</refObject>
             <linkAttribute>id_post</linkAttribute>
-            <autoCompleteObject>Tag</autoCompleteObject>
-            <autoCompleteAttribute>name</autoCompleteAttribute>
             <onDelete>cascade</onDelete>
-        </attribute>
-        <attribute>
-            <name>categories</name>
-            <label>categories</label>
-            <type>multiple_checkbox</type>
-            <refObject>PostCategory</refObject>
-            <linkAttribute>id_post</linkAttribute>
-            <checkboxObject>Category</checkboxObject>>
-            <onDelete>cascade</onDelete>
+            <class>multiple_items</class>
         </attribute>
         <attribute>
             <name>views</name>

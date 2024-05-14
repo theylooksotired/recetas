@@ -1,6 +1,6 @@
 <?php
 /**
- * @class PostCategory
+ * @class PostImage
  *
  * This class defines the relation between a project and its users.
  *
@@ -8,7 +8,7 @@
  * @package Asterion\Base
  * @version 4.0.0
  */
-class PostCategory extends Db_Object
+class PostImage extends Db_Object
 {
 
 }

@@ -17,7 +17,7 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
-            <article class="recipe">
+            <div class="recipe">
                 <a class="recipe_ins" href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">
                     <div class="recipe_image">' . $image . '</div>
                     <div class="recipe_information">
@@ -29,7 +29,7 @@ class Post_Ui extends Ui
                         <p class="recipe_short_description">' . $shortDescription . '</p>
                     </div>
                 </a>
-            </article>';
+            </div>';
     }
 
     public function renderMedium()
@@ -38,7 +38,7 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
-            <article class="post">
+            <div class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image">' . $image . '</div>
                     <div class="post_information">
@@ -54,7 +54,7 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                 </a>
-            </article>';
+            </div>';
     }
 
     public function renderPublicSimple()
@@ -63,7 +63,7 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
-            <article class="post_simple">
+            <div class="post_simple">
                 <div class="post_ins">
                     <div class="post_image">' . $image . '</div>
                     <div class="post_information">
@@ -73,7 +73,7 @@ class Post_Ui extends Ui
                         <div class="post_short_description">' . $shortDescription . '</div>
                     </div>
                 </div>
-            </article>';
+            </div>';
     }
 
     public function renderIntro($options = [])
@@ -82,7 +82,7 @@ class Post_Ui extends Ui
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
-            <article class="post">
+            <div class="post">
                 <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
                     <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
@@ -98,7 +98,7 @@ class Post_Ui extends Ui
                         </div>
                     </div>
                 </a>
-            </article>';
+            </div>';
     }
 
     public function renderIntroTop($options = [])
@@ -139,20 +139,37 @@ class Post_Ui extends Ui
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
-        $tags = '';
-        foreach ($this->object->get('tags') as $tag) {
-            $tags .= $tag->link() . ' ';
-        }
-        $categories = '';
-        foreach ($this->object->get('categories') as $category) {
-            $categories .= $category->link() . ' ';
-        }
         $share = $this->share(['share' => [
             ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
+        // Text
+        $dom = new DOMDocument();
+        $dom->loadHTML('<html><body>' . mb_convert_encoding($this->object->get('description'), 'HTML-ENTITIES', 'UTF-8') . '</body></html>');
+        $xpath = new DOMXPath($dom);
+        $paragraphs = [];
+        foreach ($xpath->query('/html/body/*') as $node) {
+            $paragraphs[] = $dom->saveHTML($node);
+        }
+        $images = [];
+        foreach ($this->object->get('images') as $item) {
+            $images[] = '
+                <figure class="post_image">
+                    ' . $item->getImageWidth('image', 'web') . '
+                    ' . (($item->get('title') != '') ? '<figcaption>' . $item->get('title') . '</figcaption>' : '') . '
+                </figure>';
+        }
+        $middleRepetitions = (count($images) > 0) ? ceil(count($paragraphs) / count($images)) : 0;
+        $paragraphsResult = [];
+        foreach ($paragraphs as $index => $paragraph) {
+            if ($middleRepetitions > 0 && ($index - 1) % $middleRepetitions == 0) {
+                $paragraphsResult[] = array_shift($images);
+            }
+            $paragraphsResult[] = $paragraph;
+        }
+        $paragraphsResult = array_merge($paragraphsResult, $images);
+        $text = implode('', $paragraphsResult);
         return '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
@@ -172,8 +189,13 @@ class Post_Ui extends Ui
                         ' . $share . '
                         </div>
                     </div>
-                    <div class="post_image_complete">' . $image . '</div>
-                    <div class="editorial">' . $this->object->get('description') . '</div>
+                    <div class="editorial">
+                        <figure class="post_image">
+                            ' . $item->getImageWidth('image', 'web') . '
+                            <figcaption>' . $this->object->getBasicInfo() . '</figcaption>
+                        </figure>
+                        ' . $text . '
+                    </div>
                 </div>
             </article>
             ' . Adsense::amp() . '
@@ -186,11 +208,24 @@ class Post_Ui extends Ui
 
     public function renderRelated()
     {
-        $items = new ListObjects('Post', ['where' => 'id!=:id AND publish_date<=NOW() AND active="1"', 'limit' => 6], ['id' => $this->object->id()]);
-        return '<div class="related">
-                    <div class="related_title">' . __('other_posts') . '</div>
-                    <div class="posts">' . $items->showList(['function' => 'PublicSimple']) . '</div>
-                </div>';
+        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC AND id != :id', 'limit' => '6'], ['match' => $this->object->getBasicInfo(), 'id' => $this->object->id()]);
+        if ($posts->count() < 6) {
+            $posts = new ListObjects('Post', ['where' => 'id!=:id AND publish_date<=NOW() AND active="1"', 'limit' => 6], ['id' => $this->object->id()]);
+        }
+        $recipes = new ListObjects('Recipe', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
+        return '
+            <div class="related">
+                ' . ((!$recipes->isEmpty()) ? '
+                <div class="related_block">
+                    <h2 class="related_title">' . __('other_recipes') . '</h2>
+                    <div class="recipes_minimal">' . $recipes->showList(['function' => 'Minimal']) . '</div>
+                </div>
+                ' : '') . '
+                <div class="related_block">
+                    <h2 class="related_title">' . __('other_posts') . '</h2>
+                    <div class="posts">' . $posts->showList(['function' => 'PublicSimple']) . '</div>
+                </div>
+            </div>';
     }
 
     // Overwrite this function for the public form

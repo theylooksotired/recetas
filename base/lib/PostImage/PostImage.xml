@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-* @structure PostTag
+* @structure PostImage
 *
 * @author Leano Martinet <info@asterion-cms.com>
 * @package Asterion\Base
 * @version 4.0.0
 -->
 <object>
-	<name>PostTag</name>
-	<table>post_tag</table>
+	<name>PostImage</name>
+	<table>post_image</table>
 	<info>
 		<sql>
             <primary>id</primary>
             <created>true</created>
-            <modified>true</modified>
+            <order>true</order>
         </sql>
 		<form>
 			<hiddenAdminMenu>true</hiddenAdminMenu>
@@ -30,9 +30,16 @@
 			<refObject>Post</refObject>
 		</attribute>
 		<attribute>
-			<name>id_tag</name>
-			<type>linkid_autoincrement</type>
-			<refObject>Tag</refObject>
-		</attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+		<attribute>
+            <name>title</name>
+            <label>title</label>
+            <type>textarea_long</type>
+        </attribute>
 	</attributes>
 </object>

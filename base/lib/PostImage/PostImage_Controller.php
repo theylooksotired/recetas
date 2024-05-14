@@ -1,6 +1,6 @@
 <?php
 /**
- * @class PostCategory_Controller
+ * @class PostImage_Controller
  *
  * This class defines the controller for the project users.
  *
@@ -8,7 +8,7 @@
  * @package Asterion\Base
  * @version 4.0.0
  */
-class PostCategory_Controller extends Controller
+class PostImage_Controller extends Controller
 {
 
 }
