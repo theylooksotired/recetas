@@ -191,7 +191,7 @@ class Post_Ui extends Ui
                     </div>
                     <div class="editorial">
                         <figure class="post_image">
-                            ' . $item->getImageWidth('image', 'web') . '
+                            ' . $this->object->getImageWidth('image', 'web') . '
                             <figcaption>' . $this->object->getBasicInfo() . '</figcaption>
                         </figure>
                         ' . $text . '
