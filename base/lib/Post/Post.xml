@@ -31,8 +31,8 @@
                 #active
                 #image
                 <div class="item_information">
+                    <p class="accent_alt">#title_page</p>
                     <p class="accent"><strong>#title</strong></p>
-                    <p class="small">#id_language</p>
                     <p class="small">#publish_date</p>
                     <p class="small">#short_description</p>
                     <p class="accent">#meta_description</p>
