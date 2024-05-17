@@ -34,6 +34,7 @@ class Category_Ui extends Ui
             $bestRecipes = new ListObjects('Recipe', ['where' => 'id IN (' . implode(',', $bestRecipesIds) . ') AND active="1"', 'order' => 'title_url']);
             $restRecipes = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND id NOT IN (' . implode(',', $bestRecipesIds) . ') AND active="1"', 'order' => 'title_url']);
             return '
+                <h1>' . $this->object->get('title') . '</h1>
                 <div class="recipes_description">'.$this->object->get('description').'</div>
                 <h2>' . $titleBestRecipes . '</h2>
                 <div class="recipes recipes_category">' . $bestRecipes->showList(['function' => 'Best']) . '</div>
