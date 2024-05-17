@@ -123,6 +123,11 @@ class Navigation_Controller extends Controller
                     $this->content_bottom = $post->showUi('Related');
                     $this->facebookCommentsFooter = true;
                 } else {
+                    if ($this->id != '') {
+                        header("HTTP/1.1 301 Moved Permanently");
+                        header('Location: ' . url('articulos'));
+                        exit();
+                    }
                     $this->title_page = __('posts_list');
                     $this->bread_crumbs = [url('articulos') => __('posts')];
                     $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'results' => '10']);
