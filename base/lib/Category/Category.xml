@@ -11,6 +11,7 @@
             <title>categories</title>
 			<orderBy>ord</orderBy>
 			<label>#name</label>
+			<viewPublic>true</viewPublic>
 			<publicUrl>recetas / #name_url</publicUrl>
             <templateItemAdmin>
                 #image
