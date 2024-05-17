@@ -12,10 +12,14 @@
 			<orderBy>ord</orderBy>
 			<label>#name</label>
 			<publicUrl>recetas / #name_url</publicUrl>
-			<templateItemAdmin>
-				#image
-                <p class="accent"><strong>#name</strong></p>
-                <p class="small">#short_description</p>
+            <templateItemAdmin>
+                #image
+                <div class="item_information">
+                    <p class="accent_alt">#title</p>
+                    <p class="accent"><strong>#name</strong></p>
+                    <p class="small">#short_description</p>
+                    <p class="accent">#meta_description</p>
+                </div>
             </templateItemAdmin>
         </form>
 	</info>

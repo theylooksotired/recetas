@@ -42,6 +42,11 @@ class Navigation_Controller extends Controller
                         FriendSite::saveFriends($this->recipe);
                     }
                 }
+                if ($this->extraId != '' && $this->recipe->id() == '') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $this->category->url());
+                    exit();
+                }
                 $item = ($this->category->id() != '') ? $this->category : new Category();
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {

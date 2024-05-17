@@ -22,11 +22,8 @@
             <pager>50</pager>
             <viewPublic>true</viewPublic>
             <orderBy>publish_date,views</orderBy>
-            <multipleActions>
-                <action icon="times">delete</action>
-                <action icon="check">activate</action>
-                <action>deactivate</action>
-            </multipleActions>
+            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
+            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQueryCount>
             <templateItemAdmin>
                 #active
                 #image
