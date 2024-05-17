@@ -1941,6 +1941,19 @@ body {
     }
 }
 
+.recipes_category {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    .recipe {
+        margin: 0;
+    }
+    @include mobile {
+        gap: 10px;
+        grid-template-columns: 1fr;
+    }
+}
+
 .recipe {
     padding: 15px 15px 10px 15px;
     margin: 0 0 15px;
@@ -2012,7 +2025,15 @@ body {
             z-index: 1;
         }
     }
+    &.recipe_best {
+        .rating {
+            padding: 5px 0;
+            margin: 5px 0 0 0;
+            border-top: 1px solid rgba($colorAccent, 0.1);
+        }
+    }
     @include mobile {
+        padding: 10px;
         .recipe_image {
             width: 60px;
             img {
@@ -2134,6 +2155,12 @@ body {
     i {
         display: inline-block;
         padding: 0 5px 0 0;
+    }
+    @include mobile() {
+        font-size: $fontSizeSmall;;
+        i {
+            padding: 0 3px 0 0;
+        }
     }
 }
 
@@ -2544,22 +2571,24 @@ body {
 }
 
 .recipes_minimal {
-    margin: 0 -5px;
-    @include clearer();
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 20px;
     .recipe_minimal {
-        width: calc(100%/6);
-        float: left;
         position: relative;
+        padding: 10px 10px 15px 10px;
+        background: rgba($colorAccent, 0.05);
+        border: 1px solid rgba($colorAccent, 0.1);
+        @include animate();
+        @include borderRadius(3px);
+        &:hover {
+            background: rgba($colorAccent, 0.1);
+            border: 1px solid rgba($colorAccent, 0.3);
+        }
         .recipe_ins {
-            display: block;
-            padding: 5px;
-            margin: 0 5px;
-            background: rgba($colorAccent, 0.05);
-            border: 1px solid rgba($colorAccent, 0.1);
             text-align: center;
             color: $colorAccent;
-            @include animate();
-            @include borderRadius(3px);
             .recipe_image {
                 margin: 0 0 10px;
                 height: 120px;
@@ -2578,14 +2607,15 @@ body {
                 white-space: nowrap;
                 overflow: hidden;
             }
-            &:hover {
-                background: rgba($colorAccent, 0.1);
-                border: 1px solid rgba($colorAccent, 0.3);
+            h3 {
+                margin: 0;
+                padding: 0;
             }
             a {
                 display: block;
-                font-size: $fontSizeSmall;
+                font-size: $fontSizeNormal;
                 color: $colorAccent;
+                line-height: 1.1em;
                 &::before {
                     inset: 0px;
                     content: "";
@@ -2596,11 +2626,17 @@ body {
                 }
             }
         }
+        .recipe_rating {
+            padding: 0 0 5px;
+            font-size: 10px;
+        }
     }
     @include mobile() {
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
         .recipe_minimal {
-            width: calc(100%/2);
-            margin: 0 0 10px;
+            position: relative;
+            padding: 5px 5px 10px 5px;
         }
     }
 }

@@ -44,7 +44,7 @@ class Adsense {
 
     static public function ampInline() {
         if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">ad</div>';
-        if (isMobile()) return Adsense::amp();
+        if (isMobile()) return Adsense::responsive();
         return '<div class="adsense">
                     <amp-ad
                         layout="fixed-height"

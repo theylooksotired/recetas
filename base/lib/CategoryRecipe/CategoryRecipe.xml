@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure CategoryRecipe
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>CategoryRecipe</name>
+	<table>category_recipe</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <order>true</order>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_category</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Category</refObject>
+		</attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<type>select</type>
+			<refObject>Recipe</refObject>
+		</attribute>
+	</attributes>
+</object>

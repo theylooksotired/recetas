@@ -32,7 +32,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . Adsense::amp() . '
+                                ' . Adsense::responsive() . '
                                 <div class="content_ins">
                                     <div class="content_left">
                                         ' . $content . '
@@ -48,11 +48,13 @@ class Navigation_Ui extends Ui
                     </div>';
                 break;
             case 'simple':
+            case 'recipe_category':
                 return '
                     <div class="content_format content_format_' . $layout_page . '">
                         ' . $this->header() . '
                         <div class="content">
                             <div class="content_all">
+                                ' . Adsense::responsive() . '
                                 ' . $message_error . '
                                 ' . $message_alert . '
                                 ' . $message . '
@@ -75,7 +77,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . Adsense::amp() . '
+                                ' . Adsense::responsive() . '
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '

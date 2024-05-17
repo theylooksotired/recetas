@@ -21,6 +21,11 @@ class Recipe extends Db_Object
         return str_replace('"', '', $this->getBasicInfo());
     }
 
+    public function getBasicInfoTitlePage()
+    {
+        return ($this->get('title_page') != '') ? $this->get('title_page') : $this->getBasicInfoTitle();
+    }
+
     public function getCookTime()
     {
         $values = [

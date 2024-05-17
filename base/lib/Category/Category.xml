@@ -17,6 +17,8 @@
                 #image
                 <div class="item_information">
                     <p class="accent_alt">#title</p>
+					<p class="accent">#best_recipes_title</p>
+					<p class="accent">#rest_recipes_title</p>
                     <p class="accent"><strong>#name</strong></p>
                     <p class="small">#short_description</p>
                     <p class="accent">#meta_description</p>
@@ -51,6 +53,16 @@
 			<type>text_long</type>
 		</attribute>
 		<attribute>
+			<name>best_recipes_title</name>
+			<label>best_recipes_title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>rest_recipes_title</name>
+			<label>rest_recipes_title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
             <name>meta_description</name>
             <label>meta_description</label>
             <type>textarea</type>
@@ -69,5 +81,13 @@
 			<label>description</label>
 			<type>textarea_ck</type>
 		</attribute>
+		<attribute>
+            <name>main_recipes</name>
+            <label>main_recipes</label>
+            <type>multiple_object</type>
+            <refObject>CategoryRecipe</refObject>
+            <linkAttribute>id_category</linkAttribute>
+            <onDelete>cascade</onDelete>
+        </attribute>
 	</attributes>
 </object>

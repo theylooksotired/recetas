@@ -52,6 +52,11 @@ class Navigation_Controller extends Controller
                     header('Location: ' . $this->category->url());
                     exit();
                 }
+                if (isset($this->parameters['pagina']) && $this->parameters['pagina'] !='') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $this->category->url());
+                    exit();
+                }
                 $item = ($this->category->id() != '') ? $this->category : new Category();
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {
@@ -71,11 +76,6 @@ class Navigation_Controller extends Controller
                     }
                     $this->url_page = $item->url();
                     $this->meta_url = $item->url();
-                    if (isset($this->parameters['pagina']) && $this->parameters['pagina'] > 1) {
-                        $this->title_page_content = $this->title_page;
-                        $this->title_page .= ' - ' . __('page') . ' ' . $this->parameters['pagina'];
-                        $this->meta_url .= '?pagina=' . $this->parameters['pagina'];
-                    }
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
                     $this->bread_crumbs = ($this->recipe->id() != '') ? [url('recetas') => __('recipes'), $this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
@@ -169,7 +169,7 @@ class Navigation_Controller extends Controller
                     }
                     $this->content = '
                         <div class="items_all">
-                            ' . $items->showList(['middle' => Adsense::amp(), 'middleRepetitions' => 2]) . '
+                            ' . $items->showList(['middle' => Adsense::responsive(), 'middleRepetitions' => 2]) . '
                         </div>';
                     return $this->ui->render();
                 } else {
