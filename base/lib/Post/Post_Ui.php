@@ -131,7 +131,9 @@ class Post_Ui extends Ui
             <div class="post_minimal">
                 <div class="post_minimal_ins">
                     <div class="post_image">' . $image . '</div>
-                    <h3 class="post_title"><a a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                    <h3 class="post_title">
+                        <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a>
+                    </h3>
                 </div>
             </div>';
     }

@@ -77,7 +77,9 @@ class Recipe_Ui extends Ui
             <div class="post_minimal">
                 <div class="post_minimal_ins">
                     <div class="post_image">' . $this->object->getImageWidth('image', 'small') . '</div>
-                    <h3 class="post_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                    <h3 class="post_title">
+                        <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a>
+                    </h3>
                 </div>
             </div>';
     }
