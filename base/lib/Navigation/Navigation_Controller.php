@@ -78,7 +78,7 @@ class Navigation_Controller extends Controller
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
-                    $this->bread_crumbs = ($this->recipe->id() != '') ? [url('recetas') => __('recipes'), $this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [url('recetas') => __('recipes'), $item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($this->recipe->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($this->content == '') {
                         header("HTTP/1.1 301 Moved Permanently");

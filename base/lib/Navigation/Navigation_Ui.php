@@ -54,6 +54,7 @@ class Navigation_Ui extends Ui
                         ' . $this->header() . '
                         <div class="content">
                             <div class="content_all">
+                                ' . $this->breadCrumbs() . '
                                 ' . Adsense::responsive() . '
                                 ' . $message_error . '
                                 ' . $message_alert . '
