@@ -386,7 +386,6 @@ class Recipe_Ui extends Ui
             <div class="items_side">
                 <h2 class="items_side_title">' . __('popular_recipes') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
-                <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_recipes') . '</a></div>
             </div>';
     }
 

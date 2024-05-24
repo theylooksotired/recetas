@@ -83,21 +83,17 @@ class Post_Ui extends Ui
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <div class="post">
-                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
+                <div class="post_ins">
                     <div class="post_image post_image_simple">' . $image . '</div>
                     <div class="post_information">
-                        <div class="post_title">' . $this->object->getBasicInfo() . '</div>
+                        <h3 class="post_title">' . $this->object->link() . '</h3>
                         <div class="post_short_description">' . $shortDescription . '</div>
                         <div class="post_date">
                             <i class="icon icon-date"></i>
                             <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
-                        <div class="post_reading_time">
-                            <i class="icon icon-time"></i>
-                            <span>' . Text::readingTime($this->object->get('description')) . '</span>
-                        </div>
                     </div>
-                </a>
+                </div>
             </div>';
     }
 
@@ -247,7 +243,7 @@ class Post_Ui extends Ui
         $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3, 6']);
         return '
             <div class="posts_intro">
-                <div class="posts_intro_title">' . __('last_posts') . '</div>
+                <h2 class="posts_intro_title">' . __('last_posts') . '</h2>
                 <div class="posts_intro_items">' . $items->showList(['function' => 'Intro']) . '</div>
                 <div class="posts_intro_button">
                     <a href="' . url('articulos') . '">' . __('view_all_posts') . '</a>

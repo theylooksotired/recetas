@@ -21,6 +21,39 @@ class Category_Ui extends Ui
             </div>';
     }
 
+    public function renderIntro()
+    {
+        $this->object->loadMultipleValues();
+        $query = 'SELECT r.*
+            FROM ' . (new Recipe)->tableName . ' r
+            JOIN ' . (new CategoryRecipe)->tableName . ' rc ON r.id=rc.id_recipe
+            WHERE rc.id_category=' . $this->object->id() . ' AND r.active="1" ORDER BY r.title_url';
+        $recipes = (new Recipe)->readListQuery($query);
+        if (count($recipes) > 2) {
+            $recipesTop = '';
+            $recipesBottom = '';
+            foreach ($recipes as $key => $recipe) {
+                if ($key < 2) {
+                    $recipesTop .= $recipe->showUi();
+                } else {
+                    $recipesBottom .= $recipe->showUi('Minimal');
+                }
+            }
+            return '
+                <div class="category_intro">
+                    <div class="category_intro_title">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                        <h2 class="category_title">
+                            <a href="' . $this->object->url() . '">' . $this->object->get('name') . '</a>
+                        </h2>
+                    </div>
+                    <p class="category_intro_description">' . $this->object->get('short_description') . '</p>
+                    <div class="recipes">' . $recipesTop . '</div>
+                    <div class="recipes_minimal">' . $recipesBottom . '</div>
+                </div>';
+        }
+    }
+
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
@@ -57,6 +90,12 @@ class Category_Ui extends Ui
     }
 
     public static function intro()
+    {
+        $categories = new ListObjects('Category', ['order' => 'ord']);
+        return $categories->showList(['function' => 'Intro']);
+    }
+    
+    public static function introSimple()
     {
         $categories = new ListObjects('Category', ['order' => 'ord']);
         return '

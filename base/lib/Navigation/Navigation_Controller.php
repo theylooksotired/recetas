@@ -108,8 +108,9 @@ class Navigation_Controller extends Controller
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->meta_url = url('');
                 $this->content_top = '
-                    ' . Post_Ui::introTop(['items' => $items]) . '
+                    ' . Adsense::responsive() . '
                     ' . HtmlSection::show('intro_top') . '
+                    <h1>' . $this->title_page . '</h1>
                     ' . Category_Ui::intro();
                 $this->content = '
                     ' . HtmlSection::show('intro') . '
