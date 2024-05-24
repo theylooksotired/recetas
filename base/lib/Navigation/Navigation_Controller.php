@@ -102,6 +102,7 @@ class Navigation_Controller extends Controller
             case 'intro':
                 if (Parameter::code('meta_title_page_intro') != '') {
                     $this->title_page = Parameter::code('meta_title_page_intro');
+                    $this->hide_title_page = true;
                     $this->hide_title_page_appendix = true;
                 }
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
