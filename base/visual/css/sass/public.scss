@@ -895,6 +895,7 @@ body {
             img {
                 width: 100%;
                 display: block;
+                height: auto;
             }
         }
     }
@@ -949,7 +950,7 @@ body {
     }
     @include mobile {
         .post_image {
-            width: 100%;
+            width: calc(100% - 10px);
             float: none;
             margin: 0 0 10px;
         }
