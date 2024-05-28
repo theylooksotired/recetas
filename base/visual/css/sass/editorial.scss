@@ -14,6 +14,8 @@ body {
 
 .editorial {
     .post_image {
-        height: auto;
+        img {
+            height: auto;
+        }
     }    
 }
