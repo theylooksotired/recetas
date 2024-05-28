@@ -41,5 +41,11 @@
             <label>title</label>
             <type>textarea_long</type>
         </attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<type>select</type>
+			<refObject>Recipe</refObject>
+			<firstSelect>-- Seleccionar en vez de una imagen --</firstSelect>
+		</attribute>
 	</attributes>
 </object>

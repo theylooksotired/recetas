@@ -152,16 +152,21 @@ class Post_Ui extends Ui
         }
         $images = [];
         foreach ($this->object->get('images') as $item) {
-            $images[] = '
-                <figure class="post_image">
-                    ' . $item->getImageWidth('image', 'web') . '
-                    ' . (($item->get('title') != '') ? '<figcaption>' . $item->get('title') . '</figcaption>' : '') . '
-                </figure>';
+            if ($item->get('id_recipe') != '') {
+                $recipe = (new Recipe)->read($item->get('id_recipe'));
+                $images[] = $recipe->showUi();
+            } else {
+                $images[] = '
+                    <figure class="post_image">
+                        ' . $item->getImageWidth('image', 'web') . '
+                        ' . (($item->get('title') != '') ? '<figcaption>' . $item->get('title') . '</figcaption>' : '') . '
+                    </figure>';
+            }
         }
-        $middleRepetitions = (count($images) > 0) ? ceil(count($paragraphs) / count($images)) : 0;
+        $middleItems = (count($images) > 0) ? ceil(count($paragraphs) / count($images)) : 0;
         $paragraphsResult = [];
-        foreach ($paragraphs as $index => $paragraph) {
-            if ($middleRepetitions > 0 && ($index - 1) % $middleRepetitions == 0) {
+        foreach ($paragraphs as $index => $paragraph) {            
+            if ($middleItems > 0 && ($index + 1) % $middleItems == 0) {
                 $paragraphsResult[] = array_shift($images);
             }
             $paragraphsResult[] = $paragraph;
