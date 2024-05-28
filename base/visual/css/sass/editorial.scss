@@ -11,3 +11,9 @@ body {
     max-width: $sizeTablet;
     margin: auto;
 }
+
+.editorial {
+    .post_image {
+        height: auto;
+    }    
+}
