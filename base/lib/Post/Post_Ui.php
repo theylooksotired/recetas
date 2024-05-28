@@ -245,7 +245,7 @@ class Post_Ui extends Ui
 
     public static function intro($options = [])
     {
-        $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3, 6']);
+        $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '6']);
         return '
             <div class="posts_intro">
                 <h2 class="posts_intro_title">' . __('last_posts') . '</h2>
