@@ -152,6 +152,7 @@
                 <value id="steamed">steamed</value>
                 <value id="boiled">boiled</value>
                 <value id="baked">baked</value>
+                <value id="grilled">grilled</value>
             </values>
         </attribute>
         <attribute>
@@ -199,18 +200,18 @@
         <attribute>
             <name>friend_links</name>
             <label>friend_links</label>
-            <type>textarea_long</type>
+            <type>hidden</type>
+        </attribute>
+        <attribute>
+            <name>views</name>
+            <label>views</label>
+            <type>text_integer</type>
         </attribute>
         <attribute>
             <name>check_versions</name>
             <label>check_versions</label>
             <type>checkbox</type>
             <managesPermissions>true</managesPermissions>
-        </attribute>
-        <attribute>
-            <name>views</name>
-            <label>views</label>
-            <type>text_integer</type>
         </attribute>
         <attribute>
             <name>active</name>

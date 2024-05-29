@@ -47,36 +47,20 @@
 }
 
 .nested_form_field_multiple_items_preparation {
-    .nested_form_field_content {
-        @include clearer();
-        .form_field_image {
-            float: left;
-        }
-        .form_field_image {
-            width: 30%;
-            margin: 0 10px 0 0;
-        }
+    .form_field_image {
+        display: none;
     }
-}
-
-.nested_form_field_multiple_items_preparation {
-    .nested_form_field_content {
-        @include clearer();
-        .form_field_step {
-            float: left;
-        }
-        .form_field_step {
-            width: 50%;
-            margin: 0;
+    .nested_form_field_object {
+        padding: 5px !important;
+        margin: 0 0 5px !important;
+        .textarea_resizable {
+            padding: 0 !important;
             textarea {
-                width: 100%;
-                height: 160px;
+                padding: 5px !important;
             }
-            &.textarea_small {
-                textarea {
-                    height: auto;
-                }
-            }
+        }
+        label {
+            display: none !important;
         }
     }
 }
