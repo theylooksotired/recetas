@@ -184,6 +184,7 @@ class Navigation_Controller extends Controller
                 }
                 break;
             case 'sitemap':
+            case 'sitemap.xml':
                 $this->mode = 'xml';
                 $urls = [url('')];
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());

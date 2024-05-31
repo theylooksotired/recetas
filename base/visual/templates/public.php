@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 
     <meta property="fb:app_id" content="168728593755836" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@plasticwebs" />
+    <meta name="twitter:creator" content="@plasticwebs" />
     <meta property="og:title" content="<?php echo $title;?>" />
     <meta property="og:description" content="<?php echo $metaDescription;?>" />
     <meta property="og:url" content="<?php echo $metaUrl;?>" />
