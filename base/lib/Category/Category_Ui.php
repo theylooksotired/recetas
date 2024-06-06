@@ -105,6 +105,12 @@ class Category_Ui extends Ui
             </div>';
     }
 
+    public static function sitemapUrls()
+    {
+        $items = (new Category)->readList();
+        return Sitemap::getUrls($items);
+    }
+
     /**
      * @cache
      */

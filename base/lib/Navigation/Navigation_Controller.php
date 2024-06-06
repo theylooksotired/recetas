@@ -30,10 +30,30 @@ class Navigation_Controller extends Controller
                     header('Location: ' . $item->url());
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");
-                    header('Location: ' . url('intro'));
+                    header('Location: ' . url(''));
                 }
                 break;
+            case 'intro':
+                if (Parameter::code('meta_title_page_intro') != '') {
+                    $this->title_page = Parameter::code('meta_title_page_intro');
+                    $this->hide_title_page = true;
+                    $this->hide_title_page_appendix = true;
+                }
+                $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
+                $this->meta_url = url('');
+                $this->content_top = '
+                    ' . Adsense::responsive() . '
+                    ' . HtmlSection::show('intro_top') . '
+                    <h1>' . $this->title_page . '</h1>
+                    ' . Category_Ui::intro();
+                $this->content = '
+                    ' . HtmlSection::show('intro') . '
+                    ' . Post_Ui::intro();
+                $this->head = $items->showList(['function' => 'PreloadImage']);
+                return $this->ui->render();
+                break;
             case 'recetas':
+                $this->redirecLastSlash();
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
                 if ($this->recipe->id() != '') {
@@ -83,6 +103,7 @@ class Navigation_Controller extends Controller
                     if ($this->content == '') {
                         header("HTTP/1.1 301 Moved Permanently");
                         header('Location: ' . url(''));
+                        exit();
                     }
                     if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
@@ -99,29 +120,16 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
-            case 'intro':
-                if (Parameter::code('meta_title_page_intro') != '') {
-                    $this->title_page = Parameter::code('meta_title_page_intro');
-                    $this->hide_title_page = true;
-                    $this->hide_title_page_appendix = true;
-                }
-                $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
-                $this->meta_url = url('');
-                $this->content_top = '
-                    ' . Adsense::responsive() . '
-                    ' . HtmlSection::show('intro_top') . '
-                    <h1>' . $this->title_page . '</h1>
-                    ' . Category_Ui::intro();
-                $this->content = '
-                    ' . HtmlSection::show('intro') . '
-                    ' . Post_Ui::intro();
-                $this->head = $items->showList(['function' => 'PreloadImage']);
-                return $this->ui->render();
-                break;
             case 'articulos':
+                $this->redirecLastSlash();
                 $this->layout_page = 'posts';
                 $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
                 if ($post->id() != '') {
+                    if ($this->extraId != '') {
+                        header("HTTP/1.1 301 Moved Permanently");
+                        header('Location: ' . $post->url());
+                        exit();
+                    }
                     $post->persistSimple('views', $post->get('views') + 1);
                     $this->title_page = ($post->get('title_page') != '') ? $post->get('title_page') : $post->getBasicInfoTitle();
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
@@ -181,14 +189,16 @@ class Navigation_Controller extends Controller
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . url(''));
+                    exit();
                 }
                 break;
             case 'sitemap':
             case 'sitemap.xml':
                 $this->mode = 'xml';
                 $urls = [url('')];
-                $urls = array_merge($urls, Post_Ui::sitemapUrls());
+                $urls = array_merge($urls, Category_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
+                $urls = array_merge($urls, Post_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
 
@@ -378,6 +388,23 @@ class Navigation_Controller extends Controller
             header('Location: ' . url(''));
             exit();
         }
+    }
+
+    public function redirecLastSlash()
+    {
+        $url = '//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        if (substr($url, -1) == '/') {
+            header("HTTP/1.1 301 Moved Permanently");
+            header('Location: ' . substr($url, 0, -1));
+            exit();
+        }
+        if (strpos($url, '?') !== false) {
+            $url = explode('?', $url);
+            header("HTTP/1.1 301 Moved Permanently");
+            header('Location: ' . $url[0]);
+            exit();
+        }
+        
     }
 
 }
