@@ -147,6 +147,7 @@ class Navigation_Controller extends Controller
                         header('Location: ' . url('articulos'));
                         exit();
                     }
+                    $this->meta_url = url('articulos');
                     $this->title_page = __('posts_list');
                     $this->bread_crumbs = [url('articulos') => __('posts')];
                     $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'results' => '10']);
