@@ -134,8 +134,7 @@ class Navigation_Controller extends Controller
                     $this->title_page = ($post->get('title_page') != '') ? $post->get('title_page') : $post->getBasicInfoTitle();
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
                     $this->meta_url = $post->url();
-                    $this->meta_image = $post->getImageUrl('image', 'huge');
-                    $this->meta_image = ($this->meta_image != '') ? $this->meta_image : $post->getImageUrl('image', 'web');
+                    $this->meta_image = $post->getImageUrl('image', 'web');
                     $this->head = $post->showUi('JsonHeader');
                     $this->bread_crumbs = [url($this->action) => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');

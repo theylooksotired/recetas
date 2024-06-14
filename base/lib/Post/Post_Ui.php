@@ -374,7 +374,7 @@ class Post_Ui extends Ui
             '@type' => 'Article',
             'headline' => $this->object->getBasicInfo(),
             'mainEntityOfPage' => $this->object->url(),
-            'image' => $this->object->getImageUrl('image', 'huge'),
+            'image' => $this->object->getImageUrl('image', 'web'),
             'author' => [
                 '@type' => 'Organization',
                 'name' => Parameter::code('meta_title_page'),
