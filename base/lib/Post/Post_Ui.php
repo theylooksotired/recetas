@@ -256,6 +256,15 @@ class Post_Ui extends Ui
             </div>';
     }
 
+    public static function all()
+    {
+        $title_page = (Parameter::code('meta_title_page_posts') != '') ? Parameter::code('meta_title_page_posts') : __('posts_list');
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC']);
+        return '
+            <h1>' . $title_page . '</h1>
+            <div class="posts_grid">' . $items->showList(['function' => 'PublicSimple']) . '</div>';
+    }
+
     public static function menuSide($options = [])
     {
         $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 3]);

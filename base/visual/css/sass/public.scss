@@ -1324,6 +1324,16 @@ body {
     }
 }
 
+.posts_grid {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
 .form_site_border {
     padding: 15px;
     background: rgba($black, 0.02);

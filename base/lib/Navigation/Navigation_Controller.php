@@ -137,21 +137,21 @@ class Navigation_Controller extends Controller
                     $this->meta_image = $post->getImageUrl('image', 'huge');
                     $this->meta_image = ($this->meta_image != '') ? $this->meta_image : $post->getImageUrl('image', 'web');
                     $this->head = $post->showUi('JsonHeader');
-                    $this->bread_crumbs = [url('articulos') => __('posts'), $post->url() => $post->getBasicInfoTitle()];
+                    $this->bread_crumbs = [url($this->action) => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
                     $this->facebookCommentsFooter = true;
                 } else {
                     if ($this->id != '') {
                         header("HTTP/1.1 301 Moved Permanently");
-                        header('Location: ' . url('articulos'));
+                        header('Location: ' . url($this->action));
                         exit();
                     }
-                    $this->meta_url = url('articulos');
-                    $this->title_page = __('posts_list');
-                    $this->bread_crumbs = [url('articulos') => __('posts')];
-                    $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'results' => '10']);
-                    $this->content = '<div class="posts">' . $items->showListPager() . '</div>';
+                    $this->meta_url = url($this->action);
+                    $this->layout_page = 'simple';
+                    $this->title_page = (Parameter::code('meta_title_page_posts') != '') ? Parameter::code('meta_title_page_posts') : __('posts_list');
+                    $this->bread_crumbs = [url($this->action) => __('posts')];
+                    $this->content = Post_Ui::all();
                 }
                 return $this->ui->render();
                 break;
