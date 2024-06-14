@@ -262,6 +262,8 @@ class Post_Ui extends Ui
         $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC']);
         return '
             <h1>' . $title_page . '</h1>
+            ' . HtmlSection::show('intro_posts') .'
+            <h2>' . __('posts_list') . '</h2>
             <div class="posts_grid">' . $items->showList(['function' => 'PublicSimple']) . '</div>';
     }
 
