@@ -11,6 +11,7 @@ $(document).ready(function() {
         };
         $.post(url, data, function(response) {
             if (response.description) {
+                $('input[name="title_page"]').val(response.title_page);
                 $('textarea[name="meta_description"]').val(response.meta_description);
                 $('textarea[name="short_description"]').val(response.short_description);
                 var textareaId = $('textarea[name="description"]').attr('id');

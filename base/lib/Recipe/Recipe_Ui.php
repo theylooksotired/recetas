@@ -262,6 +262,15 @@ class Recipe_Ui extends Ui
         return $html;
     }
 
+    public function renderPreparationParagraph()
+    {
+        $html = '';
+        foreach ($this->object->get('preparation') as $preparation) {
+            $html .= $preparation->get('step') . ' ';
+        }
+        return $html;
+    }
+
     public function renderRelated()
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);

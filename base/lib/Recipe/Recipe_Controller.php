@@ -31,13 +31,74 @@ class Recipe_Controller extends Controller
                 $recipe = (new Recipe)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '' && $recipe->get('description') == '') {
-                    $questionDescription = 'Escribe una descripcion de tres lineas sobre el origen, historia y significado de la receta ' . $recipe->getBasicInfo() . ' de ' . Parameter::code('meta_title_header_bottom') . ', sin decir como se prepara. Evita usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion también, el texto " ' . $recipe->get('short_description') . ' "';
-                    $response['description'] = '<p>' . $this->callChatGPT($questionDescription) . '</p>';
-                    $questionDescription = 'Escribe una linea de invitacion a preparar una receta, como "Animate a preparala", "Esperamos que sea de tu agrado", "Lista para cocinar esta delicia?". Dirigete a la tercera persona en plural.';
-                    $response['description'] .= '<p>' . $this->callChatGPT($questionDescription) . '</p>';
+                    $firstWord = explode(' ', $recipe->getBasicInfo())[0];
+                    $lastTwoCharacters = substr($firstWord, -2);
+                    $lastCharacter = substr($firstWord, -1);
+                    $genre = 'm';
+                    $genre = ($lastCharacter == 's') ? 'mp' : $genre;
+                    $genre = ($lastTwoCharacters == 'as') ? 'fp' : $genre;
+                    $genre = ($lastCharacter == 'a') ? 'f' : $genre;
+                    switch ($genre) {
+                        case 'm':
+                            $titleTestOptions = [
+                                'Como se prepara el ' . $recipe->getBasicInfo(),
+                                'Como se prepara un sabroso ' . $recipe->getBasicInfo(),
+                                'Como se prepara un rico ' . $recipe->getBasicInfo(),
+                                'Como preparar un exquisito ' . $recipe->getBasicInfo(),
+                                'Como cocinar un rico ' . $recipe->getBasicInfo(),
+                                'Como se hace la ' . $recipe->getBasicInfo(),
+                                'Como se hace un sabroso ' . $recipe->getBasicInfo(),
+                                'Como se hace un rico ' . $recipe->getBasicInfo(),
+                                'Receta tradicional de ' . $recipe->getBasicInfo(),
+                            ];        
+                        break;
+                        case 'mp':
+                            $titleTestOptions = [
+                                'Como se preparan los ' . $recipe->getBasicInfo(),
+                                'Como se preparan unos sabrosos ' . $recipe->getBasicInfo(),
+                                'Como se prepara unos ricos ' . $recipe->getBasicInfo(),
+                                'Como preparar unos exquisitos ' . $recipe->getBasicInfo(),
+                                'Como cocinar unos ricos ' . $recipe->getBasicInfo(),
+                                'Como se hacen unos ' . $recipe->getBasicInfo(),
+                                'Como se hacen unos sabrosos ' . $recipe->getBasicInfo(),
+                                'Como se hacen unos ricos ' . $recipe->getBasicInfo(),
+                                'Receta tradicional de los ' . $recipe->getBasicInfo(),
+                            ];        
+                        break;
+                        case 'f':
+                            $titleTestOptions = [
+                                'Como se prepara la ' . $recipe->getBasicInfo(),
+                                'Como se prepara una sabrosa ' . $recipe->getBasicInfo(),
+                                'Como se prepara una rica ' . $recipe->getBasicInfo(),
+                                'Como preparar una exquisita ' . $recipe->getBasicInfo(),
+                                'Como cocinar una rica ' . $recipe->getBasicInfo(),
+                                'Como se hace la ' . $recipe->getBasicInfo(),
+                                'Como se hace una sabrosa ' . $recipe->getBasicInfo(),
+                                'Como se hace una rica ' . $recipe->getBasicInfo(),
+                                'Receta tradicional de la ' . $recipe->getBasicInfo(),
+                            ];        
+                        break;
+                        case 'fp':
+                            $titleTestOptions = [
+                                'Como se preparan las ' . $recipe->getBasicInfo(),
+                                'Como se preparan unas sabrosas ' . $recipe->getBasicInfo(),
+                                'Como se preparan unas ricas ' . $recipe->getBasicInfo(),
+                                'Como preparar unas exquisitas ' . $recipe->getBasicInfo(),
+                                'Como cocinar unas ricas ' . $recipe->getBasicInfo(),
+                                'Como se hacen las ' . $recipe->getBasicInfo(),
+                                'Como se hacen unas sabrosas ' . $recipe->getBasicInfo(),
+                                'Como se hacen unas ricas ' . $recipe->getBasicInfo(),
+                                'Receta tradicional de las ' . $recipe->getBasicInfo(),
+                            ];        
+                        break;
+                    }
+                    $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTestOptions[array_rand($titleTestOptions)] . '"';
+                    $response['title_page'] = $this->callChatGPT($questionTitle);
+                    $questionDescription = 'Escribe tres lineas separadas por dobles saltos de linea, sobre la receta ' . $recipe->getBasicInfo() . ', sin decir como se prepara. No usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion la preparación de la receta: " ' . $recipe->showUi('PreparationParagraph') . ' "';
+                    $response['description'] = '<p>' . str_replace("\n\n", '</p><p>', $this->callChatGPT($questionDescription)) . '</p>';
                     $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . $response['description'];
                     $response['meta_description'] = $this->callChatGPT($questionMetaDescription);
-                    $questionShortDescription = 'Haz este texto mas lindo, sin usar signos de admiracion: ' . $recipe->getBasicInfo() . ' ' . $recipe->get('short_description');
+                    $questionShortDescription = 'Escribe no mas de 250 caracteres sobre la receta ' . $recipe->getBasicInfo() . '. Evita invitaciones a probarla o prepararla. Puedes usar como inspiracion el texto "' . $recipe->get('short_description') . '" o tambien la preparacion de la misma "' . $recipe->showUi('PreparationParagraph') . '"';
                     $response['short_description'] = $this->callChatGPT($questionShortDescription);
                 }
                 return json_encode($response);
@@ -268,7 +329,7 @@ class Recipe_Controller extends Controller
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => 'Eres un escritor latinoamericano de un sitio de recetas, tu publico es amigable y te gusta escribir de forma calmada.'
+                    'content' => 'Eres una escritora latinoamericana de un sitio de recetas, tu publico es amigable y te gusta escribir de forma calmada.'
                 ],
                 [
                     'role' => 'user',
