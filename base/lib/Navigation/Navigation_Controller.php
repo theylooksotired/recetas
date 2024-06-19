@@ -339,7 +339,6 @@ class Navigation_Controller extends Controller
                 $content = json_encode($info, JSON_PRETTY_PRINT);
                 return $content;
             break;
-
                 // case 'friends':
                 //     $this->mode = 'ajax';
                 //     $sites = FriendSite::allLess();

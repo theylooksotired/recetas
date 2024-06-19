@@ -93,13 +93,13 @@ class Recipe_Controller extends Controller
                         break;
                     }
                     $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTestOptions[array_rand($titleTestOptions)] . '"';
-                    $response['title_page'] = str_replace('.', '', $this->callChatGPT($questionTitle));
+                    $response['title_page'] = str_replace('.', '', ChatGPT::answer($questionTitle));
                     $questionDescription = 'Escribe tres lineas sobre la receta ' . $recipe->getBasicInfo() . ', sin decir como se prepara. No usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion la preparación de la receta: " ' . $recipe->showUi('PreparationParagraph') . ' "';
-                    $response['description'] = str_replace('¡', '', str_replace('!', '.', '<p>' . str_replace('. ', '.</p><p>', $this->callChatGPT($questionDescription)) . '</p>'));
+                    $response['description'] = str_replace('¡', '', str_replace('!', '.', '<p>' . str_replace('. ', '.</p><p>', ChatGPT::answer($questionDescription)) . '</p>'));
                     $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . strip_tags($response['description']);
-                    $response['meta_description'] = str_replace('¡', '', str_replace('!', '.', $this->callChatGPT($questionMetaDescription)));
+                    $response['meta_description'] = str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionMetaDescription)));
                     $questionShortDescription = 'Escribe no mas de 250 caracteres sobre la receta ' . $recipe->getBasicInfo() . '. Evita invitaciones a probarla o prepararla. Puedes usar como inspiracion el texto "' . $recipe->get('short_description') . '" o tambien la preparacion de la misma "' . $recipe->showUi('PreparationParagraph') . '"';
-                    $response['short_description'] = str_replace('¡', '', str_replace('!', '.', $this->callChatGPT($questionShortDescription)));
+                    $response['short_description'] = str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionShortDescription)));
                 }
                 return json_encode($response);
                 break;
@@ -285,6 +285,48 @@ class Recipe_Controller extends Controller
                 $this->head = $this->loadFormAjax();
                 return $this->ui->render();
                 break;
+            case 'others':
+                $recipe = (new Recipe)->read($this->id);
+                $searchText = 'Receta de ' . $recipe->getBasicInfo();
+                $response = file_get_contents('https://www.googleapis.com/customsearch/v1?key=AIzaSyAnP86N1FY-FGhWtVY0AT8x0WInS-4tReU&cx=57be6ac7afb0e4453&q=' . urlencode($searchText));
+                $data = json_decode($response, true);
+                if (isset($data['items']) && count($data['items'] > 3)) {
+                    foreach ($data['items'] as $item) {
+                        if ($item['link'] != $recipe->url()) {
+                            $content = @file_get_contents($item['link']);
+                            if ($content !== false) {
+                                $doc = new DOMDocument();
+                                libxml_use_internal_errors(true);
+                                $doc->loadHTML($content);
+                                libxml_clear_errors();
+                                $body = $doc->getElementsByTagName('body')->item(0);
+                                $htmlBody = $doc->saveHTML($body);
+                                $htmlBody = preg_replace('/<!--(.*?)-->/', '', $htmlBody);
+                                $htmlBody = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<noscript\b[^>]*>(.*?)<\/noscript>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<header\b[^>]*>(.*?)<\/header>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<footer\b[^>]*>(.*?)<\/footer>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<side\b[^>]*>(.*?)<\/side>/is', '', $htmlBody);
+                                $htmlBody = preg_replace('/<([a-zA-Z0-9]+)\b[^>]*>/', '<$1>', $htmlBody);
+                                $htmlBody = preg_replace('/<([a-zA-Z0-9]+)\b[^>]*>(.*?)<\/\1>/', '', $htmlBody);
+                                $htmlBody = preg_replace('~>\s+<~', '><', $htmlBody);
+                                $htmlBody = preg_replace('/\s\s+/', ' ', $htmlBody);
+                                // dump(ChatGPT::answer('Encuentra la titulo de la receta en : ' . $htmlBody));
+                                echo '=============<br/>';
+                                echo $item['link'];
+                                echo '<br/><br/>';
+                                echo '<pre>' . ChatGPT::answer('Encuentra los ingredientes con sus cantidades de la receta en el siguiente codigo HTML: ' . $htmlBody) . '</pre>';
+                                echo '<br/><br/>';
+                                $preparacion = ChatGPT::answer('Encuentra los pasos de preparacion de la receta en el siguiente codigo HTML: ' . $htmlBody);
+                                echo '<pre>' . ChatGPT::answer('Reformula los pasos y escribe de forma mas clara: ' . $preparacion) . '</pre>';
+                                echo '<br/><br/><br/><br/><br/><br/><br/><br/>';
+                            }
+                        }
+                    }
+                }
+                dd('END');
+                break;
         }
     }
 
@@ -315,41 +357,6 @@ class Recipe_Controller extends Controller
                     });
                 });
             </script>';
-    }
-
-    public function callChatGPT($question)
-    {
-        $url = 'https://api.openai.com/v1/chat/completions';
-        $headers = [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . Parameter::code('openai_api')
-        ];
-        $data = [
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'content' => 'Eres una escritora latinoamericana de un sitio de recetas, tu publico es amigable y te gusta escribir de forma calmada.'
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $question
-                ]
-            ],
-            'n' => 1
-        ];
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $response = json_decode($response, true);
-        return (isset($response['choices'][0]['message']['content'])) ? $response['choices'][0]['message']['content'] : '';
     }
 
 }

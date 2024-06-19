@@ -32,50 +32,15 @@ class Post_Controller extends Controller
                 $response = [];
                 if ($post->id() != '') {
                     $questionMetaDescription = 'Tienes que hacer la meta descripcion de una pagina. Para ello, resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . "\n\n" . strip_tags($post->get('description'));
-                    $response['meta_description'] = $this->callChatGPT($questionMetaDescription);
+                    $response['meta_description'] = ChatGPT::answer($questionMetaDescription);
                     $questionShortDescription = 'Haz este texto mas lindo, sin usar signos de admiracion: ' . $post->getBasicInfo() . ' ' . $post->get('short_description').'. Intenta que no sea de más de 4 líneas.';
-                    $response['short_description'] = $this->callChatGPT($questionShortDescription);
+                    $response['short_description'] = ChatGPT::answer($questionShortDescription);
                     $questionShortDescription = 'Escribe un titulo atractivo para un artículo. No uses dos puntos. Debe tener maximo 65 caracteres y se muy conciso. Usa el siguiente articulo de inspiracion: ' . "\n\n" . strip_tags($post->get('description'));
-                    $response['title_page'] = $this->callChatGPT($questionShortDescription);
+                    $response['title_page'] = ChatGPT::answer($questionShortDescription);
                 }
                 return json_encode($response);
                 break;
         }
-    }
-
-    public function callChatGPT($question)
-    {
-        $url = 'https://api.openai.com/v1/chat/completions';
-        $headers = [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . Parameter::code('openai_api')
-        ];
-        $data = [
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'content' => 'Eres un escritor latinoamericano de un sitio de recetas, tu publico es amigable y te gusta escribir de forma calmada.'
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $question
-                ]
-            ],
-            'n' => 1
-        ];
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $response = json_decode($response, true);
-        return (isset($response['choices'][0]['message']['content'])) ? $response['choices'][0]['message']['content'] : '';
     }
 
 }
