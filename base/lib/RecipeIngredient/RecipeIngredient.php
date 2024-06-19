@@ -21,4 +21,16 @@ class RecipeIngredient extends Db_Object
         }
     }
 
+    public function persist($persistMultiple = true)
+    {
+        $this->values['ingredient'] = str_replace('a gusto', '', $this->values['ingredient']);
+        $this->values['ingredient'] = ucfirst(strtolower(trim($this->values['ingredient'])));
+        $amount = trim($this->values['amount']);
+        $amount = str_replace('1/2', '½', $amount);
+        $amount = str_replace('1/4', '¼', $amount);
+        $amount = str_replace('3/4', '¾', $amount);
+        $this->values['amount'] = $amount;
+        return parent::persist($persistMultiple);
+    }
+
 }
