@@ -119,6 +119,7 @@ class Recipe_Ui extends Ui
             }
         }
         $friendSiteLink1 = '';
+        $friendSiteLink2 = '';
         if ($this->object->get('friend_links') != '') {
             $sites = @json_decode($this->object->get('friend_links'), true);
             if (is_array($sites) && count($sites) > 0) {
@@ -406,6 +407,13 @@ class Recipe_Ui extends Ui
 
     public function renderJsonHeader()
     {
+        $versionsJson = '';
+        if ($this->object->get('check_versions') == 1) {
+            $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+            foreach ($versions as $version) {
+                $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
+            }
+        }
         $ingredients = [];
         foreach ($this->object->get('ingredients') as $ingredient) {
             $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
@@ -448,7 +456,7 @@ class Recipe_Ui extends Ui
         if ($this->object->get('cooking_method') != '') {
             $info['cookingMethod'] = $this->object->get('cooking_method');
         }
-        return '<script type="application/ld+json">' . json_encode($info) . '</script>';
+        return '<script type="application/ld+json">' . json_encode($info) . '</script>' . $versionsJson;
     }
 
 }

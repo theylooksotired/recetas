@@ -11,6 +11,47 @@
 class RecipeVersion extends Db_Object
 {
 
+    public function getCookTime()
+    {
+        $values = [
+            '5_minutes' => 'PT5M',
+            '15_minutes' => 'PT15M',
+            '30_minutes' => 'PT30M',
+            '45_minutes' => 'PT45M',
+            '1_hour' => 'PT1H',
+            '2_hours' => 'PT2H',
+            '3_hours' => 'PT3H',
+            '4_hours' => 'PT4H',
+            '5_hours' => 'PT5H',
+            '1_day' => 'P1D',
+            '2_days' => 'P2D',
+        ];
+        return (isset($values[$this->get('cook_time')])) ? $values[$this->get('cook_time')] : '';
+    }
+
+    public function getDiet()
+    {
+        $values = [
+            'diabetic' => 'DiabeticDiet',
+            'gluten_free' => 'GlutenFreeDiet',
+            'halal' => 'HalalDiet',
+            'hindu' => 'HinduDiet',
+            'kosher' => 'KosherDiet',
+            'low_calorie' => 'LowCalorieDiet',
+            'low_fat' => 'LowFatDiet',
+            'low_lactose' => 'LowLactoseDiet',
+            'low_salt' => 'LowSaltDiet',
+            'vegan' => 'VeganDiet',
+            'vegetarian' => 'VegetarianDiet',
+        ];
+        return (isset($values[$this->get('diet')])) ? $values[$this->get('diet')] : '';
+    }
+
+    public function getServings()
+    {
+        return ($this->get('servings') > 0) ? $this->get('servings') . ' ' . __('servings') : '';
+    }
+
     public function persist($persistMultiple = true)
     {
         $persist = parent::persist($persistMultiple);
