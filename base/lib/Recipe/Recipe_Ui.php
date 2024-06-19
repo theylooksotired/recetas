@@ -276,11 +276,17 @@ class Recipe_Ui extends Ui
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
-        $recipes = new ListObjects('Recipe', ['where' => 'id!=:id AND id_category=:id_category AND active="1"', 'limit' => 8], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        $recipesBefore = new ListObjects('Recipe', ['where' => 'id > :id AND id_category=:id_category AND active="1"', 'limit' => 12, 'order' => 'id'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        if ($recipesBefore->count() < 12) {
+            $recipesAfter = new ListObjects('Recipe', ['where' => 'id < :id AND id_category=:id_category AND active="1"', 'limit' => (12 - $recipesBefore->count()), 'order' => 'id DESC'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        }
         return '<div class="related">
                     <div class="related_block">
                         <h2 class="related_title">' . __('other_recipes') . '</h2>
-                        <div class="recipes_minimal">' . $recipes->showList(['function' => 'Minimal']) . '</div>
+                        <div class="recipes_minimal">
+                        ' . ((isset($recipesAfter)) ? $recipesAfter->showList(['function' => 'Minimal']) : '') . '
+                        ' . $recipesBefore->showList(['function' => 'Minimal']) . '
+                        </div>
                     </div>
                     <div class="related_block">
                         <h2 class="related_title">' . __('other_posts_related') . ' ' . strtolower($this->object->getBasicInfo()) . '</h2>
