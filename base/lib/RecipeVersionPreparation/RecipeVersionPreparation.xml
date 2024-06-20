@@ -37,7 +37,7 @@
 		<attribute>
             <name>step</name>
             <label>step</label>
-            <type>textarea</type>
+            <type>textarea_resizable</type>
             <required>not_empty</required>
         </attribute>
 	</attributes>

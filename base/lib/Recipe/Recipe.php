@@ -80,73 +80,40 @@ class Recipe extends Db_Object
         $this->set('id_category_object', $category);
     }
 
-    public function urlUploadTempImagePublic()
+    public function persist($persistMultiple = true)
     {
-        return url('cuenta/subir-imagen-temporal');
-    }
-
-    public function urlDeleteImagePublic($valueFile = '')
-    {
-        return url('cuenta/borrar-imagen-receta/' . $this->id());
-    }
-
-    public function deleteImagePublic()
-    {
-        $status = StatusCode::NOK;
-        try {
-            Image_File::deleteImage($this->className, $this->get('image'));
-            $this->persistSimple('image', '');
-            $status = StatusCode::OK;
-        } catch (Exception $e) {};
-        return ['status' => $status];
-    }
-
-    public function createPublic($values)
-    {
-        $status = StatusCode::NOK;
-        $content = (new Recipe_Form())->create();
-        if (count($values) > 0) {
-            $login = User_Login::getInstance();
-            $values['active'] = 0;
-            $values['id_user'] = $login->id();
-            $recipe = new Recipe($values);
-            $persist = $recipe->persist();
-            if ($persist['status'] == StatusCode::OK) {
-                Session::flashInfo(__('saved_recipe_message'));
-                $status = StatusCode::OK;
-                $form = Recipe_Form::fromObject($recipe);
-                $content = $form->edit();
-                return ['status' => $status, 'content' => $content, 'recipe' => $recipe];
-            } else {
-                Session::flashError(__('errors_form'));
-                $content = (new Recipe_Form($persist['values'], $persist['errors']))->create();
+        $persist = parent::persist($persistMultiple);
+        if ($persist['status'] == StatusCode::OK) {
+            if ($this->get('preparation_raw') != '') {
+                $preparationLines = explode("\n", $this->get('preparation_raw'));
+                foreach ($preparationLines as $line) {
+                    $line = trim($line);
+                    if ($line != '') {
+                        $preparation = new RecipePreparation([
+                            'id_recipe' => $this->id(),
+                            'step' => $line
+                        ]);
+                        $preparation->persist();
+                    }
+                }
             }
-        }
-        return ['status' => $status, 'content' => $content];
-    }
-
-    public function editPublic($values)
-    {
-        $status = StatusCode::NOK;
-        $form = Recipe_Form::fromObject($this);
-        $content = $form->edit();
-        if (count($values) > 0) {
-            $login = User_Login::getInstance();
-            $values['active'] = 0;
-            $values['id'] = $this->id();
-            $values['id_user'] = $login->id();
-            $comic = new Recipe($values);
-            $persist = $comic->persist();
-            if ($persist['status'] == StatusCode::OK) {
-                Session::flashInfo(__('saved_recipe_message'));
-                $form = Recipe_Form::fromObject($comic);
-                $content = $form->edit();
-            } else {
-                Session::flashError(__('errors_form'));
-                $content = (new Recipe_Form($persist['values'], $persist['errors']))->edit();
+            $this->persistSimple('preparation_raw', '');
+            if ($this->get('ingredients_raw') != '') {
+                $ingredientsLines = explode("\n", $this->get('ingredients_raw'));
+                foreach ($ingredientsLines as $line) {
+                    $line = trim($line);
+                    if ($line != '') {
+                        $ingredients = new RecipeIngredient([
+                            'id_recipe' => $this->id(),
+                            'ingredient' => $line
+                        ]);
+                        $ingredients->persist();
+                    }
+                }
             }
+            $this->persistSimple('ingredients_raw', '');
         }
-        return ['status' => $status, 'content' => $content];
+        return $persist;
     }
 
 }

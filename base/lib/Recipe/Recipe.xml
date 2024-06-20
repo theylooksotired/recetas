@@ -180,6 +180,11 @@
             </values>
         </attribute>
         <attribute>
+            <name>ingredients_raw</name>
+            <label>ingredients_raw</label>
+            <type>textarea_long</type>
+        </attribute>
+        <attribute>
             <name>ingredients</name>
             <label>ingredients</label>
             <type>multiple_object</type>
@@ -187,6 +192,11 @@
             <linkAttribute>id_recipe</linkAttribute>
             <onDelete>cascade</onDelete>
             <class>multiple_items_ingredients</class>
+        </attribute>
+        <attribute>
+            <name>preparation_raw</name>
+            <label>preparation_raw</label>
+            <type>textarea_long</type>
         </attribute>
         <attribute>
             <name>preparation</name>
