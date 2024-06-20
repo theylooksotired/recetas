@@ -50,13 +50,6 @@
             <type>id_autoincrement</type>
         </attribute>
         <attribute>
-            <name>id_user</name>
-            <type>hidden_user_admin</type>
-            <label>user</label>
-            <layout>label</layout>
-            <refObject>UserAdmin</refObject>
-        </attribute>
-        <attribute>
             <name>id_category</name>
             <label>category</label>
             <type>select</type>
