@@ -103,6 +103,17 @@ class Recipe_Controller extends Controller
                 }
                 return json_encode($response);
                 break;
+            case 'steps-ai-data':
+                $this->mode = 'json';
+                $recipe = (new Recipe)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '') {
+                    $steps = $recipe->showUi('PreparationParagraph');
+                    $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. La preparacion es: "' . $steps . '"';
+                    $response['steps'] = str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
+                }
+                return json_encode($response);
+                break;
             case 'preparation':
                 $table = '';
                 foreach ((new Recipe)->readList(['order' => 'title']) as $item) {

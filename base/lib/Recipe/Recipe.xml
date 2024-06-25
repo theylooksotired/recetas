@@ -175,7 +175,7 @@
         <attribute>
             <name>ingredients_raw</name>
             <label>ingredients_raw</label>
-            <type>textarea_long</type>
+            <type>textarea_resizable</type>
         </attribute>
         <attribute>
             <name>ingredients</name>
@@ -189,7 +189,7 @@
         <attribute>
             <name>preparation_raw</name>
             <label>preparation_raw</label>
-            <type>textarea_long</type>
+            <type>textarea_resizable</type>
         </attribute>
         <attribute>
             <name>preparation</name>
