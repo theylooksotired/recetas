@@ -11,6 +11,16 @@
 class RecipeVersion_Ui extends Ui
 {
 
+    public function renderPreparationParagraph()
+    {
+        $this->object->loadMultipleValues();
+        $html = '';
+        foreach ($this->object->get('preparation') as $preparation) {
+            $html .= $preparation->get('step') . ' ';
+        }
+        return $html;
+    }
+
     public function renderJsonHeader($options = [])
     {
         if (!isset($options['recipe']) || !isset($options['category'])) {
