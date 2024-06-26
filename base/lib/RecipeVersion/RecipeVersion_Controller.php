@@ -31,9 +31,7 @@ class RecipeVersion_Controller extends Controller
                 $recipe = (new RecipeVersion)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '') {
-                    $steps = $recipe->showUi('PreparationParagraph');
-                    $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. La preparacion es: "' . $steps . '"';
-                    $response['steps'] = str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
+                    $response['steps'] = $recipe->getPreparationChatGPT();
                 }
                 return json_encode($response);
                 break;

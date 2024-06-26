@@ -251,6 +251,25 @@ class Navigation_Controller extends Controller
                 }
                 return json_encode($result);
                 break;
+            case 'recipes-fix-steps':
+                $this->mode = 'ajax';
+                $this->checkAuthorization();
+                $recipe = (new Recipe)->read($this->id);
+                if ($recipe->id() != '') {
+                    if (isset($this->parameters['save'])) {
+                        $recipe->fixSteps();
+                        return 'DONE';
+                    }
+                    return $recipe->showUi('FixSteps');
+                } else {
+                    $items = (new Recipe)->readList(['order' => 'title_url']);
+                    $results = [];
+                    foreach ($items as $item) {
+                        $results[] = $item->urlFixSteps();
+                    }
+                    return implode(' ', $results);
+                }
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();

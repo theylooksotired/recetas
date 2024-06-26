@@ -75,6 +75,11 @@ class Recipe extends Db_Object
         return url('recetas/' . $this->get('id_category_object')->get('name_url') . '/' . $this->get('title_url'));
     }
 
+    public function urlFixSteps()
+    {
+        return url('recipes-fix-steps/' . $this->id());
+    }
+
     public function loadCategoryManually($category)
     {
         $this->set('id_category_object', $category);
@@ -114,6 +119,30 @@ class Recipe extends Db_Object
             $this->persistSimple('ingredients_raw', '');
         }
         return $persist;
+    }
+
+    public function getPreparationChatGPT()
+    {
+        $steps = $this->showUi('PreparationParagraph');
+        $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. No uses lineas como "Buen provecho" o "Listo para disfrutar". La preparacion es: "' . $steps . '"';
+        return str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
+    }
+
+    public function fixSteps()
+    {
+        $preparationLines = explode("\n", $this->getPreparationChatGPT());
+        $query = 'DELETE FROM ' . (new RecipePreparation)->tableName . ' WHERE id_recipe = ' . $this->id();
+        Db::execute($query);
+        foreach ($preparationLines as $line) {
+            $line = trim($line);
+            if ($line != '') {
+                $preparation = new RecipePreparation([
+                    'id_recipe' => $this->id(),
+                    'step' => $line
+                ]);
+                $preparation->persist();
+            }
+        }
     }
 
 }

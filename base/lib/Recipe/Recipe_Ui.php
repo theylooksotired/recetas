@@ -273,6 +273,19 @@ class Recipe_Ui extends Ui
         return $html;
     }
 
+    public function renderFixSteps()
+    {
+        $preparation = $this->renderPreparationParagraph();
+        $content = '';
+
+        $content .= "\n\033[1m" . $this->object->getBasicInfo() . "\033[0m\n\n";
+        $content .= $preparation . "\n\n";
+        $content .= "\033[1m-- Corrección --\033[0m\n\n";
+        $content .= $this->object->getPreparationChatGPT() . "\n\n";
+        $content .= $this->object->urlAdmin();
+        return $content;
+    }
+
     public function renderRelated()
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
