@@ -258,7 +258,8 @@ class Navigation_Controller extends Controller
                 if ($recipe->id() != '') {
                     if (isset($this->parameters['save'])) {
                         $recipe->fixSteps();
-                        return 'DONE';
+                        $recipe = (new Recipe)->read($this->id);
+                        return $recipe->showUi('FixedSteps');
                     }
                     return $recipe->showUi('FixSteps');
                 } else {

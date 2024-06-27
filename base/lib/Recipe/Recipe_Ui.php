@@ -277,11 +277,21 @@ class Recipe_Ui extends Ui
     {
         $preparation = $this->renderPreparationParagraph();
         $content = '';
-
         $content .= "\n\033[1m" . $this->object->getBasicInfo() . "\033[0m\n\n";
         $content .= $preparation . "\n\n";
         $content .= "\033[1m-- Corrección --\033[0m\n\n";
         $content .= $this->object->getPreparationChatGPT() . "\n\n";
+        $content .= $this->object->urlAdmin();
+        return $content;
+    }
+
+    public function renderFixedSteps()
+    {
+        $preparation = $this->renderPreparationParagraph();
+        $content = '';
+        $content .= "\n\033[1m" . $this->object->getBasicInfo() . "\033[0m\n";
+        $content .= "\033[1m" . $this->object->url() . "\033[0m\n\n";
+        $content .= str_replace('. ', ".\n", $preparation) . "\n\n";
         $content .= $this->object->urlAdmin();
         return $content;
     }
