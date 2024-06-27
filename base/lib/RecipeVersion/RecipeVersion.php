@@ -47,6 +47,13 @@ class RecipeVersion extends Db_Object
         return (isset($values[$this->get('diet')])) ? $values[$this->get('diet')] : '';
     }
 
+    public function getPreparationChatGPT()
+    {
+        $steps = $this->showUi('PreparationParagraph');
+        $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. No uses lineas como "Buen provecho" o "Listo para disfrutar". La preparacion es: "' . $steps . '"';
+        return str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
+    }
+
     public function getServings()
     {
         return ($this->get('servings') > 0) ? $this->get('servings') . ' ' . __('servings') : '';
