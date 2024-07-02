@@ -194,9 +194,12 @@ class Navigation_Controller extends Controller
                 break;
             case 'politicas-privacidad':
             case 'terminos-condiciones':
+                $this->redirecLastSlash();
                 $this->layout_page = 'simple';
                 $this->no_ads = true;
                 $this->title_page = ($this->action == 'politicas-privacidad') ? 'Políticas de Privacidad' : 'Términos y Condiciones';
+                $this->meta_description = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action . '-meta-description'));
+                $this->meta_url = url($this->action);
                 $this->content = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action));
                 return $this->ui->render();
                 break;
