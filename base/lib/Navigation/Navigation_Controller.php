@@ -192,6 +192,14 @@ class Navigation_Controller extends Controller
                     exit();
                 }
                 break;
+            case 'politicas-privacidad':
+            case 'terminos-condiciones':
+                $this->layout_page = 'simple';
+                $this->no_ads = true;
+                $this->title_page = ($this->action == 'politicas-privacidad') ? 'Políticas de Privacidad' : 'Términos y Condiciones';
+                $this->content = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action));
+                return $this->ui->render();
+                break;
             case 'sitemap':
             case 'sitemap.xml':
                 $this->mode = 'xml';

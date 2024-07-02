@@ -30,6 +30,11 @@ class HtmlSection extends Db_Object
         return $html->showUi('Section');
     }
 
+    public static function showFromCode($code)
+    {
+        return file_get_contents(ASTERION_BASE_FILE . 'lib/HtmlSection/data/' . $code . '.html');
+    }
+
     public static function loadHtmlSections()
     {
         if (!isset($GLOBALS['html_sections'])) {
