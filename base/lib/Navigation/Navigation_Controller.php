@@ -282,6 +282,26 @@ class Navigation_Controller extends Controller
                     return implode(' ', $results);
                 }
                 break;
+            case 'recipes-fix-content':
+                $this->mode = 'ajax';
+                $this->checkAuthorization();
+                $recipe = (new Recipe)->read($this->id);
+                if ($recipe->id() != '') {
+                    if (isset($this->parameters['save'])) {
+                        $recipe->fixContent();
+                        $recipe = (new Recipe)->read($this->id);
+                        return $recipe->showUi('FixedContent');
+                    }
+                    return $recipe->showUi('FixedContent');
+                } else {
+                    $items = (new Recipe)->readList(['order' => 'title_url']);
+                    $results = [];
+                    foreach ($items as $item) {
+                        $results[] = $item->urlFixContent();
+                    }
+                    return implode(' ', $results);
+                }
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();

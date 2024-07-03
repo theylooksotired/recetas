@@ -296,6 +296,19 @@ class Recipe_Ui extends Ui
         return $content;
     }
 
+    public function renderFixedContent()
+    {
+        $content = '';
+        $content .= "\n\033[1m" . $this->object->getBasicInfo() . "\033[0m\n";
+        $content .= "\033[1m" . $this->object->url() . "\033[0m\n\n";
+        $content .= "\n\033[0;31m" . $this->object->get('title_page') . "\033[0m\n\n";
+        $content .= "\n\033[0;32m" . $this->object->get('meta_description') . "\033[0m\n\n";
+        $content .= $this->object->get('short_description') . "\n\n";
+        $content .= $this->object->get('description') . "\n\n";
+        $content .= $this->object->urlAdmin();
+        return $content;
+    }
+
     public function renderRelated()
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
