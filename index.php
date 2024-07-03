@@ -83,6 +83,10 @@ switch ($mode) {
     case 'ajax':
         echo $content;
         break;
+    case 'plain':
+        header('Content-Type: text/plain');
+        echo $content;
+        break;
     case 'json':
         header('Content-Type: application/json');
         echo $content;

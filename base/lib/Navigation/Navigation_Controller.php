@@ -263,7 +263,7 @@ class Navigation_Controller extends Controller
                 return json_encode($result);
                 break;
             case 'recipes-fix-steps':
-                $this->mode = 'ajax';
+                $this->mode = 'plain';
                 $this->checkAuthorization();
                 $recipe = (new Recipe)->read($this->id);
                 if ($recipe->id() != '') {
@@ -283,7 +283,7 @@ class Navigation_Controller extends Controller
                 }
                 break;
             case 'recipes-fix-content':
-                $this->mode = 'ajax';
+                $this->mode = 'plain';
                 $this->checkAuthorization();
                 $recipe = (new Recipe)->read($this->id);
                 if ($recipe->id() != '') {
