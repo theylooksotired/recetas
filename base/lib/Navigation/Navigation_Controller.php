@@ -201,6 +201,7 @@ class Navigation_Controller extends Controller
                 $this->meta_description = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action . '-meta-description'));
                 $this->meta_url = url($this->action);
                 $this->content = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action));
+                $this->content = str_replace('#SITE_URL#', preg_replace("(^https?://www.)", "", substr(url(''), 0, -1)), $this->content);
                 return $this->ui->render();
                 break;
             case 'sitemap':
