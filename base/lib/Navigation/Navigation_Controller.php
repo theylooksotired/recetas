@@ -350,6 +350,9 @@ class Navigation_Controller extends Controller
                     
                     $infoIns['country'] = $countryCode;
                     $infoIns['url'] = $item->url();
+                    $infoIns['cook_time'] = __($infoIns['cook_time']);
+                    $infoIns['cooking_method'] = __($infoIns['cooking_method']);
+                    $infoIns['diet'] = __($infoIns['diet']);
                     $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
 
                     $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
