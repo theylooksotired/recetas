@@ -78,7 +78,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . Adsense::responsive() . '
+                                ' . Adsense::top() . '
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '
