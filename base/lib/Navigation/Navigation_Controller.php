@@ -42,7 +42,7 @@ class Navigation_Controller extends Controller
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->meta_url = url('');
                 $this->content_top = '
-                    ' . Adsense::responsive() . '
+                    ' . Adsense::top() . '
                     ' . HtmlSection::show('intro_top') . '
                     <h1>' . $this->title_page . '</h1>
                     ' . Category_Ui::intro();
@@ -183,7 +183,7 @@ class Navigation_Controller extends Controller
                     }
                     $this->content = '
                         <div class="items_all">
-                            ' . $items->showList(['middle' => Adsense::responsive(), 'middleRepetitions' => 2]) . '
+                            ' . $items->showList(['middle' => Adsense::midContent(), 'middleRepetitions' => 2]) . '
                         </div>';
                     return $this->ui->render();
                 } else {

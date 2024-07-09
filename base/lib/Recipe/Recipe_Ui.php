@@ -97,7 +97,7 @@ class Recipe_Ui extends Ui
                     $versionUi = new Recipe_Ui($version);
                     $otherVersions .= '
                         <div class="recipe_wrapper recipe_version">
-                            ' . Adsense::responsive() . '
+                            ' . Adsense::midContent() . '
                             <h3>' . $version->getBasicInfo() . '</h3>
                             ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
                             <div class="recipe_ingredients">
@@ -149,7 +149,7 @@ class Recipe_Ui extends Ui
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
-                        <div class="recipe_wrapper_all_left">' . Adsense::responsive() . '</div>
+                        <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                         <div class="recipe_wrapper_all_right">
                             <div class="recipe_wrapper">
                                 <div class="recipe_ingredients">
@@ -163,7 +163,7 @@ class Recipe_Ui extends Ui
                             </div>
                         </div>
                     </div>
-                    ' . Adsense::responsive() . '
+                    ' . Adsense::midContent() . '
                     ' . $friendSiteLink2 . '
                 </div>
             </article>
@@ -435,7 +435,7 @@ class Recipe_Ui extends Ui
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
-            ' . Adsense::responsive() . '
+            ' . Adsense::sidebarTop() . '
             <div class="items_side">
                 <h2 class="items_side_title">' . __('popular_recipes') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
