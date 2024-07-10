@@ -337,9 +337,10 @@ class Navigation_Controller extends Controller
                 $errorStep = '';
                 foreach($items as $item) {
                     $infoIns = (array)$item->values;
+                    $infoIns['image'] = $item->getImageUrl('image', 'web');
+                    $infoIns['image_small'] = $item->getImageUrl('image', 'small');
                     unset($infoIns['created']);
                     unset($infoIns['modified']);
-                    unset($infoIns['image']);
                     unset($infoIns['title_url']);
                     unset($infoIns['active']);
                     unset($infoIns['ord']);
