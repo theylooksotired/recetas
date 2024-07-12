@@ -310,8 +310,10 @@ class Navigation_Controller extends Controller
                 $info = [
                     'site' => [
                         'title' => Parameter::code('meta_title_page'),
-                        'titleCountry' => Parameter::code('meta_title_header_bottom'),
+                        'title_page' => Parameter::code('meta_title_page_intro'),
+                        'title_country' => Parameter::code('meta_title_header_bottom'),
                         'description' => Parameter::code('meta_description'),
+                        'intro' => HtmlSection::show('intro_top'),
                         'country' => $countryCode,
                         'url' => url(''),
                         'version' => '14.0.0'
@@ -326,68 +328,69 @@ class Navigation_Controller extends Controller
                     unset($infoIns['created']);
                     unset($infoIns['modified']);
                     unset($infoIns['image']);
-                    unset($infoIns['description']);
                     unset($infoIns['name_url']);
-                    unset($infoIns['title']);
                     unset($infoIns['ord']);
                     $info['categories'][] = $infoIns;
                     $categories[$item->id()] = $item->getBasicInfo();
                 }
-                $items = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'title_url']);
-                $errorStep = '';
-                foreach($items as $item) {
-                    $infoIns = (array)$item->values;
-                    $infoIns['image'] = $item->getImageUrl('image', 'web');
-                    $infoIns['image_small'] = $item->getImageUrl('image', 'small');
-                    unset($infoIns['created']);
-                    unset($infoIns['modified']);
-                    unset($infoIns['title_url']);
-                    unset($infoIns['active']);
-                    unset($infoIns['ord']);
-                    unset($infoIns['preparation_old']);
-                    unset($infoIns['id_user']);
-                    unset($infoIns['friend_links']);
-                    unset($infoIns['description_bottom']);
-                    
-                    $infoIns['country'] = $countryCode;
-                    $infoIns['url'] = $item->url();
-                    $infoIns['cook_time'] = __($infoIns['cook_time']);
-                    $infoIns['cooking_method'] = __($infoIns['cooking_method']);
-                    $infoIns['diet'] = __($infoIns['diet']);
-                    $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
-
-                    $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
-                    $infoIns['ingredients'] = [];
-                    foreach ($ingredients as $ingredient) {
-                        $infoIngredient = (array)$ingredient->values;
-                        unset($infoIngredient['id']);
-                        unset($infoIngredient['created']);
-                        unset($infoIngredient['modified']);
-                        unset($infoIngredient['id_recipe']);
-                        unset($infoIngredient['ord']);
-                        unset($infoIngredient['ingredient_old']);
-                        $infoIngredient['label'] = $ingredient->labelSimple();
+                $noRecipes = (isset($this->parameters['noRecipes'])) ? true : false;
+                if (!$noRecipes) {
+                    $items = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'title_url']);
+                    $errorStep = '';
+                    foreach($items as $item) {
+                        $infoIns = (array)$item->values;
+                        $infoIns['image'] = $item->getImageUrl('image', 'web');
+                        $infoIns['image_small'] = $item->getImageUrl('image', 'small');
+                        unset($infoIns['created']);
+                        unset($infoIns['modified']);
+                        unset($infoIns['title_url']);
+                        unset($infoIns['active']);
+                        unset($infoIns['ord']);
+                        unset($infoIns['preparation_old']);
+                        unset($infoIns['id_user']);
+                        unset($infoIns['friend_links']);
+                        unset($infoIns['description_bottom']);
                         
-                        $infoIns['ingredients'][] = $infoIngredient;
+                        $infoIns['country'] = $countryCode;
+                        $infoIns['url'] = $item->url();
+                        $infoIns['cook_time'] = __($infoIns['cook_time']);
+                        $infoIns['cooking_method'] = __($infoIns['cooking_method']);
+                        $infoIns['diet'] = __($infoIns['diet']);
+                        $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
+    
+                        $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+                        $infoIns['ingredients'] = [];
+                        foreach ($ingredients as $ingredient) {
+                            $infoIngredient = (array)$ingredient->values;
+                            unset($infoIngredient['id']);
+                            unset($infoIngredient['created']);
+                            unset($infoIngredient['modified']);
+                            unset($infoIngredient['id_recipe']);
+                            unset($infoIngredient['ord']);
+                            unset($infoIngredient['ingredient_old']);
+                            $infoIngredient['label'] = $ingredient->labelSimple();
+                            
+                            $infoIns['ingredients'][] = $infoIngredient;
+                        }
+    
+                        $preparation = (new RecipePreparation)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+                        $infoIns['preparation'] = [];
+                        foreach ($preparation as $step) {
+                            $infoStep = (array)$step->values;
+                            unset($infoStep['id']);
+                            unset($infoStep['created']);
+                            unset($infoStep['modified']);
+                            unset($infoStep['id_recipe']);
+                            unset($infoStep['ord']);
+                            unset($infoStep['image']);
+                            unset($infoStep['description']);
+                            unset($infoStep['description_old']);
+                            unset($infoStep['image_old']);
+                            $infoIns['preparation'][] = $infoStep;
+                        }
+    
+                        $info['recipes'][] = $infoIns;
                     }
-
-                    $preparation = (new RecipePreparation)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
-                    $infoIns['preparation'] = [];
-                    foreach ($preparation as $step) {
-                        $infoStep = (array)$step->values;
-                        unset($infoStep['id']);
-                        unset($infoStep['created']);
-                        unset($infoStep['modified']);
-                        unset($infoStep['id_recipe']);
-                        unset($infoStep['ord']);
-                        unset($infoStep['image']);
-                        unset($infoStep['description']);
-                        unset($infoStep['description_old']);
-                        unset($infoStep['image_old']);
-                        $infoIns['preparation'][] = $infoStep;
-                    }
-
-                    $info['recipes'][] = $infoIns;
                 }
                 if ($errorStep!='') {
                     return "ERROR STEP - \n".$errorStep;
