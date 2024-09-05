@@ -295,7 +295,7 @@ class Navigation_Controller extends Controller
                     }
                     return $recipe->showUi('FixedContent');
                 } else {
-                    $items = (new Recipe)->readList(['where' => 'title_url = "" OR title_url IS NULL', 'order' => 'title_url']);
+                    $items = (new Recipe)->readList(['where' => 'title_page = "" OR title_page IS NULL', 'order' => 'title_url']);
                     $results = [];
                     foreach ($items as $item) {
                         $results[] = $item->urlFixContent();
