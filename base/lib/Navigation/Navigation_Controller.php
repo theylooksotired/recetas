@@ -44,6 +44,7 @@ class Navigation_Controller extends Controller
                 $this->content_top = '
                     ' . Adsense::top() . '
                     ' . HtmlSection::show('intro_top') . '
+                    ' . $this->ui->adApp('ad_intro') . '
                     <h1>' . $this->title_page . '</h1>
                     ' . Category_Ui::intro();
                 $this->content = '

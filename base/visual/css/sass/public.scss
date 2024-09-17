@@ -1318,6 +1318,9 @@ body {
         grid-auto-rows: 1fr;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 20px;
+        &:after {
+            display: none;
+        }
         @include mobile {
             grid-template-columns: 1fr;
         }
@@ -2713,5 +2716,50 @@ body {
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+    }
+}
+
+.ad_app {
+    background: rgba($colorAccent, 0.05);
+    border: 3px solid rgba($colorAccent, 0.2);
+    padding: 10px;
+    margin: 40px 0 0 0;
+    @include borderRadius(10px);
+    @include clearer();
+    .ad_app_left {
+        width: calc(100% - 220px);
+        float: left;
+        color: $colorAccent;
+        p {
+            font-size: $fontSizeMedium;
+        }
+    }
+    .ad_app_right {
+        text-align: right;
+        width: 200px;
+        float: right;
+        a {
+            display: block;
+            margin: 0 0 5px;
+            &:last-child {
+                margin: 0;
+            }
+        }
+        img {
+            max-width: 100%;
+        }
+    }
+    @include mobile() {
+        .ad_app_left,
+        .ad_app_right {
+            width: auto;
+            float: none;
+        }
+        .ad_app_right {
+            text-align: center;
+        }
+    }
+    &.ad_intro {
+        margin: 20px 0;
     }
 }

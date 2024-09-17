@@ -42,6 +42,7 @@ class Navigation_Ui extends Ui
                                     </div>
                                 </div>
                                 ' . $content_bottom . '
+                                ' . $this->adApp() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -61,6 +62,7 @@ class Navigation_Ui extends Ui
                                 ' . $message . '
                                 ' . $content . '
                                 ' . $content_bottom . '
+                                ' . $this->adApp() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -82,6 +84,7 @@ class Navigation_Ui extends Ui
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '
+                                    ' . $this->adApp() . '
                                 </div>
                             </div>
                         </div>
@@ -129,6 +132,22 @@ class Navigation_Ui extends Ui
                     </div>
                 </div>
             </header>';
+    }
+
+    public function adApp($extraClass = '')
+    {
+        return '
+            <div class="ad_app ' . $extraClass . '">
+                <div class="ad_app_left">' . HtmlSection::showFromCode('ad-app') . '</div>
+                <div class="ad_app_right">
+                    <a href="https://apps.apple.com/app/recetario-de-cocina/id6526489470" target="_blank" title="App Store">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_app_store.png" loading="lazy" alt="App Store">
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.plasticwebs.recetario" target="_blank" title="Google Play">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_google_play.png" loading="lazy" alt="Google Play">
+                    </a>
+                </div>
+            </div>';
     }
 
     public function footer()
@@ -187,11 +206,12 @@ class Navigation_Ui extends Ui
                         <div class="footer_down_ins">
                             <p>
                                 <a href="' . url('politicas-privacidad') . '">Políticas de Privacidad</a> |
-                                <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a>
+                                <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a> |
+                                <a href="https://www.recetario-de-cocina.com/publicar-articulos">Publicar en nuestro sitio web</a>
                             </p>
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>' . Parameter::code('meta_description') . ' Diviértete cocinando y no dudes en compartir tus preparaciones y críticas.</p>
-                            <p>Escríbenos a <a href="mailto:recetas@plasticwebs.com">recetas@plasticwebs.com</a></p>
+                            <p>Escríbenos a <a href="mailto:info@plasticwebs.com">info@plasticwebs.com</a></p>
                         </div>
                     </div>
                 </div>
