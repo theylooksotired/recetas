@@ -136,6 +136,7 @@ class Navigation_Ui extends Ui
 
     public function adApp($extraClass = '')
     {
+        return '';
         return '
             <div class="ad_app ' . $extraClass . '">
                 <div class="ad_app_left">' . HtmlSection::showFromCode('ad-app') . '</div>
@@ -152,6 +153,7 @@ class Navigation_Ui extends Ui
 
     public function footer()
     {
+        // <a href="https://www.recetario-de-cocina.com/publicar-articulos">Publicar en nuestro sitio web</a>
         $facebookCommentsHtml = (isset($this->object->facebookCommentsFooter) && $this->object->facebookCommentsFooter && Parameter::code('facebook_comments') == 'true') ? '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v19.0&appId=168728593755836" nonce="aPczU4ie"></script>' : '';
         return '
             <footer class="footer">
@@ -207,7 +209,6 @@ class Navigation_Ui extends Ui
                             <p>
                                 <a href="' . url('politicas-privacidad') . '">Políticas de Privacidad</a> |
                                 <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a> |
-                                <a href="https://www.recetario-de-cocina.com/publicar-articulos">Publicar en nuestro sitio web</a>
                             </p>
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>' . Parameter::code('meta_description') . ' Diviértete cocinando y no dudes en compartir tus preparaciones y críticas.</p>
