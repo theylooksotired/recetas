@@ -142,14 +142,7 @@ class Post_Ui extends Ui
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
         ]]);
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        // Text
-        $dom = new DOMDocument();
-        $dom->loadHTML('<html><body>' . mb_convert_encoding($this->object->get('description'), 'HTML-ENTITIES', 'UTF-8') . '</body></html>');
-        $xpath = new DOMXPath($dom);
-        $paragraphs = [];
-        foreach ($xpath->query('/html/body/*') as $node) {
-            $paragraphs[] = $dom->saveHTML($node);
-        }
+        // Images
         $images = [];
         foreach ($this->object->get('images') as $item) {
             if ($item->get('id_recipe') != '') {
@@ -162,6 +155,21 @@ class Post_Ui extends Ui
                         ' . (($item->get('title') != '') ? '<figcaption>' . $item->get('title') . '</figcaption>' : '') . '
                     </figure>';
             }
+        }
+        $description = $this->object->get('description');
+        foreach ($images as $key => $image) {
+            if (strpos($description, '#IMAGE_' . ($key + 1) . '#') !== false) {
+                $description = str_replace('#IMAGE_' . ($key + 1) . '#', $image, $description);
+                unset($images[$key]);
+            }
+        }
+        // Text
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<html><body>' . mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8') . '</body></html>');
+        $xpath = new DOMXPath($dom);
+        $paragraphs = [];
+        foreach ($xpath->query('/html/body/*') as $node) {
+            $paragraphs[] = $dom->saveHTML($node);
         }
         $middleItems = (count($images) > 0) ? ceil(count($paragraphs) / count($images)) : 0;
         $paragraphsResult = [];
@@ -211,11 +219,11 @@ class Post_Ui extends Ui
 
     public function renderRelated()
     {
-        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC AND id != :id', 'limit' => '6'], ['match' => $this->object->getBasicInfo(), 'id' => $this->object->id()]);
+        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) AND id != :id', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'limit' => '6'], ['match' => $this->object->getBasicInfo(), 'id' => $this->object->id()]);
         if ($posts->count() < 6) {
             $posts = new ListObjects('Post', ['where' => 'id!=:id AND publish_date<=NOW() AND active="1"', 'limit' => 6], ['id' => $this->object->id()]);
         }
-        $recipes = new ListObjects('Recipe', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
+        $recipes = new ListObjects('Recipe', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         return '
             <div class="related">
                 ' . ((!$recipes->isEmpty()) ? '
