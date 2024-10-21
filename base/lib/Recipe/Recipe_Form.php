@@ -20,7 +20,7 @@ class Recipe_Form extends Form
             ' : '
             <div class="textarea_resizable form_field  form_field_short_description required ">
                 <div class="form_field_ins">
-                    <textarea name="recipe_content" cols="80" rows="1" placeholder="" required=""></textarea>
+                    <textarea name="recipe_content" cols="80" rows="1"></textarea>
                 </div>
             </div>
             <div class="button button_small button_api_content" data-url="' . url('recipe/full-ai-recipe', true) . '">Llenar todo con el portapapeles</div>
