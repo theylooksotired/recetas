@@ -14,6 +14,31 @@ $(document).ready(function() {
                 CKEDITOR.instances[textareaId].setData(response.description);
             }
         }).always(function() {
+            resizableTextareas();
+            button.text(oldLabel);
+        });
+    });
+
+    $('.button_api_content').click(function() {
+        var button = $(this);
+        var oldLabel = button.text();
+        var postUrl = $(this).data('url');
+        button.text('Cargando...');
+        var content = $('textarea[name="recipe_content"]').val();
+
+        $.post(postUrl, { content: content }, function(response) {
+            if (response.titulo) {
+                $('input[name="title"]').val(response.titulo);
+                $('input[name="title_page"]').val(response.tituloPagina);
+                $('textarea[name="meta_description"]').val(response.metaDescripcion);
+                $('textarea[name="short_description"]').val(response.descripcion);
+                var textareaId = $('textarea[name="description"]').attr('id');
+                CKEDITOR.instances[textareaId].setData(response.descripcionHtml);
+                $('textarea[name="ingredients_raw"]').val(response.ingredientes.join('\n'));
+                $('textarea[name="preparation_raw"]').val(response.pasos.join('\n'));
+            }
+        }).always(function() {
+            resizableTextareas();
             button.text(oldLabel);
         });
     });

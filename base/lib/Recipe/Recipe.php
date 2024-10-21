@@ -136,7 +136,20 @@ class Recipe extends Db_Object
     public function getContentChatGPT()
     {
         $response = [];
-        $firstWord = explode(' ', $this->getBasicInfo())[0];
+        $titleTest = $this->titleTest($this->getBasicInfo());
+        $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTest . '"';
+        $response['title_page'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
+        $questionDescription = 'Escribe tres lineas sobre la receta ' . $this->getBasicInfo() . ', sin decir como se prepara. No usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion la preparación de la receta: " ' . $this->showUi('PreparationParagraph') . ' "';
+        $response['description'] = str_replace('¡', '', str_replace('!', '.', '<p>' . str_replace('. ', '.</p><p>', ChatGPT::answer($questionDescription)) . '</p>'));
+        $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . strip_tags($response['description']);
+        $response['meta_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionMetaDescription)))));
+        $questionShortDescription = 'Escribe no mas de 250 caracteres sobre la receta ' . $this->getBasicInfo() . '. Evita invitaciones a probarla o prepararla. Puedes usar como inspiracion el texto "' . $this->get('short_description') . '" o tambien la preparacion de la misma "' . $this->showUi('PreparationParagraph') . '"';
+        $response['short_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionShortDescription)))));
+        return $response;
+    }
+
+    public function titleTest($title) {
+        $firstWord = explode(' ', $title)[0];
         $lastTwoCharacters = substr($firstWord, -2);
         $lastCharacter = substr($firstWord, -1);
         $genre = 'm';
@@ -146,66 +159,58 @@ class Recipe extends Db_Object
         switch ($genre) {
             case 'm':
                 $titleTestOptions = [
-                    'Como se prepara el ' . $this->getBasicInfo(),
-                    'Como se prepara un sabroso ' . $this->getBasicInfo(),
-                    'Como se prepara un rico ' . $this->getBasicInfo(),
-                    'Como preparar un exquisito ' . $this->getBasicInfo(),
-                    'Como cocinar un rico ' . $this->getBasicInfo(),
-                    'Como se hace el ' . $this->getBasicInfo(),
-                    'Como se hace un sabroso ' . $this->getBasicInfo(),
-                    'Como se hace un rico ' . $this->getBasicInfo(),
-                    'Receta tradicional de ' . $this->getBasicInfo(),
+                    'Como se prepara el ' . $title,
+                    'Como se prepara un sabroso ' . $title,
+                    'Como se prepara un rico ' . $title,
+                    'Como preparar un exquisito ' . $title,
+                    'Como cocinar un rico ' . $title,
+                    'Como se hace el ' . $title,
+                    'Como se hace un sabroso ' . $title,
+                    'Como se hace un rico ' . $title,
+                    'Receta tradicional de ' . $title,
                 ];        
             break;
             case 'mp':
                 $titleTestOptions = [
-                    'Como se preparan los ' . $this->getBasicInfo(),
-                    'Como se preparan unos sabrosos ' . $this->getBasicInfo(),
-                    'Como se prepara unos ricos ' . $this->getBasicInfo(),
-                    'Como preparar unos exquisitos ' . $this->getBasicInfo(),
-                    'Como cocinar unos ricos ' . $this->getBasicInfo(),
-                    'Como se hacen unos ' . $this->getBasicInfo(),
-                    'Como se hacen unos sabrosos ' . $this->getBasicInfo(),
-                    'Como se hacen unos ricos ' . $this->getBasicInfo(),
-                    'Receta tradicional de los ' . $this->getBasicInfo(),
+                    'Como se preparan los ' . $title,
+                    'Como se preparan unos sabrosos ' . $title,
+                    'Como se prepara unos ricos ' . $title,
+                    'Como preparar unos exquisitos ' . $title,
+                    'Como cocinar unos ricos ' . $title,
+                    'Como se hacen unos ' . $title,
+                    'Como se hacen unos sabrosos ' . $title,
+                    'Como se hacen unos ricos ' . $title,
+                    'Receta tradicional de los ' . $title,
                 ];        
             break;
             case 'f':
                 $titleTestOptions = [
-                    'Como se prepara la ' . $this->getBasicInfo(),
-                    'Como se prepara una sabrosa ' . $this->getBasicInfo(),
-                    'Como se prepara una rica ' . $this->getBasicInfo(),
-                    'Como preparar una exquisita ' . $this->getBasicInfo(),
-                    'Como cocinar una rica ' . $this->getBasicInfo(),
-                    'Como se hace la ' . $this->getBasicInfo(),
-                    'Como se hace una sabrosa ' . $this->getBasicInfo(),
-                    'Como se hace una rica ' . $this->getBasicInfo(),
-                    'Receta tradicional de la ' . $this->getBasicInfo(),
+                    'Como se prepara la ' . $title,
+                    'Como se prepara una sabrosa ' . $title,
+                    'Como se prepara una rica ' . $title,
+                    'Como preparar una exquisita ' . $title,
+                    'Como cocinar una rica ' . $title,
+                    'Como se hace la ' . $title,
+                    'Como se hace una sabrosa ' . $title,
+                    'Como se hace una rica ' . $title,
+                    'Receta tradicional de la ' . $title,
                 ];        
             break;
             case 'fp':
                 $titleTestOptions = [
-                    'Como se preparan las ' . $this->getBasicInfo(),
-                    'Como se preparan unas sabrosas ' . $this->getBasicInfo(),
-                    'Como se preparan unas ricas ' . $this->getBasicInfo(),
-                    'Como preparar unas exquisitas ' . $this->getBasicInfo(),
-                    'Como cocinar unas ricas ' . $this->getBasicInfo(),
-                    'Como se hacen las ' . $this->getBasicInfo(),
-                    'Como se hacen unas sabrosas ' . $this->getBasicInfo(),
-                    'Como se hacen unas ricas ' . $this->getBasicInfo(),
-                    'Receta tradicional de las ' . $this->getBasicInfo(),
+                    'Como se preparan las ' . $title,
+                    'Como se preparan unas sabrosas ' . $title,
+                    'Como se preparan unas ricas ' . $title,
+                    'Como preparar unas exquisitas ' . $title,
+                    'Como cocinar unas ricas ' . $title,
+                    'Como se hacen las ' . $title,
+                    'Como se hacen unas sabrosas ' . $title,
+                    'Como se hacen unas ricas ' . $title,
+                    'Receta tradicional de las ' . $title,
                 ];        
             break;
         }
-        $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTestOptions[array_rand($titleTestOptions)] . '"';
-        $response['title_page'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
-        $questionDescription = 'Escribe tres lineas sobre la receta ' . $this->getBasicInfo() . ', sin decir como se prepara. No usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion la preparación de la receta: " ' . $this->showUi('PreparationParagraph') . ' "';
-        $response['description'] = str_replace('¡', '', str_replace('!', '.', '<p>' . str_replace('. ', '.</p><p>', ChatGPT::answer($questionDescription)) . '</p>'));
-        $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . strip_tags($response['description']);
-        $response['meta_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionMetaDescription)))));
-        $questionShortDescription = 'Escribe no mas de 250 caracteres sobre la receta ' . $this->getBasicInfo() . '. Evita invitaciones a probarla o prepararla. Puedes usar como inspiracion el texto "' . $this->get('short_description') . '" o tambien la preparacion de la misma "' . $this->showUi('PreparationParagraph') . '"';
-        $response['short_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionShortDescription)))));
-        return $response;
+        return $titleTestOptions[array_rand($titleTestOptions)];
     }
 
     public function fixSteps()
