@@ -73,32 +73,14 @@ class Adsense {
     }
 
     static public function top() {
-        if (Parameter::code('ezoic') == 'true') {
-            return '
-                <!-- Ezoic - top_of_page_recetas - top_of_page -->
-                <div id="ezoic-pub-ad-placeholder-107">' . Adsense::responsive() . '</div>
-                <!-- End Ezoic - top_of_page_recetas - top_of_page -->';
-        }
         return Adsense::responsive();
     }
 
     static public function sidebarTop() {
-        if (Parameter::code('ezoic') == 'true') {
-            return '
-                <!-- Ezoic - sidebar_top_recetas - sidebar -->
-                <div id="ezoic-pub-ad-placeholder-108">' . Adsense::responsive() . '</div>
-                <!-- End Ezoic - sidebar_top_recetas - sidebar -->';
-        }
         return Adsense::responsive();
     }
 
     static public function midContent() {
-        if (Parameter::code('ezoic') == 'true') {
-            return '
-                <!-- Ezoic - mid_content_recetas - mid_content -->
-                <div id="ezoic-pub-ad-placeholder-109">' . Adsense::responsive() . '</div>
-                <!-- End Ezoic - mid_content_recetas - mid_content -->';
-        }
         return Adsense::responsive();
     }
 

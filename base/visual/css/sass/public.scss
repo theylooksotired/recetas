@@ -2159,7 +2159,7 @@ body {
 }
 
 .recipe_extra_info {
-    margin: 0 -10px 10px -10px;
+    margin: 0 0 10px;
     font-size: $fontSizeNormal;
     > div,
     > a {
@@ -2226,13 +2226,15 @@ body {
 .recipe_wrapper {
     padding: 15px;
     background: rgba($colorAccent, 0.02);
+    border: 1px solid rgba($colorAccent, 0.1);
     @include borderRadius(5px);
     @include clearer();
-    h2 {
+    h2,
+    h3 {
         margin: 0 0 10px;
-        padding: 10px 0 10px 0;
+        padding: 0 0 10px 0;
         font-size: $fontSizeMedium;
-        color: $colorAccent;
+        color: $black;
         &:after,
         &:before {
             display: none;
@@ -2240,7 +2242,7 @@ body {
     }
     h4 {
         font-size: $fontSizeMedium;
-        color: $colorAccent;
+        color: $black;
         margin: 0 0 10px;
         padding: 0;
     }
@@ -2250,7 +2252,7 @@ body {
         margin: 0 0 20px;
         p {
             font-size: $fontSizeNormal;
-            color: darken($colorAccentAlt, 20%);
+            color: rgba($black, 0.7);
             margin: 0 0 5px;
             padding: 0 0 5px;
             position: relative;
@@ -2262,7 +2264,7 @@ body {
             }
         }
         .ingredient_ingredient {
-            color: darken($colorAccentAlt, 30%);
+            color: $black;
         }
     }
     .recipe_preparation {
@@ -2289,8 +2291,8 @@ body {
         }
     }
     @include mobile() {
-        padding: 20px 10px;
-        margin: 0 -10px;
+        padding: 10px;
+        margin: 0 -5px;
         @include borderRadius(0);
         .recipe_ingredients,
         .recipe_preparation {
@@ -2313,7 +2315,6 @@ body {
     border-top: 2px solid rgba($colorAccent, 0.1);
     .recipe_wrapper {
         padding: 20px;
-        margin: 0 -20px 20px -20px;
         background: rgba($black, 0.02);
         @include borderRadius(10px);
     }
@@ -2762,4 +2763,36 @@ body {
     &.ad_intro {
         margin: 20px 0;
     }
+}
+
+.recipe_versions_top {
+    margin: 0 0 20px;
+    padding: 10px;
+    background: rgba($colorAccent, 0.02);
+    border: 1px solid rgba($colorAccent, 0.1);
+    @include borderRadius(5px);
+    a {
+        color: $colorAccent;
+        display: block;
+    }
+    ol {
+        margin: 0 0 0 40px;
+        padding: 0;
+        li {
+            padding: 0;
+            margin: 0 0 5px;
+            &:last-child {
+                margin: 0;
+            }
+            &::marker {
+                color: rgba($black, 0.6);
+                font-size: $fontSizeSmall;
+            }
+        }
+    }
+}
+
+.anchor_top {
+    padding-top: 100px;
+    margin-top: -100px;
 }

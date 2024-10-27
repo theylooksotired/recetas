@@ -87,35 +87,80 @@ class Recipe_Ui extends Ui
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
+        $otherVersionsTop = '';
         $otherVersions = '';
+        $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
+        $newFormat = false;
         if ($this->object->get('check_versions') == 1) {
             $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
             if (count($versions) > 0) {
-                foreach ($versions as $version) {
-                    $version->loadMultipleValuesSingleAttribute('ingredients');
-                    $version->loadMultipleValuesSingleAttribute('preparation');
-                    $versionUi = new Recipe_Ui($version);
-                    $otherVersions .= '
-                        <div class="recipe_wrapper recipe_version">
-                            ' . Adsense::midContent() . '
-                            <h3>' . $version->getBasicInfo() . '</h3>
-                            ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
-                            <div class="recipe_ingredients">
-                                <h4>' . __('ingredients') . '</h4>
-                                <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
-                            </div>
-                            <div class="recipe_preparation">
-                                <h4>' . __('preparation') . '</h4>
-                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
-                            </div>
+                if (Parameter::code('versions_style') == 'true') {
+                    // New style
+                    $newFormat = true;
+                    foreach ($versions as $version) {
+                        $version->loadMultipleValuesSingleAttribute('ingredients');
+                        $version->loadMultipleValuesSingleAttribute('preparation');
+                        $versionUi = new Recipe_Ui($version);
+                        $nameLink = Text::simpleUrl($version->getBasicInfo());
+                        $otherVersions .= '
+                            <div class="recipe_wrapper_all">
+                                <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
+                                <div class="recipe_wrapper_all_right">
+                                    <div class="recipe_version">
+                                        <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
+                                        ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                                        <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
+                                        <div class="recipe_wrapper">
+                                            <div class="recipe_ingredients">
+                                                <h3>' . __('ingredients') . '</h3>
+                                                <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
+                                            </div>
+                                            <div class="recipe_preparation">
+                                                <h3>' . __('preparation') . '</h3>
+                                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+                        $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $version->getBasicInfo() . '</a></li> ';
+                    }
+                    $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . '</a></li> ' . $otherVersionsTop;
+                    $otherVersionsTop = '
+                        <div class="recipe_versions_top">
+                            <p>Por si acaso, en esta pagina presentamos ' . (count($versions) + 1) . ' formas de preparar esta receta:</p>
+                            <ol>' . $otherVersionsTop . '</ol>
+                        </div>';
+                } else {
+                    // Old style
+                    foreach ($versions as $version) {
+                        $version->loadMultipleValuesSingleAttribute('ingredients');
+                        $version->loadMultipleValuesSingleAttribute('preparation');
+                        $versionUi = new Recipe_Ui($version);
+                        $otherVersions .= '
+                            <div class="recipe_version">
+                                ' . Adsense::midContent() . '
+                                <h3>' . $version->getBasicInfo() . '</h3>
+                                ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                                <div class="recipe_wrapper">
+                                    <div class="recipe_ingredients">
+                                        <h4>' . __('ingredients') . '</h4>
+                                        <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
+                                    </div>
+                                    <div class="recipe_preparation">
+                                        <h4>' . __('preparation') . '</h4>
+                                        <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
+                                    </div>
+                                </div>
+                            </div>';
+                    }
+                    $otherVersions = '
+                        <div class="recipe_versions">
+                            <h2>' . __('other_versions') . '</h2>
+                            <p>' . __('other_versions_message') . '</p>
+                            ' . $otherVersions . '
                         </div>';
                 }
-                $otherVersions = '
-                    <div class="recipe_versions">
-                        <h2>' . __('other_versions') . '</h2>
-                        <p>' . __('other_versions_message') . '</p>
-                        ' . $otherVersions . '
-                    </div>';
             }
         }
         $friendSiteLink1 = '';
@@ -138,6 +183,7 @@ class Recipe_Ui extends Ui
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         return '
+            ' . $otherVersionsTop . '
             <article class="recipe_complete">
                 <div class="recipe_complete_ins post-content" id="post-container">
                     <div class="recipe_complete_info">
@@ -145,19 +191,20 @@ class Recipe_Ui extends Ui
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
                     <div class="recipe_rating">' . $this->renderRating() . '</div>
-                    <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
                         <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                         <div class="recipe_wrapper_all_right">
+                            ' . (($newFormat) ? '<h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>' : '') . '
+                            <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                             <div class="recipe_wrapper">
                                 <div class="recipe_ingredients">
-                                    <h2>' . __('ingredients') . '</h2>
+                                    ' . (($newFormat) ? '<h3>' . __('ingredients') . '</h3>' : '<h2>' . __('ingredients') . '</h2>') . '
                                     <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                                 </div>
                                 <div class="recipe_preparation">
-                                    <h2>' . __('preparation') . '</h2>
+                                    ' . (($newFormat) ? '<h3>' . __('preparation') . '</h3>' : '<h2>' . __('preparation') . '</h2>') . '
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                 </div>
                             </div>
@@ -220,6 +267,46 @@ class Recipe_Ui extends Ui
             <div class="recipe_diet">
                 <i class="icon icon-globe"></i>
                 <span>' . __($this->object->get('diet')) . '</span>
+            </div>
+            ' : '') . '';
+    }
+
+    public function renderInfoVersion($version, $complete = false)
+    {
+        return '
+            ' . (($complete) ? '
+                <a class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                    <i class="icon icon-cutlery"></i>
+                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                </a>
+            ' : '
+                <div class="recipe_cook_category">
+                    <i class="icon icon-cutlery"></i>
+                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                </div>
+            ') . '
+            ' . (($version->get('cook_time') != '') ? '
+            <div class="recipe_cook_time">
+                <i class="icon icon-time"></i>
+                <span>' . __($version->get('cook_time')) . '</span>
+            </div>
+            ' : '') . '
+            ' . (($version->get('cooking_method') != '') ? '
+            <div class="recipe_cooking_method">
+                <i class="icon icon-cutlery"></i>
+                <span>' . __($version->get('cooking_method')) . '</span>
+            </div>
+            ' : '') . '
+            ' . (($version->get('servings') != '') ? '
+            <div class="recipe_servings">
+                <i class="icon icon-group"></i>
+                <span>' . $version->getServings() . '</span>
+            </div>
+            ' : '') . '
+            ' . (($version->get('diet') != '') ? '
+            <div class="recipe_diet">
+                <i class="icon icon-globe"></i>
+                <span>' . __($version->get('diet')) . '</span>
             </div>
             ' : '') . '';
     }
