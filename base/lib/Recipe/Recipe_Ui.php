@@ -128,7 +128,7 @@ class Recipe_Ui extends Ui
                     $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . '</a></li> ' . $otherVersionsTop;
                     $otherVersionsTop = '
                         <div class="recipe_versions_top">
-                            <p>Por si acaso, en esta pagina presentamos ' . (count($versions) + 1) . ' formas de preparar esta receta:</p>
+                            <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
                             <ol>' . $otherVersionsTop . '</ol>
                         </div>';
                 } else {
@@ -169,15 +169,12 @@ class Recipe_Ui extends Ui
             $sites = @json_decode($this->object->get('friend_links'), true);
             if (is_array($sites) && count($sites) > 0) {
                 $link = '<a href="' . $sites[0]['url'] . '" title="Receta de ' . $sites[0]['title'] . '">' . $sites[0]['title'] . '</a>';
-                $friendSiteLink1 = '<div class="recipe_complete_link_friend">' . str_replace('#LINK', $link, __('link_friend_top')) . '</div>';
+                $friendSiteLink1 = '<p class="recipe_complete_link_friend">' . str_replace('#LINK', $link, __('link_friend_top')) . '</p>';
             }
             if (is_array($sites) && count($sites) > 1) {
                 $link1 = '<a href="' . $sites[1]['url'] . '" title="Receta de ' . $sites[1]['title'] . '">' . $sites[1]['title'] . '</a>';
                 $link2 = '<a href="' . $sites[2]['url'] . '" title="Receta de ' . $sites[2]['title'] . '">' . $sites[2]['title'] . '</a>';
-                $friendSiteLink2 = '
-                    <div class="recipe_complete_link_friend_bottom">
-                        ' . str_replace('#LINK2', $link2, str_replace('#LINK1', $link1, __('link_friend_bottom'))) . '
-                    </div>';
+                $friendSiteLink2 = '<p class="recipe_complete_link_friend_bottom">' . str_replace('#LINK2', $link2, str_replace('#LINK1', $link1, __('link_friend_bottom'))) . '</p>';
             }
         }
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
