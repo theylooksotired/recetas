@@ -105,7 +105,6 @@ class Recipe_Ui extends Ui
                         $nameLink = Text::simpleUrl($version->getBasicInfo());
                         $otherVersions .= '
                             <div class="recipe_wrapper_all">
-                                <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                                 <div class="recipe_wrapper_all_right">
                                     <div class="recipe_version">
                                         <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
@@ -123,6 +122,7 @@ class Recipe_Ui extends Ui
                                         </div>
                                     </div>
                                 </div>
+                                <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                             </div>';
                         $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . str_replace("#COUNT#", count($version->get('ingredients')), __('version_alternative_ingredients')) . ')</span></a></li> ';
                         $i++;
@@ -141,7 +141,6 @@ class Recipe_Ui extends Ui
                         $versionUi = new Recipe_Ui($version);
                         $otherVersions .= '
                             <div class="recipe_version">
-                                ' . Adsense::midContent() . '
                                 <h3>' . $version->getBasicInfo() . '</h3>
                                 ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
                                 <div class="recipe_wrapper">
@@ -154,6 +153,7 @@ class Recipe_Ui extends Ui
                                         <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
                                     </div>
                                 </div>
+                                ' . Adsense::midContent() . '
                             </div>';
                     }
                     $otherVersions = '
@@ -189,13 +189,13 @@ class Recipe_Ui extends Ui
                         ' . $image . '
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
-                    <div class="recipe_rating">' . $this->renderRating() . '</div>
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
                         <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                         <div class="recipe_wrapper_all_right">
                             ' . (($newFormat) ? '<h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>' : '') . '
+                            <div class="recipe_rating">' . $this->renderRating() . '</div>
                             <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                             <div class="recipe_wrapper">
                                 <div class="recipe_ingredients">
