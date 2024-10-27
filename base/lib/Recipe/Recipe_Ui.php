@@ -97,6 +97,7 @@ class Recipe_Ui extends Ui
                 if (Parameter::code('versions_style') == 'true') {
                     // New style
                     $newFormat = true;
+                    $i = 1;
                     foreach ($versions as $version) {
                         $version->loadMultipleValuesSingleAttribute('ingredients');
                         $version->loadMultipleValuesSingleAttribute('preparation');
@@ -123,9 +124,10 @@ class Recipe_Ui extends Ui
                                     </div>
                                 </div>
                             </div>';
-                        $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $version->getBasicInfo() . '</a></li> ';
+                        $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . str_replace("#COUNT#", count($version->get('ingredients')), __('version_alternative_ingredients')) . ')</span></a></li> ';
+                        $i++;
                     }
-                    $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . '</a></li> ' . $otherVersionsTop;
+                    $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
                     $otherVersionsTop = '
                         <div class="recipe_versions_top">
                             <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
