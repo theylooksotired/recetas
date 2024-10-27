@@ -2771,6 +2771,10 @@ body {
     a {
         color: $colorAccent;
         display: block;
+        span {
+            font-weight: bold;
+            font-size: $fontSizeSmall;
+        }
     }
     ol {
         margin: 0 0 0 40px;
