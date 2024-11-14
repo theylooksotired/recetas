@@ -16,13 +16,13 @@ class Recipe_Ui extends Ui
         return '
             <article class="recipe">
                 <div class="recipe_ins">
-                    <div class="recipe_image">' . $this->object->getImageWidth('image', 'small') . '</div>
+                    <h3 class="recipe_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                    <div class="recipe_rating">' . $this->renderRating() . '</div>
                     <div class="recipe_information">
-                        <h3 class="recipe_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a></h3>
+                        <div class="recipe_image">' . $this->object->getImageWidth('image', 'small') . '</div>
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
-                        <div class="recipe_rating">' . $this->renderRating() . '</div>
-                        <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
                     </div>
+                    <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
                 </div>
             </article>';
     }
@@ -31,14 +31,12 @@ class Recipe_Ui extends Ui
     {
         return '
             <article class="recipe recipe_best">
-                <div class="recipe_ins">
-                    <div class="recipe_image">' . $this->object->getImageWidth('image', 'small') . '</div>
-                    <div class="recipe_information">
-                        <h3 class="recipe_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a></h3>
-                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
-                    </div>
-                </div>
+                <h3 class="recipe_title"><a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a></h3>
                 <div class="recipe_rating">' . $this->renderRating() . '</div>
+                <div class="recipe_information">
+                    <div class="recipe_image">' . $this->object->getImageWidth('image', 'small') . '</div>
+                    <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
+                </div>
                 <div class="recipe_extra_info">' . $this->renderInfo() . '</div>
             </article>';
     }
@@ -103,14 +101,16 @@ class Recipe_Ui extends Ui
                         $version->loadMultipleValuesSingleAttribute('preparation');
                         $versionUi = new Recipe_Ui($version);
                         $nameLink = Text::simpleUrl($version->getBasicInfo());
+                        $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
+                        $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
                         $otherVersions .= '
                             <div class="recipe_wrapper_all">
                                 <div class="recipe_wrapper_all_right">
-                                    <div class="recipe_version">
+                                    <div class="recipe_wrapper">
                                         <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
                                         ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
                                         <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
-                                        <div class="recipe_wrapper">
+                                        <div class="recipe_wrapper_ins">
                                             <div class="recipe_ingredients">
                                                 <h3>' . __('ingredients') . '</h3>
                                                 <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
@@ -124,12 +124,13 @@ class Recipe_Ui extends Ui
                                 </div>
                                 <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                             </div>';
-                        $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . str_replace("#COUNT#", count($version->get('ingredients')), __('version_alternative_ingredients')) . ')</span></a></li> ';
+                        $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
                         $i++;
                     }
                     $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
                     $otherVersionsTop = '
                         <div class="recipe_versions_top">
+                            <div class="recipe_versions_top_decoration"><i class="icon icon-star"></i></div>
                             <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
                             <ol>' . $otherVersionsTop . '</ol>
                         </div>';
@@ -194,17 +195,19 @@ class Recipe_Ui extends Ui
                     <div class="recipe_wrapper_all">
                         <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                         <div class="recipe_wrapper_all_right">
-                            ' . (($newFormat) ? '<h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>' : '') . '
-                            <div class="recipe_rating">' . $this->renderRating() . '</div>
-                            <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                             <div class="recipe_wrapper">
-                                <div class="recipe_ingredients">
-                                    ' . (($newFormat) ? '<h3>' . __('ingredients') . '</h3>' : '<h2>' . __('ingredients') . '</h2>') . '
-                                    <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
-                                </div>
-                                <div class="recipe_preparation">
-                                    ' . (($newFormat) ? '<h3>' . __('preparation') . '</h3>' : '<h2>' . __('preparation') . '</h2>') . '
-                                    <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
+                                <div class="recipe_rating">' . $this->renderRating() . '</div>
+                                <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
+                                <div class="recipe_wrapper_ins">                            
+                                    <div class="recipe_ingredients">
+                                        <h3>' . __('ingredients') . '</h3>
+                                        <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
+                                    </div>
+                                    <div class="recipe_preparation">
+                                        <h3>' . __('preparation') . '</h3>
+                                        <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -412,7 +415,7 @@ class Recipe_Ui extends Ui
                         </div>
                     </div>
                     <div class="related_block">
-                        <h2 class="related_title">' . __('other_posts_related') . ' ' . strtolower($this->object->getBasicInfo()) . '</h2>
+                        <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
                         <div class="posts">
                             ' . $posts->showList(['function' => 'PublicSimple']) . '
                             ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '

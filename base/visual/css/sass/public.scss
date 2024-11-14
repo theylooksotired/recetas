@@ -121,7 +121,6 @@ body {
     background: darken($colorGreenDark, 5%);
     border-top: 10px solid lighten($colorGreenDark, 15%);
     color: $white;
-    margin: 0;
     @include clearer();
     a {
         color: $white;
@@ -220,8 +219,8 @@ body {
 .menu_trigger {
     position: fixed;
     z-index: 99999;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
     font-size: 30px;
     line-height: 30px;
     height: 30px;
@@ -326,7 +325,7 @@ body {
     }
     @include mobile {
         margin: 0;
-        padding: 10px;
+        padding: 10px 10px 40px 10px;
         .content_left {
             width: 100%;
             float: none;
@@ -559,7 +558,7 @@ body {
     border: 1px solid rgba($black, 0.1);
     min-height: 280px;
     @include mobile {
-        margin: 20px -10px;
+        margin: 0 -10px 10px -10px;
         border: 0;
         min-height: 300px;
     }
@@ -643,7 +642,7 @@ body {
     text-align: center;
     .item_complete_share_title {
         font-size: $fontSizeNormal;
-        padding: 10px 0 20px 0;
+        padding: 20px 0 10px 0;
         color: $colorFacebook;
         font-weight: bold;
         position: relative;
@@ -653,8 +652,8 @@ body {
             left: 0;
             right: 0;
             width: 100px;
-            height: 1px;
-            background: rgba($black, 0.2);
+            height: 5px;
+            background: rgba($black, 0.1);
             margin: auto;
             content: '';
         }
@@ -701,13 +700,13 @@ body {
     }
 }
 
-.searchTop {
+.search_top {
     @include clearer();
     vertical-align: middle;
     width: 270px;
     float: right;
     margin: 0;
-    @include tablet {
+    .search_top_trigger {
         display: none;
     }
     fieldset {
@@ -715,7 +714,7 @@ body {
         padding: 0;
         border: 0;
     }
-    .formField {
+    .form_field {
         width: 228px;
         float: left;
         display: block;
@@ -755,7 +754,7 @@ body {
             }
         }
     }
-    .formSubmit {
+    .form_submit {
         width: 40px;
         height: 30px;
         line-height: 30px;
@@ -771,6 +770,38 @@ body {
         @include animate();
         &:hover {
             background: darken($colorRed, 30%);
+        }
+    }
+    @include tablet {
+        display: block;
+        .search_top_trigger {
+            display: block;
+            position: fixed;
+            z-index: 99999;
+            top: 5px;
+            right: 45px;
+            font-size: 20px;
+            line-height: 30px;
+            height: 30px;
+            color: $white;
+        }
+        .form_search_simple {
+            display: none;
+        }
+        &.search_top_open {
+            .form_search_simple {
+                display: block;
+                position: fixed;
+                z-index: 99999;
+                top: 40px;
+                left: 0;
+                right: 0;
+                background: $colorRed;
+                padding: 5px;
+            }
+        }
+        .form_field {
+            width: calc(100% - 50px);
         }
     }
 }
@@ -842,43 +873,29 @@ body {
     @include clearer();
 }
 .post {
-    margin: 0 0 50px;
-    padding: 0 0 50px;
-    max-width: $sizeTablet;
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: 1px solid rgba($black, 0.1);
+    font-weight: normal;
+    display: block;
     position: relative;
-    &:before {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 200px;
-        height: 3px;
-        background: rgba($colorAccent, 0.1);
-        display: block;
-        content: '';
+    @include animate();
+    @include clearer();
+    &:hover {
+        .post_image {
+            filter: grayscale(100%);
+        }
+        .post_information {
+            color: lighten($colorAccent, 20%);
+            .post_date {
+                color: lighten($colorAccent, 10%);
+            }
+        }
     }
     &:last-child {
         margin: 0;
         padding: 0;
-        &:before {
-            display: none;
-        }
-    }
-    .post_ins {
-        font-weight: normal;
-        display: block;
-        @include animate();
-        @include clearer();
-        &:hover {
-            .post_image {
-                filter: grayscale(100%);
-            }
-            .post_information {
-                color: lighten($colorAccent, 20%);
-                .post_date {
-                    color: lighten($colorAccent, 10%);
-                }
-            }
-        }
+        border-bottom: 0;
     }
     .post_image {
         width: 280px;
@@ -887,9 +904,6 @@ body {
         background-size: cover;
         background-repeat: no-repeat;
         overflow: hidden;
-        padding: 5px;
-        background: $white;
-        box-shadow: 2px 3px 5px rgba($black, 0.3);
         @include animate();
         &.post_image_simple {
             img {
@@ -914,7 +928,6 @@ body {
     .post_information {
         width: calc(100% - 325px);
         float: right;
-        color: $colorAccent;
         @include animate();
         .post_title {
             font-size: $fontSizeBig;
@@ -925,7 +938,6 @@ body {
         }
         .post_date {
             font-size: $fontSizeSmall;
-            color: darken($colorAccent, 10%);
             padding: 0 0 10px;
             @include animate();
             i {
@@ -935,13 +947,10 @@ body {
         }
         .post_short_description {
             font-size: $fontSizeNormal;
-            color: $colorAccent;
-            padding: 0 0 20px;
             @include animate();
         }
         .post_reading_time {
             font-size: $fontSizeSmall;
-            color: darken($colorAccentAlt, 10%);
             i {
                 display: inline-block;
                 width: 20px;
@@ -1036,10 +1045,19 @@ body {
         }
     }
     @include mobile {
-        .post_ins {
-            padding: 10px;
-            margin: 0 -10px;
-            background: darken($white, 2%);
+        padding: 0 0 20px;
+        margin: 0 0 20px;
+        border-bottom: 1px solid rgba($black, 0.1);
+        &:last-child {
+            padding: 0;
+            margin: 0;
+            border-bottom: 0;
+        }
+        .post_information {
+            .post_short_description {
+                padding: 0;
+                font-size: $fontSizeSmall;
+            }
         }
     }
 }
@@ -1295,6 +1313,10 @@ body {
     @include mobile {
         .post_short_description {
             font-size: $fontSizeNormal;
+            margin: 0 0 10px;
+        }
+        .post_short_info {
+            margin: 0 0 10px;
         }
     }
 }
@@ -1322,7 +1344,7 @@ body {
             display: none;
         }
         @include mobile {
-            grid-template-columns: 1fr;
+            display: block;
         }
     }
 }
@@ -1978,7 +2000,13 @@ body {
     }
     @include mobile {
         gap: 10px;
-        grid-template-columns: 1fr;
+        display: block;
+        .recipe {
+            margin: 0 0 20px;
+            &:last-child {
+                margin: 0;
+            }
+        }
     }
 }
 
@@ -1992,33 +2020,24 @@ body {
     &:last-child {
         margin: 0;
     }
-    .recipe_ins {
-        display: block;
-        font-weight: normal;
-        @include clearer();
-        &:hover {
-            .recipe_title {
-                color: $colorAccentAlt;
-            }
-        }
-    }
     .recipe_image {
         width: 140px;
+        float: right;
         float: left;
         padding: 5px;
         background: $white;
-        box-shadow: 2px 3px 5px rgba($black, 0.3);
         @include animate();
         img {
             object-fit: cover;
             display: block;
             width: 100%;
             height: 100px;
+            box-shadow: 1px 1px 3px rgba($black, 0.1);
         }
     }
     .recipe_information {
-        width: calc(100% - 160px);
-        float: right;
+        @include clearer();
+
     }
     .recipe_title {
         font-weight: bold;
@@ -2036,6 +2055,8 @@ body {
         font-size: $fontSizeSmall;
         padding: 0 0 5px;
         line-height: normal;
+        float: right;
+        width: calc(100% - 160px);
     }
     .rating {
         padding: 0 0 5px;
@@ -2052,22 +2073,16 @@ body {
             z-index: 1;
         }
     }
-    &.recipe_best {
-        .rating {
-            padding: 5px 0;
-            margin: 5px 0 0 0;
-            border-top: 1px solid rgba($colorAccent, 0.1);
-        }
-    }
     @include mobile {
         padding: 10px;
         .recipe_image {
             width: 60px;
             img {
                 height: 50px;
+                padding: 2px;
             }
         }
-        .recipe_information {
+        .recipe_short_description {
             width: calc(100% - 80px);
         }
     }
@@ -2165,7 +2180,7 @@ body {
 }
 
 .recipe_extra_info {
-    margin: 0 0 10px;
+    margin: 0 -5px 10px -5px;
     font-size: $fontSizeNormal;
     > div,
     > a {
@@ -2231,20 +2246,27 @@ body {
 }
 .recipe_wrapper {
     padding: 15px;
-    background: rgba($colorAccent, 0.02);
-    border: 1px solid rgba($colorAccent, 0.1);
-    @include borderRadius(5px);
+    background: rgba($colorAccent, 0.01);
+    border: 5px solid rgba($colorAccent, 0.08);
     @include clearer();
+    @include borderRadius(10px);
+    .recipe_wrapper_ins {
+        @include clearer();
+    }
     h2,
     h3 {
-        margin: 0 0 10px;
-        padding: 0 0 10px 0;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
         font-size: $fontSizeMedium;
         color: $black;
         &:after,
         &:before {
             display: none;
         }
+    }
+    h2 {
+        font-size: $fontSizeBig;
+        color: $colorAccent;
     }
     h4 {
         font-size: $fontSizeMedium;
@@ -2299,7 +2321,6 @@ body {
     @include mobile() {
         padding: 10px;
         margin: 0 -5px;
-        @include borderRadius(0);
         .recipe_ingredients,
         .recipe_preparation {
             width: auto;
@@ -2440,8 +2461,8 @@ body {
 .posts_intro {
     .posts_intro_title {
         font-size: $fontSizeNormal;
-        padding: 10px 0 40px 0;
-        color: $colorFacebook;
+        padding: 30px 0;
+        color: $black;
         font-weight: bold;
         position: relative;
         text-align: center;
@@ -2451,8 +2472,8 @@ body {
             left: 0;
             right: 0;
             width: 100px;
-            height: 1px;
-            background: rgba($black, 0.2);
+            height: 5px;
+            background: rgba($black, 0.1);
             margin: auto;
             content: '';
         }
@@ -2461,7 +2482,7 @@ body {
         padding: 60px 0 20px 0;
         text-align: center;
         a {
-            background: darken($colorMainAlt, 40%);
+            background: $colorAccent;
             color: $white;
             font-size: $fontSizeMedium;
             font-weight: bold;
@@ -2587,11 +2608,10 @@ body {
 .recipes_minimal {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-auto-rows: 1fr;
     gap: 20px;
     .recipe_minimal {
         position: relative;
-        padding: 10px 10px 15px 10px;
+        padding: 5px;
         background: rgba($colorAccent, 0.02);
         border: 1px solid rgba($colorAccent, 0.1);
         @include animate();
@@ -2767,15 +2787,28 @@ body {
 }
 
 .recipe_versions_top {
-    margin: 0 0 20px;
-    padding: 10px;
-    background: rgba($colorAccent, 0.02);
-    border: 1px solid rgba($colorAccent, 0.1);
-    @include borderRadius(5px);
+    margin: 0 0 20px 20px;
+    padding: 10px 10px 10px 45px;
+    border: 5px solid $colorMain;
+    position: relative;
+    @include borderRadius(10px);
+    .recipe_versions_top_decoration {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        top: -23px;
+        left: -27px;
+        color: $colorMain;
+        font-size: 60px;
+        line-height: 1em;
+        rotate: -25deg;
+        text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    }
     a {
-        color: $colorAccent;
+        color: darken($colorMainAlt, 5%);
         display: block;
         span {
+            color: $colorMainAlt;
             font-weight: normal;
             font-size: $fontSizeSmall;
         }
@@ -2790,7 +2823,7 @@ body {
                 margin: 0;
             }
             &::marker {
-                color: rgba($black, 0.6);
+                color: rgba($colorMainAlt, 0.6);
                 font-size: $fontSizeSmall;
             }
         }

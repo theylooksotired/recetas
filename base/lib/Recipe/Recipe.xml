@@ -237,5 +237,10 @@
             <fields>title,title_url,short_description</fields>
             <type>FULLTEXT</type>
         </index>
+        <index>
+            <name>search_title</name>
+            <fields>title,title_url</fields>
+            <type>FULLTEXT</type>
+        </index>
     </indexes>
 </object>

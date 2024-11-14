@@ -36,7 +36,13 @@
     <div id="body_content">
         <?php echo $content;?>
     </div>
-    <script type="text/javascript">document.querySelector('.menu_trigger').addEventListener('click', function(evt) { document.querySelector('.menu_all').classList.toggle('menu_all_open'); });</script>
+    <script type="text/javascript">
+        document.querySelector('.menu_trigger').addEventListener('click', function(evt) { document.querySelector('.menu_all').classList.toggle('menu_all_open'); });
+        document.querySelector('.search_top_trigger').addEventListener('click', function(evt) {
+            document.querySelector('.search_top').classList.toggle('search_top_open');
+            document.querySelector('input[name="search"]').focus();
+        });
+    </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389"
      crossorigin="anonymous"></script>
 </body>

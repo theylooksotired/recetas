@@ -41,13 +41,12 @@ class Navigation_Controller extends Controller
                 }
                 $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->meta_url = url('');
-                $this->content_top = '
-                    ' . Adsense::top() . '
+                $this->layout_page = 'simple';
+                $this->content = '
                     ' . HtmlSection::show('intro_top') . '
                     ' . $this->ui->adApp('ad_intro') . '
                     <h1>' . $this->title_page . '</h1>
-                    ' . Category_Ui::intro();
-                $this->content = '
+                    ' . Category_Ui::intro() .'
                     ' . HtmlSection::show('intro') . '
                     ' . Post_Ui::intro();
                 $this->head = $items->showList(['function' => 'PreloadImage']);
@@ -95,7 +94,6 @@ class Navigation_Controller extends Controller
                         $this->layout_page = 'recipe_category';
                         $this->hide_title_page_appendix = true;
                     }
-                    $this->url_page = $item->url();
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
@@ -123,7 +121,7 @@ class Navigation_Controller extends Controller
                 break;
             case 'articulos':
                 $this->redirecLastSlash();
-                $this->layout_page = 'posts';
+                $this->layout_page = 'simple';
                 $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
                 if ($post->id() != '') {
                     if ($this->extraId != '') {
@@ -131,6 +129,7 @@ class Navigation_Controller extends Controller
                         header('Location: ' . $post->url());
                         exit();
                     }
+                    $this->layout_page = 'recipe';
                     $post->persistSimple('views', $post->get('views') + 1);
                     $this->title_page = ($post->get('title_page') != '') ? $post->get('title_page') : $post->getBasicInfoTitle();
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
@@ -148,7 +147,6 @@ class Navigation_Controller extends Controller
                         exit();
                     }
                     $this->meta_url = url($this->action);
-                    $this->layout_page = 'simple';
                     $this->title_page = (Parameter::code('meta_title_page_posts') != '') ? Parameter::code('meta_title_page_posts') : __('posts_list');
                     $this->bread_crumbs = [url($this->action) => __('posts')];
                     $this->content = Post_Ui::all();
@@ -163,12 +161,12 @@ class Navigation_Controller extends Controller
                     exit();
                 }
                 if ($this->id != '') {
+                    $this->content = '';
+                    $titleRecipes = __('recipes');
                     $search = str_replace('-', ' ', Text::simpleUrl($this->id));
-                    $this->title_page = __('search_results') . ' "' . ucwords($search) . '"';
-                    $this->url_page = url('buscar/' . $search);
                     $items = new ListObjects('Recipe', [
                         'where' => 'active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
-                        'order' => 'MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE) DESC',
+                        'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
                         'limit' => '20',
                     ]);
                     if ($items->isEmpty()) {
@@ -177,13 +175,43 @@ class Navigation_Controller extends Controller
                             'order' => 'title_url',
                             'limit' => '20',
                         ]);
+                    } else {
+                        $searchPage = (new SearchPage)->readFirst(['where' => 'search=:search'], ['search' => $search]);
+                        if ($searchPage->id() == '') {
+                            $values = [
+                                'search' => $search,
+                                'views' => 1
+                            ];
+                            $questionSearch = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo (que sea una correcion del titulo original), metaDescripcion (140 caracteres), descripcion (350 caracteres). El titulo original de la pagina es: "Resultados de la búsqueda ' . $search . ' en ' . Parameter::code('meta_title_page') . '"';
+                            $answerChatGPT = ChatGPT::answer($questionSearch);
+                            preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
+                            $jsonString = (isset($matches[0])) ? $matches[0] : '';
+                            if ($jsonString != '') {
+                                $json = json_decode($jsonString, true);
+                                $values['title_page'] = (isset($json['titulo'])) ? $json['titulo'] : '';
+                                $values['meta_description'] = (isset($json['metaDescripcion'])) ? $json['metaDescripcion'] : '';
+                                $values['short_description'] = (isset($json['descripcion'])) ? $json['descripcion'] : '';
+                            }
+                            $searchPage = new SearchPage($values);
+                            $searchPage->persist();
+                        } else {
+                            $searchPage->persistSimple('views', $searchPage->get('views') + 1);
+                        }
+                        $this->title_page = $searchPage->getBasicInfoTitlePage();
+                        $this->meta_description = $searchPage->get('meta_description');
+                        $this->meta_url = url('buscar/' . $search);
+                        $this->meta_image = $searchPage->getImageUrl('image', 'web');
+                        $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
                     }
                     if ($items->isEmpty()) {
                         $this->title_page = __('no_search_results');
+                        $this->content = '<div class="message message_error">' . __('no_search_results_disclaimer') . '</div>';
+                        $titleRecipes = __('recipes_might_like');
                         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
                     }
-                    $this->content = '
+                    $this->content .= '
                         <div class="items_all">
+                            <h2>' . $titleRecipes . '</h2>
                             ' . $items->showList(['middle' => Adsense::midContent(), 'middleRepetitions' => 2]) . '
                         </div>';
                     return $this->ui->render();

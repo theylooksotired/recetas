@@ -112,9 +112,7 @@ class Navigation_Ui extends Ui
                             </div>
                         </div>
                         <div class="header_right">
-                            <div class="header_rightIns">
-                                <div class="searchTop">' . Navigation_Ui::search() . '</div>
-                            </div>
+                            ' . Navigation_Ui::search() . '
                         </div>
                     </div>
                 </div>
@@ -222,6 +220,7 @@ class Navigation_Ui extends Ui
 
     public function menuSide()
     {
+        return '';
         return '
             ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
             ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
@@ -232,7 +231,7 @@ class Navigation_Ui extends Ui
     {
         $menu = Cache::show('Category', 'menuTop');
         return '
-            <div class="menuWrapper">
+            <div class="menu_wrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
                 <div class="menu_trigger" role="button" tabindex="0" aria-label="' . __('menu') . '" on="tap:AMP.setState({menuVisible: !menuVisible})">
                     <i [class]="menuVisibleButton ? \'icon icon-close\' : \'icon icon-menu\'" class="icon icon-menu"></i>
@@ -278,14 +277,17 @@ class Navigation_Ui extends Ui
     public static function search()
     {
         return '
-            <form accept-charset="UTF-8" class="formSearchSimple" action="' . url('buscar') . '" method="GET" target="_top">
-                <fieldset>
-                    <div class="text formField ">
-                        <input type="text" size="50" name="search" placeholder="' . __('search') . '">
-                    </div>
-                    <button type="submit" class="formSubmit" role="button" aria-label="' . __('search') . '"><i class="icon icon-search"></i></button>
-                </fieldset>
-            </form>';
+            <div class="search_top">
+                <div class="search_top_trigger"><i class="icon icon-search"></i></div>
+                <form accept-charset="UTF-8" class="form_search_simple" action="' . url('buscar') . '" method="GET" target="_top">
+                    <fieldset>
+                        <div class="text form_field ">
+                            <input type="text" size="50" name="search" placeholder="' . __('search') . '">
+                        </div>
+                        <button type="submit" class="form_submit" role="button" aria-label="' . __('search') . '"><i class="icon icon-search"></i></button>
+                    </fieldset>
+                </form>
+            </div>';
     }
 
     public static function facebookComments($url)

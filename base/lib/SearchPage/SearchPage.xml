@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure SearchPage
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+    <name>SearchPage</name>
+    <table>search_page</table>
+    <info>
+        <sql>
+            <primary>id</primary>
+            <created>true</created>
+            <modified>true</modified>
+        </sql>
+        <form>
+            <title>search_pages</title>
+            <label>#search</label>
+            <pager>50</pager>
+            <orderBy>search,views</orderBy>
+            <viewPublic>true</viewPublic>
+            <publicUrl>buscar / #search_url</publicUrl>
+            <multipleActions>
+                <action icon="times">delete</action>
+            </multipleActions>
+            <templateItemAdmin>
+                #active
+                #image
+                <div class="item_information">
+                    <p class="accent_alt">#title_page</p>
+                    <p class="accent"><strong>#search</strong></p>
+                    <p class="small">#short_description</p>
+                    <p class="accent">#meta_description</p>
+                    <p class="small accent">#views _views</p>
+                </div>
+            </templateItemAdmin>
+        </form>
+    </info>
+    <attributes>
+        <attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+        <attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+            <fileFieldName>title_url</fileFieldName>
+        </attribute>
+        <attribute>
+            <name>search</name>
+            <label>search</label>
+            <type>text_long</type>
+            <required>unique</required>
+        </attribute>
+        <attribute>
+            <name>search_url</name>
+            <type>hidden_url</type>
+            <refAttribute>search</refAttribute>
+        </attribute>
+        <attribute>
+            <name>title_page</name>
+            <label>title_page</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>meta_description</name>
+            <label>meta_description</label>
+            <type>textarea_resizable</type>
+            <countLength>true</countLength>
+            <showCountCharactersMeta>true</showCountCharactersMeta>
+            <minlength>110</minlength>
+            <maxlength>160</maxlength>
+        </attribute>
+        <attribute>
+            <name>short_description</name>
+            <label>short_description</label>
+            <type>textarea_resizable</type>
+        </attribute>
+        <attribute>
+            <name>views</name>
+            <label>views</label>
+            <type>text_integer</type>
+        </attribute>
+    </attributes>
+    <indexes>
+        <index>
+            <name>search_url</name>
+            <fields>search_url</fields>
+        </index>
+    </indexes>
+</object>

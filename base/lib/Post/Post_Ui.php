@@ -83,16 +83,14 @@ class Post_Ui extends Ui
         $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
         return '
             <div class="post">
-                <div class="post_ins">
-                    <div class="post_image post_image_simple">' . $image . '</div>
-                    <div class="post_information">
-                        <h3 class="post_title">' . $this->object->link() . '</h3>
-                        <div class="post_short_description">' . $shortDescription . '</div>
-                        <div class="post_date">
-                            <i class="icon icon-date"></i>
-                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
-                        </div>
+                <div class="post_image post_image_simple">' . $image . '</div>
+                <div class="post_information">
+                    <h3 class="post_title">' . $this->object->link() . '</h3>
+                    <div class="post_date">
+                        <i class="icon icon-date"></i>
+                        <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                     </div>
+                    <div class="post_short_description">' . $shortDescription . '</div>
                 </div>
             </div>';
     }
@@ -184,22 +182,17 @@ class Post_Ui extends Ui
         return '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
-                    <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                     <div class="post_short_info">
-                        <div class="post_short_info_left">
-                            <div class="post_date">
-                                <i class="icon icon-date"></i>
-                                <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
-                            </div>
-                            <div class="post_reading_time">
-                                <i class="icon icon-time"></i>
-                                <span>' . Text::readingTime($this->object->get('description')) . '</span>
-                            </div>
+                        <div class="post_date">
+                            <i class="icon icon-date"></i>
+                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
                         </div>
-                        <div class="post_short_info_right">
-                        ' . $share . '
+                        <div class="post_reading_time">
+                            <i class="icon icon-time"></i>
+                            <span>' . Text::readingTime($this->object->get('description')) . '</span>
                         </div>
                     </div>
+                    <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                     <div class="editorial">
                         <figure class="post_image">
                             ' . $this->object->getImageWidth('image', 'web') . '
@@ -257,7 +250,7 @@ class Post_Ui extends Ui
         return '
             <div class="posts_intro">
                 <h2 class="posts_intro_title">' . __('last_posts') . '</h2>
-                <div class="posts_intro_items">' . $items->showList(['function' => 'Intro']) . '</div>
+                <div class="posts_grid">' . $items->showList(['function' => 'PublicSimple']) . '</div>
                 <div class="posts_intro_button">
                     <a href="' . url('articulos') . '">' . __('view_all_posts') . '</a>
                 </div>
