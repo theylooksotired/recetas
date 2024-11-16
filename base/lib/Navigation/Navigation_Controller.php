@@ -241,6 +241,7 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Category_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());
+                $urls = array_merge($urls, SearchPage_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
 

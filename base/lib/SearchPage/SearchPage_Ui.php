@@ -28,4 +28,10 @@ class SearchPage_Ui extends Ui
         }
     }
 
+    public static function sitemapUrls()
+    {
+        $items = (new SearchPage)->readList(['where' => 'views > 1']);
+        return Sitemap::getUrls($items);
+    }
+
 }
