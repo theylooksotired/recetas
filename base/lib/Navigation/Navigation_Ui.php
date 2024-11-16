@@ -33,14 +33,7 @@ class Navigation_Ui extends Ui
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
                                 ' . Adsense::top() . '
-                                <div class="content_ins">
-                                    <div class="content_left">
-                                        ' . $content . '
-                                    </div>
-                                    <div class="content_right">
-                                        ' . $this->menuSide() . '
-                                    </div>
-                                </div>
+                                <div class="content_ins">' . $content . '</div>
                                 ' . $content_bottom . '
                                 ' . $this->adApp() . '
                             </div>
@@ -216,15 +209,6 @@ class Navigation_Ui extends Ui
                 </div>
             </footer>
             ' . $facebookCommentsHtml;
-    }
-
-    public function menuSide()
-    {
-        return '';
-        return '
-            ' . Recipe_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
-            ' . Post_Ui::menuSide(['amp' => (isset($this->object->mode) && $this->object->mode == 'amp')]) . '
-            ';
     }
 
     public function menu()

@@ -48,7 +48,8 @@ class Navigation_Controller extends Controller
                     <h1>' . $this->title_page . '</h1>
                     ' . Category_Ui::intro() .'
                     ' . HtmlSection::show('intro') . '
-                    ' . Post_Ui::intro();
+                    ' . Post_Ui::intro() . '
+                    ' . SearchPage_Ui::tags();
                 $this->head = $items->showList(['function' => 'PreloadImage']);
                 return $this->ui->render();
                 break;
@@ -191,6 +192,8 @@ class Navigation_Controller extends Controller
                                 $values['title_page'] = (isset($json['titulo'])) ? $json['titulo'] : '';
                                 $values['meta_description'] = (isset($json['metaDescripcion'])) ? $json['metaDescripcion'] : '';
                                 $values['short_description'] = (isset($json['descripcion'])) ? $json['descripcion'] : '';
+                                $values['meta_description'] = str_replace(['!', '?', '¡', '¿'], ['.', '.', '', ''], $values['meta_description']);
+                                $values['short_description'] = str_replace(['!', '?', '¡', '¿'], ['.', '.', '', ''], $values['short_description']);
                             }
                             $searchPage = new SearchPage($values);
                             $searchPage->persist();
@@ -210,10 +213,8 @@ class Navigation_Controller extends Controller
                         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
                     }
                     $this->content .= '
-                        <div class="items_all">
-                            <h2>' . $titleRecipes . '</h2>
-                            ' . $items->showList(['middle' => Adsense::midContent(), 'middleRepetitions' => 2]) . '
-                        </div>';
+                        <h2>' . $titleRecipes . '</h2>
+                        <div class="recipes recipes_category">' . $items->showList(['middle' => Adsense::midContent(), 'middleRepetitions' => 2]) . '</div>';
                     return $this->ui->render();
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");
