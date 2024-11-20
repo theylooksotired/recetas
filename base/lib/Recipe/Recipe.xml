@@ -39,7 +39,7 @@
                     <p class="accent"><strong>#title</strong></p>
                     <p class="small">#short_description</p>
                     <p class="accent">#meta_description</p>
-                    <p class="small accent">#views _views</p>
+                    <p class="small accent">#views _views - _versions #check_versions</p>
                 </div>
             </templateItemAdmin>
         </form>

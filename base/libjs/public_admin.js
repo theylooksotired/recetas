@@ -33,7 +33,9 @@ $(document).ready(function() {
                 $('textarea[name="meta_description"]').val(response.metaDescripcion);
                 $('textarea[name="short_description"]').val(response.descripcion);
                 var textareaId = $('textarea[name="description"]').attr('id');
-                CKEDITOR.instances[textareaId].setData(response.descripcionHtml);
+                if (CKEDITOR.instances[textareaId]) {
+                    CKEDITOR.instances[textareaId].setData(response.descripcionHtml);
+                }
                 $('textarea[name="ingredients_raw"]').val(response.ingredientes.join('\n'));
                 $('textarea[name="preparation_raw"]').val(response.pasos.join('\n'));
             }

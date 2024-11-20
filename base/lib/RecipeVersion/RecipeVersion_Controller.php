@@ -35,6 +35,29 @@ class RecipeVersion_Controller extends Controller
                 }
                 return json_encode($response);
                 break;
+            case 'full-ai-recipe':
+                $this->mode = 'json';
+                $response = [];
+                $content = (isset($this->values['content'])) ? $this->values['content'] : '';
+                if ($content != '') {
+                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del plato, debe ser distinta a la descripcion y debe contener mejor informacion sobre la receta, de maximo 1000 caracteres en codigo HTML), ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
+                    $answerChatGPT = ChatGPT::answer($questionRecipe);
+                    preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
+                    $jsonString = (isset($matches[0])) ? $matches[0] : '';
+                    if ($jsonString != '') {
+                        $response = json_decode($jsonString, true);
+                        if (isset($response['titulo'])) {
+                            $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . (new Recipe)->titleTest($response['titulo']) . '"';
+                            $response['tituloPagina'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
+                        }
+                        if (isset($response['descripcionHtml'])) {
+                            $response['descripcionHtml'] = str_replace('. ', '.</p><p>', $response['descripcionHtml']);
+                        }
+                        return json_encode($response);
+                    }
+                }
+                return '';
+                break;
         }
     }
 
