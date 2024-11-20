@@ -189,7 +189,7 @@ class Navigation_Controller extends Controller
                             $jsonString = (isset($matches[0])) ? $matches[0] : '';
                             if ($jsonString != '') {
                                 $json = json_decode($jsonString, true);
-                                $values['title_page'] = (isset($json['titulo'])) ? $json['titulo'] : '';
+                                $values['title_page'] = (isset($json['titulo'])) ? str_replace('"', '', $json['titulo']) : '';
                                 $values['meta_description'] = (isset($json['metaDescripcion'])) ? $json['metaDescripcion'] : '';
                                 $values['short_description'] = (isset($json['descripcion'])) ? $json['descripcion'] : '';
                                 $values['meta_description'] = str_replace(['!', '?', '¡', '¿'], ['.', '.', '', ''], $values['meta_description']);
