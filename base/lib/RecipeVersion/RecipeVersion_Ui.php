@@ -11,6 +11,11 @@
 class RecipeVersion_Ui extends Ui
 {
 
+    public function renderLinkAdmin()
+    {
+        return '<a href="' . $this->object->urlModify() . '" target="_blank">' . $this->object->getBasicInfo() . '</a> ';
+    }
+
     public function renderPreparationParagraph()
     {
         $this->object->loadMultipleValues();

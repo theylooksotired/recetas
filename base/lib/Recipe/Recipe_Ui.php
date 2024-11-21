@@ -89,50 +89,48 @@ class Recipe_Ui extends Ui
         $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
         $newFormat = false;
-        if ($this->object->get('check_versions') == 1) {
-            $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
-            if (count($versions) > 0) {
-                $newFormat = true;
-                $i = 1;
-                foreach ($versions as $version) {
-                    $version->loadMultipleValuesSingleAttribute('ingredients');
-                    $version->loadMultipleValuesSingleAttribute('preparation');
-                    $versionUi = new Recipe_Ui($version);
-                    $nameLink = Text::simpleUrl($version->getBasicInfo());
-                    $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
-                    $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
-                    $otherVersions .= '
-                        <div class="recipe_wrapper_all">
-                            <div class="recipe_wrapper_all_right">
-                                <div class="recipe_wrapper">
-                                    <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
-                                    ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
-                                    <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
-                                    <div class="recipe_wrapper_ins">
-                                        <div class="recipe_ingredients">
-                                            <h3>' . __('ingredients') . '</h3>
-                                            <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
-                                        </div>
-                                        <div class="recipe_preparation">
-                                            <h3>' . __('preparation') . '</h3>
-                                            <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
-                                        </div>
+        $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+        if (count($versions) > 0) {
+            $newFormat = true;
+            $i = 1;
+            foreach ($versions as $version) {
+                $version->loadMultipleValuesSingleAttribute('ingredients');
+                $version->loadMultipleValuesSingleAttribute('preparation');
+                $versionUi = new Recipe_Ui($version);
+                $nameLink = Text::simpleUrl($version->getBasicInfo());
+                $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
+                $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
+                $otherVersions .= '
+                    <div class="recipe_wrapper_all">
+                        <div class="recipe_wrapper_all_right">
+                            <div class="recipe_wrapper">
+                                <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
+                                ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                                <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
+                                <div class="recipe_wrapper_ins">
+                                    <div class="recipe_ingredients">
+                                        <h3>' . __('ingredients') . '</h3>
+                                        <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
+                                    </div>
+                                    <div class="recipe_preparation">
+                                        <h3>' . __('preparation') . '</h3>
+                                        <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
-                        </div>';
-                    $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
-                    $i++;
-                }
-                $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
-                $otherVersionsTop = '
-                    <div class="recipe_versions_top">
-                        <div class="recipe_versions_top_decoration"><i class="icon icon-star"></i></div>
-                        <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
-                        <ol>' . $otherVersionsTop . '</ol>
+                        </div>
+                        <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
                     </div>';
+                $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
+                $i++;
             }
+            $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
+            $otherVersionsTop = '
+                <div class="recipe_versions_top">
+                    <div class="recipe_versions_top_decoration"><i class="icon icon-star"></i></div>
+                    <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
+                    <ol>' . $otherVersionsTop . '</ol>
+                </div>';
         }
         $friendSiteLink1 = '';
         $friendSiteLink2 = '';
@@ -505,14 +503,20 @@ class Recipe_Ui extends Ui
         return Sitemap::getUrls($items);
     }
 
+    public function label($canModify = false)
+    {
+        $versions = new ListObjects('RecipeVersion', ['where' => 'id_recipe="' . $this->object->id() . '"']);
+        return '
+            ' . parent::label($canModify) . '
+            ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
+    }
+
     public function renderJsonHeader()
     {
         $versionsJson = '';
-        if ($this->object->get('check_versions') == 1) {
-            $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
-            foreach ($versions as $version) {
-                $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
-            }
+        $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+        foreach ($versions as $version) {
+            $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
         }
         $ingredients = [];
         foreach ($this->object->get('ingredients') as $ingredient) {

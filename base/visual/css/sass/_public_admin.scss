@@ -64,3 +64,18 @@
         }
     }
 }
+
+.recipe_versions {
+    margin: 5px 0 0 0;
+    padding: 5px 0 0 0;
+    border-top: 1px solid rgba($colorAccent, 0.1);
+    a {
+        display: inline-block;
+        margin: 0 5px 5px 0;
+        padding: 5px 10px;
+        background: rgba($colorAccent, 0.05);
+        border: 1px solid rgba($colorAccent, 0.1);
+        color: $colorAccent;
+        font-size: $fontSizeSmall;
+    }
+}
