@@ -19,6 +19,9 @@ class RecipeVersionIngredient extends Db_Object
         $amount = str_replace('1/2', '½', $amount);
         $amount = str_replace('1/4', '¼', $amount);
         $amount = str_replace('3/4', '¾', $amount);
+        $amount = str_replace('1/3', '⅓', $amount);
+        $amount = str_replace('1/8', '⅛', $amount);
+        $amount = str_replace('2/3', '⅔', $amount);
         $this->values['amount'] = $amount;
         return parent::persist($persistMultiple);
     }
