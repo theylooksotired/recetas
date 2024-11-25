@@ -130,6 +130,7 @@ class Recipe extends Db_Object
     {
         $steps = $this->showUi('PreparationParagraph');
         $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. No uses lineas como "Buen provecho" o "Listo para disfrutar". La preparacion es: "' . $steps . '"';
+        $questionSteps = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva estes passos de forma mais clara, organizada e em terceira pessoa. Não use títulos, nem a lista de ingredientes, nem enumere os passos. Não use linhas como "Bom apetite" ou "Pronto para desfrutar". A preparação é: "' . $steps . '"' : $questionSteps;
         return str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
     }
 
@@ -138,12 +139,16 @@ class Recipe extends Db_Object
         $response = [];
         $titleTest = $this->titleTest($this->getBasicInfo());
         $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTest . '"';
+        $questionTitle = (ASTERION_LANGUAGE_ID == 'pt') ? 'Corrija a sintaxe e a ortografia desta frase, sem usar aspas, sem colocar ponto final: "' . $titleTest . '"' : $questionTitle;
         $response['title_page'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
         $questionDescription = 'Escribe tres lineas sobre la receta ' . $this->getBasicInfo() . ', sin decir como se prepara. No usar signos de admiracion y frases repetitivas. Dirigete a la tercera persona en plural. Puedes usar como inspiracion la preparación de la receta: " ' . $this->showUi('PreparationParagraph') . ' "';
+        $questionDescription = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva três linhas sobre a receita ' . $this->getBasicInfo() . ', sem dizer como preparar. Não use sinais de exclamação e frases repetitivas. Dirija-se à terceira pessoa no plural. Você pode se inspirar na preparação da receita: " ' . $this->showUi('PreparationParagraph') . ' "' : $questionDescription;
         $response['description'] = str_replace('¡', '', str_replace('!', '.', '<p>' . str_replace('. ', '.</p><p>', ChatGPT::answer($questionDescription)) . '</p>'));
         $questionMetaDescription = 'Resume el siguiente texto a 140 caracteres, sin usar signos de admiracion: ' . strip_tags($response['description']);
+        $questionMetaDescription = (ASTERION_LANGUAGE_ID == 'pt') ? 'Resuma o seguinte texto em 140 caracteres, sem usar sinais de exclamação: ' . strip_tags($response['description']) : $questionMetaDescription;
         $response['meta_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionMetaDescription)))));
         $questionShortDescription = 'Escribe no mas de 250 caracteres sobre la receta ' . $this->getBasicInfo() . '. Evita invitaciones a probarla o prepararla. Puedes usar como inspiracion el texto "' . $this->get('short_description') . '" o tambien la preparacion de la misma "' . $this->showUi('PreparationParagraph') . '"';
+        $questionShortDescription = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva não mais de 250 caracteres sobre a receita ' . $this->getBasicInfo() . '. Evite convites para experimentar ou preparar. Você pode se inspirar no texto "' . $this->get('short_description') . '" ou também na preparação da mesma "' . $this->showUi('PreparationParagraph') . '"' : $questionShortDescription;
         $response['short_description'] = str_replace(':', ',', str_replace('"', '', str_replace('¡', '', str_replace('!', '.', ChatGPT::answer($questionShortDescription)))));
         return $response;
     }
@@ -168,7 +173,18 @@ class Recipe extends Db_Object
                     'Como se hace un sabroso ' . $title,
                     'Como se hace un rico ' . $title,
                     'Receta tradicional de ' . $title,
-                ];        
+                ];
+                $titleTestOptions = (ASTERION_LANGUAGE_ID == 'pt') ? [
+                    'Como se prepara o ' . $title,
+                    'Como se prepara um saboroso ' . $title,
+                    'Como se prepara um rico ' . $title,
+                    'Como preparar um requintado ' . $title,
+                    'Como cozinhar um rico ' . $title,
+                    'Como se faz o ' . $title,
+                    'Como se faz um saboroso ' . $title,
+                    'Como se faz um rico ' . $title,
+                    'Receita tradicional de ' . $title,
+                ] : $titleTestOptions;     
             break;
             case 'mp':
                 $titleTestOptions = [
@@ -181,7 +197,18 @@ class Recipe extends Db_Object
                     'Como se hacen unos sabrosos ' . $title,
                     'Como se hacen unos ricos ' . $title,
                     'Receta tradicional de los ' . $title,
-                ];        
+                ];
+                $titleTestOptions = (ASTERION_LANGUAGE_ID == 'pt') ? [
+                    'Como se preparan os ' . $title,
+                    'Como se preparan uns saborosos ' . $title,
+                    'Como se prepara uns ricos ' . $title,
+                    'Como preparar uns requintados ' . $title,
+                    'Como cozinhar uns ricos ' . $title,
+                    'Como se fazem os ' . $title,
+                    'Como se fazem uns saborosos ' . $title,
+                    'Como se fazem uns ricos ' . $title,
+                    'Receita tradicional dos ' . $title,
+                ] : $titleTestOptions;      
             break;
             case 'f':
                 $titleTestOptions = [
@@ -194,7 +221,18 @@ class Recipe extends Db_Object
                     'Como se hace una sabrosa ' . $title,
                     'Como se hace una rica ' . $title,
                     'Receta tradicional de la ' . $title,
-                ];        
+                ];
+                $titleTestOptions = (ASTERION_LANGUAGE_ID == 'pt') ? [
+                    'Como se prepara a ' . $title,
+                    'Como se prepara uma saborosa ' . $title,
+                    'Como se prepara uma rica ' . $title,
+                    'Como preparar uma requintada ' . $title,
+                    'Como cozinhar uma rica ' . $title,
+                    'Como se faz a ' . $title,
+                    'Como se faz uma saborosa ' . $title,
+                    'Como se faz uma rica ' . $title,
+                    'Receita tradicional da ' . $title,
+                ] : $titleTestOptions;   
             break;
             case 'fp':
                 $titleTestOptions = [
@@ -207,7 +245,15 @@ class Recipe extends Db_Object
                     'Como se hacen unas sabrosas ' . $title,
                     'Como se hacen unas ricas ' . $title,
                     'Receta tradicional de las ' . $title,
-                ];        
+                ];
+                $titleTestOptions = (ASTERION_LANGUAGE_ID == 'pt') ? [
+                    'Como se preparan as ' . $title,
+                    'Como se preparan umas saborosas ' . $title,
+                    'Como se prepara umas ricas ' . $title,
+                    'Como preparar umas requintadas ' . $title,
+                    'Como cozinhar umas ricas ' . $title,
+                    'Como se fazem as ' . $title,
+                ] : $titleTestOptions;    
             break;
         }
         return $titleTestOptions[array_rand($titleTestOptions)];
