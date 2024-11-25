@@ -260,10 +260,11 @@ class Navigation_Ui extends Ui
 
     public static function search()
     {
+        $searchAction = (ASTERION_LANGUAGE_ID == 'pt') ? 'pesquisar' : 'buscar';
         return '
             <div class="search_top">
                 <div class="search_top_trigger"><i class="icon icon-search"></i></div>
-                <form accept-charset="UTF-8" class="form_search_simple" action="' . url('buscar') . '" method="GET" target="_top">
+                <form accept-charset="UTF-8" class="form_search_simple" action="' . url($searchAction) . '" method="GET" target="_top">
                     <fieldset>
                         <div class="text form_field ">
                             <input type="text" size="50" name="search" placeholder="' . __('search') . '">

@@ -21,7 +21,6 @@
             <pager>50</pager>
             <orderBy>search,views</orderBy>
             <viewPublic>true</viewPublic>
-            <publicUrl>buscar / #search_url</publicUrl>
             <multipleActions>
                 <action icon="times">delete</action>
             </multipleActions>

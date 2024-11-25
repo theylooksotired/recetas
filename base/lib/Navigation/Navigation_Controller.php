@@ -159,10 +159,11 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'buscar':
+            case 'pesquisar':
                 if (isset($_GET['search']) && $_GET['search'] != '') {
                     $search = Text::simpleUrl($_GET['search']);
                     header("HTTP/1.1 301 Moved Permanently");
-                    header('Location: ' . url('buscar/' . $search));
+                    header('Location: ' . url($this->action . '/' . $search));
                     exit();
                 }
                 if ($this->id != '') {
@@ -188,6 +189,7 @@ class Navigation_Controller extends Controller
                                 'views' => 1
                             ];
                             $questionSearch = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo (que sea una correcion del titulo original), metaDescripcion (140 caracteres), descripcion (350 caracteres). El titulo original de la pagina es: "Resultados de la búsqueda ' . $search . ' en ' . Parameter::code('meta_title_page') . '"';
+                            $questionSearch = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva um arquivo JSON, sem nenhum texto adicional, com os campos titulo (que seja uma correção do título original), metaDescripcion (140 caracteres), descripcion (350 caracteres). O título original da página é: "Resultados da busca ' . $search . ' em ' . Parameter::code('meta_title_page') . '"' : $questionSearch;
                             $answerChatGPT = ChatGPT::answer($questionSearch);
                             preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
                             $jsonString = (isset($matches[0])) ? $matches[0] : '';
@@ -206,7 +208,7 @@ class Navigation_Controller extends Controller
                         }
                         $this->title_page = $searchPage->getBasicInfoTitlePage();
                         $this->meta_description = $searchPage->get('meta_description');
-                        $this->meta_url = url('buscar/' . $search);
+                        $this->meta_url = url($this->action . '/' . $search);
                         $this->meta_image = $searchPage->getImageUrl('image', 'web');
                         $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
                     }
