@@ -14,6 +14,20 @@ class User extends User_Interface
     public $userClassName = 'User';
     public $userLoginClassName = 'User_Login';
     public $userFormClassName = 'User_Form';
+    public $urlLogin;
+    public $urlRegister;
+    public $urlActivate;
+    public $urlForgot;
+    public $urlUpdateDefaultPassword;
+    public $urlUpdatePassword;
+    public $urlUpdateEmail;
+    public $urlUpdateEmailConfirm;
+    public $urlProfile;
+    public $urlLogout;
+    public $urlDeleteImage;
+    public $urlUploadTempImage;
+    public $urlHome;
+    public $urlConnected;
 
     public function __construct($values = [])
     {

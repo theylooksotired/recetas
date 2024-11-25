@@ -11,6 +11,12 @@
 class Navigation_Controller extends Controller
 {
 
+    public $hide_title_page;
+    public $hide_title_page_appendix;
+    public $hide_side_recipes;
+    public $category;
+    public $recipe;
+
     /**
      * Main function to control the public actions.
      */
@@ -88,7 +94,6 @@ class Navigation_Controller extends Controller
                         $this->title_page = $item->getTitlePage();
                     }
                     if ($this->recipe->id() != '') {
-                        $this->facebookCommentsFooter = true;
                         $this->layout_page = 'recipe';
                         $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
                     } else {
@@ -140,7 +145,6 @@ class Navigation_Controller extends Controller
                     $this->bread_crumbs = [url($this->action) => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
-                    $this->facebookCommentsFooter = true;
                 } else {
                     if ($this->id != '') {
                         header("HTTP/1.1 301 Moved Permanently");
