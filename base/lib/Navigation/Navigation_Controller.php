@@ -161,8 +161,12 @@ class Navigation_Controller extends Controller
             case 'top-10':
                 $top10s = new ListObjects('Top10', ['order' => 'ord']);
                 $recipesMostViewed = new ListObjects('Recipe', ['order' => 'views DESC', 'limit' => '10']);
-                $this->meta_url = url($this->action);
                 $this->title_page = Parameter::code('meta_title_page_top10');
+                $this->meta_url = url($this->action);
+                preg_match('/<p>(.*?)<\/p>/', HtmlSection::show('top_10_intro'), $matches);
+                if (isset($matches[1])) {
+                    $this->meta_description = strip_tags($matches[1]);
+                }
                 $this->content = '
                     ' . HtmlSection::show('top_10_intro') . '
                     <div class="top10_wrapper">
