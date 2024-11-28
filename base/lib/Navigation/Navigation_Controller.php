@@ -208,7 +208,7 @@ class Navigation_Controller extends Controller
                         }
                         $this->title_page = $searchPage->getBasicInfoTitlePage();
                         $this->meta_description = $searchPage->get('meta_description');
-                        $this->meta_url = url($this->action . '/' . $search);
+                        $this->meta_url = url($this->action . '/' . Text::simpleUrl($this->id));
                         $this->meta_image = $searchPage->getImageUrl('image', 'web');
                         $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
                     }
