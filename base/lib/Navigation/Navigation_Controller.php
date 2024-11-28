@@ -158,6 +158,24 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
+            case 'top-10':
+                $top10s = new ListObjects('Top10', ['order' => 'ord']);
+                $recipesMostViewed = new ListObjects('Recipe', ['order' => 'views DESC', 'limit' => '10']);
+                $this->meta_url = url($this->action);
+                $this->title_page = Parameter::code('meta_title_page_top10');
+                $this->content = '
+                    ' . HtmlSection::show('top_10_intro') . '
+                    <div class="top10_wrapper">
+                        <h2>' . __('top10_recipes') . '</h2>
+                        ' . $top10s->showList() . '
+                    </div>
+                    <div class="top10_wrapper">
+                        <h2>' . __('most_viewed_recipes') . '</h2>
+                        <p>' . __('most_viewed_recipes_disclaimer') . '</p>
+                        ' . $recipesMostViewed->showList(['function' => 'Top10']) . '
+                    </div>';
+                return $this->ui->render();
+                break;
             case 'buscar':
             case 'pesquisar':
                 if (isset($_GET['search']) && $_GET['search'] != '') {
@@ -298,6 +316,14 @@ class Navigation_Controller extends Controller
                     $result[] = $item['query'];
                     Db::execute($item['query']);
                 }
+                return json_encode($result);
+                break;
+            case 'refresh-translations':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $translationsLink = 'https://www.translate-this.net/project/api_export_json/cocina?api_token=948ca9352b2f7db15c524686daf6aaa9e500c8943d6fed1eca7d6ac78596e1e6';
+                $contents = json_decode(Url::getContents($translationsLink), true);
+                $result = Translation::import($contents);
                 return json_encode($result);
                 break;
             case 'recipes-fix-steps':

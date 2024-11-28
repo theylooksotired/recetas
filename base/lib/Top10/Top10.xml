@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<object>
+	<name>Top10</name>
+	<table>top10</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <order>true</order>
+        </sql>
+        <form>
+            <title>top10</title>
+			<orderBy>ord</orderBy>
+        </form>
+	</info>
+	<attributes>
+		<attribute>
+			<name>id</name>
+			<type>id_autoincrement</type>
+		</attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<label>recipe</label>
+			<type>select</type>
+			<refObject>Recipe</refObject>
+		</attribute>
+	</attributes>
+</object>

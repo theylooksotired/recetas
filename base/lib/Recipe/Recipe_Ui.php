@@ -82,6 +82,17 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderTop10($options = [])
+    {
+        $recipe = (isset($options['recipe'])) ? $options['recipe'] : $this->object;
+        $counter = (isset($options['counter'])) ? $options['counter'] : '';
+        return '
+            <div class="top10">
+                <div class="top10_number">' . $counter  . '.</div>
+                <div class="top10_recipe">' . $recipe->showUi('Best')  . '</div>
+            </div>';
+    }
+
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
