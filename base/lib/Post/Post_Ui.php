@@ -216,13 +216,18 @@ class Post_Ui extends Ui
         if ($posts->count() < 6) {
             $posts = new ListObjects('Post', ['where' => 'id!=:id AND publish_date<=NOW() AND active="1"', 'limit' => 6], ['id' => $this->object->id()]);
         }
-        $recipes = new ListObjects('Recipe', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
+        $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
+        $recipesSearch = new ListObjects('Recipe', [
+            'where' => 'active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
+            'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
+            'limit' => '8',
+        ]);
         return '
             <div class="related">
-                ' . ((!$recipes->isEmpty()) ? '
+                ' . ((!$recipesSearch->isEmpty()) ? '
                 <div class="related_block">
                     <h2 class="related_title">' . __('other_recipes') . '</h2>
-                    <div class="recipes_minimal">' . $recipes->showList(['function' => 'Minimal']) . '</div>
+                    <div class="recipes_minimal">' . $recipesSearch->showList(['function' => 'Minimal']) . '</div>
                 </div>
                 ' : '') . '
                 <div class="related_block">

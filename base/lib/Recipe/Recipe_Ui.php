@@ -201,7 +201,6 @@ class Recipe_Ui extends Ui
                     ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
                     ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
                 ]]) . '
-                ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }
 
@@ -383,7 +382,19 @@ class Recipe_Ui extends Ui
         if ($recipesBefore->count() < 16) {
             $recipesAfter = new ListObjects('Recipe', ['where' => 'id < :id AND id_category=:id_category AND active="1"', 'limit' => (16 - $recipesBefore->count()), 'order' => 'id DESC'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         }
+        $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
+        $recipesSearch = new ListObjects('Recipe', [
+            'where' => 'id!="' . $this->object->id() . '" AND active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
+            'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
+            'limit' => '8',
+        ]);
         return '<div class="related">
+                    ' . ((!$recipesSearch->isEmpty()) ? '
+                    <div class="related_block">
+                        <h2 class="related_title">' . __('similar_recipes') . '</h2>
+                        <div class="recipes_minimal">' . $recipesSearch->showList(['function' => 'Minimal']) . '</div>
+                    </div>
+                    ' : '') . '
                     <div class="related_block">
                         <h2 class="related_title">' . __('other_recipes') . '</h2>
                         <div class="recipes_minimal">

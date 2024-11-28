@@ -2899,4 +2899,9 @@ body {
         width: calc(100% - 60px);
         float: right;
     }
+    .recipe {
+        .recipe_short_description {
+            font-size: $fontSizeNormal;
+        }
+    }
 }

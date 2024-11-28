@@ -177,7 +177,8 @@ class Navigation_Controller extends Controller
                         <h2>' . __('most_viewed_recipes') . '</h2>
                         <p>' . __('most_viewed_recipes_disclaimer') . '</p>
                         ' . $recipesMostViewed->showList(['function' => 'Top10']) . '
-                    </div>';
+                    </div>
+                    ' . SearchPage_Ui::tags();
                 return $this->ui->render();
                 break;
             case 'buscar':
