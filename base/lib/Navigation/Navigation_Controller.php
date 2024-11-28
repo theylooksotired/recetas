@@ -321,7 +321,7 @@ class Navigation_Controller extends Controller
             case 'refresh-translations':
                 $this->mode = 'json';
                 $this->checkAuthorization();
-                $translationsLink = 'https://www.translate-this.net/project/api_export_json/cocina?api_token=948ca9352b2f7db15c524686daf6aaa9e500c8943d6fed1eca7d6ac78596e1e6';
+                $translationsLink = Parameter::code('link_translations');
                 $contents = json_decode(Url::getContents($translationsLink), true);
                 $result = Translation::import($contents);
                 return json_encode($result);
