@@ -266,7 +266,7 @@ class Navigation_Controller extends Controller
             case 'sitemap':
             case 'sitemap.xml':
                 $this->mode = 'xml';
-                $urls = [url('')];
+                $urls = [url(''), url('top-10')];
                 $urls = array_merge($urls, Category_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());
