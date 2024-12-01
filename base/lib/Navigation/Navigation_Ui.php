@@ -228,6 +228,7 @@ class Navigation_Ui extends Ui
                 <nav class="menu_all">
                 ') . '
                     <div class="menu_all_ins">
+                        <a href="' . url('') . '">' . __('home') . '</a>
                         <a href="' . url('top-10') . '">' . __('top10') . '</a>
                         ' . $menu . '
                         <a class="menu_posts" href="' . url('articulos') . '">' . __('posts') . '</a>
