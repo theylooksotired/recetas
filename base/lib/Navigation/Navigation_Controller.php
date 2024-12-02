@@ -371,6 +371,64 @@ class Navigation_Controller extends Controller
                     return implode(' ', $results);
                 }
                 break;
+            case 'add-recipe-ai':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $content = (isset($this->values['content'])) ? $this->values['content'] : '';
+                $categories = (new Category)->readList(['order' => 'ord']);
+                $categoriesString = '';
+                foreach ($categories as $category) {
+                    $categoriesString .= $category->id() . '=' . $category->get('name') . ', ';
+                }
+                if ($content != '') {
+                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del plato, idCategoria (' . $categoriesString . '), numeroPorciones (el número estimado de porciones), debe ser distinta a la descripcion y debe contener mejor informacion sobre la receta, de maximo 1000 caracteres en codigo HTML), ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
+                    $questionRecipes = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva um arquivo JSON, sem texto adicional, com os campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descrição simples do prato, deve ser diferente da descrição e deve conter informações melhores sobre a receita, com no máximo 1000 caracteres em HTML), idCategoria (' . $categoriesString . '), numeroPorciones (o número estimado de porções), ingredientes (lista, separar cada ingrediente se uma linha tiver vários), pasos (lista, que inclua todos os ingredientes, sempre em terceira pessoa e com uma linguagem muito amigável, deve haver apenas uma linha por passo). A receita é: "' . $content . '"' : $questionRecipe;
+                    $answerChatGPT = ChatGPT::answer($questionRecipe);
+                    preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
+                    $jsonString = (isset($matches[0])) ? $matches[0] : '';
+                    if ($jsonString != '') {
+                        $response = json_decode($jsonString, true);
+                        if (isset($response['titulo'])) {
+                            $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . (new Recipe)->titleTest($response['titulo']) . '"';
+                            $questionTitle = (ASTERION_LANGUAGE_ID == 'pt') ? 'Corrija a sintaxe e a ortografia desta frase, sem usar aspas, sem colocar ponto final: "' . (new Recipe)->titleTest($response['titulo']) . '"' : $questionTitle;
+                            $response['tituloPagina'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
+                        }
+                        if (isset($response['descripcionHtml'])) {
+                            $response['descripcionHtml'] = str_replace('. ', '.</p><p>', $response['descripcionHtml']);
+                        }
+                        $values = [
+                            'title' => $response['titulo'],
+                            'title_url' => Text::simpleUrl($response['titulo']),
+                            'title_page' => $response['tituloPagina'],
+                            'meta_description' => $response['metaDescripcion'],
+                            'short_description' => $response['descripcion'],
+                            'description' => $response['descripcionHtml'],
+                            'id_category' => intval($response['idCategoria']),
+                            'servings' => intval($response['numeroPorciones']),
+                            'rating' => rand(4, 5),
+                            'ingredients_raw' => implode("\n", $response['ingredientes']),
+                            'preparation_raw' => implode("\n", $response['pasos']),
+                            'active' => 0
+                        ];
+                        $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url=:title_url'], ['title_url' => Text::simpleUrl($response['titulo'])]);
+                        if ($oldRecipe->id() == '') {
+                            $recipe = new Recipe($values);
+                            $recipe->persist();
+                            $result = ['status' => 'OK', 'recipe' => $recipe->getBasicInfo()];
+                        } else {
+                            $values['id_recipe'] = $oldRecipe->id();
+                            $questionTitle = 'Escribe un nombre alternativo para la receta "' . $oldRecipe->getBasicInfo() . '", talvez añadiendo "tipico", "alternativo" o "tradicional". Responde solamente con el nuevo titulo, sin ningun mensaje adicional y sin signos de admiracion ni interrogacion';
+                            $values['title'] = ChatGPT::answer($questionTitle);
+                            $recipeVersion = new RecipeVersion($values);
+                            $recipeVersion->persist();
+                            $result = ['status' => 'OK', 'recipe' => $oldRecipe->getBasicInfo(), 'recipe_version' => $recipeVersion->getBasicInfo()];
+                        }
+                        return json_encode($result);
+                    }
+                }
+                return json_encode($result);
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();

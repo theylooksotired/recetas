@@ -100,7 +100,7 @@ class Recipe_Ui extends Ui
         $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
         $newFormat = false;
-        $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+        $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         if (count($versions) > 0) {
             $newFormat = true;
             $i = 1;
@@ -527,7 +527,7 @@ class Recipe_Ui extends Ui
 
     public function label($canModify = false)
     {
-        $versions = new ListObjects('RecipeVersion', ['where' => 'id_recipe="' . $this->object->id() . '"']);
+        $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
@@ -536,7 +536,7 @@ class Recipe_Ui extends Ui
     public function renderJsonHeader()
     {
         $versionsJson = '';
-        $versions = (new RecipeVersion)->readList(['where' => 'id_recipe="' . $this->object->id() . '"']);
+        $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         foreach ($versions as $version) {
             $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
         }
