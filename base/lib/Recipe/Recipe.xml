@@ -35,12 +35,13 @@
                 #active
                 #image
                 <div class="item_information">
-                    <p class="tiny accent">#created - #modified</p>
                     <p class="accent_alt">#title_page</p>
                     <p class="accent"><strong>#title</strong></p>
                     <p class="small">#short_description</p>
                     <p class="accent">#meta_description</p>
                     <p class="small accent">#views _views</p>
+                    <p class="tiny accent">#created</p>
+                    <p class="tiny accent">#modified</p>
                 </div>
             </templateItemAdmin>
         </form>
