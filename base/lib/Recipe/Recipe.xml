@@ -20,7 +20,7 @@
             <label>#title</label>
             <icon>utensils</icon>
             <pager>50</pager>
-            <orderBy>title,views,active</orderBy>
+            <orderBy>title,views,active,created</orderBy>
             <viewPublic>true</viewPublic>
             <publicUrl>receta / #id _ #title_url</publicUrl>
             <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
