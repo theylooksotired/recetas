@@ -35,6 +35,7 @@
                 #active
                 #image
                 <div class="item_information">
+                    <p class="small">#created - #updated</p>
                     <p class="accent_alt">#title_page</p>
                     <p class="accent"><strong>#title</strong></p>
                     <p class="small">#short_description</p>
