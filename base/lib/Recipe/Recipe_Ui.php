@@ -159,6 +159,11 @@ class Recipe_Ui extends Ui
         }
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
+        $lastAnswer = '';
+        if (Parameter::code('questions') == 'true' && Session::get('answered_recipe') == $this->object->id() ) {
+            $question = (new Question)->read(Session::get('answered_question'));
+            $lastAnswer = $question->showUi();
+        }
         return '
             ' . $otherVersionsTop . '
             <article class="recipe_complete">
@@ -186,6 +191,12 @@ class Recipe_Ui extends Ui
                                         <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                     </div>
                                 </div>
+                                ' . ((Parameter::code('questions') == 'true') ? '
+                                    <div class="question_wrapper" id="question_' . $this->object->id() . '">
+                                        ' . Question_Form::showPublic() . '
+                                        ' . $lastAnswer . '
+                                    </div>
+                                ' : '') . '
                             </div>
                         </div>
                     </div>
@@ -459,6 +470,25 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderText()
+    {
+        $this->object->loadMultipleValues();
+        $ingredients = [];
+        foreach ($this->object->get('ingredients') as $ingredient) {
+            $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
+        }
+        $instructions = [];
+        foreach ($this->object->get('preparation') as $preparation) {
+            $instructions[] = $preparation->get('step') . "\n";
+        }
+
+        return $this->object->getBasicInfo() . '
+            ' . __('ingredients') . '
+            ' . implode("\n", $ingredients) . '
+            ' . __('preparation') . '
+            ' . implode("\n", $instructions);
+    }
+
     public static function introConnected()
     {
         $login = User_Login::getInstance();
@@ -530,6 +560,7 @@ class Recipe_Ui extends Ui
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
+            ' . (($this->object->get('created') == $this->object->get('modified')) ? '<div class="error">NEW</div>' : '')  . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
     }
 

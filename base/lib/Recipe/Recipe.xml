@@ -40,8 +40,6 @@
                     <p class="small">#short_description</p>
                     <p class="accent">#meta_description</p>
                     <p class="small accent">#views _views</p>
-                    <p class="tiny accent">#created</p>
-                    <p class="tiny accent">#modified</p>
                 </div>
             </templateItemAdmin>
         </form>

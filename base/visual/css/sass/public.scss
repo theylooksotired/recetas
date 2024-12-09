@@ -2905,3 +2905,59 @@ body {
         }
     }
 }
+
+.question_wrapper {
+    fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    form {
+        margin: 20px 0 0 0;
+        padding: 20px 0 0 0;
+        border-top: 2px solid rgba($colorAccent, 0.1);
+        .form_field {
+            label {
+                display: block;
+                margin: 0 0 5px;
+                padding: 0;
+                color: $colorAccent;
+                font-weight: bold;
+            }
+            input {
+                width: 100%;
+                padding: 15px;
+                margin: 0 0 10px;
+                border: 1px solid $black;
+                background: $white;
+                color: $black;
+                @include borderRadius(3px);
+            }
+        }
+        .form_submit_wrapper {
+            text-align: right;
+            .button {
+                width: auto;
+                display: inline-block;
+                padding: 5px 15px;
+                border: 1px solid darken($colorAccent, 5%);
+                border-bottom: 2px solid darken($colorAccent, 5%);
+                border-right: 2px solid darken($colorAccent, 5%);
+                font-size: $fontSizeNormal;
+            }
+        }
+    }
+}
+
+.question_answered {
+    margin: 20px 0 0 0;
+    padding: 10px;
+    background: rgba($colorMain, 0.05);
+    border: 5px solid rgba($colorMain, 0.1);
+    color: $colorMainAlt;
+    @include borderRadius(5px);
+    .question {
+        font-weight: bold;
+        font-size: $fontSizeMedium;
+    }
+}

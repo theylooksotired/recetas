@@ -113,7 +113,33 @@ class Navigation_Controller extends Controller
                     if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
                         $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
+                        if (Parameter::code('questions') == 'true') $this->head .= Recaptcha::head();
                         $this->content_bottom = $this->recipe->showUi('Related');
+                        if (Parameter::code('questions') == 'true' && isset($this->values['question']) && strlen($this->values['question']) > 10) {
+                            $question = 'Usando un lenguaje formal y evitando mencionar el sexo de la persona pues no sabemos si es hombre o mujer. Escribe un archivo JSON que tenga tres campos: "original_question" que es el texto original de la pregunta, "formatted_question" que es la pregunta reformulada y bien escrita, "answer" que es una respuesta a la pregunta: "' . $this->values['question'] . '" que ha formulado una persona que acaba de leer la siguiente receta de cocina: "' . $this->recipe->showUi('Text') . '"';
+                            $answerChatGPT = ChatGPT::answer($question);
+                            preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
+                            $jsonString = (isset($matches[0])) ? $matches[0] : '';
+                            if ($jsonString != '') {
+                                $json = json_decode($jsonString, true);
+                                $values = $this->values;
+                                $values['question'] = (isset($json['original_question'])) ? $json['original_question'] : '';
+                                $values['question_formatted'] = (isset($json['formatted_question'])) ? $json['formatted_question'] : '';
+                                $values['answer'] = (isset($json['answer'])) ? $json['answer'] : '';
+                                $values['id_recipe'] = $this->recipe->id();
+                                $values['published'] = false;
+                                $question = new Question($values);
+                                $question->validate();
+                                $question->validateReCaptchaV3();
+                                if (count($question->errors) == 0) {
+                                    $question->persist();
+                                    Session::set('answered_recipe', $this->recipe->id());
+                                    Session::set('answered_question', $question->id());
+                                    header('Location: ' . $this->recipe->url() . '#question_' . $this->recipe->id());
+                                    exit();
+                                }
+                            }
+                        }
                     }
                     return $this->ui->render();
                 } else {
