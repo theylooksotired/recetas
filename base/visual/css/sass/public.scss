@@ -558,21 +558,13 @@ body {
     border: 1px solid rgba($black, 0.1);
     min-height: 280px;
     @include mobile {
-        margin: 0 -10px 10px -10px;
+        margin: 20px -10px 20px -10px;
         border: 0;
         min-height: 300px;
     }
 }
-.adsenselinksWrapper {
-    @include clearer();
-}
-.adsenselinks {
-    float: left;
-    margin: 0 10px 10px 0;
-}
-
-.adsenseTop {
-    margin: 50px 0 10px 0;
+.google-auto-placed {
+    margin: 20px 0;
 }
 
 .listAllSimple {
