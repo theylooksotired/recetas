@@ -10,8 +10,8 @@ html {
 p,
 li {
     font-size: $fontSizeMedium;
-    line-height: 1.3em;
-    padding: 0 0 1em;
+    line-height: 1.2em;
+    padding: 0 0 0.8em;
     margin: 0;
     @include mobile {
         font-size: $fontSizeNormal
