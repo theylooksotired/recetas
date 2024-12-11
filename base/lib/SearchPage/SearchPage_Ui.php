@@ -18,7 +18,7 @@ class SearchPage_Ui extends Ui
 
     static public function tags()
     {
-        $items = new ListObjects('SearchPage', ['limit' => '12', 'order' => 'views DESC']);
+        $items = new ListObjects('SearchPage', ['limit' => '12', 'order' => '(views + 0) DESC']);
         if (!$items->isEmpty()) {
             return '
                 <div class="search_pages_tags">
