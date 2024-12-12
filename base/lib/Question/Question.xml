@@ -5,13 +5,21 @@
 	<info>
 		<sql>
             <primary>id</primary>
-            <order>true</order>
 			<created>true</created>
 			<modified>true</modified>
         </sql>
         <form>
             <title>question</title>
-			<orderBy>ord</orderBy>
+			<orderBy>created DESC</orderBy>
+			<pager>50</pager>
+			<templateItemAdmin>
+                <div class="item_information">
+                    <p class="small">#created</p>
+                    <p class="accent"><strong>#id_recipe</strong></p>
+                    <p class="accent">#question_formatted</p>
+                    <p class="small">#answer</p>
+                </div>
+            </templateItemAdmin>
         </form>
 	</info>
 	<attributes>
