@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<object>
+	<name>SubCategory</name>
+	<table>subcategory</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <order>true</order>
+        </sql>
+        <form>
+            <title>subcategories</title>
+			<orderBy>ord</orderBy>
+			<label>#name</label>
+			<viewPublic>true</viewPublic>
+			<publicUrl>recetas / #name_url</publicUrl>
+            <templateItemAdmin>
+                #image
+                <div class="item_information">
+                    <p class="accent_alt">#title</p>
+                    <p class="accent"><strong>#name</strong></p>
+                    <p class="small">#short_description</p>
+                    <p class="accent">#meta_description</p>
+                </div>
+            </templateItemAdmin>
+        </form>
+	</info>
+	<attributes>
+		<attribute>
+			<name>id</name>
+			<type>id_autoincrement</type>
+		</attribute>
+		<attribute>
+			<name>image</name>
+			<type>file_drag</type>
+			<layout>image</layout>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<label>name</label>
+			<type>text_long</type>
+			<required>notEmpty</required>
+		</attribute>
+		<attribute>
+			<name>name_url</name>
+			<type>hidden_url</type>
+			<refAttribute>name</refAttribute>
+		</attribute>
+		<attribute>
+			<name>icon</name>
+			<type>icon</type>
+			<type>text</type>
+		</attribute>
+		<attribute>
+			<name>title</name>
+			<label>title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>best_recipes_title</name>
+			<label>best_recipes_title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>rest_recipes_title</name>
+			<label>rest_recipes_title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+            <name>meta_description</name>
+            <label>meta_description</label>
+            <type>textarea</type>
+            <countLength>true</countLength>
+            <showCountCharactersMeta>true</showCountCharactersMeta>
+            <minlength>110</minlength>
+            <maxlength>160</maxlength>
+        </attribute>
+		<attribute>
+			<name>short_description</name>
+			<label>short_description</label>
+			<type>textarea</type>
+		</attribute>
+		<attribute>
+			<name>description</name>
+			<label>description</label>
+			<type>textarea_ck</type>
+		</attribute>
+		<attribute>
+			<name>recipes_query</name>
+			<label>recipes_query</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>ingredients_query</name>
+			<label>ingredients_query</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+            <name>recipes</name>
+            <label>recipes</label>
+            <type>multiple_object</type>
+            <refObject>SubCategoryRecipe</refObject>
+            <linkAttribute>id_subcategory</linkAttribute>
+            <onDelete>cascade</onDelete>
+        </attribute>
+	</attributes>
+</object>

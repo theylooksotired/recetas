@@ -7,7 +7,10 @@ $(document).ready(function() {
 
         $.post($(this).data('url'), [], function(response) {
             if (response.description) {
+                $('input[name="title"]').val(response.title_page);
                 $('input[name="title_page"]').val(response.title_page);
+                $('input[name="best_recipes_title"]').val(response.best_recipes_title);
+                $('input[name="rest_recipes_title"]').val(response.rest_recipes_title);
                 $('textarea[name="meta_description"]').val(response.meta_description);
                 $('textarea[name="short_description"]').val(response.short_description);
                 var textareaId = $('textarea[name="description"]').attr('id');

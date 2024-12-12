@@ -260,6 +260,13 @@ body {
         &:hover {
             color: $colorBlue;
         }
+        &.menu_subcategory {
+            display: none;
+            background: $colorOrange;
+            &:hover {
+                color: $colorBlue;
+            }
+        }
         &.menu_posts {
             background: $colorOrange;
             &:hover {
@@ -281,6 +288,9 @@ body {
             display: block;
             padding: 5px 10px;
             text-align: left;
+            &.menu_subcategory {
+                display: block;
+            }
         }
         .menu_all_ins {
             > * {
@@ -2953,5 +2963,41 @@ body {
     .question {
         font-weight: bold;
         font-size: $fontSizeMedium;
+    }
+}
+
+.categories_top {
+    text-align: center;
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 0 0 20px;
+    .category_intro_link {
+        position: relative;
+        a {
+            display: block;
+            color: $colorAccent;
+            padding: 5px 0 0 0;
+            &::before {
+                inset: 0px;
+                content: "";
+                overflow: hidden;
+                position: absolute;
+                white-space: nowrap;
+                z-index: 1;
+            }
+        }
+        &:hover {
+            a {
+                color: $colorMainAlt;
+            }
+        }
+    }
+    @include tablet {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    @include mobile {
+        grid-template-columns: 1fr 1fr;
     }
 }

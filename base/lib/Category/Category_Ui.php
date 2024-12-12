@@ -21,6 +21,16 @@ class Category_Ui extends Ui
             </div>';
     }
 
+    public function renderIntroLink()
+    {
+        $image = ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg';
+        return '
+            <div class="category_intro_link">
+                <img src="' . $image . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                <a href="' . $this->object->url() . '">' . $this->object->get('name') . '</a>
+            </div>';
+    }
+
     public function renderIntro()
     {
         $this->object->loadMultipleValues();
@@ -93,6 +103,20 @@ class Category_Ui extends Ui
     {
         $categories = new ListObjects('Category', ['order' => 'ord']);
         return $categories->showList(['function' => 'Intro']);
+    }
+
+    /**
+     * @cache
+     */
+    public static function introTop()
+    {
+        $categories = (new Category)->readList(['order' => 'ord']);
+        $categories = array_merge($categories, (new SubCategory)->readList(['order' => 'ord']));
+        $categoriesHtml = '';
+        foreach ($categories as $category) {
+            $categoriesHtml .= $category->showUi('IntroLink');
+        }
+        return '<div class="categories_top">' . $categoriesHtml . '</div>';
     }
     
     public static function introSimple()

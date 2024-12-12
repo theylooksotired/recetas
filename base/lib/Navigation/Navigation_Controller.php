@@ -14,6 +14,7 @@ class Navigation_Controller extends Controller
     public $hide_title_page;
     public $hide_title_page_appendix;
     public $hide_side_recipes;
+    public $subcategory;
     public $category;
     public $recipe;
 
@@ -28,8 +29,10 @@ class Navigation_Controller extends Controller
         switch ($this->action) {
             default:
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
+                $subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
                 $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
-                $item = ($category->id() != '') ? $category : new Category();
+                $item = ($subcategory->id() != '') ? $subcategory : new SubCategory();
+                $item = ($category->id() != '') ? $category : $item;
                 $item = ($recipe->id() != '') ? $recipe : $item;
                 if ($item->id() != '') {
                     header("HTTP/1.1 301 Moved Permanently");
@@ -49,6 +52,7 @@ class Navigation_Controller extends Controller
                 $this->meta_url = url('');
                 $this->layout_page = 'simple';
                 $this->content = '
+                    ' . Category_Ui::introTop() . '
                     ' . HtmlSection::show('intro_top') . '
                     ' . $this->ui->adApp('ad_intro') . '
                     <h1>' . $this->title_page . '</h1>
@@ -61,6 +65,7 @@ class Navigation_Controller extends Controller
                 break;
             case 'recetas':
                 $this->redirecLastSlash();
+                $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
                 if ($this->recipe->id() != '') {
@@ -69,7 +74,7 @@ class Navigation_Controller extends Controller
                         FriendSite::saveFriends($this->recipe);
                     }
                 }
-                if ($this->id != '' && $this->category->id() == '') {
+                if ($this->id != '' && $this->category->id() == '' && $this->subcategory->id() == '') {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . url('recetas'));
                     exit();
@@ -84,7 +89,8 @@ class Navigation_Controller extends Controller
                     header('Location: ' . $this->category->url());
                     exit();
                 }
-                $item = ($this->category->id() != '') ? $this->category : new Category();
+                $item = ($this->subcategory->id() != '') ? $this->subcategory : new SubCategory();
+                $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {
                     if ($item->get('title_page') != '') {
@@ -294,6 +300,7 @@ class Navigation_Controller extends Controller
                 $this->mode = 'xml';
                 $urls = [url(''), url('top-10')];
                 $urls = array_merge($urls, Category_Ui::sitemapUrls());
+                $urls = array_merge($urls, SubCategory_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());
                 $urls = array_merge($urls, SearchPage_Ui::sitemapUrls());
@@ -550,44 +557,6 @@ class Navigation_Controller extends Controller
                 $content = json_encode($info, JSON_PRETTY_PRINT);
                 return $content;
             break;
-                // case 'friends':
-                //     $this->mode = 'ajax';
-                //     $sites = FriendSite::allLess();
-                //     foreach ($sites as $key=>$site) {
-                //         $sites[$key]['title'] = '';
-                //         $sites[$key]['description'] = '';
-                //         $sites[$key]['image'] = '';
-                //         $dom = new DOMDocument();
-                //         if (@$dom->loadHTMLFile($site['url'])) {
-                //             $xpath = new DOMXPath($dom);
-                //             $sites[$key]['title'] = $dom->getElementsByTagName("title")->item(0)->textContent;
-                //             $sites[$key]['description'] = $xpath->evaluate('//meta[@name="description"]/@content')->item(0)->textContent;
-                //             $sites[$key]['image'] = $dom->getElementsByTagName("amp-img")->item(0)->getAttribute('src');
-                //         }
-                //         // break;
-                //     }
-                //     //====
-                //     // dd(FriendSite::random('sopas'));
-                //     //=====
-                //     // $sites = FriendSite::all();
-                //     // dump(count($sites));
-                //     // //576
-                //     // // $categories = [];
-                //     // foreach ($sites as $key => $site) {
-                //     //     $info = explode('/', $site['url']);
-                //     //     $category = $info[4];
-                //     //     $sites[$key]['category'] = $info[4];
-                //     //     // if (!in_array($info[4], $categories)) {
-                //     //     //     $categories[] = ;
-                //     //     // }
-                //     // }
-                //     //Echo as PHP
-                //     foreach ($sites as $site) {
-                //         echo "['site'=>'".$site['site']."', 'url'=>'".$site['url']."', 'category'=>'".$site['category']."', 'image'=>'".$site['image']."', 'title'=>'".$site['title']."', 'description'=>'".$site['description']."'],\n";
-                //     }
-
-                //     exit();
-                //     break;
         }
     }
 

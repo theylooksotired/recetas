@@ -214,6 +214,7 @@ class Navigation_Ui extends Ui
     public function menu()
     {
         $menu = Cache::show('Category', 'menuTop');
+        $menu .= Cache::show('SubCategory', 'menuTop');
         return '
             <div class="menu_wrapper">
                 ' . ((isset($this->object->mode) && $this->object->mode == 'amp') ? '
