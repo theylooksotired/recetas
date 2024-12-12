@@ -47,7 +47,7 @@
 		</attribute>
 		<attribute>
 			<name>icon</name>
-			<type>icon</type>
+			<label>icon</label>
 			<type>text</type>
 		</attribute>
 		<attribute>
