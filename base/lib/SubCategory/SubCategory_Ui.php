@@ -23,13 +23,13 @@ class SubCategory_Ui extends Ui
 
     public function renderIntroLink()
     {
-        $image = ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('icon') . '.svg';
+        $image = ASTERION_BASE_FILE . 'visual/img/icon_' . $this->object->get('icon') . '.svg';
         if (!file_exists($image)) {
-            $image = ASTERION_BASE_URL . 'visual/img/icon_default.svg';
+            $image = ASTERION_BASE_FILE . 'visual/img/icon_default.svg';
         }
         return '
             <div class="category_intro_link">
-                <img src="' . $image . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                <img src="' . str_replace(ASTERION_BASE_FILE, ASTERION_BASE_URL, $image) . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                 <a href="' . $this->object->url() . '">' . $this->object->get('name') . '</a>
             </div>';
     }
