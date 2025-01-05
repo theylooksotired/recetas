@@ -446,6 +446,7 @@ class Navigation_Controller extends Controller
                             'preparation_raw' => implode("\n", $response['pasos']),
                             'active' => 0
                         ];
+                        dd($values);
                         $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url=:title_url'], ['title_url' => Text::simpleUrl($response['titulo'])]);
                         if ($oldRecipe->id() == '') {
                             $recipe = new Recipe($values);
