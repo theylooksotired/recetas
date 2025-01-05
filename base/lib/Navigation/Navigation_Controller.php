@@ -449,7 +449,7 @@ class Navigation_Controller extends Controller
                         $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url=:title_url'], ['title_url' => Text::simpleUrl($response['titulo'])]);
                         if ($oldRecipe->id() == '') {
                             $recipe = new Recipe($values);
-                            dd($recipe->persist());
+                            dd($values, $recipe->persist());
                             $result = ['status' => 'OK', 'recipe' => $recipe->getBasicInfo()];
                         } else {
                             $values['id_recipe'] = $oldRecipe->id();
