@@ -415,7 +415,7 @@ class Navigation_Controller extends Controller
                     $categoriesString .= $category->id() . '=' . $category->get('name') . ', ';
                 }
                 if ($content != '') {
-                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del plato, idCategoria (' . $categoriesString . '), numeroPorciones (el número estimado de porciones), debe ser distinta a la descripcion y debe contener mejor informacion sobre la receta, de maximo 1000 caracteres en codigo HTML), ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
+                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del platodebe ser distinta a la descripcion, como la forma de preparacion la receta u algun dato interesante de la misma, de maximo 1000 caracteres en codigo HTML), idCategoria (' . $categoriesString . '), numeroPorciones (el número estimado de porciones), tiempoPreparacion (debe ser uno de estos valores: "5_minutes", "30_minutes", "45_minutes", "1_hour", "2_hours", "3_hours", "4_hours", "5_hours", "1_day", "2_days"), metodoPreparacion (debe ser uno de estos valores: "", "fried", "steamed", "boiled", "baked", "grilled"), ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
                     $questionRecipes = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva um arquivo JSON, sem texto adicional, com os campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descrição simples do prato, deve ser diferente da descrição e deve conter informações melhores sobre a receita, com no máximo 1000 caracteres em HTML), idCategoria (' . $categoriesString . '), numeroPorciones (o número estimado de porções), ingredientes (lista, separar cada ingrediente se uma linha tiver vários), pasos (lista, que inclua todos os ingredientes, sempre em terceira pessoa e com uma linguagem muito amigável, deve haver apenas uma linha por passo). A receita é: "' . $content . '"' : $questionRecipe;
                     $answerChatGPT = ChatGPT::answer($questionRecipe);
                     preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
@@ -439,6 +439,8 @@ class Navigation_Controller extends Controller
                             'description' => $response['descripcionHtml'],
                             'id_category' => intval($response['idCategoria']),
                             'servings' => intval($response['numeroPorciones']),
+                            'cooking_method' => intval($response['metodoPreparacion']),
+                            'cook_time' => intval($response['tiempoPreparacion']),
                             'rating' => rand(4, 5),
                             'ingredients_raw' => implode("\n", $response['ingredientes']),
                             'preparation_raw' => implode("\n", $response['pasos']),
