@@ -172,6 +172,8 @@ class Recipe_Controller extends Controller
                     $ingredient = str_replace('5d','5 d', $ingredient);
                     $amount = $item->get('amount');
                     if ($amount == '') {
+                        $amount = ($amount == '' && strpos($ingredient, '1.5') !== false) ? '1 1/2' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1,5') !== false) ? '1 1/2' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1 1/2') !== false) ? '1 1/2' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '2 1/2') !== false) ? '2 1/2' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1/2') !== false) ? '1/2' : $amount;
