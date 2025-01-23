@@ -148,7 +148,13 @@ class Recipe_Controller extends Controller
             case 'ingredients':
                 $table = '';
                 // foreach ((new RecipeIngredient)->readList(['where'=>'type IS NULL OR type=""', 'order' => 'ingredient']) as $item) {
-                foreach ((new RecipeIngredient)->readList(['order' => 'ingredient']) as $item) {
+                // $items = (new RecipeIngredient)->readList(['order' => 'ingredient']) ;
+                $items = (new RecipeIngredient)->readList(['where'=>'type IS NULL OR type=""', 'order' => 'ingredient']) ;
+                $query = 'SELECT DISTINCT i.* FROM ' . (new RecipeIngredient)->tableName . ' i
+                    LEFT JOIN ' . (new Recipe)->tableName . ' r ON i.id_recipe=r.id WHERE r.active != 1 OR r.active IS NULL
+                    ORDER BY i.ingredient';
+                $items = (new RecipeIngredient)->readListQuery($query) ;
+                foreach ($items as $item) {
                     $ingredient = ($item->get('ingredient_old') == 'Sal y pimienta' || $item->get('ingredient_old') == '') ? $item->get('ingredient') : $item->get('ingredient_old');
                     $ingredient = str_replace('0g','0 g', $ingredient);
                     $ingredient = str_replace('5g','5 g', $ingredient);
@@ -166,6 +172,15 @@ class Recipe_Controller extends Controller
                     $ingredient = str_replace('5d','5 d', $ingredient);
                     $amount = $item->get('amount');
                     if ($amount == '') {
+                        $amount = ($amount == '' && strpos($ingredient, '1 1/2') !== false) ? '1 1/2' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '2 1/2') !== false) ? '2 1/2' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1/2') !== false) ? '1/2' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1/3') !== false) ? '1/3' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1/4') !== false) ? '1/4' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1/8') !== false) ? '1/8' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1 1/2') !== false) ? '1 1/2' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1 1/3') !== false) ? '1 1/3' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '1 3/4') !== false) ? '1 3/4' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1 ½') !== false) ? '1 ½' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1½') !== false) ? '1 ½' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '2 ½') !== false) ? '2 ½' : $amount;
@@ -184,6 +199,9 @@ class Recipe_Controller extends Controller
                     $type = $item->get('type');
                     if ($type == '') {
                         $type = (strpos($ingredient, ' cda ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cda. ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cdta ') !== false) ? 'tablespoon' : $type;
+                        $type = (strpos($ingredient, ' cdta. ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cdas ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cuchara ') !== false) ? 'tablespoon' : $type;
                         $type = (strpos($ingredient, ' cucharas ') !== false) ? 'tablespoon' : $type;
@@ -196,6 +214,7 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' cdta ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cdtas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cdita ') !== false) ? 'teaspoon' : $type;
+                        $type = (strpos($ingredient, ' cdita. ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cditas ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharadita ') !== false) ? 'teaspoon' : $type;
                         $type = (strpos($ingredient, ' cucharaditas ') !== false) ? 'teaspoon' : $type;
@@ -224,6 +243,7 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' kilo ') !== false) ? 'kilogram' : $type;
                         $type = (strpos($ingredient, ' kilos ') !== false) ? 'kilogram' : $type;
                         $type = (strpos($ingredient, ' lb ') !== false) ? 'pound' : $type;
+                        $type = (strpos($ingredient, ' lb. ') !== false) ? 'pound' : $type;
                         $type = (strpos($ingredient, ' libra ') !== false) ? 'pound' : $type;
                         $type = (strpos($ingredient, ' libras ') !== false) ? 'pound' : $type;
                         $type = (strpos($ingredient, ' g ') !== false) ? 'gram' : $type;
@@ -237,10 +257,14 @@ class Recipe_Controller extends Controller
                         $type = (strpos($ingredient, ' ml ') !== false) ? 'milliliter' : $type;
                         $type = (strpos($ingredient, ' lata ') !== false) ? 'can' : $type;
                         $type = (strpos($ingredient, ' latas ') !== false) ? 'can' : $type;
+                        $type = (strpos($ingredient, ' oz. ') !== false) ? 'ounce' : $type;
+                        $type = (strpos($ingredient, ' onza ') !== false) ? 'ounce' : $type;
+                        $type = (strpos($ingredient, ' onzas ') !== false) ? 'ounce' : $type;
+                        $type = (strpos($ingredient, ' onz. ') !== false) ? 'ounce' : $type;
                     }
                     $typeEmpty = ($type == '') ? true : false;
-                    $type = ($typeEmpty) ? 'unit' : $type;
-                    $remove = [' cda ', ' cdas ', ' cuchara ', ' cucharas ', ' cucharada ', ' cucharadas ', ' cdta ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' cucharilla ', ' cucharillas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' lts ', ' litro ', ' litros ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' libra ', ' libras ', ' g ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml ', ' lata ', ' latas ', ' colher (chá) ', ' xícara (chá) ', ' xícaras (chá) ', ' colheres (sopa) ', ' colher (café) ', ' colher (sopa) ', ' xícaras ', ' colheres (chá) '];
+                    $type = ($typeEmpty) ? '' : $type;
+                    $remove = [' cda ', ' cda. ', ' cdas ', ' cuchara ', ' cucharas ', ' cucharada ', ' cucharadas ', ' cdta ', ' cdta. ', ' cdtas ', ' cdita ', ' cditas ', ' cucharadita ', ' cucharaditas ', ' cucharilla ', ' cucharillas ', ' vaso ', ' vasos ', ' vasitos ', ' copa ', ' copas ', ' unidad ', ' unidades ', ' l ', ' lt ', ' lts ', ' litro ', ' litros ', ' tza ', ' taza ', ' tazas ', ' kg ', ' kilo ', ' kilos ', ' lb ', ' lb. ', ' libra ', ' libras ', ' g ', ' gr ', ' gr. ', ' gramo ', ' gramos ', ' pizca ', ' pizcas ', ' cc ', ' ml ', ' lata ', ' latas ', ' colher (chá) ', ' xícara (chá) ', ' xícaras (chá) ', ' colheres (sopa) ', ' colher (café) ', ' colher (sopa) ', ' xícaras ', ' colheres (chá) ', ' oz. ', ' onza ', ' onzas ', ' onz. ', ' cdita. '];
                     $ingredient_new = str_replace($remove, '', $ingredient);
                     $ingredient_new = str_replace($amount, '', $ingredient_new);
                     $ingredient_new = trim($ingredient_new);
@@ -261,7 +285,7 @@ class Recipe_Controller extends Controller
                         $ingredient_new = 'Pimienta';
                     }
                     $ingredient_new = ucfirst(strtolower($ingredient_new));
-                    $ingredient_new = ($item->get('ingredient') != '') ? $item->get('ingredient') : $ingredient_new;
+                    //$ingredient_new = ($item->get('ingredient') != '') ? $item->get('ingredient') : $ingredient_new;
                     $table .= '
                             <tr class="form" data-id="' . $item->id() . '">
                                 <td><input name="amount" value="' . $amount . '"  style="width:100%;"/></td>
@@ -276,7 +300,7 @@ class Recipe_Controller extends Controller
                         $item->persistSimple('ingredient', $ingredient_new);
                     }
                 }
-                $this->content = '<table class="table_admin table_categories small" style="width:100%" data-action="' . url('recipe/ingredient-ajax', true) . '">' . $table . '</table>';
+                $this->content = '<p>' . count($items) . '</p><table class="table_admin table_categories small" style="width:100%" data-action="' . url('recipe/ingredient-ajax', true) . '">' . $table . '</table>';
                 $this->head = $this->loadFormAjax();
                 return $this->ui->render();
                 break;
