@@ -180,6 +180,7 @@ class Recipe_Controller extends Controller
                         $amount = ($amount == '' && strpos($ingredient, '1/3') !== false) ? '1/3' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1/4') !== false) ? '1/4' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1/8') !== false) ? '1/8' : $amount;
+                        $amount = ($amount == '' && strpos($ingredient, '3/4') !== false) ? '3/4' : $amount; 
                         $amount = ($amount == '' && strpos($ingredient, '1 1/2') !== false) ? '1 1/2' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1 1/3') !== false) ? '1 1/3' : $amount;
                         $amount = ($amount == '' && strpos($ingredient, '1 3/4') !== false) ? '1 3/4' : $amount;
