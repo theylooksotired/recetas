@@ -376,7 +376,8 @@ class Navigation_Controller extends Controller
                     }
                     return $recipe->showUi('FixSteps');
                 } else {
-                    $items = (new Recipe)->readList(['order' => 'title_url']);
+                    // $items = (new Recipe)->readList(['order' => 'title_url']);
+                    $items = (new Recipe)->readList(['where' => 'active!=1 OR active IS NULL', 'order' => 'title_url']);
                     $results = [];
                     foreach ($items as $item) {
                         $results[] = $item->urlFixSteps();
