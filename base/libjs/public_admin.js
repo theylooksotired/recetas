@@ -88,4 +88,21 @@ $(document).ready(function() {
         });
     });
 
+
+    $('.button_social').click(function(event) {
+        if ($(this).data('requestRunning')) {
+            return;
+        }
+        $(this).data('requestRunning', true);
+        var button = $(this);
+        var oldLabel = button.text();
+        button.text('Cargando...');
+        $.ajax($(this).data('url')).done(function(response) {
+            console.log(response);
+        }).always(function() {
+            $(this).data('requestRunning', false);
+            button.text(oldLabel);
+        });
+    });
+
 });

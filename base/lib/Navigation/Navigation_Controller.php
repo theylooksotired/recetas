@@ -48,7 +48,6 @@ class Navigation_Controller extends Controller
                     $this->hide_title_page = true;
                     $this->hide_title_page_appendix = true;
                 }
-                $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
                 $this->meta_url = url('');
                 $this->layout_page = 'simple';
                 $this->content = '
@@ -60,7 +59,6 @@ class Navigation_Controller extends Controller
                     ' . HtmlSection::show('intro') . '
                     ' . Post_Ui::intro() . '
                     ' . SearchPage_Ui::tags();
-                $this->head = $items->showList(['function' => 'PreloadImage']);
                 return $this->ui->render();
                 break;
             case 'recetas':

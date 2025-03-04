@@ -475,18 +475,58 @@ class Recipe_Ui extends Ui
         $this->object->loadMultipleValues();
         $ingredients = [];
         foreach ($this->object->get('ingredients') as $ingredient) {
-            $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
+            if ($ingredient->get('amount') != '') {
+                $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
+                $ingredients[] = $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient');
+            } else {
+                $ingredients[] = $ingredient->get('ingredient');
+            }
         }
         $instructions = [];
         foreach ($this->object->get('preparation') as $preparation) {
             $instructions[] = $preparation->get('step') . "\n";
         }
-
         return $this->object->getBasicInfo() . '
             ' . __('ingredients') . '
             ' . implode("\n", $ingredients) . '
             ' . __('preparation') . '
             ' . implode("\n", $instructions);
+    }
+
+    public function renderTextSocial()
+    {
+        $this->object->loadMultipleValues();
+        $ingredients = [];
+        foreach ($this->object->get('ingredients') as $ingredient) {
+            if ($ingredient->get('amount') != '') {
+                $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
+                $ingredients[] = $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient');
+            } else {
+                $ingredients[] = $ingredient->get('ingredient');
+            }
+        }
+        $instructions = [];
+        $i = 1;
+        foreach ($this->object->get('preparation') as $preparation) {
+            $instructions[] = $i . '. ' . $preparation->get('step');
+            $i++;
+        }
+        $content = "👩‍🍳 🍽️ 🍽️ 🍽️ 🍽️ 🍽️ 👩‍🍳\n";
+        $content = mb_strtoupper($this->object->getBasicInfo(), 'UTF-8') . "\n\n";
+        $content .= $this->object->get('short_description') . "\n";
+        $content .= "\n\n";
+        $content .= "🥒 - " . mb_strtoupper(__('ingredients'), 'UTF-8') . " - 🥒\n";
+        $content .= "\n";
+        $content .= implode("\n", $ingredients) . "\n";
+        $content .= "\n";
+        $content .= "\n\n";
+        $content .= "📋 - " . mb_strtoupper(__('preparation'), 'UTF-8') . " - 📋\n";
+        $content .= "\n";
+        $content .= implode("\n", $instructions);
+        $content .= "\n";
+        $content .= "\n";
+        $content .= $this->object->url();
+        return $content;
     }
 
     public static function introConnected()
@@ -562,6 +602,9 @@ class Recipe_Ui extends Ui
             ' . parent::label($canModify) . '
             ' . (($this->object->get('created') == $this->object->get('modified')) ? '<div class="error">NEW</div>' : '')  . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
+            //  . '
+            // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>
+            // <button class="button_social" data-url="' . url('recipe/instagram-post/' . $this->object->id(), true) . '">Publicar en Instagram</button>';
     }
 
     public function renderJsonHeader()

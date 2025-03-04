@@ -361,6 +361,78 @@ class Recipe_Controller extends Controller
                 }
                 dd('END');
                 break;
+            case 'facebook-post':
+                $this->mode = 'ajax';
+                $item = (new Recipe)->read($this->id);
+                $response = ['status' => 'NOK'];
+                if ($item->id() != '') {
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/v22.0/" . Parameter::code('facebook_page_id') . "/feed");
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'Content-Type: application/json',
+                        'Authorization: Bearer ' . Parameter::code('facebook_access_token')
+                    ]);
+                    if (isset($this->parameters['time'])) {
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                            'message' => $item->showUi('TextSocial'),
+                            'image_url' => $item->getImageUrl('image', 'web'),
+                            'link' => $item->url(),
+                            'published' => 'false',
+                            'scheduled_publish_time' => $this->parameters['time']
+                        ]));
+                    } else {
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                            'message' => $item->showUi('TextSocial'),
+                            'image_url' => $item->getImageUrl('image', 'web'),
+                            'link' => $item->url(),
+                        ]));
+                    }
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                }
+                return json_encode($response);
+            break;
+            case 'instagram-post':
+                $this->mode = 'ajax';
+                $item = (new Recipe)->read($this->id);
+                $response = ['status' => 'NOK'];
+                if ($item->id() != '') {
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/v22.0/" . Parameter::code('facebook_instagram_id') . "/media");
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'Content-Type: application/json',
+                        'Authorization: Bearer ' . Parameter::code('facebook_access_token')
+                    ]);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                        'caption' => $item->showUi('TextSocial'),
+                        'image_url' => $item->getImageUrl('image', 'web'),
+                    ]));
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $responseData = json_decode($response, true);
+                    $responseId = (isset($responseData['id'])) ? $responseData['id'] : null;
+                    if ($responseId) {
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/v22.0/" . Parameter::code('facebook_instagram_id') . "/media_publish");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                            'Content-Type: application/json',
+                            'Authorization: Bearer ' . Parameter::code('facebook_access_token')
+                        ]);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                            'creation_id' => $responseId,
+                        ]));
+                        $response = curl_exec($ch);
+                        curl_close($ch);
+                    }
+                }
+                return json_encode($response);
+                break;
         }
     }
 
