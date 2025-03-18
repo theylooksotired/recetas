@@ -41,6 +41,9 @@ $(document).ready(function() {
                 }
                 $('textarea[name="ingredients_raw"]').val(response.ingredientes.join('\n'));
                 $('textarea[name="preparation_raw"]').val(response.pasos.join('\n'));
+                $('select[name="id_category"]').val(response.idCategory);
+                $('select[name="cook_time"]').val(response.tiempoPreparacion);
+                $('input[name="servings"]').val(response.numeroPorciones);
             }
         }).always(function() {
             resizableTextareas();
