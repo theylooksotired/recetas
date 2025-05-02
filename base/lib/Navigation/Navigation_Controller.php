@@ -478,87 +478,68 @@ class Navigation_Controller extends Controller
                         'url' => url(''),
                         'version' => '14.0.0'
                     ],
-                    'categories' => [],
+                    'categories' => Category::allToJson(),
                     'recipes' => []
                 ];
-                $items = (new Category)->readList(['order' => 'ord']);
-                $categories = [];
-                foreach($items as $item) {
-                    $infoIns = (array)$item->values;
-                    unset($infoIns['created']);
-                    unset($infoIns['modified']);
-                    unset($infoIns['image']);
-                    unset($infoIns['name_url']);
-                    unset($infoIns['ord']);
-                    $info['categories'][] = $infoIns;
-                    $categories[$item->id()] = $item->getBasicInfo();
-                }
                 $noRecipes = (isset($this->parameters['noRecipes'])) ? true : false;
                 if (!$noRecipes) {
                     $items = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'title_url']);
                     $errorStep = '';
                     foreach($items as $item) {
-                        $infoIns = (array)$item->values;
-                        $infoIns['image'] = $item->getImageUrl('image', 'web');
-                        $infoIns['image_small'] = $item->getImageUrl('image', 'small');
-                        unset($infoIns['created']);
-                        unset($infoIns['modified']);
-                        unset($infoIns['title_url']);
-                        unset($infoIns['active']);
-                        unset($infoIns['ord']);
-                        unset($infoIns['preparation_old']);
-                        unset($infoIns['id_user']);
-                        unset($infoIns['friend_links']);
-                        unset($infoIns['description_bottom']);
-                        
-                        $infoIns['country'] = $countryCode;
-                        $infoIns['url'] = $item->url();
-                        $infoIns['cook_time'] = __($infoIns['cook_time']);
-                        $infoIns['cooking_method'] = __($infoIns['cooking_method']);
-                        $infoIns['diet'] = __($infoIns['diet']);
-                        $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
-    
-                        $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
-                        $infoIns['ingredients'] = [];
-                        foreach ($ingredients as $ingredient) {
-                            $infoIngredient = (array)$ingredient->values;
-                            unset($infoIngredient['id']);
-                            unset($infoIngredient['created']);
-                            unset($infoIngredient['modified']);
-                            unset($infoIngredient['id_recipe']);
-                            unset($infoIngredient['ord']);
-                            unset($infoIngredient['ingredient_old']);
-                            $infoIngredient['label'] = $ingredient->labelSimple();
-                            
-                            $infoIns['ingredients'][] = $infoIngredient;
-                        }
-    
-                        $preparation = (new RecipePreparation)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
-                        $infoIns['preparation'] = [];
-                        foreach ($preparation as $step) {
-                            $infoStep = (array)$step->values;
-                            unset($infoStep['id']);
-                            unset($infoStep['created']);
-                            unset($infoStep['modified']);
-                            unset($infoStep['id_recipe']);
-                            unset($infoStep['ord']);
-                            unset($infoStep['image']);
-                            unset($infoStep['description']);
-                            unset($infoStep['description_old']);
-                            unset($infoStep['image_old']);
-                            $infoIns['preparation'][] = $infoStep;
-                        }
-    
-                        $info['recipes'][] = $infoIns;
+                        $info['recipes'][] = $item->toJson();
                     }
                 }
                 if ($errorStep!='') {
                     return "ERROR STEP - \n".$errorStep;
                 }
-                $content = json_encode($info, JSON_PRETTY_PRINT);
-                return $content;
+                return json_encode($info, JSON_PRETTY_PRINT);
             break;
-        }
+            case 'translate-categories':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $categories = (new Category)->readList();
+                foreach ($categories as $category) {
+                    $question = 'Traduci el archivo JSON que contiene la categoria de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $category->toJson() . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        $categoryTranslated = new Category($response);
+                        $categoryTranslated->persist();
+                        $itemsProcessed[] = 'OK - ' . $categoryTranslated->getBasicInfo();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $category->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+            break;
+            case 'translate-recipes':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $recipes = (new Recipe)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                foreach ($recipes as $recipe) {
+                    $recipeJson = $recipe->toJson();
+                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        unset($response['id']);
+                        $recipeTranslated = new Recipe($response);
+                        $recipeTranslated->set('translated', 1);
+                        $recipeTranslated->persist();
+                        $recipeTranslated->saveImage($recipe->getImageUrl('image', 'web'), 'image');
+                        $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $recipe->getBasicInfo();
+                        $recipe->delete();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $recipe->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+                break;
+            }
     }
 
     public function checkAuthorization()

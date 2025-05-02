@@ -47,4 +47,12 @@ class ChatGPT extends Controller
         return (isset($response['choices'][0]['message']['content'])) ? $response['choices'][0]['message']['content'] : '';
     }
 
+    static public function answerJson($question, $options = [])
+    {
+        $response = ChatGPT::answer($question, $options);
+        preg_match('/\{(?:[^{}]|(?R))*\}/', $response, $matches);
+        $jsonString = (isset($matches[0])) ? $matches[0] : '';
+        return json_decode($jsonString, true);
+    }
+
 }

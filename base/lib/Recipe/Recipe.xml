@@ -20,7 +20,7 @@
             <label>#title</label>
             <icon>utensils</icon>
             <pager>50</pager>
-            <orderBy>title,views,active,created</orderBy>
+            <orderBy>title,views,active,created,modified</orderBy>
             <viewPublic>true</viewPublic>
             <publicUrl>receta / #id _ #title_url</publicUrl>
             <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
@@ -215,6 +215,11 @@
             <label>active</label>
             <type>checkbox</type>
             <managesPermissions>true</managesPermissions>
+        </attribute>
+        <attribute>
+            <name>translated</name>
+            <label>translated</label>
+            <type>hidden</type>
         </attribute>
     </attributes>
     <indexes>

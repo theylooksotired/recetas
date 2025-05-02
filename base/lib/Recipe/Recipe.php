@@ -285,4 +285,64 @@ class Recipe extends Db_Object
         $this->persistSimple('short_description', $content['short_description']);
     }
 
+    public function toJson()
+    {
+        $categories = Category::allToJson();
+        $countryCode = Parameter::code('country_code');
+        $infoIns = (array)$this->values;
+        $infoIns['image'] = $this->getImageUrl('image', 'web');
+        $infoIns['image_small'] = $this->getImageUrl('image', 'small');
+        unset($infoIns['created']);
+        unset($infoIns['modified']);
+        unset($infoIns['title_url']);
+        unset($infoIns['active']);
+        unset($infoIns['ord']);
+        unset($infoIns['preparation_old']);
+        unset($infoIns['id_user']);
+        unset($infoIns['friend_links']);
+        unset($infoIns['description_bottom']);
+        
+        $infoIns['country'] = $countryCode;
+        $infoIns['url'] = $this->url();
+        $infoIns['cook_time'] = $infoIns['cook_time'];
+        $infoIns['cook_time_label'] = __($infoIns['cook_time']);
+        $infoIns['cooking_method'] = $infoIns['cooking_method'];
+        $infoIns['cooking_method_label'] = __($infoIns['cooking_method']);
+        $infoIns['diet'] = $infoIns['diet'];
+        $infoIns['diet_label'] = __($infoIns['diet']);
+        $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
+
+        $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+        $infoIns['ingredients'] = [];
+        foreach ($ingredients as $ingredient) {
+            $infoIngredient = (array)$ingredient->values;
+            unset($infoIngredient['id']);
+            unset($infoIngredient['created']);
+            unset($infoIngredient['modified']);
+            unset($infoIngredient['id_recipe']);
+            unset($infoIngredient['ord']);
+            unset($infoIngredient['ingredient_old']);
+            $infoIngredient['label'] = $ingredient->labelSimple();
+            $infoIns['ingredients'][] = $infoIngredient;
+        }
+
+        $preparation = (new RecipePreparation)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+        $infoIns['preparation'] = [];
+        foreach ($preparation as $step) {
+            $infoStep = (array)$step->values;
+            unset($infoStep['id']);
+            unset($infoStep['created']);
+            unset($infoStep['modified']);
+            unset($infoStep['id_recipe']);
+            unset($infoStep['ord']);
+            unset($infoStep['image']);
+            unset($infoStep['description']);
+            unset($infoStep['description_old']);
+            unset($infoStep['image_old']);
+            $infoIns['preparation'][] = $infoStep;
+        }
+
+        return $infoIns;
+    }
+
 }
