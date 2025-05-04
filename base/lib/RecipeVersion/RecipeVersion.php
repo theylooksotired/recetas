@@ -95,4 +95,48 @@ class RecipeVersion extends Db_Object
         return $persist;
     }
 
+    public function toJson()
+    {
+        $infoIns = (array)$this->values;
+        $infoIns['image'] = $this->getImageUrl('image', 'web');
+        $infoIns['image_small'] = $this->getImageUrl('image', 'small');
+        $infoIns['cook_time'] = $infoIns['cook_time'];
+        $infoIns['cook_time_label'] = __($infoIns['cook_time']);
+        $infoIns['cooking_method'] = $infoIns['cooking_method'];
+        $infoIns['cooking_method_label'] = __($infoIns['cooking_method']);
+        $infoIns['diet'] = $infoIns['diet'];
+        $infoIns['diet_label'] = __($infoIns['diet']);
+
+        $ingredients = (new RecipeVersionIngredient)->readList(['where' => 'id_recipe_version=:id_recipe_version', 'order'=>'ord'], ['id_recipe_version' => $infoIns['id']]);
+        $infoIns['ingredients'] = [];
+        foreach ($ingredients as $ingredient) {
+            $infoIngredient = (array)$ingredient->values;
+            unset($infoIngredient['id']);
+            unset($infoIngredient['created']);
+            unset($infoIngredient['modified']);
+            unset($infoIngredient['id_recipe_version']);
+            unset($infoIngredient['ord']);
+            unset($infoIngredient['ingredient_old']);
+            $infoIns['ingredients'][] = $infoIngredient;
+        }
+
+        $preparation = (new RecipeVersionPreparation)->readList(['where' => 'id_recipe_version=:id_recipe_version', 'order'=>'ord'], ['id_recipe_version' => $infoIns['id']]);
+        $infoIns['preparation'] = [];
+        foreach ($preparation as $step) {
+            $infoStep = (array)$step->values;
+            unset($infoStep['id']);
+            unset($infoStep['created']);
+            unset($infoStep['modified']);
+            unset($infoStep['id_recipe_version']);
+            unset($infoStep['ord']);
+            unset($infoStep['image']);
+            unset($infoStep['description']);
+            unset($infoStep['description_old']);
+            unset($infoStep['image_old']);
+            $infoIns['preparation'][] = $infoStep;
+        }
+
+        return $infoIns;
+    }
+
 }

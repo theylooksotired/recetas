@@ -582,6 +582,32 @@ class Navigation_Controller extends Controller
                 $result = ['status' => 'OK', 'items' => $itemsProcessed];
                 return json_encode($result, JSON_PRETTY_PRINT);
                 break;
+            case 'translate-recipes-versions':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $recipes = (new RecipeVersion)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                foreach ($recipes as $recipe) {
+                    $recipeJson = $recipe->toJson();
+                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        unset($response['id']);
+                        $recipeTranslated = new RecipeVersion($response);
+                        $recipeTranslated->set('translated', 1);
+                        $recipeTranslated->persist();
+                        $recipeTranslated->saveImage($recipe->getImageUrl('image', 'web'), 'image');
+                        $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $recipe->getBasicInfo();
+                        Db::execute('UPDATE ' . (new RecipeVersion)->tableName . ' SET id_recipe=' . $recipeTranslated->id() . ' WHERE id_recipe=' . $recipe->id());
+                        $recipe->delete();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $recipe->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+                break;
             case 'translate-post-images':
                 $this->mode = 'json';
                 $this->checkAuthorization();
