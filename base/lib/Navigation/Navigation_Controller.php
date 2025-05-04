@@ -662,7 +662,7 @@ class Navigation_Controller extends Controller
                 foreach ($items as $item)  {
                     $recipe = (new Recipe)->readFirst(['where' => 'old_id="' . $item->get('id_recipe') . '"']);
                     $result[] = $item->get('id_recipe') . ' - ' . $recipe->id();
-                    $item->persisSimple('id_recipe', $recipe->id());
+                    $item->persistSimple('id_recipe', $recipe->id());
                 }
                 return json_encode($result, JSON_PRETTY_PRINT);
                 break;
