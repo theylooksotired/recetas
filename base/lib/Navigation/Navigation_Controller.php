@@ -571,6 +571,7 @@ class Navigation_Controller extends Controller
                         unset($response['id']);
                         $recipeTranslated = new Recipe($response);
                         $recipeTranslated->set('translated', 1);
+                        $recipeTranslated->set('old_id', $recipe->id());
                         $recipeTranslated->persist();
                         $recipeTranslated->saveImage($recipe->getImageUrl('image', 'web'), 'image');
                         $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $recipe->getBasicInfo();
