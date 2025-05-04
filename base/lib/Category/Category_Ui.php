@@ -71,7 +71,9 @@ class Category_Ui extends Ui
         $titleRestRecipes = ($this->object->get('rest_recipes_title') != '') ? $this->object->get('rest_recipes_title') : __('rest_recipes');
         $bestRecipesIds = [];
         foreach ($this->object->get('main_recipes') as $bestRecipe) {
-            $bestRecipesIds[] = $bestRecipe->get('id_recipe');
+            if ($bestRecipe->get('id_recipe') !='') {
+                $bestRecipesIds[] = $bestRecipe->get('id_recipe');
+            }
         }
         if (count($bestRecipesIds) > 0) {
             $bestRecipes = new ListObjects('Recipe', ['where' => 'id IN (' . implode(',', $bestRecipesIds) . ') AND active="1"', 'order' => 'title_url']);
