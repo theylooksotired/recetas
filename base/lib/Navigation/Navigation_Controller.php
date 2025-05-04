@@ -574,7 +574,7 @@ class Navigation_Controller extends Controller
                         $recipeTranslated->persist();
                         $recipeTranslated->saveImage($recipe->getImageUrl('image', 'web'), 'image');
                         $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $recipe->getBasicInfo();
-                        Db::execute('UPDATE ' . (new RecipeVersion)->tableName . ' SET id_recipe=' . $recipeTranslated->id() . ' WHERE id_recipe=' . $recipe->id());
+                        Db::execute('UPDATE ' . (new RecipeVersion)->tableName . ' SET id_recipe="' . $recipeTranslated->id() . '" WHERE id_recipe="' . $recipe->id() . '"');
                         $recipe->delete();
                     } else {
                         $itemsProcessed[] = 'NOK - ' . $recipe->getBasicInfo();
