@@ -655,6 +655,16 @@ class Navigation_Controller extends Controller
                 $result = ['status' => 'OK', 'items' => $itemsProcessed];
                 return json_encode($result, JSON_PRETTY_PRINT);
                 break;
+            case 'fix':
+                $this->mode = 'json';
+                $result = ['status' => 'NOK'];
+                $items = (new CategoryRecipe)->readList();
+                foreach ($items as $item)  {
+                    $recipe = (new Recipe)->readFirst(['where' => 'old_id="' . $item->get('id_recipe') . '"']);
+                    $result[] = $recipe->id();
+                }
+                return json_encode($result, JSON_PRETTY_PRINT);
+                break;
             }
     }
 
