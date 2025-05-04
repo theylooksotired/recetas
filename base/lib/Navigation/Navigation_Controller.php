@@ -568,15 +568,18 @@ class Navigation_Controller extends Controller
                     $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
                     $response = ChatGPT::answerJson($question);
                     if (isset($response['id'])) {
+                        $oldId = $recipe->id();
+                        $oldImage = $recipe->getImageUrl('image', 'web');
+                        $oldName = $recipe->getBasicInfo();
+                        $recipe->delete();
                         unset($response['id']);
                         $recipeTranslated = new Recipe($response);
                         $recipeTranslated->set('translated', 1);
-                        $recipeTranslated->set('old_id', $recipe->id());
+                        $recipeTranslated->set('old_id', $oldId);
                         $recipeTranslated->persist();
-                        $recipeTranslated->saveImage($recipe->getImageUrl('image', 'web'), 'image');
-                        $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $recipe->getBasicInfo();
-                        Db::execute('UPDATE ' . (new RecipeVersion)->tableName . ' SET id_recipe="' . $recipeTranslated->id() . '" WHERE id_recipe="' . $recipe->id() . '"');
-                        $recipe->delete();
+                        $recipeTranslated->saveImage($oldImage, 'image');
+                        $itemsProcessed[] = 'OK - ' . $recipeTranslated->getBasicInfo() . ' - ' . $oldName;
+                        Db::execute('UPDATE ' . (new RecipeVersion)->tableName . ' SET id_recipe="' . $recipeTranslated->id() . '" WHERE id_recipe="' . $oldId . '"');
                     } else {
                         $itemsProcessed[] = 'NOK - ' . $recipe->getBasicInfo();
                     }
