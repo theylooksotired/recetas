@@ -514,6 +514,49 @@ class Navigation_Controller extends Controller
                 $result = ['status' => 'OK', 'items' => $itemsProcessed];
                 return json_encode($result, JSON_PRETTY_PRINT);
             break;
+            case 'translate-subcategories':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $subCategories = (new SubCategory)->readList();
+                foreach ($subCategories as $subCategory) {
+                    $question = 'Traduci el archivo JSON que contiene la subCategoria de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $subCategory->toJson() . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        $subCategoryTranslated = new SubCategory($response);
+                        $subCategoryTranslated->persist();
+                        $itemsProcessed[] = 'OK - ' . $subCategoryTranslated->getBasicInfo();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $subCategory->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+            break;
+            case 'translate-info':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $htmlSections = (new HtmlSection)->readList();
+                foreach ($htmlSections as $htmlSection) {
+                    $question = 'Traduci el archivo JSON que contiene una pagina de un sitio de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $htmlSection->toJson() . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        $response['title_en'] = $response['title_es'];
+                        $response['title_url_en'] = $response['title_url_es'];
+                        $response['section_en'] = $response['section_es'];
+                        $htmlSectionTranslated = new HtmlSection($response);
+                        $htmlSectionTranslated->persist();
+                        $itemsProcessed[] = 'OK - ' . $htmlSectionTranslated->getBasicInfo();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $htmlSection->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+            break;
             case 'translate-recipes':
                 $this->mode = 'json';
                 $this->checkAuthorization();
@@ -534,6 +577,52 @@ class Navigation_Controller extends Controller
                         $recipe->delete();
                     } else {
                         $itemsProcessed[] = 'NOK - ' . $recipe->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+                break;
+            case 'translate-post-images':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $postImages = (new PostImage)->readList();
+                foreach ($postImages as $postImage) {
+                    $question = 'Traduci el archivo JSON que contiene la image de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $postImage->toJson() . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        $postImageTranslated = new PostImage($response);
+                        $postImageTranslated->persist();
+                        $itemsProcessed[] = 'OK - ' . $postImageTranslated->getBasicInfo();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $postImage->getBasicInfo();
+                    }
+                }
+                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                return json_encode($result, JSON_PRETTY_PRINT);
+            break;
+            case 'translate-posts':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+                $itemsProcessed = [];
+                $posts = (new Post)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                foreach ($posts as $post) {
+                    $postJson = $post->toJson();
+                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($postJson) . '"';
+                    $response = ChatGPT::answerJson($question);
+                    if (isset($response['id'])) {
+                        unset($response['id']);
+                        $postTranslated = new Post($response);
+                        $postTranslated->set('translated', 1);
+                        $postTranslated->persist();
+                        $postTranslated->saveImage($post->getImageUrl('image', 'web'), 'image');
+                        $itemsProcessed[] = 'OK - ' . $postTranslated->getBasicInfo() . ' - ' . $post->getBasicInfo();
+                        Db::execute('UPDATE ' . (new PostImage)->tableName . ' SET id_post=' . $postTranslated->id() . ' WHERE id_post=' . $post->id());
+                        $post->delete();
+                    } else {
+                        $itemsProcessed[] = 'NOK - ' . $post->getBasicInfo();
                     }
                 }
                 $result = ['status' => 'OK', 'items' => $itemsProcessed];

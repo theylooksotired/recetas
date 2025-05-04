@@ -214,7 +214,6 @@
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>
-            <managesPermissions>true</managesPermissions>
         </attribute>
         <attribute>
             <name>translated</name>

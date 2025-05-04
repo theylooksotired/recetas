@@ -47,5 +47,10 @@
 			<refObject>Recipe</refObject>
 			<firstSelect>-- Seleccionar en vez de una imagen --</firstSelect>
 		</attribute>
+        <attribute>
+            <name>translated</name>
+            <label>translated</label>
+            <type>hidden</type>
+        </attribute>
 	</attributes>
 </object>

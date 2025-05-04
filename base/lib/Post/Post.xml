@@ -125,6 +125,11 @@
             <label>active</label>
             <type>checkbox</type>
         </attribute>
+        <attribute>
+            <name>translated</name>
+            <label>translated</label>
+            <type>hidden</type>
+        </attribute>
     </attributes>
     <indexes>
         <index>
