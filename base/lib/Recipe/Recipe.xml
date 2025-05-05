@@ -220,11 +220,6 @@
             <label>translated</label>
             <type>hidden</type>
         </attribute>
-        <attribute>
-            <name>old_id</name>
-            <label>old_id</label>
-            <type>hidden</type>
-        </attribute>
     </attributes>
     <indexes>
         <index>

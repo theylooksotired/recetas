@@ -345,4 +345,13 @@ class Recipe extends Db_Object
         return $infoIns;
     }
 
+    public function loadTranslation()
+    {
+        if (!isset($this->translation_url)) {
+            $translations = Navigation_Controller::loadTranslations();
+            $this->translation_url = (isset($translations['recipe_' . $this->id()])) ? $translations['recipe_' . $this->id()] : '';
+        }
+        return $this->translation_url;
+    }
+
 }

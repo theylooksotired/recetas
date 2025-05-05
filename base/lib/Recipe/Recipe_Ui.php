@@ -164,6 +164,10 @@ class Recipe_Ui extends Ui
             $question = (new Question)->read(Session::get('answered_question'));
             $lastAnswer = $question->showUi();
         }
+        $translationLink = '';
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            $translationLink = '<p class="recipe_complete_translation"><a href="' . $this->object->translation_url . '" target="_blank">' . __('view_in_' . Language::translateTo()) . '</a></p>';
+        }
         return '
             ' . $otherVersionsTop . '
             <article class="recipe_complete">
