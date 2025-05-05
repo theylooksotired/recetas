@@ -348,7 +348,7 @@ class Recipe extends Db_Object
     public function loadTranslation()
     {
         if (!isset($this->translation_url)) {
-            $translations = Navigation_Controller::loadTranslations();
+            $translations = Translate_Controller::loadTranslations();
             $this->translation_url = (isset($translations['recipe_' . $this->id()])) ? $translations['recipe_' . $this->id()] : '';
         }
         return $this->translation_url;

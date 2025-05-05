@@ -117,6 +117,14 @@ class Post_Ui extends Ui
         return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
     }
 
+    public function renderAlternateUrl()
+    {
+        $this->object->loadTranslation();
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            return '<link rel="alternate" hreflang="' . Translate_Controller::translateTo() . '" href="' . $this->object->translation_url . '"/>';
+        }
+    }
+
     public function renderSide($options = [])
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
@@ -135,6 +143,7 @@ class Post_Ui extends Ui
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
+        $this->object->loadTranslation();
         $share = $this->share(['share' => [
             ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
             ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
@@ -179,7 +188,15 @@ class Post_Ui extends Ui
         }
         $paragraphsResult = array_merge($paragraphsResult, $images);
         $text = implode('', $paragraphsResult);
+        $translationLink = '';
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            $translationLink = '
+                <p class="recipe_complete_translation">
+                    <a href="' . $this->object->translation_url . '" target="_blank" class="button">' . __('view_in_' . Translate_Controller::translateTo()) . '</a>
+                </p>';
+        }
         return '
+            ' . $translationLink . '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
                     <div class="post_short_info">

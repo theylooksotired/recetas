@@ -50,6 +50,7 @@ class Navigation_Controller extends Controller
                 }
                 $this->meta_url = url('');
                 $this->layout_page = 'simple';
+                $this->head = Translate_Controller::alternateUrl('main');
                 $this->content = '
                     ' . Category_Ui::introTop() . '
                     ' . HtmlSection::show('intro_top') . '
@@ -115,9 +116,8 @@ class Navigation_Controller extends Controller
                         exit();
                     }
                     if ($this->recipe->id() != '') {
-                        $this->recipe->loadTranslation();
                         $this->hide_side_recipes = true;
-                        $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage');
+                        $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage') . $item->showUi('AlternateUrl');
                         if (Parameter::code('questions') == 'true') $this->head .= Recaptcha::head();
                         $this->content_bottom = $this->recipe->showUi('Related');
                         if (Parameter::code('questions') == 'true' && isset($this->values['question']) && strlen($this->values['question']) > 10) {
@@ -172,7 +172,7 @@ class Navigation_Controller extends Controller
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'web');
-                    $this->head = $post->showUi('JsonHeader');
+                    $this->head = $post->showUi('JsonHeader') . $post->showUi('AlternateUrl');
                     $this->bread_crumbs = [url($this->action) => __('posts'), $post->url() => $post->getBasicInfoTitle()];
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');

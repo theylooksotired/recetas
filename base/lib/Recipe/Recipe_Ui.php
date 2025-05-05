@@ -96,6 +96,7 @@ class Recipe_Ui extends Ui
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
+        $this->object->loadTranslation();
         $otherVersionsTop = '';
         $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
@@ -166,9 +167,13 @@ class Recipe_Ui extends Ui
         }
         $translationLink = '';
         if (isset($this->object->translation_url) && $this->object->translation_url != '') {
-            $translationLink = '<p class="recipe_complete_translation"><a href="' . $this->object->translation_url . '" target="_blank">' . __('view_in_' . Language::translateTo()) . '</a></p>';
+            $translationLink = '
+                <p class="recipe_complete_translation">
+                    <a href="' . $this->object->translation_url . '" target="_blank" class="button">' . __('view_in_' . Translate_Controller::translateTo()) . '</a>
+                </p>';
         }
         return '
+            ' . $translationLink . '
             ' . $otherVersionsTop . '
             <article class="recipe_complete">
                 <div class="recipe_complete_ins post-content" id="post-container">
@@ -222,6 +227,14 @@ class Recipe_Ui extends Ui
     public function renderPreloadImage()
     {
         return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
+    }
+
+    public function renderAlternateUrl()
+    {
+        $this->object->loadTranslation();
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            return '<link rel="alternate" hreflang="' . Translate_Controller::translateTo() . '" href="' . $this->object->translation_url . '"/>';
+        }
     }
 
     public function renderInfo($complete = false)

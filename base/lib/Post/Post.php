@@ -95,4 +95,13 @@ class Post extends Db_Object
         return ['status' => $status, 'content' => $content];
     }
 
+    public function loadTranslation()
+    {
+        if (!isset($this->translation_url)) {
+            $translations = Translate_Controller::loadTranslations();
+            $this->translation_url = (isset($translations['post_' . $this->id()])) ? $translations['post_' . $this->id()] : '';
+        }
+        return $this->translation_url;
+    }
+
 }

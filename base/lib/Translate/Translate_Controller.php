@@ -207,7 +207,7 @@ class Translate_Controller extends Controller
                     $translations[$languageFile] = json_decode(file_get_contents($file), true);
                 }
             }
-            $translations = (isset($translations[Navigation_Controller::translateTo()])) ? $translations[Navigation_Controller::translateTo()] : [];
+            $translations = (isset($translations[Translate_Controller::translateTo()])) ? $translations[Translate_Controller::translateTo()] : [];
         }
         return $translations;
     }
@@ -215,6 +215,14 @@ class Translate_Controller extends Controller
     static public function translateTo()
     {
         return (Language::active() == 'es') ? 'en' : 'es';
+    }
+
+    static public function alternateUrl($code = 'main')
+    {
+        $translations = Translate_Controller::loadTranslations();
+        if (isset($translations[$code])) {
+            return '<link rel="alternate" hreflang="' . Translate_Controller::translateTo() . '" href="' . $translations[$code] . '"/>';
+        }
     }
 
 }
