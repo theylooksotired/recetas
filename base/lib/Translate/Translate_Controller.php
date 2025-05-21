@@ -92,8 +92,13 @@ class Translate_Controller extends Controller
                         Db::execute('DELETE FROM ' . (new RecipePreparation)->tableName . ' WHERE id_recipe=' . $recipe->id());
                         $recipe->setValues($response);
                         $recipe->set('translated', 1);
-                        $recipe->persist();
-                        $itemsProcessed[] = 'OK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
+                        $persist = $recipe->persist();
+                        if ($persist['status'] == 'OK') {
+                            $itemsProcessed[] = 'OK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
+                        } else {
+                            $itemsProcessed[] = 'NOK DELETED - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
+                            $recipe->delete();
+                        }
                     } else {
                         $itemsProcessed[] = 'NOK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
                     }
