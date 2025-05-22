@@ -201,6 +201,22 @@
             <class>multiple_items_preparation</class>
         </attribute>
         <attribute>
+            <name>image_ingredients</name>
+            <label>image_ingredients</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+        <attribute>
+            <name>images</name>
+            <label>images</label>
+            <type>multiple_object</type>
+            <refObject>RecipeImage</refObject>
+            <linkAttribute>id_recipe</linkAttribute>
+            <onDelete>cascade</onDelete>
+            <class>multiple_items</class>
+        </attribute>
+        <attribute>
             <name>friend_links</name>
             <label>friend_links</label>
             <type>hidden</type>

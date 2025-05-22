@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure RecipeImage
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>RecipeImage</name>
+	<table>recipe_image</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <order>true</order>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Recipe</refObject>
+		</attribute>
+		<attribute>
+            <name>image</name>
+            <label>image</label>
+            <type>file_drag</type>
+            <layout>image</layout>
+            <maxDimensions>true</maxDimensions>
+        </attribute>
+		<attribute>
+            <name>label</name>
+            <label>label</label>
+            <type>textarea_small</type>
+        </attribute>
+	</attributes>
+    <indexes>
+        <index>
+            <name>id_recipe</name>
+            <fields>id_recipe</fields>
+        </index>
+    </indexes>
+</object>

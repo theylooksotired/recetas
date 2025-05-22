@@ -172,6 +172,16 @@ class Recipe_Ui extends Ui
                     <a href="' . $this->object->translation_url . '" target="_blank" class="button">' . __('view_in_' . Translate_Controller::translateTo()) . '</a>
                 </p>';
         }
+        $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
+        $imagesPreparation = '';
+        foreach ($this->object->get('images') as $imagePreparation) {
+            $imagesPreparation .= '
+                <div class="recipe_inside_image recipe_ingredients_image">
+                    ' . $imagePreparation->getImageWidth('image', 'web') . '
+                    ' . (($imagePreparation->get('label') != '') ? '<p class="recipe_inside_image_description">' . $imagePreparation->get('label') . '</p>' : ''). '
+                </div>';
+        }
+        $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
         return '
             ' . $translationLink . '
             ' . $otherVersionsTop . '
@@ -193,10 +203,12 @@ class Recipe_Ui extends Ui
                                 <div class="recipe_wrapper_ins">                            
                                     <div class="recipe_ingredients">
                                         <h3>' . __('ingredients') . '</h3>
+                                        ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
                                         <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                                     </div>
                                     <div class="recipe_preparation">
                                         <h3>' . __('preparation') . '</h3>
+                                        ' . $imagesPreparation . '
                                         <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                     </div>
                                 </div>
