@@ -174,12 +174,15 @@ class Recipe_Ui extends Ui
         }
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
+        $i = 1;
         foreach ($this->object->get('images') as $imagePreparation) {
             $imagesPreparation .= '
                 <div class="recipe_inside_image recipe_ingredients_image">
+                    <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
+                    <span class="preparation_step">' . $imagePreparation->get('label') . '</span>
                     ' . $imagePreparation->getImageWidth('image', 'web') . '
-                    ' . (($imagePreparation->get('label') != '') ? '<p class="recipe_inside_image_description">' . $imagePreparation->get('label') . '</p>' : ''). '
                 </div>';
+            $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
         return '
@@ -207,8 +210,11 @@ class Recipe_Ui extends Ui
                                         <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                                     </div>
                                     <div class="recipe_preparation">
-                                        <h3>' . __('preparation') . '</h3>
+                                        ' . (($imagesPreparation != '') ? '
+                                        <h3>' . __('preparation_simple') . '</h3>
                                         ' . $imagesPreparation . '
+                                        ' : '') . '
+                                        <h3>' . __('preparation') . '</h3>
                                         <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                     </div>
                                 </div>

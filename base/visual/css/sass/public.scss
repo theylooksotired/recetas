@@ -2335,6 +2335,11 @@ body {
         }
     }
     .recipe_inside_image {
+        margin: 0 0 30px;
+        .preparation_step {
+            display: block;
+            padding: 0 0 10px;
+        }
         img {
             object-fit: cover;
             display: block;
