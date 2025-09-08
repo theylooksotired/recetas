@@ -36,6 +36,7 @@ class Recipe_Controller extends Controller
                 return json_encode($response);
                 break;
             case 'prompts-images':
+                $this->mode = 'ajax';
                 $recipe = (new Recipe)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '') {
