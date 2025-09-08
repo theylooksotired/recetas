@@ -36,7 +36,6 @@ class Recipe_Controller extends Controller
                 return json_encode($response);
                 break;
             case 'prompts-images':
-                $this->mode = 'json';
                 $recipe = (new Recipe)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '') {
@@ -45,7 +44,6 @@ class Recipe_Controller extends Controller
                     $question = 'Haz un archivo JSON que tenga el "titulo", "descripcion", "ingredientes" y "pasos" que resume los pasos a tan solo ' . $newSteps . ' de la receta: ' . $recipe->showUi('Text');
                     $answer = ChatGPT::answerJson($question);
                     if (isset($answer['pasos'])) {
-                        echo '<html><body>';
                         echo "PROMPT 0<br/><br/>Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $recipe->showUi('Text');
                         echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
                         $ingredients = [];
@@ -66,7 +64,6 @@ class Recipe_Controller extends Controller
                             echo "PROMPT " . ($i + 1) . "<br/><br/>Haz una imagen solamente con el paso " . ($i + 1) . " de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
                             echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
                         }
-                        echo '</body></html>';
                     }
                 }
                 return '';
