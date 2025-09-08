@@ -635,7 +635,7 @@ class Recipe_Ui extends Ui
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
-            ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error">Tiene imagenes</div>' : '')  . '
+            ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
             //  . '
             // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>
