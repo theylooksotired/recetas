@@ -45,7 +45,12 @@ class Recipe_Controller extends Controller
                     $question = 'Haz un archivo JSON que tenga el "titulo", "descripcion", "ingredientes" y "pasos" que resume los pasos a tan solo ' . $newSteps . ' de la receta: ' . $recipe->showUi('Text');
                     $answer = ChatGPT::answerJson($question);
                     if (isset($answer['pasos'])) {
-                        echo "PROMPT 0<br/><br/>Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $recipe->showUi('Text');
+                        $quoteSpanish = "PROMPT 0<br/><br/>Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $recipe->showUi('Text');
+                        echo $quoteSpanish;
+                        echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
+                        $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
+                        $quoteEnglish = ChatGPT::answer($questionTranslate);
+                        echo $quoteEnglish;
                         echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
                         $ingredients = [];
                         foreach ($recipe->get('ingredients') as $ingredient) {
@@ -61,10 +66,12 @@ class Recipe_Controller extends Controller
                             $pasosSimple .= 'Paso ' . ($i + 1) . ': ' . $answer['pasos'][$i] . '<br/>';
                         }
                         $recipeSimple = $recipe->getBasicInfo('') . '<br/>Ingredientes:<br/>' . implode('<br/>', $ingredients) . '<br/>Preparacion:<br/>' . $pasosSimple;
-                        for ($i = 0; $i < count($answer['pasos']); $i++) {
-                            echo "PROMPT " . ($i + 1) . "<br/><br/>Haz una imagen solamente con el paso " . ($i + 1) . " de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
-                            echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
-                        }
+                        $quoteSpanish = "PROMPT PASOS<br/><br/>Haz cuatro imágenes una por cada uno de los cuatro pasos de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
+                        echo $quoteSpanish;
+                        echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
+                        $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
+                        $quoteEnglish = ChatGPT::answer($questionTranslate);
+                        echo $quoteEnglish;
                     }
                 }
                 return '';
