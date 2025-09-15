@@ -66,7 +66,7 @@ class Recipe_Controller extends Controller
                             $pasosSimple .= 'Paso ' . ($i + 1) . ': ' . $answer['pasos'][$i] . '<br/>';
                         }
                         $recipeSimple = $recipe->getBasicInfo('') . '<br/>Ingredientes:<br/>' . implode('<br/>', $ingredients) . '<br/>Preparacion:<br/>' . $pasosSimple;
-                        $quoteSpanish = "PROMPT PASOS<br/><br/>Haz cuatro imágenes una por cada uno de los cuatro pasos de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
+                        $quoteSpanish = "PROMPT PASOS<br/><br/>Haz cuatro imágenes diferentes y separadas, una por cada uno de los cuatro pasos de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
                         echo $quoteSpanish;
                         echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
                         $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
