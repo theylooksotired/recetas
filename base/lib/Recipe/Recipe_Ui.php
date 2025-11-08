@@ -185,6 +185,12 @@ class Recipe_Ui extends Ui
             $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
+        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
+        $questionsHtml = ($questions->isEmpty()) ? '' : '
+            <div class="questions_recipe">
+                <h2 class="questions_recipe_title">' . __('questions_about_recipe') . '</h2>
+                <div class="questions_recipe_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
+            </div>';
         return '
             ' . $translationLink . '
             ' . $otherVersionsTop . '
@@ -239,7 +245,8 @@ class Recipe_Ui extends Ui
                     ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
                     ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
                 ]]) . '
-            </div>';
+            </div>
+            ' . $questionsHtml;
     }
 
     public function renderPreloadImage()

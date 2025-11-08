@@ -3070,3 +3070,43 @@ body {
     text-align: center;
     margin: 0 0 10px;
 }
+
+.questions_recipe {
+    border-top: 5px solid rgba($black, 0.03);
+    padding: 20px 0;
+    margin: 20px 0;
+    .questions_recipe_title {
+        font-size: $fontSizeBig;
+        margin: 0 0 20px;
+        padding: 0;
+        color: $colorAccent;
+        text-align: center;
+    }
+}
+
+.question_recipe {
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: 1px solid rgba($black, 0.03);
+    &:last-child {
+        border-bottom: none;
+        padding: 0;
+        margin: 0;
+    }
+    p {
+        margin: 0;
+        padding: 0;
+    }
+    .question_recipe_date {
+        font-size: $fontSizeTiny;
+        color: rgba($black, 0.6);
+    }
+    .question_recipe_question {
+        font-weight: bold;
+        font-size: $fontSizeMedium;
+        color: $colorAccent;
+    }
+    .question_recipe_answer {
+        color: rgba($black, 0.8);   
+    }
+}

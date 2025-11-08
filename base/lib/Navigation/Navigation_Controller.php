@@ -495,6 +495,38 @@ class Navigation_Controller extends Controller
                 }
                 return json_encode($info, JSON_PRETTY_PRINT);
             break;
+            case 'json-questions':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                switch ($this->id) {
+                    default:
+                        $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
+                        $info = [];
+                        foreach ($questions as $question) {
+                            $info[] = $question->toJson();
+                        }
+                        return json_encode($info, JSON_PRETTY_PRINT);
+                    break;
+                    case 'publish':
+                        $question = (new Question)->read($this->extraId);
+                        if ($question->id() != '') {
+                            $question->persistSimple('published', 1);
+                            return json_encode(['status' => 'OK', 'question' => $question->toJson()]);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                    case 'delete':
+                        $question = (new Question)->read($this->extraId);
+                        if ($question->id() != '') {
+                            $question->delete();
+                            return json_encode(['status' => 'OK']);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                }
+            break;
         }
     }
 

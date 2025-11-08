@@ -48,10 +48,10 @@ class Recipe_Controller extends Controller
                         $quoteSpanish = "PROMPT 0<br/><br/>Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $recipe->showUi('Text');
                         echo $quoteSpanish;
                         echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
-                        $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
-                        $quoteEnglish = ChatGPT::answer($questionTranslate);
-                        echo $quoteEnglish;
-                        echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
+                        // $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
+                        // $quoteEnglish = ChatGPT::answer($questionTranslate);
+                        // echo $quoteEnglish;
+                        // echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
                         $ingredients = [];
                         foreach ($recipe->get('ingredients') as $ingredient) {
                             if ($ingredient->get('amount') != '') {
@@ -68,10 +68,10 @@ class Recipe_Controller extends Controller
                         $recipeSimple = $recipe->getBasicInfo('') . '<br/>Ingredientes:<br/>' . implode('<br/>', $ingredients) . '<br/>Preparacion:<br/>' . $pasosSimple;
                         $quoteSpanish = "PROMPT PASOS<br/><br/>Haz cuatro imágenes diferentes y separadas, una por cada uno de los cuatro pasos de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
                         echo $quoteSpanish;
-                        echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
-                        $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
-                        $quoteEnglish = ChatGPT::answer($questionTranslate);
-                        echo $quoteEnglish;
+                        // echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";
+                        // $questionTranslate = 'Traduce al ingles el siguiente texto, sin usar comillas ni punto final. Responde solamente con la traduccion, sin ningun texto adicional. El texto es : ' . $quoteSpanish;
+                        // $quoteEnglish = ChatGPT::answer($questionTranslate);
+                        // echo $quoteEnglish;
                     }
                 }
                 return '';
