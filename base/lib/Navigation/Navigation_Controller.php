@@ -464,6 +464,19 @@ class Navigation_Controller extends Controller
                 }
                 return json_encode($result);
                 break;
+            case 'long-questions':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                $longQuestions = (new Question)->readList(['where'=>'LENGTH(answer) > 250', 'limit' => 100]);
+                foreach ($longQuestions as $question) {
+                    $questionText = 'Crea un archivo JSON con los campos "question_formatted" y "answer", ambos son un resumen de menos de 220 caracteres de la pregunta y repuesta:  "' . $question->get('question_formatted') . ' - ' . $question->get('answer') . '"';
+                    $shortAnswer = ChatGPT::answerJson($questionText);
+                    if (isset($shortAnswer['question_formatted']) && isset($shortAnswer['answer'])) {
+                        $question->persistSimple('question_formatted', $shortAnswer['question_formatted']);
+                        $question->persistSimple('answer', $shortAnswer['answer']);
+                    }
+                }
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();
