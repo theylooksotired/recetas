@@ -2960,21 +2960,23 @@ body {
 }
 
 .question_wrapper {
+    margin: 20px -20px -20px -20px;
+    padding: 10px;
+    background: rgba($colorMessage, 0.05);
+    border: 5px solid rgba($colorMessage, 0.1);
+    @include borderRadius(5px);
     fieldset {
         margin: 0;
         padding: 0;
         border: 0;
     }
     form {
-        margin: 20px 0 0 0;
-        padding: 20px 0 0 0;
-        border-top: 5px solid rgba($colorAccent, 0.1);
         .form_field {
             label {
                 display: block;
                 margin: 0 0 5px;
                 padding: 0 0 0 50px;
-                color: $colorAccent;
+                color: $colorMessage;
                 font-weight: bold;
                 position: relative;
                 line-height: 1.1em;
@@ -2996,7 +2998,7 @@ body {
                 width: 100%;
                 padding: 15px;
                 margin: 0 0 10px;
-                border: 1px solid $colorAccent;
+                border: 1px solid $colorMessage;
                 background: $white;
                 color: $black;
                 @include borderRadius(3px);
@@ -3008,25 +3010,88 @@ body {
                 width: auto;
                 display: inline-block;
                 padding: 5px 15px;
-                border: 1px solid darken($colorAccent, 5%);
-                border-bottom: 2px solid darken($colorAccent, 5%);
-                border-right: 2px solid darken($colorAccent, 5%);
+                background: darken($colorMessage, 10%);
+                border: 1px solid darken($colorMessage, 5%);
+                border-bottom: 2px solid darken($colorMessage, 5%);
+                border-right: 2px solid darken($colorMessage, 5%);
                 font-size: $fontSizeNormal;
+                &:hover {
+                    background: darken($colorMessage, 20%);
+                }
             }
         }
+    }
+    @include mobile() {
+        margin: 20px -15px -15px -15px;
+        padding: 10px;
     }
 }
 
 .question_answered {
-    margin: 20px 0 0 0;
+    margin: 10px 0 0 0;
     padding: 10px;
-    background: rgba($colorMain, 0.05);
-    border: 5px solid rgba($colorMain, 0.1);
-    color: $colorMainAlt;
+    border: 5px solid $colorYellow;
+    background: rgba($white, 0.8);
+    color: darken($colorMessage, 10%);
     @include borderRadius(5px);
     .question {
         font-weight: bold;
         font-size: $fontSizeMedium;
+        color: darken($colorMessage, 20%);
+    }
+}
+
+.questions_recipe {
+    border-top: 5px solid rgba($colorMessage, 0.1);
+    padding: 20px 0 0 0;
+    margin: 20px 0 0 0;
+    .questions_recipe_title {
+        font-size: $fontSizeBig;
+        margin: 0 0 20px;
+        padding: 0;
+        color: darken($colorMessage, 10%);
+        text-align: center;
+    }
+    @include mobile() {
+        .questions_recipe_title {
+            font-size: $fontSizeMedium;
+        }
+    }
+}
+
+.question_recipe_hidden {
+    display: none;
+}
+
+.question_recipe {
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: 1px solid rgba($black, 0.03);
+    &:last-child {
+        border-bottom: none;
+        padding: 0;
+        margin: 0;
+    }
+    p {
+        margin: 0;
+        padding: 0;
+    }
+    .question_recipe_date {
+        font-size: $fontSizeTiny;
+        color: rgba($black, 0.6);
+    }
+    .question_recipe_question {
+        font-weight: bold;
+        font-size: $fontSizeMedium;
+        color: rgba($black, 0.8);
+    }
+    .question_recipe_answer {
+        color: rgba($black, 0.7);   
+    }
+    @include mobile() {
+        .question_recipe_question {
+            font-size: $fontSizeNormal;
+        }
     }
 }
 
@@ -3069,44 +3134,4 @@ body {
 .recipe_complete_translation {
     text-align: center;
     margin: 0 0 10px;
-}
-
-.questions_recipe {
-    border-top: 5px solid rgba($black, 0.03);
-    padding: 20px 0;
-    margin: 20px 0;
-    .questions_recipe_title {
-        font-size: $fontSizeBig;
-        margin: 0 0 20px;
-        padding: 0;
-        color: $colorAccent;
-        text-align: center;
-    }
-}
-
-.question_recipe {
-    margin: 0 0 20px;
-    padding: 0 0 20px;
-    border-bottom: 1px solid rgba($black, 0.03);
-    &:last-child {
-        border-bottom: none;
-        padding: 0;
-        margin: 0;
-    }
-    p {
-        margin: 0;
-        padding: 0;
-    }
-    .question_recipe_date {
-        font-size: $fontSizeTiny;
-        color: rgba($black, 0.6);
-    }
-    .question_recipe_question {
-        font-weight: bold;
-        font-size: $fontSizeMedium;
-        color: $colorAccent;
-    }
-    .question_recipe_answer {
-        color: rgba($black, 0.8);   
-    }
 }

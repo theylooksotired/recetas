@@ -161,9 +161,9 @@ class Recipe_Ui extends Ui
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         $lastAnswer = '';
-        if (Parameter::code('questions') == 'true' && Session::get('answered_recipe') == $this->object->id() ) {
+        if (Session::get('answered_recipe') == $this->object->id() ) {
             $question = (new Question)->read(Session::get('answered_question'));
-            $lastAnswer = $question->showUi();
+            $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
         }
         $translationLink = '';
         if (isset($this->object->translation_url) && $this->object->translation_url != '') {
@@ -185,11 +185,12 @@ class Recipe_Ui extends Ui
             $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
-        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'limit' => '12', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
+        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
             <div class="questions_recipe">
                 <h2 class="questions_recipe_title">' . __('questions_about_recipe') . '</h2>
                 <div class="questions_recipe_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
+                ' . (($questions->count() > 10) ? '<div class="button questions_recipe_more">' . __('view_more_questions') . '</div>' : '') . '
             </div>';
         return '
             ' . $translationLink . '
@@ -224,13 +225,11 @@ class Recipe_Ui extends Ui
                                         <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                     </div>
                                 </div>
-                                ' . ((Parameter::code('questions') == 'true') ? '
-                                    <div class="question_wrapper" id="question_' . $this->object->id() . '">
-                                        ' . Question_Form::showPublic() . '
-                                        ' . $lastAnswer . '
-                                    </div>
+                                <div class="question_wrapper" id="question_' . $this->object->id() . '">
+                                    ' . Question_Form::showPublic() . '
+                                    ' . $lastAnswer . '
                                     ' . $questionsHtml . '
-                                ' : '') . '
+                                </div>
                             </div>
                         </div>
                     </div>
