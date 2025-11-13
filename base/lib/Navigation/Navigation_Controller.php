@@ -474,6 +474,7 @@ class Navigation_Controller extends Controller
                     if (isset($shortAnswer['question_formatted']) && isset($shortAnswer['answer'])) {
                         $question->persistSimple('question_formatted', $shortAnswer['question_formatted']);
                         $question->persistSimple('answer', $shortAnswer['answer']);
+                        echo 'Updated question ID ' . $question->id() . "\n";
                     }
                 }
                 break;
