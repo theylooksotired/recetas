@@ -475,6 +475,7 @@ class Navigation_Controller extends Controller
                         $question->persistSimple('question_formatted', $shortAnswer['question_formatted']);
                         $question->persistSimple('answer', $shortAnswer['answer']);
                         echo 'Updated question ID ' . $question->id() . "\n";
+                        
                     }
                 }
                 break;
