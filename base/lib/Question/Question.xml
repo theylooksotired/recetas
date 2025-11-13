@@ -9,17 +9,7 @@
 			<modified>true</modified>
         </sql>
         <form>
-            <title>question</title>
-			<orderBy>created DESC</orderBy>
-			<pager>50</pager>
-			<templateItemAdmin>
-                <div class="item_information">
-                    <p class="small">#created</p>
-                    <p class="accent"><strong>#id_recipe</strong></p>
-                    <p class="accent">#question_formatted</p>
-                    <p class="small">#answer</p>
-                </div>
-            </templateItemAdmin>
+            <hiddenAdminMenu>true</hiddenAdminMenu>
         </form>
 	</info>
 	<attributes>
@@ -29,17 +19,13 @@
 		</attribute>
 		<attribute>
 			<name>id_recipe</name>
-			<label>recipe</label>
-			<type>select</type>
+			<type>linkid_autoincrement</type>
 			<refObject>Recipe</refObject>
-			<firstSelect></firstSelect>
 		</attribute>
 		<attribute>
 			<name>id_recipe_version</name>
-			<label>version</label>
-			<type>select</type>
-			<refObject>Recipe</refObject>
-			<firstSelect></firstSelect>
+			<type>linkid_autoincrement</type>
+			<refObject>RecipeVersion</refObject>
 		</attribute>
 		<attribute>
             <name>question</name>

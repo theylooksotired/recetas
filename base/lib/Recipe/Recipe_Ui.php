@@ -229,6 +229,7 @@ class Recipe_Ui extends Ui
                                         ' . Question_Form::showPublic() . '
                                         ' . $lastAnswer . '
                                     </div>
+                                    ' . $questionsHtml . '
                                 ' : '') . '
                             </div>
                         </div>
@@ -245,8 +246,7 @@ class Recipe_Ui extends Ui
                     ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
                     ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
                 ]]) . '
-            </div>
-            ' . $questionsHtml;
+            </div>';
     }
 
     public function renderPreloadImage()
@@ -640,9 +640,11 @@ class Recipe_Ui extends Ui
     public function label($canModify = false)
     {
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
+        $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
+            ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
             //  . '
             // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>
