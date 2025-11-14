@@ -18,4 +18,13 @@ class Question extends Db_Object
         return $this->recipe->getBasicInfo();
     }
 
+    public function toJson()
+    {
+        $this->loadRecipe();
+        $json = json_decode(parent::toJson(), true);
+        $json['recipe_name'] = $this->recipe->getBasicInfo();
+        $json['recipe_url'] = $this->recipe->url();
+        return json_encode($json);
+    }
+
 }
