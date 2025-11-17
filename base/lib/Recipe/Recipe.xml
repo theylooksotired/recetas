@@ -227,12 +227,12 @@
         <attribute>
             <name>friend_links</name>
             <label>friend_links</label>
-            <type>hidden</type>
+            <type>hidden_total</type>
         </attribute>
         <attribute>
             <name>adsense_dates</name>
             <label>adsense_dates</label>
-            <type>hidden</type>
+            <type>hidden_total</type>
         </attribute>
         <attribute>
             <name>adsense_earnings</name>

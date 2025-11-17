@@ -499,7 +499,7 @@ class Navigation_Controller extends Controller
                         $adsenseVisits = isset($this->values['adsense_visits']) ? $this->values['adsense_visits'] : '';
                         $recipe = (new Recipe)->read($id);
                         if ($recipe->id() != '') {
-                            $recipe->persistSimple('adsense_dates', str_replace('"', '\\"', $adsenseDates));
+                            $recipe->persistSimple('adsense_dates', $adsenseDates);
                             $recipe->persistSimple('adsense_earnings', $adsenseEarnings);
                             $recipe->persistSimple('adsense_visits', $adsenseVisits);
                             return json_encode(['status' => 'OK']);
