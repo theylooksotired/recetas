@@ -482,7 +482,7 @@ class Navigation_Controller extends Controller
                 $this->checkAuthorization();
                 switch ($this->id) {
                     default:
-                        $recipes = (new Recipe)->readList(['order'=>'views DESC']);
+                        $recipes = (new Recipe)->readList(['order'=>'CAST(views AS UNSIGNED) DESC']);
                         $recipesUrls = [];
                         foreach ($recipes as $recipe) {
                             $recipesUrls[] = [
