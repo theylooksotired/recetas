@@ -477,6 +477,38 @@ class Navigation_Controller extends Controller
                     }
                 }
                 break;
+            case 'adsense-info':
+                $this->mode = 'json';
+                $this->checkAuthorization();
+                switch ($this->id) {
+                    default:
+                        $recipes = (new Recipe)->readList(['order'=>'views DESC']);
+                        $recipesUrls = [];
+                        foreach ($recipes as $recipe) {
+                            $recipesUrls[] = [
+                                'id' => $recipe->id(),
+                                'url' => $recipe->url(),
+                            ];
+                        }
+                        return json_encode($recipesUrls, JSON_PRETTY_PRINT);
+                    break;
+                    case 'saveinfo':
+                        $id = isset($this->values['id']) ? $this->values['id'] : '';
+                        $adsenseDates = isset($this->values['adsense_dates']) ? $this->values['adsense_dates'] : '';
+                        $adsenseEarnings = isset($this->values['adsense_earnings']) ? $this->values['adsense_earnings'] : '';
+                        $adsenseVisits = isset($this->values['adsense_visits']) ? $this->values['adsense_visits'] : '';
+                        $recipe = (new Recipe)->read($id);
+                        if ($recipe->id() != '') {
+                            $recipe->persistSimple('adsense_dates', $adsenseDates);
+                            $recipe->persistSimple('adsense_earnings', $adsenseEarnings);
+                            $recipe->persistSimple('adsense_visits', $adsenseVisits);
+                            return json_encode(['status' => 'OK']);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                }
+                break;
             case 'json-mobile':
                 $this->mode = 'json';
                 $this->checkAuthorization();

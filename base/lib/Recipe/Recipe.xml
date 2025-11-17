@@ -230,6 +230,21 @@
             <type>hidden</type>
         </attribute>
         <attribute>
+            <name>adsense_dates</name>
+            <label>adsense_dates</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
+            <name>adsense_earnings</name>
+            <label>adsense_earnings</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
+            <name>adsense_visits</name>
+            <label>adsense_visits</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
             <name>views</name>
             <label>views</label>
             <type>text_integer</type>
