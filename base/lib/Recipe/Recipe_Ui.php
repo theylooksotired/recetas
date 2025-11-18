@@ -642,7 +642,10 @@ class Recipe_Ui extends Ui
         $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
         $adsenseInfo = json_decode($this->object->get('adsense_info'), true);
         $adsenseNumberDays = count($adsenseInfo);
-        if (is_array($adsenseInfo) && $adsenseNumberDays >= 28) {
+        if (is_array($adsenseInfo)) {
+            if ($adsenseNumberDays < 28) {
+                $adsenseInfo = array_merge(array_fill(0, 28 - $adsenseNumberDays, [0, 0]), $adsenseInfo);
+            }
             $blocks = [
                 'block1' => ['data' => array_slice($adsenseInfo, 0, 7), 'earnings' => 0, 'visits' => 0],
                 'block2' => ['data' => array_slice($adsenseInfo, 7, 7), 'earnings' => 0, 'visits' => 0],
