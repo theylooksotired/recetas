@@ -640,10 +640,57 @@ class Recipe_Ui extends Ui
     {
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
+        $adsenseInfo = json_decode($this->object->get('adsense_info'), true);
+        if (is_array($adsenseInfo) && count($adsenseInfo) > 28) {
+            $blocks = [
+                'block1' => ['data' => array_slice($adsenseInfo, 0, 7), 'earnings' => 0, 'visits' => 0],
+                'block2' => ['data' => array_slice($adsenseInfo, 7, 7), 'earnings' => 0, 'visits' => 0],
+                'block3' => ['data' => array_slice($adsenseInfo, 14, 7), 'earnings' => 0, 'visits' => 0],
+                'block4' => ['data' => array_slice($adsenseInfo, 21, 7), 'earnings' => 0, 'visits' => 0],
+            ];
+            $totalEarnings = 0;
+            $totalVisits = 0;
+            $maxEarnings = 0;
+            $maxVisits = 0;
+            foreach ($blocks as $key => $block) {
+                foreach ($block['data'] as $dateInfo) {
+                    $blocks[$key]['visits'] += $dateInfo[0];
+                    $blocks[$key]['earnings'] += $dateInfo[1];
+                    $totalVisits += $dateInfo[0];
+                    $totalEarnings += $dateInfo[1];
+                }
+                if ($blocks[$key]['earnings'] > $maxEarnings) {
+                    $maxEarnings = $blocks[$key]['earnings'];
+                }
+                if ($blocks[$key]['visits'] > $maxVisits) {
+                    $maxVisits = $blocks[$key]['visits'];
+                }
+            }
+            foreach ($blocks as $key => $block) {
+                $blocks[$key]['earnings_average_per_max'] = ($maxEarnings > 0) ? round(($block['earnings'] * 100) / $maxEarnings) : 0;
+                $blocks[$key]['visits_average_per_max'] = ($maxVisits > 0) ? round(($block['visits'] * 100) / $maxVisits) : 0;
+            }
+            $htmlEarnings = '';
+            $htmlVisits = '';
+            $colorEarnings = '#999999';
+            $colorVisits = '#999999';
+            foreach ($blocks as $key => $block) {
+                if ($key != 'block1') {
+                    $previousKey = 'block' . (intval(substr($key, -1)) - 1);
+                    $colorEarnings = ($blocks[$key]['earnings'] < $blocks[$previousKey]['earnings']) ? '#FF0000' : '#00AA00';
+                    $colorVisits = ($blocks[$key]['visits'] < $blocks[$previousKey]['visits']) ? '#FF0000' : '#00AA00';
+                }
+                $htmlEarnings .= '<span style="display:inline-block;vertical-align:bottom;background:' . $colorEarnings . ';width:10px; height:' . round($blocks[$key]['earnings_average_per_max']/8) . 'px" title="' . __('earnings') . ': ' . $blocks[$key]['earnings'] . '$USD">&nbsp;</span>';
+                $htmlVisits .= '<span style="display:inline-block;vertical-align:bottom;background:' . $colorVisits . ';width:10px; height:' . round($blocks[$key]['visits_average_per_max']/8) . 'px" title="' . __('visits') . ': ' . $blocks[$key]['visits'] . '">&nbsp;</span>';
+            }
+            $htmlEarnings = ($htmlEarnings != '') ? '<span class="adsense_earnings_chart">' . $htmlEarnings . '</span>' : '';
+            $htmlVisits = ($htmlVisits != '') ? '<span class="adsense_visits_chart">' . $htmlVisits . '</span>' : '';
+        }
         return '
             ' . parent::label($canModify) . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
+            ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos 30 dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
             //  . '
             // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>

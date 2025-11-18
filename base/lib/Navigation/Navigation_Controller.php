@@ -494,12 +494,12 @@ class Navigation_Controller extends Controller
                     break;
                     case 'saveinfo':
                         $id = isset($this->values['id']) ? $this->values['id'] : '';
-                        $adsenseDates = isset($this->values['adsense_dates']) ? $this->values['adsense_dates'] : '';
+                        $adsenseDates = isset($this->values['adsense_info']) ? $this->values['adsense_info'] : '';
                         $adsenseEarnings = isset($this->values['adsense_earnings']) ? $this->values['adsense_earnings'] : '';
                         $adsenseVisits = isset($this->values['adsense_visits']) ? $this->values['adsense_visits'] : '';
                         $recipe = (new Recipe)->read($id);
                         if ($recipe->id() != '') {
-                            $recipe->persistSimple('adsense_dates', $adsenseDates);
+                            $recipe->persistSimple('adsense_info', $adsenseDates);
                             $recipe->persistSimple('adsense_earnings', $adsenseEarnings);
                             $recipe->persistSimple('adsense_visits', $adsenseVisits);
                             return json_encode(['status' => 'OK']);
