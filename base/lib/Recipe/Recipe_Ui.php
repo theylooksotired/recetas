@@ -641,7 +641,8 @@ class Recipe_Ui extends Ui
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
         $adsenseInfo = json_decode($this->object->get('adsense_info'), true);
-        if (is_array($adsenseInfo) && count($adsenseInfo) > 28) {
+        $adsenseNumberDays = count($adsenseInfo);
+        if (is_array($adsenseInfo) && $adsenseNumberDays >= 28) {
             $blocks = [
                 'block1' => ['data' => array_slice($adsenseInfo, 0, 7), 'earnings' => 0, 'visits' => 0],
                 'block2' => ['data' => array_slice($adsenseInfo, 7, 7), 'earnings' => 0, 'visits' => 0],
@@ -690,7 +691,7 @@ class Recipe_Ui extends Ui
             ' . parent::label($canModify) . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
-            ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos 30 dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
+            ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos ' . $adsenseNumberDays . ' dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
             //  . '
             // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>
