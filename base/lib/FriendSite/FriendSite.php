@@ -13,7 +13,7 @@ class FriendSite
 
     public static function saveFriends($recipe)
     {
-        if ($recipe->get('friend_links') == '') {
+        if ($recipe->get('friend_links') == '' || $recipe->get('friend_links') == '[{') {
             $category = (new Category)->read($recipe->get('id_category'));
             $sites = FriendSite::random($category->get('name_url'));
             $recipe->persistSimple('friend_links', json_encode($sites));
