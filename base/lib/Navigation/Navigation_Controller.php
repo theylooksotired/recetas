@@ -69,7 +69,7 @@ class Navigation_Controller extends Controller
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
                 if ($this->recipe->id() != '') {
                     $this->recipe->loadCategoryManually($this->category);
-                    if ($this->recipe->get('friend_links') == '') {
+                    if ($this->recipe->get('friend_links') == '' || $this->recipe->get('friend_links') == '{[') {
                         FriendSite::saveFriends($this->recipe);
                     }
                 }
