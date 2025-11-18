@@ -694,7 +694,7 @@ class Recipe_Ui extends Ui
             ' . parent::label($canModify) . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
-            ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimoss ' . $adsenseNumberDays . ' dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
+            ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos ' . $adsenseNumberDays . ' dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
             //  . '
             // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>

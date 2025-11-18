@@ -232,7 +232,7 @@
         <attribute>
             <name>adsense_info</name>
             <label>adsense_info</label>
-            <type>textarea</type>
+            <type>hidden_total</type>
         </attribute>
         <attribute>
             <name>adsense_earnings</name>
