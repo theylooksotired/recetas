@@ -76,6 +76,75 @@ class Recipe_Controller extends Controller
                 }
                 return '';
                 break;
+            case 'social-media':
+                $this->mode = 'ajax';
+                $recipe = (new Recipe)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '') {
+                    $recipe->loadMultipleValues();
+                    $font = ASTERION_BASE_FILE . 'visual/css/fonts/AlfaSlabOne-Regular.ttf';
+                    // Portada
+                    $pngMaskCover = ASTERION_BASE_FILE . 'visual/img/pngs/en4pasos.png';
+                    $imageCover = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->getImageUrl('image', 'web'));
+                    $imageCoverOut = ASTERION_STOCK_FILE . 'recipe_out_cover.jpg';
+                    $imageCover = new Image($imageCover);
+                    $imageCover->resizeSquare($imageCoverOut, 1024, 'image/jpg');
+                    $imageCover = new Image($imageCoverOut);
+                    $imageCover->addPngOverImage($pngMaskCover, $imageCoverOut, 'image/jpg');
+                    $imageCover = new Image($imageCoverOut);
+                    $imageCover->addTextOverImage($recipe->get('title'), $imageCoverOut, 'image/jpg', 100, $font);
+                    // Ingredientes
+                    $pngMaskIngredientes = ASTERION_BASE_FILE . 'visual/img/pngs/ingredientes.png';
+                    $imageIngredients = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->getImageUrl('image_ingredients', 'web'));
+                    $imageIngredientsOut = ASTERION_STOCK_FILE . 'recipe_out_ingredientes.jpg';
+                    $imageIngredients = new Image($imageIngredients);
+                    $imageIngredients->resizeSquare($imageIngredientsOut, 1024, 'image/jpg');
+                    $imageIngredients = new Image($imageIngredientsOut);
+                    $imageIngredients->addPngOverImage($pngMaskIngredientes, $imageIngredientsOut, 'image/jpg');
+                    // Pasos
+                    $pasosText = '';
+                    for ($i=1; $i<=4; $i++) {
+                        $pngMaskStep = ASTERION_BASE_FILE . 'visual/img/pngs/paso' . $i . '.png';
+                        $imageStepOut = ASTERION_STOCK_FILE . 'recipe_out_step' . $i . '.jpg';
+                        $imageStep = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->get('images')[$i - 1]->getImageUrl('image', 'web'));
+                        $imageStep = new Image($imageStep);
+                        $imageStep->resizeSquare($imageStepOut, 1024, 'image/jpg');
+                        $imageStep = new Image($imageStepOut);
+                        $imageStep->addPngOverImage($pngMaskStep, $imageStepOut, 'image/jpg');
+                        $pasosText .= 'Paso ' . $i . ': ' . $recipe->get('preparation')[$i - 1]->get('step') . "\n";
+                    }
+                    $zipImages = new ZipArchive();
+                    $zipFileName = ASTERION_STOCK_FILE . 'recipe_social_media_images_' . $recipe->id() . '.zip';
+                    if ($zipImages->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                        $zipImages->addFile($imageCoverOut, 'cover.jpg');
+                        $zipImages->addFile($imageIngredientsOut, 'ingredientes.jpg');
+                        $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step1.jpg', 'paso1.jpg');
+                        $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step2.jpg', 'paso2.jpg');
+                        $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step3.jpg', 'paso3.jpg');
+                        $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step4.jpg', 'paso4.jpg');
+                        $zipImages->close();
+                    }
+                    $question = 'Escribe un archivo JSON con los siguientes campos: "introduccion" que son dos lineas para introducir la receta en una publicacion de redes sociales, "despedida" que es una linea para despedir la publicacion. La receta es: "' . $recipe->showUi('Text') . '"';
+                    $info = ChatGPT::answerJson($question, $options = []);
+                    $socialText = $recipe->get('title');
+                    $socialText .= (isset($info['introduccion'])) ? "\n\n" . $info['introduccion'] : '';
+                    $socialText .= "\n\n-- Ingredientes --\n\n";
+                    foreach ($recipe->get('ingredients') as $ingredient) {
+                        if ($ingredient->get('amount') != '') {
+                            $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
+                            $socialText .= $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient') . "\n";
+                        } else {
+                            $socialText .= $ingredient->get('ingredient') . "\n";
+                        }
+                    }
+                    $socialText .= "\n-- Preparación --\n\n";
+                    $socialText .= $pasosText;
+                    $socialText .= (isset($info['despedida'])) ? "\n" . $info['despedida'] : '';
+                    $socialText .= "\n\n" . $recipe->url();
+                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar todas las imagenes en un archivo ZIP</a><br/><br/>';
+                    echo '<pre>' . $socialText . '</pre>';
+                }
+                break;
             case 'steps-ai-data':
                 $this->mode = 'json';
                 $recipe = (new Recipe)->read($this->id);

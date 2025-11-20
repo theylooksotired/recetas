@@ -17,6 +17,7 @@ class Recipe_Form extends Form
             <div class="button button_small button_api_recipes" data-url="' . url('recipe/load-ai-data/' . $this->object->id(), true) . '">Cargar informacion de ChatGPT</div>
             <div class="button button_small button_api_steps" data-url="' . url('recipe/steps-ai-data/' . $this->object->id(), true) . '">Corregir preparación con ChatGPT</div>
             <a class="button button_small" target="_blank" href="' . url('recipe/prompts-images/' . $this->object->id(), true) . '">Prompts imagenes</a>
+            <a class="button button_small" target="_blank" href="' . url('recipe/social-media/' . $this->object->id(), true) . '">Redes sociales</a>
             <hr/>
             ' : '
             <div class="textarea_resizable form_field  form_field_short_description required ">
