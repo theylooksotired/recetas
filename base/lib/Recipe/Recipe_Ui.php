@@ -146,18 +146,18 @@ class Recipe_Ui extends Ui
         }
         $friendSiteLink1 = '';
         $friendSiteLink2 = '';
-        if ($this->object->get('friend_links') != '') {
-            $sites = @json_decode($this->object->get('friend_links'), true);
-            if (is_array($sites) && count($sites) > 0) {
-                $link = '<a href="' . $sites[0]['url'] . '" title="Receta de ' . $sites[0]['title'] . '">' . $sites[0]['title'] . '</a>';
-                $friendSiteLink1 = '<p class="recipe_complete_link_friend">' . str_replace('#LINK', $link, __('link_friend_top')) . '</p>';
-            }
-            if (is_array($sites) && count($sites) > 1) {
-                $link1 = '<a href="' . $sites[1]['url'] . '" title="Receta de ' . $sites[1]['title'] . '">' . $sites[1]['title'] . '</a>';
-                $link2 = '<a href="' . $sites[2]['url'] . '" title="Receta de ' . $sites[2]['title'] . '">' . $sites[2]['title'] . '</a>';
-                $friendSiteLink2 = '<p class="recipe_complete_link_friend_bottom">' . str_replace('#LINK2', $link2, str_replace('#LINK1', $link1, __('link_friend_bottom'))) . '</p>';
-            }
-        }
+        // if ($this->object->get('friend_links') != '') {
+        //     $sites = @json_decode($this->object->get('friend_links'), true);
+        //     if (is_array($sites) && count($sites) > 0) {
+        //         $link = '<a href="' . $sites[0]['url'] . '" title="Receta de ' . $sites[0]['title'] . '">' . $sites[0]['title'] . '</a>';
+        //         $friendSiteLink1 = '<p class="recipe_complete_link_friend">' . str_replace('#LINK', $link, __('link_friend_top')) . '</p>';
+        //     }
+        //     if (is_array($sites) && count($sites) > 1) {
+        //         $link1 = '<a href="' . $sites[1]['url'] . '" title="Receta de ' . $sites[1]['title'] . '">' . $sites[1]['title'] . '</a>';
+        //         $link2 = '<a href="' . $sites[2]['url'] . '" title="Receta de ' . $sites[2]['title'] . '">' . $sites[2]['title'] . '</a>';
+        //         $friendSiteLink2 = '<p class="recipe_complete_link_friend_bottom">' . str_replace('#LINK2', $link2, str_replace('#LINK1', $link1, __('link_friend_bottom'))) . '</p>';
+        //     }
+        // }
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         $lastAnswer = '';
