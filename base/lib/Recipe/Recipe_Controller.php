@@ -87,8 +87,10 @@ class Recipe_Controller extends Controller
                     $pngMaskCover = ASTERION_BASE_FILE . 'visual/img/pngs/en4pasos.png';
                     $imageCover = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->getImageUrl('image', 'web'));
                     $imageCoverOut = ASTERION_STOCK_FILE . 'recipe_out_cover.jpg';
+                    $imageCoverBigOut = ASTERION_STOCK_FILE . 'recipe_out_big_cover.jpg';
                     $imageCover = new Image($imageCover);
                     $imageCover->resizeSquare($imageCoverOut, 1024, 'image/jpg');
+                    $imageCover->resizeSquare($imageCoverBigOut, 1920, 'image/jpg');
                     $imageCover = new Image($imageCoverOut);
                     $imageCover->addPngOverImage($pngMaskCover, $imageCoverOut, 'image/jpg');
                     $imageCover = new Image($imageCoverOut);
@@ -97,8 +99,10 @@ class Recipe_Controller extends Controller
                     $pngMaskIngredientes = ASTERION_BASE_FILE . 'visual/img/pngs/ingredientes.png';
                     $imageIngredients = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->getImageUrl('image_ingredients', 'web'));
                     $imageIngredientsOut = ASTERION_STOCK_FILE . 'recipe_out_ingredientes.jpg';
+                    $imageIngredientsBigOut = ASTERION_STOCK_FILE . 'recipe_out_big_ingredientes.jpg';
                     $imageIngredients = new Image($imageIngredients);
                     $imageIngredients->resizeSquare($imageIngredientsOut, 1024, 'image/jpg');
+                    $imageIngredients->resizeSquare($imageIngredientsBigOut, 1920, 'image/jpg');
                     $imageIngredients = new Image($imageIngredientsOut);
                     $imageIngredients->addPngOverImage($pngMaskIngredientes, $imageIngredientsOut, 'image/jpg');
                     // Pasos
@@ -106,9 +110,11 @@ class Recipe_Controller extends Controller
                     for ($i=1; $i<=4; $i++) {
                         $pngMaskStep = ASTERION_BASE_FILE . 'visual/img/pngs/paso' . $i . '.png';
                         $imageStepOut = ASTERION_STOCK_FILE . 'recipe_out_step' . $i . '.jpg';
+                        $imageStepBigOut = ASTERION_STOCK_FILE . 'recipe_out_big_step' . $i . '.jpg';
                         $imageStep = str_replace(ASTERION_LOCAL_URL, ASTERION_LOCAL_FILE, $recipe->get('images')[$i - 1]->getImageUrl('image', 'web'));
                         $imageStep = new Image($imageStep);
                         $imageStep->resizeSquare($imageStepOut, 1024, 'image/jpg');
+                        $imageStep->resizeSquare($imageStepBigOut, 1920, 'image/jpg');
                         $imageStep = new Image($imageStepOut);
                         $imageStep->addPngOverImage($pngMaskStep, $imageStepOut, 'image/jpg');
                         $pasosText .= 'Paso ' . $i . ': ' . $recipe->get('preparation')[$i - 1]->get('step') . "\n";
@@ -123,6 +129,17 @@ class Recipe_Controller extends Controller
                         $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step3.jpg', 'paso3.jpg');
                         $zipImages->addFile(ASTERION_STOCK_FILE . 'recipe_out_step4.jpg', 'paso4.jpg');
                         $zipImages->close();
+                    }
+                    $zipImagesBig = new ZipArchive();
+                    $zipFileNameBig = ASTERION_STOCK_FILE . 'recipe_social_media_images_big_' . $recipe->id() . '.zip';
+                    if ($zipImagesBig->open($zipFileNameBig, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                        $zipImagesBig->addFile($imageCoverBigOut, 'cover.jpg');
+                        $zipImagesBig->addFile($imageIngredientsBigOut, 'ingredientes.jpg');
+                        $zipImagesBig->addFile(ASTERION_STOCK_FILE . 'recipe_out_big_step1.jpg', 'paso1.jpg');
+                        $zipImagesBig->addFile(ASTERION_STOCK_FILE . 'recipe_out_big_step2.jpg', 'paso2.jpg');
+                        $zipImagesBig->addFile(ASTERION_STOCK_FILE . 'recipe_out_big_step3.jpg', 'paso3.jpg');
+                        $zipImagesBig->addFile(ASTERION_STOCK_FILE . 'recipe_out_big_step4.jpg', 'paso4.jpg');
+                        $zipImagesBig->close();
                     }
                     $question = 'Escribe un archivo JSON con los siguientes campos: "introduccion" que son dos lineas para introducir la receta en una publicacion de redes sociales, "despedida" que es una linea para despedir la publicacion. La receta es: "' . $recipe->showUi('Text') . '"';
                     $info = ChatGPT::answerJson($question, $options = []);
@@ -141,7 +158,8 @@ class Recipe_Controller extends Controller
                     $socialText .= $pasosText;
                     $socialText .= (isset($info['despedida'])) ? "\n" . $info['despedida'] : '';
                     $socialText .= "\n\n" . $recipe->url();
-                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar todas las imagenes en un archivo ZIP</a><br/><br/>';
+                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
+                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
                     echo '<pre>' . $socialText . '</pre>';
                 }
                 break;
