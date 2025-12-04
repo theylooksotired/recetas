@@ -205,6 +205,35 @@ class Recipe_Controller extends Controller
                 }
                 return '';
                 break;
+            case 'create-version':
+                $this->mode = 'json';
+                $recipe = (new Recipe)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '') {
+                    $recipeInfo = $recipe->toJson();
+                    unset($recipeInfo['images']);
+                    unset($recipeInfo['image_ingredients']);
+                    unset($recipeInfo['adsense_info']);
+                    unset($recipeInfo['adsense_earnings']);
+                    unset($recipeInfo['adsense_dates']);
+                    unset($recipeInfo['adsense_visits']);
+                    unset($recipeInfo['questions']);
+                    unset($recipeInfo['ingredients_raw']);
+                    unset($recipeInfo['preparation_raw']);
+                    $recipeJson = json_encode($recipeInfo);
+                    $questionVersion = 'Crea una version alternativa de la receta usando el mismo formato JSON (cook_time:5_minutes,15_minutes,30_minutes,45_minutes,1_hour,2_hours,3_hours,4_hours,5_hours,1_day,2_days; cooking_method:fried,steamed,boiled,baked,grilled; diet:diabetic,gluten_free,halal,hindu,kosher,low_calorie,low_fat,low_lactose,low_salt,vegan,vegetarian). La receta original es: "' . $recipeJson . '"';
+                    $response = ChatGPT::answerJson($questionVersion);
+                    if (isset($response['id'])) {
+                        unset($response['id']);
+                        $response['id_recipe'] = $this->id;
+                        $response['active'] = '1';
+                        $version = new RecipeVersion($response);
+                        $version->persist();
+                    }
+                }
+                header('Location:' . $recipe->urlAdmin());
+                exit();
+                break;
             case 'preparation':
                 $table = '';
                 foreach ((new Recipe)->readList(['order' => 'title']) as $item) {
