@@ -117,7 +117,7 @@ class Recipe_Controller extends Controller
                         $imageStep->resizeSquare($imageStepBigOut, 1920, 'image/jpg');
                         $imageStep = new Image($imageStepOut);
                         $imageStep->addPngOverImage($pngMaskStep, $imageStepOut, 'image/jpg');
-                        $pasosText .= 'Paso ' . $i . ': ' . $recipe->get('preparation')[$i - 1]->get('step') . "\n";
+                        $pasosText .= 'Paso ' . $i . ': ' . $recipe->get('images')[$i - 1]->get('label') . "\n";
                     }
                     $zipImages = new ZipArchive();
                     $zipFileName = ASTERION_STOCK_FILE . 'recipe_social_media_images_' . $recipe->id() . '.zip';
