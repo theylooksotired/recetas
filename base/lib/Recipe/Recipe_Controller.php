@@ -157,7 +157,7 @@ class Recipe_Controller extends Controller
                     $socialText .= "\n-- Preparación --\n\n";
                     $socialText .= $pasosText;
                     $socialText .= (isset($info['despedida'])) ? "\n" . $info['despedida'] : '';
-                    $socialText .= "\n\n" . $recipe->url();
+                    $socialText .= "\n\nMás información:\n" . $recipe->url() . "\n\n#receta #cocina";
                     echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
                     echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
                     echo '<pre>' . $socialText . '</pre>';
