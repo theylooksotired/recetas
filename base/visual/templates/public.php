@@ -42,12 +42,15 @@
             document.querySelector('.search_top').classList.toggle('search_top_open');
             document.querySelector('input[name="search"]').focus();
         });
-        document.querySelector('.questions_recipe_more').addEventListener('click', function(evt) {
-            document.querySelectorAll('.question_recipe_hidden').forEach(function(element) {
-                element.classList.remove('question_recipe_hidden');
+        var questionsRecipeMore = document.querySelector('.questions_recipe_more');
+        if (questionsRecipeMore) {
+            questionsRecipeMore.addEventListener('click', function(evt) {
+                document.querySelectorAll('.question_recipe_hidden').forEach(function(element) {
+                    element.classList.remove('question_recipe_hidden');
+                });
+                evt.target.style.display = 'none';
             });
-            evt.target.style.display = 'none';
-        });
+        }
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389"
      crossorigin="anonymous"></script>
