@@ -80,6 +80,11 @@
             <type>text_long</type>
         </attribute>
         <attribute>
+            <name>youtube_url</name>
+            <label>youtube_url</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
             <name>meta_description</name>
             <label>meta_description</label>
             <type>textarea_resizable</type>

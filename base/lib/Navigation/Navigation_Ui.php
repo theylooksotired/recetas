@@ -199,7 +199,7 @@ class Navigation_Ui extends Ui
                         <div class="footer_down_ins">
                             <p>
                                 <a href="' . url('politicas-privacidad') . '">Políticas de Privacidad</a> |
-                                <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a> |
+                                <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a>
                             </p>
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>' . Parameter::code('meta_description') . ' Diviértete cocinando y no dudes en compartir tus preparaciones y críticas.</p>

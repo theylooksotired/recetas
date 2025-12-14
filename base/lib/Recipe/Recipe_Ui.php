@@ -192,6 +192,7 @@ class Recipe_Ui extends Ui
                 <div class="questions_recipe_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
                 ' . (($questions->count() > 10) ? '<div class="button questions_recipe_more">' . __('view_more_questions') . '</div>' : '') . '
             </div>';
+        $videoHtml = ($this->object->get('youtube_url') != '') ? VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) : '';
         return '
             ' . $translationLink . '
             ' . $otherVersionsTop . '
@@ -201,6 +202,7 @@ class Recipe_Ui extends Ui
                         ' . $image . '
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
+                    ' . $videoHtml . '
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
@@ -750,6 +752,17 @@ class Recipe_Ui extends Ui
         }
         if ($this->object->get('cooking_method') != '') {
             $info['cookingMethod'] = $this->object->get('cooking_method');
+        }
+        if ($this->object->get('youtube_url') != '') {
+            $info['video'] = [
+                '@type' => 'VideoObject',
+                'name' => $this->object->getBasicInfo(),
+                'description' => $this->object->get('short_description'),
+                'thumbnailUrl' => $this->object->getImageUrl('image', 'web'),
+                'contentUrl' => $this->object->get('youtube_url'),
+                'embedUrl' => $this->object->get('youtube_url'),
+                'uploadDate' => $this->object->get('created'),
+            ];
         }
         return '<script type="application/ld+json">' . json_encode($info) . '</script>' . $versionsJson;
     }

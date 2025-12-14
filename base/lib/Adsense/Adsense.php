@@ -13,7 +13,8 @@ class Adsense {
     static public function responsive($type = '') {
         $types = ['top'=>'2176577868', 'ingredients' => '1193850444', 'preparation' => '8717935483', 'bottom' => '5599999310', 'middle' => '8023994431'];
         $adSlot = (isset($types[$type])) ? $types[$type] : '2090660201';
-        if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">Ad - ' . (($type!='') ? $type : 'default') . '</div>';
+        $adSlot = (Parameter::code('country_code') == 'peru') ? $adSlot : '2090660201';
+        if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">Ad - ' . (($type!='') ? $type : 'default') . ' - ' . $adSlot . '</div>';
         return '
             <div class="adsense">
                 <ins class="adsbygoogle"
