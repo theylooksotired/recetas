@@ -215,6 +215,7 @@ class Recipe_Ui extends Ui
                                         <h3>' . __('ingredients') . '</h3>
                                         ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
                                         <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
+                                        ' . Adsense::responsive('ingredients') . '
                                     </div>
                                     <div class="recipe_preparation">
                                         ' . (($imagesPreparation != '') ? '
@@ -223,6 +224,7 @@ class Recipe_Ui extends Ui
                                         ' : '') . '
                                         <h3>' . __('preparation') . '</h3>
                                         <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                        ' . Adsense::responsive('preparation') . '
                                     </div>
                                 </div>
                                 <div class="question_wrapper" id="question_' . $this->object->id() . '">
@@ -233,7 +235,6 @@ class Recipe_Ui extends Ui
                             </div>
                         </div>
                     </div>
-                    ' . Adsense::responsive('bottom') . '
                     ' . $friendSiteLink2 . '
                 </div>
             </article>
