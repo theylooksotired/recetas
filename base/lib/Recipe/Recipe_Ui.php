@@ -706,6 +706,8 @@ class Recipe_Ui extends Ui
 
     public function renderJsonHeader()
     {
+        $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') : date('Y-m-d');
+        $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') : $dateModified;
         $versionsJson = '';
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         foreach ($versions as $version) {
@@ -739,8 +741,8 @@ class Recipe_Ui extends Ui
                 'name' => Parameter::code('meta_title_page'),
                 'logo' => Parameter::code('meta_image'),
             ],
-            'datePublished' => $this->object->get('created'),
-            'dateModified' => $this->object->get('modified'),
+            'datePublished' => $dateCreated,
+            'dateModified' => $dateModified,
             'recipeCuisine' => $this->object->label('diet'),
             'recipeCategory' => $this->object->get('id_category_object')->getBasicInfo(),
             'recipeYield' => $this->object->getServings(),
@@ -761,7 +763,7 @@ class Recipe_Ui extends Ui
                 'thumbnailUrl' => $this->object->getImageUrl('image', 'web'),
                 'contentUrl' => $this->object->get('youtube_url'),
                 'embedUrl' => $this->object->get('youtube_url'),
-                'uploadDate' => $this->object->get('created'),
+                'uploadDate' => $dateCreated
             ];
         }
         return '<script type="application/ld+json">' . json_encode($info) . '</script>' . $versionsJson;
