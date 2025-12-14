@@ -83,7 +83,7 @@ class Category_Ui extends Ui
                 <div class="recipes_description">'.$this->object->get('description').'</div>
                 <h2>' . $titleBestRecipes . '</h2>
                 <div class="recipes recipes_category">' . $bestRecipes->showList(['function' => 'Best']) . '</div>
-                ' . Adsense::midContent() . '
+                ' . Adsense::responsive('middle') . '
                 <h2>' . $titleRestRecipes . '</h2>
                 <div class="recipes_minimal">' . $restRecipes->showList(['function' => 'Minimal']) . '</div>';
         } else {
@@ -98,7 +98,7 @@ class Category_Ui extends Ui
     public static function all()
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
-        return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::midContent(), 'middleRepetitions'=>2]) . '</div>';
+        return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::responsive('middle'), 'middleRepetitions'=>2]) . '</div>';
     }
 
     public static function intro()

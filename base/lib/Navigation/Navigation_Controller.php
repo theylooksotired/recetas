@@ -273,7 +273,7 @@ class Navigation_Controller extends Controller
                     }
                     $this->content .= '
                         <h2>' . $titleRecipes . '</h2>
-                        <div class="recipes recipes_category">' . $items->showList(['middle' => Adsense::midContent(), 'middleRepetitions' => 2]) . '</div>';
+                        <div class="recipes recipes_category">' . $items->showList(['middle' => Adsense::responsive('middle'), 'middleRepetitions' => 2]) . '</div>';
                     return $this->ui->render();
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");

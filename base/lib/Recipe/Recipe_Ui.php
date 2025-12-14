@@ -131,7 +131,7 @@ class Recipe_Ui extends Ui
                                 </div>
                             </div>
                         </div>
-                        <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
+                        <div class="recipe_wrapper_all_left">' . Adsense::responsive('bottom') . '</div>
                     </div>';
                 $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
                 $i++;
@@ -204,7 +204,7 @@ class Recipe_Ui extends Ui
                     ' . $this->object->get('description') . '
                     ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
-                        <div class="recipe_wrapper_all_left">' . Adsense::midContent() . '</div>
+                        <div class="recipe_wrapper_all_left">' . Adsense::responsive('middle') . '</div>
                         <div class="recipe_wrapper_all_right">
                             <div class="recipe_wrapper">
                                 <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
@@ -233,7 +233,7 @@ class Recipe_Ui extends Ui
                             </div>
                         </div>
                     </div>
-                    ' . Adsense::midContent() . '
+                    ' . Adsense::responsive('bottom') . '
                     ' . $friendSiteLink2 . '
                 </div>
             </article>
@@ -623,7 +623,7 @@ class Recipe_Ui extends Ui
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
-            ' . Adsense::sidebarTop() . '
+            ' . Adsense::responsive('middle') . '
             <div class="items_side">
                 <h2 class="items_side_title">' . __('popular_recipes') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>

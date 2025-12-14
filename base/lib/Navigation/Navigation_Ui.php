@@ -32,7 +32,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . Adsense::top() . '
+                                ' . Adsense::responsive('top') . '
                                 <div class="content_ins">' . $content . '</div>
                                 ' . $content_bottom . '
                                 ' . $this->adApp() . '
@@ -49,7 +49,7 @@ class Navigation_Ui extends Ui
                         <div class="content">
                             <div class="content_all">
                                 ' . $this->breadCrumbs() . '
-                                ' . (!(isset($this->object->no_ads)) ? Adsense::top() : '') . '
+                                ' . (!(isset($this->object->no_ads)) ? Adsense::responsive('top') : '') . '
                                 ' . $message_error . '
                                 ' . $message_alert . '
                                 ' . $message . '
@@ -73,7 +73,7 @@ class Navigation_Ui extends Ui
                                 ' . $content_top . '
                                 ' . $this->breadCrumbs() . '
                                 ' . $title_page . '
-                                ' . Adsense::top() . '
+                                ' . Adsense::responsive('top') . '
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '

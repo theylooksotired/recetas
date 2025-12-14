@@ -219,7 +219,7 @@ class Post_Ui extends Ui
                     </div>
                 </div>
             </article>
-            ' . Adsense::midContent() . '
+            ' . Adsense::responsive('bottom') . '
             <div class="item_complete_share">
                 <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
                 ' . $share . '
@@ -294,7 +294,7 @@ class Post_Ui extends Ui
     {
         $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 3]);
         return '
-            ' . Adsense::sidebarTop() . '
+            ' . Adsense::responsive('middle') . '
             <div class="items_side">
                 <h2 class="items_side_title">' . __('last_posts') . '</h2>
                 <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>

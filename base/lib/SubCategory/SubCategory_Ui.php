@@ -63,7 +63,7 @@ class SubCategory_Ui extends Ui
     public static function all()
     {
         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'results' => '12']);
-        return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::midContent(), 'middleRepetitions'=>2]) . '</div>';
+        return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::responsive('middle'), 'middleRepetitions'=>2]) . '</div>';
     }
 
     public static function intro()
