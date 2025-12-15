@@ -11,6 +11,7 @@
 class Adsense {
 
     static public function responsive($type = '') {
+        if ($type == 'bottom') return ''; // Disable bottom ads for now
         $types = ['top'=>'2176577868', 'ingredients' => '1193850444', 'preparation' => '8717935483', 'bottom' => '5599999310', 'middle' => '8023994431'];
         $adSlot = (isset($types[$type])) ? $types[$type] : '2090660201';
         $adSlot = (Parameter::code('country_code') == 'peru') ? $adSlot : '2090660201';
