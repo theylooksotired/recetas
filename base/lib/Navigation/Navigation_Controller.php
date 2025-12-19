@@ -92,6 +92,11 @@ class Navigation_Controller extends Controller
                 $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 if ($item->id() != '') {
+                    if ($item->get('redirect_force_url') != '') {
+                        header("HTTP/1.1 301 Moved Permanently");
+                        header('Location: ' . $item->get('redirect_force_url'));
+                        exit();
+                    }
                     if ($item->get('title_page') != '') {
                         $this->title_page = $item->get('title_page');
                         $this->hide_title_page_appendix = true;
@@ -271,6 +276,7 @@ class Navigation_Controller extends Controller
                         $titleRecipes = __('recipes_might_like');
                         $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
                     }
+                    $this->head = '<meta name="robots" content="noindex">';
                     $this->content .= '
                         <h2>' . $titleRecipes . '</h2>
                         <div class="recipes recipes_category">' . $items->showList(['middle' => Adsense::responsive('middle'), 'middleRepetitions' => 2]) . '</div>';

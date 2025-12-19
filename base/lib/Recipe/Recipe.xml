@@ -80,11 +80,6 @@
             <type>text_long</type>
         </attribute>
         <attribute>
-            <name>youtube_url</name>
-            <label>youtube_url</label>
-            <type>text_url</type>
-        </attribute>
-        <attribute>
             <name>meta_description</name>
             <label>meta_description</label>
             <type>textarea_resizable</type>
@@ -253,6 +248,16 @@
             <name>views</name>
             <label>views</label>
             <type>text_integer</type>
+        </attribute>
+        <attribute>
+            <name>youtube_url</name>
+            <label>youtube_url</label>
+            <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>redirect_force_url</name>
+            <label>redirect_force_url</label>
+            <type>text_url</type>
         </attribute>
         <attribute>
             <name>active</name>
