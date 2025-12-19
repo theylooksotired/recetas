@@ -117,8 +117,8 @@
             </values>
         </attribute>
         <attribute>
-            <name>ratingCount</name>
-            <label>ratingCount</label>
+            <name>rating_count</name>
+            <label>rating_count</label>
             <type>hidden</type>
         </attribute>
         <attribute>
