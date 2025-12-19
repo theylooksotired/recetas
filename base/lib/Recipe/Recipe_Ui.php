@@ -695,6 +695,7 @@ class Recipe_Ui extends Ui
         }
         return '
             ' . parent::label($canModify) . '
+            ' . (($this->object->get('redirect_force_url') != '') ? '<div class="error tiny"><strong>Redirigido a ' . $this->object->get('redirect_force_url') . '</strong></div>' : '')  . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
             ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos ' . $adsenseNumberDays . ' dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
