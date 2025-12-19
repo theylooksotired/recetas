@@ -119,7 +119,7 @@
         <attribute>
             <name>rating_count</name>
             <label>rating_count</label>
-            <type>hidden</type>
+            <type>text_number</type>
         </attribute>
         <attribute>
             <name>cook_time</name>

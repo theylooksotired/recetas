@@ -731,7 +731,7 @@ class Recipe_Ui extends Ui
             'aggregateRating' => [
                 '@type' => 'AggregateRating',
                 'ratingValue' => $this->object->get('rating'),
-                'ratingCount' => $this->object->get('ratingCount'),
+                'ratingCount' => $this->object->get('rating_count'),
             ],
             'author' => [
                 '@type' => 'Organization',
