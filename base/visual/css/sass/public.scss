@@ -593,6 +593,11 @@ body {
     font-weight: bold;
     text-align: center;
     @include borderRadius(10px);
+    &.message_info {
+        color: $colorAccent;
+        background: rgba($colorAccent, 0.05);
+        border: 2px solid rgba($colorAccent, 0.1);
+    }
     &.message_error {
         color: $colorError;
         background: rgba($colorError, 0.05);
@@ -1989,6 +1994,53 @@ body {
             }
         }
     }
+    .rating_label {
+        font-size: $fontSizeTiny;
+        color: rgba($black, 0.6);
+    }
+}
+
+.rating_complete {
+    text-align: center;
+}
+
+.rating_votes {
+    padding: 20px 0 0 0;
+    text-align: center;
+    .rating_vote {
+        width: calc(20% - 20px);
+        display: inline-block;
+        padding: 5px;
+        font-size: $fontSizeTiny;
+        color: rgba($colorAccent, 0.9);
+        font-weight: bold;
+        border: 2px solid rgba($colorAccent, 0.1);
+        background: rgba($colorAccent, 0.03);
+        cursor: pointer;
+        @include borderRadius(5px);
+        &:hover {
+            background: $colorAccent;
+            border: 2px solid $colorAccent;
+            color: $white;
+        }
+    }
+    @include mobile() {
+        .rating_vote {
+            display: block;
+            width: auto;
+            margin: 0 auto 10px auto;
+            font-size: $fontSizeNormal;
+            max-width: 200px;
+            text-align: left;
+        }
+    }
+}
+
+.rating_wrapper,
+.question_wrapper {
+    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 5px solid rgba($colorAccent, 0.1);
 }
 
 .recipes_category {
@@ -2960,11 +3012,6 @@ body {
 }
 
 .question_wrapper {
-    margin: 20px -20px -20px -20px;
-    padding: 10px;
-    background: rgba($colorMessage, 0.05);
-    border: 5px solid rgba($colorMessage, 0.1);
-    @include borderRadius(5px);
     fieldset {
         margin: 0;
         padding: 0;
@@ -3020,10 +3067,6 @@ body {
                 }
             }
         }
-    }
-    @include mobile() {
-        margin: 20px -15px -15px -15px;
-        padding: 10px;
     }
 }
 

@@ -51,6 +51,28 @@
                 evt.target.style.display = 'none';
             });
         }
+        var ratingComplete = document.querySelector('.rating_complete');
+        if (ratingComplete) {
+            ratingComplete.querySelectorAll('.rating_vote').forEach(function(element) {
+                element.addEventListener('click', function(evt) {
+                    var ratingValue = element.getAttribute('data-rating');
+                    var url = ratingComplete.getAttribute('data-url');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', url, true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status && response.status=='OK' && response.html) {
+                                var ratingVote = document.querySelector('.rating_votes');
+                                ratingVote.innerHTML = response.html;
+                            }
+                        }
+                    };
+                    xhr.send('rating=' + ratingValue);
+                });
+            });
+        }
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389"
      crossorigin="anonymous"></script>

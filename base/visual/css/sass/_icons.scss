@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?tak602');
-  src:  url('../fonts/icomoon.eot?tak602#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?tak602') format('truetype'),
-    url('../fonts/icomoon.woff?tak602') format('woff'),
-    url('../fonts/icomoon.svg?tak602#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?tak622');
+  src:  url('../fonts/icomoon.eot?tak622#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?tak622') format('truetype'),
+    url('../fonts/icomoon.woff?tak622') format('woff'),
+    url('../fonts/icomoon.svg?tak622#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,6 +26,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-vote_1:before {
+  content: "\e913";
+}
+.icon-vote_2:before {
+  content: "\e914";
+}
+.icon-vote_3:before {
+  content: "\e915";
+}
+.icon-vote_4:before {
+  content: "\e916";
+}
+.icon-vote_5:before {
+  content: "\e917";
+}
 .icon-search:before {
   content: "\e911";
 }

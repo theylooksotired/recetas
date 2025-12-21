@@ -160,6 +160,24 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
+            case 'rating':
+                $this->mode = 'json';
+                $response = ['status' => 'NOK'];
+                $recipe = (new Recipe)->read($this->id);
+                if ($recipe->id() != '') {
+                    $rating = (isset($this->values['rating'])) ? $this->values['rating'] : '';
+                    if (in_array($rating, ['1', '2', '3', '4', '5'])) {
+                        $recipeRating = new RecipeRating([
+                            'id_recipe' => $recipe->id(),
+                            'rating' => $rating,
+                            'active' => 0
+                        ]);
+                        $recipeRating->persist();
+                        $response = ['status' => 'OK', 'html' => '<div class="message">' . __('thank_you_for_your_vote') . '</div>'];
+                    }
+                }
+                return json_encode($response);
+                break;
             case 'articulos':
                 $this->redirecLastSlash();
                 $this->layout_page = 'simple';

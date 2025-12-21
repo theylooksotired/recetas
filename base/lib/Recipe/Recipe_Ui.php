@@ -144,22 +144,6 @@ class Recipe_Ui extends Ui
                     <ol>' . $otherVersionsTop . '</ol>
                 </div>';
         }
-        $friendSiteLink1 = '';
-        $friendSiteLink2 = '';
-        // if ($this->object->get('friend_links') != '') {
-        //     $sites = @json_decode($this->object->get('friend_links'), true);
-        //     if (is_array($sites) && count($sites) > 0) {
-        //         $link = '<a href="' . $sites[0]['url'] . '" title="Receta de ' . $sites[0]['title'] . '">' . $sites[0]['title'] . '</a>';
-        //         $friendSiteLink1 = '<p class="recipe_complete_link_friend">' . str_replace('#LINK', $link, __('link_friend_top')) . '</p>';
-        //     }
-        //     if (is_array($sites) && count($sites) > 1) {
-        //         $link1 = '<a href="' . $sites[1]['url'] . '" title="Receta de ' . $sites[1]['title'] . '">' . $sites[1]['title'] . '</a>';
-        //         $link2 = '<a href="' . $sites[2]['url'] . '" title="Receta de ' . $sites[2]['title'] . '">' . $sites[2]['title'] . '</a>';
-        //         $friendSiteLink2 = '<p class="recipe_complete_link_friend_bottom">' . str_replace('#LINK2', $link2, str_replace('#LINK1', $link1, __('link_friend_bottom'))) . '</p>';
-        //     }
-        // }
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
         $lastAnswer = '';
         if (Session::get('answered_recipe') == $this->object->id() ) {
             $question = (new Question)->read(Session::get('answered_question'));
@@ -199,18 +183,16 @@ class Recipe_Ui extends Ui
             <article class="recipe_complete">
                 <div class="recipe_complete_ins post-content" id="post-container">
                     <div class="recipe_complete_info">
-                        ' . $image . '
+                        ' . $this->object->getImageWidth('image', 'web') . '
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
                     ' . $videoHtml . '
                     ' . $this->object->get('description') . '
-                    ' . $friendSiteLink1 . '
                     <div class="recipe_wrapper_all">
                         <div class="recipe_wrapper_all_left">' . Adsense::responsive('middle') . '</div>
                         <div class="recipe_wrapper_all_right">
                             <div class="recipe_wrapper">
                                 <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
-                                <div class="recipe_rating">' . $this->renderRating() . '</div>
                                 <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
                                 <div class="recipe_wrapper_ins">                            
                                     <div class="recipe_ingredients">
@@ -229,7 +211,12 @@ class Recipe_Ui extends Ui
                                         ' . Adsense::responsive('preparation') . '
                                     </div>
                                 </div>
+                                <div class="rating_wrapper">
+                                    <h2>' . __('rating_of_recipe') . '</h2>
+                                    <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
+                                </div>
                                 <div class="question_wrapper" id="question_' . $this->object->id() . '">
+                                    <h2>' . __('questions_recipe') . '</h2>
                                     ' . Question_Form::showPublic() . '
                                     ' . $lastAnswer . '
                                     ' . $questionsHtml . '
@@ -237,7 +224,6 @@ class Recipe_Ui extends Ui
                             </div>
                         </div>
                     </div>
-                    ' . $friendSiteLink2 . '
                 </div>
             </article>
             ' . $otherVersions . '
@@ -500,18 +486,52 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
-    public function renderRating()
+    public function renderRating($layout = 'simple')
     {
-        return '
-            <div class="rating rating_' . $this->object->get('rating') . '">
-                <div class="rating_ins">
-                    <i class="icon icon-star"></i>
-                    <i class="icon icon-star"></i>
-                    <i class="icon icon-star"></i>
-                    <i class="icon icon-star"></i>
-                    <i class="icon icon-star"></i>
-                </div>
+        $count = $this->object->get('rating_count');
+        if ($count == '' || $count == 0) {
+            $count = rand(30, 90);
+            $this->object->persistSimple('rating_count', $count);
+        }
+        $ratingHtml = '
+            <div class="rating_ins">
+                <i class="icon icon-star"></i>
+                <i class="icon icon-star"></i>
+                <i class="icon icon-star"></i>
+                <i class="icon icon-star"></i>
+                <i class="icon icon-star"></i>
             </div>';
+        if ($layout == 'complete') {
+            return '
+                <div class="rating rating_complete rating_' . $this->object->get('rating') . '" data-url="' . $this->object->urlRatingModal() . '">
+                    ' . $ratingHtml . '
+                    <div class="rating_label">' . __('rating') . ' : ' . $this->object->get('rating') . '/5 (' . $this->object->get('rating_count') . ')</div>
+                    <div class="rating_votes">
+                        <div class="rating_vote rating_vote_1" data-rating="1">
+                            <i class="icon icon-vote_1"></i>
+                            <span class="rating_vote_label">' . __('vote_button_1') . '</span>
+                        </div>
+                        <div class="rating_vote rating_vote_2" data-rating="2">
+                            <i class="icon icon-vote_2"></i>
+                            <span class="rating_vote_label">' . __('vote_button_2') . '</span>
+                        </div>
+                        <div class="rating_vote rating_vote_3" data-rating="3">
+                            <i class="icon icon-vote_3"></i>
+                            <span class="rating_vote_label">' . __('vote_button_3') . '</span>
+                        </div>
+                        <div class="rating_vote rating_vote_4" data-rating="4">
+                            <i class="icon icon-vote_4"></i>
+                            <span class="rating_vote_label">' . __('vote_button_4') . '</span>
+                        </div>
+                        <div class="rating_vote rating_vote_5" data-rating="5">
+                            <i class="icon icon-vote_5"></i>
+                            <span class="rating_vote_label">' . __('vote_button_5') . '</span>
+                        </div>
+                    </div>
+                </div>';
+        } else {
+            return '<div class="rating rating_' . $this->object->get('rating') . '">' . $ratingHtml . '</div>';
+        }
     }
 
     public function renderText()

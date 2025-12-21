@@ -85,6 +85,11 @@ class Recipe extends Db_Object
         return url('recipes-fix-content/' . $this->id());
     }
 
+    public function urlRatingModal()
+    {
+        return url('rating/' . $this->id());
+    }
+
     public function loadCategoryManually($category)
     {
         $this->set('id_category_object', $category);
