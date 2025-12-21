@@ -2204,6 +2204,10 @@ body {
             float: left;
         }
     }
+    .recipe_video {
+        max-width: 500px;
+        margin: 10px auto;
+    }
     @include mobile {
         .recipe_short_description {
             font-size: $fontSizeNormal;
