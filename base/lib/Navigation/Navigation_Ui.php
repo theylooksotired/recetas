@@ -187,10 +187,7 @@ class Navigation_Ui extends Ui
                             <div class="footer_links_title">Otros sitios de cocina por tipos</div>
                             <a href="https://www.recetas-arabes.com" rel="nofollow" title="Recetas árabes">Árabes</a>
                             <a href="https://www.recetasdiabetes.com" rel="nofollow" title="Recetas para diabéticos">Diabetes</a>
-                            <a href="https://www.recetas-sin-gluten.com" rel="nofollow" title="Recetas sin gluten">Sin gluten</a>
                             <a href="https://www.recetas-judias.com" rel="nofollow" title="Recetas judías">Judías</a>
-                            <a href="https://www.recetaspizzas.com" rel="nofollow" title="Recetas de Pizzas">Pizzas</a>
-                            <a href="https://www.recetas-simples.com" rel="nofollow" title="Recetas simples">Simples</a>
                             <a href="https://www.receta-vegetariana.com" rel="nofollow" title="Recetas vegetariana">Vegetariana</a>
                             <a href="https://www.recetas-veganas.com" rel="nofollow" title="Recetas veganas">Veganas</a>
                         </div>
