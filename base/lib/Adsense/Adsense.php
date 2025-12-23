@@ -113,19 +113,19 @@ class Adsense {
             $adSlot = $adSlotChina;
         } elseif (Parameter::code('country_code') == 'diabetes') {
             $adSlot = $adSlotDiabetes;
-        } elseif (Parameter::code('country_code') == 'japonesas') {
+        } elseif (Parameter::code('country_code') == 'japon') {
             $adSlot = $adSlotJaponesas;
-        } elseif (Parameter::code('country_code') == 'francesas') {
+        } elseif (Parameter::code('country_code') == 'francia') {
             $adSlot = $adSlotFrancesas;
         } elseif (Parameter::code('country_code') == 'vegetariana') {
             $adSlot = $adSlotVegetariana;
         } elseif (Parameter::code('country_code') == 'brasilpt') {
             $adSlot = $adSlotBrasilPt;
-        } elseif (Parameter::code('country_code') == 'haitianas') {
+        } elseif (Parameter::code('country_code') == 'haiti') {
             $adSlot = $adSlotHaitianas;
         } elseif (Parameter::code('country_code') == 'veganas') {
             $adSlot = $adSlotVeganas;
-        } elseif (Parameter::code('country_code') == 'indias') {
+        } elseif (Parameter::code('country_code') == 'india') {
             $adSlot = $adSlotIndias;
         } else {
             $adSlot = '2090660201';
