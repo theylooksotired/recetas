@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?tak622');
-  src:  url('../fonts/icomoon.eot?tak622#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?tak622') format('truetype'),
-    url('../fonts/icomoon.woff?tak622') format('woff'),
-    url('../fonts/icomoon.svg?tak622#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?dsa421');
+  src:  url('../fonts/icomoon.eot?dsa42#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?dsa42') format('truetype'),
+    url('../fonts/icomoon.woff?dsa42') format('woff'),
+    url('../fonts/icomoon.svg?dsa42#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,6 +26,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-pinterest:before {
+  content: "\e918";
+}
+.icon-print:before {
+  content: "\e919";
+}
+.icon-whatsapp:before {
+  content: "\e91a";
+}
 .icon-vote_1:before {
   content: "\e913";
 }

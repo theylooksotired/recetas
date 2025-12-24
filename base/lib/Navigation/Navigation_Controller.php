@@ -596,6 +596,72 @@ class Navigation_Controller extends Controller
                     break;
                 }
             break;
+            case 'info-json':
+                $this->mode = 'json';
+                // $this->checkAuthorization();
+                switch ($this->id) {
+                    default:
+                        $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
+                        $recipesCount = (new Recipe)->countResults();
+                        $info = [
+                            'country_code' => Parameter::code('country_code'),
+                            'language' => ASTERION_LANGUAGE_ID,
+                            'title' => Parameter::code('meta_title_page'),
+                            'description' => Parameter::code('meta_description'),
+                            'recipes_count' => $recipesCount,
+                            'questions' => [],
+                            'url' => url(''),
+                        ];
+                        foreach ($questions as $question) {
+                            $info['questions'][] = $question->toJson();
+                        }
+                        return json_encode($info, JSON_PRETTY_PRINT);
+                    break;
+                    case 'list-recipes':
+                        $recipes = (new Recipe)->readList(['order' => 'id']);
+                        $recipesInfo = [];
+                        foreach ($recipes as $recipe) {
+                            $recipesInfo[] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url()];
+                        }
+                        return json_encode($recipesInfo, JSON_PRETTY_PRINT);
+                    break;
+                    case 'recipe-info':
+                        $recipe = (new Recipe)->read($this->extraId);
+                        if ($recipe->id() != '') {
+                            return json_encode($recipe->toJson(), JSON_PRETTY_PRINT);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                    case 'save-recipe':
+                        $jsonData = json_decode($this->values, true) ?: [];
+                        dd('Saving', $jsonData);
+                        if (isset($jsonData['id'])) {
+                            $recipeOld = (new Recipe)->readFirst(['where' => 'title_url=:title_url'], ['title_url' => $jsonData['title_url']]);
+                            if ($recipeOld->id() != '') {
+                                $recipe = new Recipe($jsonData);
+                                $persist = $recipe->persist();
+                                if ($persist['status'] == 'OK') {
+                                    return json_encode(['status' => 'OK', 'recipe' => $recipe->toJson()]);
+                                } else {
+                                    return json_encode(['status' => 'NOK', 'errors' => $persist['errors']]);
+                                }
+                            }
+                        }
+                        break;
+                    case 'publish-question':
+                    case 'delete-question':
+                        $question = (new Question)->read($this->extraId);
+                        if ($question->id() != '') {
+                            if ($this->id == 'publish-question') $question->persistSimple('published', 1);
+                            if ($this->id == 'delete-question') $question->delete();
+                            return json_encode(['status' => 'OK']);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                }
+            break;
         }
     }
 

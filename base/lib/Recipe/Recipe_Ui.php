@@ -101,10 +101,14 @@ class Recipe_Ui extends Ui
         $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
         $newFormat = false;
+        $translationLink = '';
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
+        }
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        if (count($versions) > 0) {
+        if ((count($versions) > 0) || $translationLink != '') {
             $newFormat = true;
-            $i = 1;
+            $i = ($translationLink != '') ? 2 : 1;
             foreach ($versions as $version) {
                 $version->loadMultipleValuesSingleAttribute('ingredients');
                 $version->loadMultipleValuesSingleAttribute('preparation');
@@ -113,48 +117,38 @@ class Recipe_Ui extends Ui
                 $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
                 $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
                 $otherVersions .= '
-                    <div class="recipe_wrapper_all">
-                        <div class="recipe_wrapper_all_right">
-                            <div class="recipe_wrapper">
-                                <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
-                                ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
-                                <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
-                                <div class="recipe_wrapper_ins">
-                                    <div class="recipe_ingredients">
-                                        <h3>' . __('ingredients') . '</h3>
-                                        <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
-                                    </div>
-                                    <div class="recipe_preparation">
-                                        <h3>' . __('preparation') . '</h3>
-                                        <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
-                                    </div>
-                                </div>
+                    <div class="recipe_wrapper">
+                        <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
+                        ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                        <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
+                        <div class="recipe_wrapper_ins">
+                            <div class="recipe_ingredients">
+                                <h3>' . __('ingredients') . '</h3>
+                                <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
+                            </div>
+                            <div class="recipe_preparation">
+                                <h3>' . __('preparation') . '</h3>
+                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
                             </div>
                         </div>
-                        <div class="recipe_wrapper_all_left">' . Adsense::responsive('bottom') . '</div>
                     </div>';
-                $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $this->object->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
+                $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $version->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
                 $i++;
             }
+            $otherVersionsTop .= ($translationLink != '') ? $translationLink : '';
             $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
             $otherVersionsTop = '
                 <div class="recipe_versions_top">
                     <div class="recipe_versions_top_decoration"><i class="icon icon-star"></i></div>
-                    <p>' . str_replace('#COUNT#', (count($versions) + 1), __('recipe_versions_menu')) . '</p>
+                    <p>' . str_replace('#COUNT#', $i, __('recipe_versions_menu')) . '</p>
                     <ol>' . $otherVersionsTop . '</ol>
                 </div>';
         }
+        $otherVersions = ($otherVersions != '') ? '<div class="other_versions_wrapper">' . $otherVersions . '</div>' : '';
         $lastAnswer = '';
         if (Session::get('answered_recipe') == $this->object->id() ) {
             $question = (new Question)->read(Session::get('answered_question'));
             $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
-        }
-        $translationLink = '';
-        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
-            $translationLink = '
-                <p class="recipe_complete_translation">
-                    <a href="' . $this->object->translation_url . '" target="_blank" class="button">' . __('view_in_' . Translate_Controller::translateTo()) . '</a>
-                </p>';
         }
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
@@ -181,7 +175,6 @@ class Recipe_Ui extends Ui
                 ' . VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) . '
             </div>' : '';
         return '
-            ' . $translationLink . '
             ' . $otherVersionsTop . '
             <article class="recipe_complete">
                 <div class="recipe_complete_ins post-content" id="post-container">
@@ -190,54 +183,51 @@ class Recipe_Ui extends Ui
                         <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                     </div>
                     ' . $videoHtml . '
+                    ' . Adsense::responsive('middle') . '
                     ' . $this->object->get('description') . '
-                    <div class="recipe_wrapper_all">
-                        <div class="recipe_wrapper_all_left">' . Adsense::responsive('middle') . '</div>
-                        <div class="recipe_wrapper_all_right">
-                            <div class="recipe_wrapper">
-                                <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
-                                <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
-                                <div class="recipe_wrapper_ins">                            
-                                    <div class="recipe_ingredients">
-                                        <h3>' . __('ingredients') . '</h3>
-                                        ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
-                                        <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
-                                        ' . Adsense::responsive('ingredients') . '
-                                    </div>
-                                    <div class="recipe_preparation">
-                                        ' . (($imagesPreparation != '') ? '
-                                        <h3>' . __('preparation_simple') . '</h3>
-                                        ' . $imagesPreparation . '
-                                        ' : '') . '
-                                        <h3>' . __('preparation') . '</h3>
-                                        <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
-                                        ' . Adsense::responsive('preparation') . '
-                                    </div>
-                                </div>
-                                <div class="rating_wrapper">
-                                    <h2>' . __('rating_of_recipe') . '</h2>
-                                    <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
-                                </div>
-                                <div class="question_wrapper" id="question_' . $this->object->id() . '">
-                                    <h2>' . __('questions_recipe') . '</h2>
-                                    ' . Question_Form::showPublic() . '
-                                    ' . $lastAnswer . '
-                                    ' . $questionsHtml . '
-                                </div>
+                    <div class="recipe_wrapper">
+                        <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
+                        <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
+                        <div class="recipe_share_top">
+                            <div class="recipe_share_top_title">' . __('share_recipe') . '</div>
+                            ' . $this->share(['share' => [
+                                ['key' => 'whatsapp', 'icon' => '<i class="icon icon-whatsapp"></i>'],
+                                ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+                                ['key' => 'print', 'icon' => '<i class="icon icon-print"></i>'],
+                            ]]) . '
+                        </div>
+                        ' . Adsense::responsive('ingredients') . '
+                        <div class="recipe_wrapper_ins">                            
+                            <div class="recipe_ingredients">
+                                <h3>' . __('ingredients') . '</h3>
+                                ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
+                                <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                             </div>
+                            <div class="recipe_preparation">
+                                ' . (($imagesPreparation != '') ? '
+                                <h3>' . __('preparation_simple') . '</h3>
+                                ' . $imagesPreparation . '
+                                ' : '') . '
+                                <h3>' . __('preparation') . '</h3>
+                                <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                ' . Adsense::responsive('preparation') . '
+                            </div>
+                        </div>
+                        <div class="rating_wrapper">
+                            <h2>' . __('rating_of_recipe') . '</h2>
+                            <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
+                        </div>
+                        <div class="question_wrapper" id="question_' . $this->object->id() . '">
+                            <h2>' . __('questions_recipe') . '</h2>
+                            ' . Question_Form::showPublic() . '
+                            ' . $lastAnswer . '
+                            ' . $questionsHtml . '
                         </div>
                     </div>
                 </div>
             </article>
             ' . $otherVersions . '
-            ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '') . '
-            <div class="item_complete_share">
-                <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
-                ' . $this->share(['share' => [
-                    ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-                    ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
-                ]]) . '
-            </div>';
+            ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '');
     }
 
     public function renderPreloadImage()

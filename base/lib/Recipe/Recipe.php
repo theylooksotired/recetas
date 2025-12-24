@@ -299,7 +299,6 @@ class Recipe extends Db_Object
         $infoIns['image_small'] = $this->getImageUrl('image', 'small');
         unset($infoIns['created']);
         unset($infoIns['modified']);
-        unset($infoIns['title_url']);
         unset($infoIns['active']);
         unset($infoIns['ord']);
         unset($infoIns['preparation_old']);
