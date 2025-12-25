@@ -32,6 +32,12 @@ class Navigation_Controller extends Controller
             header('Location: https://www.cocina-ecuatoriana.com' . $url);
             exit();
         }
+        if ($this->action != 'recetas' && strpos($_SERVER['HTTP_HOST'], 'recetas-chilenas.com') !== false) {
+            $url = str_replace('platos-principales', 'plato-principal', $_SERVER['REQUEST_URI']);
+            header("HTTP/1.1 301 Moved Permanently");
+            header('Location: https://www.cocina-chilena.com' . $url);
+            exit();
+        }
         switch ($this->action) {
             default:
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
@@ -74,6 +80,13 @@ class Navigation_Controller extends Controller
                     $url = str_replace('platos-principales', 'plato-principal', $url);
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: https://www.cocina-ecuatoriana.com' . $url);
+                    exit();
+                }
+                if (strpos($_SERVER['HTTP_HOST'], 'recetas-chilenas.com') !== false) {
+                    $url = $_SERVER['REQUEST_URI'];
+                    $url = str_replace('platos-principales', 'plato-principal', $url);
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: https://www.cocina-chilena.com' . $url);
                     exit();
                 }
                 $this->redirecLastSlash();

@@ -157,13 +157,11 @@ class Navigation_Ui extends Ui
                             <a href="https://www.cocina-brasilena.com" rel="nofollow" title="Recetas de Brasil">Brasil</a>
                             <a href="https://www.receitas-brasil.com" rel="nofollow" title="Receitas do Brasil">Brasil [PT]</a>
                             <a href="https://www.cocina-chilena.com" rel="nofollow" title="Recetas de Chile">Chile</a>
-                            <a href="https://www.recetas-chilenas.com" rel="nofollow" title="Recetas chilenas">Chilenas</a>
                             <a href="https://www.recetas-chinas.com" rel="nofollow" title="Recetas de China">China</a>
                             <a href="https://www.cocina-colombiana.com" rel="nofollow" title="Recetas de Colombia">Colombia</a>
                             <a href="https://www.recetascostarica.com" rel="nofollow" title="Recetas de Costa Rica">Costa Rica</a>
                             <a href="https://www.cocina-cubana.com" rel="nofollow" title="Recetas de Cuba">Cuba</a>
                             <a href="https://www.cocina-ecuatoriana.com" rel="nofollow" title="Recetas de Ecuador">Ecuador</a>
-                            <a href="https://www.recetas-ecuatorianas.com" rel="nofollow" title="Recetas ecuatorianas">Ecuatorianas</a>
                             <a href="https://www.recetas-espana.com" rel="nofollow" title="Recetas de España">España</a>
                             <a href="https://www.recetassalvador.com" rel="nofollow" title="Recetas del Salvador">El Salvador</a>
                             <a href="https://www.recetas-francesas.com" rel="nofollow" title="Recetas de Francia">Francia</a>
