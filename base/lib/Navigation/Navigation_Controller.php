@@ -598,7 +598,7 @@ class Navigation_Controller extends Controller
             break;
             case 'info-json':
                 $this->mode = 'json';
-                // $this->checkAuthorization();
+                $this->checkAuthorization();
                 switch ($this->id) {
                     default:
                         $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
