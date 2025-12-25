@@ -297,6 +297,7 @@ class Recipe extends Db_Object
         $infoIns = (array)$this->values;
         $infoIns['image'] = $this->getImageUrl('image', 'web');
         $infoIns['image_small'] = $this->getImageUrl('image', 'small');
+        $infoIns['image_ingredients'] = $this->getImageUrl('image_ingredients', 'web');
         unset($infoIns['created']);
         unset($infoIns['modified']);
         unset($infoIns['active']);
@@ -344,6 +345,20 @@ class Recipe extends Db_Object
             unset($infoStep['description_old']);
             unset($infoStep['image_old']);
             $infoIns['preparation'][] = $infoStep;
+        }
+
+        $images = (new RecipeImage)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+        $infoIns['images'] = [];
+        foreach ($images as $image) {
+            $infoImage = (array)$image->values;
+            unset($infoImage['id']);
+            unset($infoImage['created']);
+            unset($infoImage['modified']);
+            unset($infoImage['id_recipe']);
+            unset($infoImage['ord']);
+            $infoImage['image'] = $image->getImageUrl('image', 'web');
+            $infoImage['image_small'] = $image->getImageUrl('image', 'small');
+            $infoIns['images'][] = $infoImage;
         }
 
         return $infoIns;

@@ -623,30 +623,49 @@ class Navigation_Controller extends Controller
                         foreach ($recipes as $recipe) {
                             $recipesInfo[] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url()];
                         }
-                        return json_encode($recipesInfo, JSON_PRETTY_PRINT);
+                        return json_encode($recipesInfo);
                     break;
                     case 'recipe-info':
                         $recipe = (new Recipe)->read($this->extraId);
                         if ($recipe->id() != '') {
-                            return json_encode($recipe->toJson(), JSON_PRETTY_PRINT);
+                            return json_encode($recipe->toJson());
                         } else {
                             return json_encode(['status' => 'NOK']);
                         }
                     break;
                     case 'save-recipe':
-                        $jsonData = json_decode($this->values, true) ?: [];
-                        dd('Saving', $jsonData);
-                        if (isset($jsonData['id'])) {
+                        $input = file_get_contents('php://input');
+                        $jsonData = json_decode($input, true) ?: [];
+                        if (isset($jsonData['title_url'])) {
+                            unset($jsonData['id']);
+                            $jsonData['active'] = 1;
+                            $jsonData['image_uploaded'] = ($jsonData['image']) ? $jsonData['image'] : '';
+                            $jsonData['image_ingredients_uploaded'] = ($jsonData['image_ingredients']) ? $jsonData['image_ingredients'] : '';
+                            foreach ($jsonData['images'] as $key => $image) {
+                                $jsonData['images'][$key]['image_uploaded'] = ($image['image']) ? $image['image'] : '';
+                            }
+
                             $recipeOld = (new Recipe)->readFirst(['where' => 'title_url=:title_url'], ['title_url' => $jsonData['title_url']]);
-                            if ($recipeOld->id() != '') {
+                            if ($recipeOld->id() == '') {
                                 $recipe = new Recipe($jsonData);
                                 $persist = $recipe->persist();
                                 if ($persist['status'] == 'OK') {
-                                    return json_encode(['status' => 'OK', 'recipe' => $recipe->toJson()]);
+                                    return json_encode(['status' => 'OK', 'recipe' => $recipe->id() . ' - ' . $recipe->getBasicInfo()]);
+                                } else {
+                                    return json_encode(['status' => 'NOK', 'errors' => $persist['errors']]);
+                                }
+                            } else {
+                                $jsonData['id_recipe'] = $recipeOld->id();
+                                $recipeVersion = new RecipeVersion($jsonData);
+                                $persist = $recipeVersion->persist();
+                                if ($persist['status'] == 'OK') {
+                                    return json_encode(['status' => 'OK', 'recipe_version' => $recipeVersion->id() . ' - ' . $recipeOld->getBasicInfo()]);
                                 } else {
                                     return json_encode(['status' => 'NOK', 'errors' => $persist['errors']]);
                                 }
                             }
+                        } else {
+                            return json_encode(['status' => 'NOK', 'errors' => 'Data missing']);
                         }
                         break;
                     case 'publish-question':
