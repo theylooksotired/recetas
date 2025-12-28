@@ -116,10 +116,18 @@ class Recipe_Ui extends Ui
                 $nameLink = Text::simpleUrl($version->getBasicInfo());
                 $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
                 $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
+                $versionImage = $version->getImageWidth('image', 'web');
                 $otherVersions .= '
                     <div class="recipe_wrapper">
                         <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
-                        ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                        ' . (($versionImage != '') ? '
+                            <div class="recipe_version_image_wrapper">
+                                <div class="recipe_version_image">' . $versionImage . '</div>
+                                ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                            </div>
+                        ' : '
+                            ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
+                        ') . '
                         <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
                         <div class="recipe_wrapper_ins">
                             <div class="recipe_ingredients">
@@ -154,11 +162,12 @@ class Recipe_Ui extends Ui
         $imagesPreparation = '';
         $i = 1;
         foreach ($this->object->get('images') as $imagePreparation) {
+            $imageAlt = $this->object->getBasicInfo() . ' - ' . __('preparation') . ' - ' . __('step') . ' ' . $i;
             $imagesPreparation .= '
                 <div class="recipe_inside_image recipe_ingredients_image">
                     <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
                     <span class="preparation_step">' . $imagePreparation->get('label') . '</span>
-                    ' . $imagePreparation->getImageWidth('image', 'web') . '
+                    ' . $imagePreparation->getImageWidth('image', 'web', '', false, $imageAlt) . '
                 </div>';
             $i++;
         }
@@ -176,58 +185,60 @@ class Recipe_Ui extends Ui
             </div>' : '';
         return '
             ' . $otherVersionsTop . '
-            <article class="recipe_complete">
-                <div class="recipe_complete_ins post-content" id="post-container">
-                    <div class="recipe_complete_info">
-                        ' . $this->object->getImageWidth('image', 'web') . '
-                        <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
-                    </div>
-                    ' . $videoHtml . '
-                    ' . Adsense::responsive('middle') . '
-                    ' . $this->object->get('description') . '
-                    <div class="recipe_wrapper">
-                        <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
-                        <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
-                        <div class="recipe_share_top">
-                            <div class="recipe_share_top_title">' . __('share_recipe') . '</div>
-                            ' . $this->share(['share' => [
-                                ['key' => 'whatsapp', 'icon' => '<i class="icon icon-whatsapp"></i>'],
-                                ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-                                ['key' => 'print', 'icon' => '<i class="icon icon-print"></i>'],
-                            ]]) . '
+            <main>
+                <article class="recipe_complete">
+                    <div class="recipe_complete_ins post-content" id="post-container">
+                        <div class="recipe_complete_info">
+                            ' . $this->object->getImageWidth('image', 'web') . '
+                            <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                         </div>
-                        ' . Adsense::responsive('ingredients') . '
-                        <div class="recipe_wrapper_ins">                            
-                            <div class="recipe_ingredients">
-                                <h3>' . __('ingredients') . '</h3>
-                                ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
-                                <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
+                        ' . $videoHtml . '
+                        ' . Adsense::responsive('middle') . '
+                        ' . $this->object->get('description') . '
+                        <div class="recipe_wrapper">
+                            <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
+                            <div class="recipe_extra_info">' . $this->renderInfo(true) . '</div>
+                            <div class="recipe_share_top">
+                                <div class="recipe_share_top_title">' . __('share_recipe') . '</div>
+                                ' . $this->share(['share' => [
+                                    ['key' => 'whatsapp', 'icon' => '<i class="icon icon-whatsapp"></i>'],
+                                    ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
+                                    ['key' => 'print', 'icon' => '<i class="icon icon-print"></i>'],
+                                ]]) . '
                             </div>
-                            <div class="recipe_preparation">
-                                ' . (($imagesPreparation != '') ? '
-                                <h3>' . __('preparation_simple') . '</h3>
-                                ' . $imagesPreparation . '
-                                ' : '') . '
-                                <h3>' . __('preparation') . '</h3>
-                                <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
-                                ' . Adsense::responsive('preparation') . '
+                            ' . Adsense::responsive('ingredients') . '
+                            <div class="recipe_wrapper_ins">                            
+                                <div class="recipe_ingredients">
+                                    <h3>' . __('ingredients') . '</h3>
+                                    ' . (($imageIngredients != '') ? '<div class="recipe_inside_image recipe_ingredients_image">' . $imageIngredients . '</div>' : '') . '
+                                    <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
+                                </div>
+                                <div class="recipe_preparation">
+                                    ' . (($imagesPreparation != '') ? '
+                                    <h3>' . __('preparation_simple') . '</h3>
+                                    ' . $imagesPreparation . '
+                                    ' : '') . '
+                                    <h3>' . __('preparation') . '</h3>
+                                    <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                    ' . Adsense::responsive('preparation') . '
+                                </div>
+                            </div>
+                            <div class="rating_wrapper">
+                                <h2>' . __('rating_of_recipe') . '</h2>
+                                <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
+                            </div>
+                            <div class="question_wrapper" id="question_' . $this->object->id() . '">
+                                <h2>' . __('questions_recipe') . '</h2>
+                                ' . Question_Form::showPublic() . '
+                                ' . $lastAnswer . '
+                                ' . $questionsHtml . '
                             </div>
                         </div>
-                        <div class="rating_wrapper">
-                            <h2>' . __('rating_of_recipe') . '</h2>
-                            <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
-                        </div>
-                        <div class="question_wrapper" id="question_' . $this->object->id() . '">
-                            <h2>' . __('questions_recipe') . '</h2>
-                            ' . Question_Form::showPublic() . '
-                            ' . $lastAnswer . '
-                            ' . $questionsHtml . '
-                        </div>
                     </div>
-                </div>
-            </article>
-            ' . $otherVersions . '
-            ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '');
+                </article>
+                ' . $otherVersions . '
+                ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '') . '
+            </main>';
     }
 
     public function renderPreloadImage()
