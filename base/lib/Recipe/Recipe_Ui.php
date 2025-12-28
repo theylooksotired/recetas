@@ -733,11 +733,6 @@ class Recipe_Ui extends Ui
     {
         $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') : date('Y-m-d');
         $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') : $dateModified;
-        $versionsJson = '';
-        $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        foreach ($versions as $version) {
-            $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
-        }
         $ingredients = [];
         foreach ($this->object->get('ingredients') as $ingredient) {
             $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
@@ -794,7 +789,12 @@ class Recipe_Ui extends Ui
                 'uploadDate' => $dateCreated
             ];
         }
-        return '<script type="application/ld+json">' . json_encode($info) . '</script>' . $versionsJson;
+        // $versionsJson = '';
+        // $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
+        // foreach ($versions as $version) {
+        //     $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
+        // }
+        return '<script type="application/ld+json">' . json_encode($info) . '</script>';
     }
 
 }
