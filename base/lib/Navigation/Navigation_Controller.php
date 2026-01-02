@@ -586,38 +586,6 @@ class Navigation_Controller extends Controller
                 }
                 return json_encode($info, JSON_PRETTY_PRINT);
             break;
-            case 'json-questions':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                switch ($this->id) {
-                    default:
-                        $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
-                        $info = [];
-                        foreach ($questions as $question) {
-                            $info[] = $question->toJson();
-                        }
-                        return json_encode($info, JSON_PRETTY_PRINT);
-                    break;
-                    case 'publish':
-                        $question = (new Question)->read($this->extraId);
-                        if ($question->id() != '') {
-                            $question->persistSimple('published', 1);
-                            return json_encode(['status' => 'OK', 'question' => $question->toJson()]);
-                        } else {
-                            return json_encode(['status' => 'NOK']);
-                        }
-                    break;
-                    case 'delete':
-                        $question = (new Question)->read($this->extraId);
-                        if ($question->id() != '') {
-                            $question->delete();
-                            return json_encode(['status' => 'OK']);
-                        } else {
-                            return json_encode(['status' => 'NOK']);
-                        }
-                    break;
-                }
-            break;
             case 'info-json':
                 $this->mode = 'json';
                 $this->checkAuthorization();
@@ -655,6 +623,24 @@ class Navigation_Controller extends Controller
                             return json_encode(['status' => 'NOK']);
                         }
                     break;
+                    case 'missing-images':
+                        $recipes = (new Recipe)->readList(['order' => 'id']);
+                        $recipeImages = ['imagesMissing' => [], 'imagesSmall' => []];
+                        foreach ($recipes as $recipe) {
+                            $imageUrl = $recipe->getImageUrl('image', 'web');
+                            if ($imageUrl == '') {
+                                $recipeImages['imagesMissing'][] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url()];
+                            } else {
+                                $imageFile = str_replace(ASTERION_BASE_URL, ASTERION_BASE_FILE, $imageUrl);
+                                $imageSize = @getimagesize($imageFile);
+                                $width = (isset($imageSize[0])) ? $imageSize[0] : 0;
+                                if ($width < 600) {
+                                    $recipeImages['imagesSmall'][] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url(), 'width' => $width];
+                                }
+                            }
+                        }
+                        return json_encode($recipeImages);
+                        break;
                     case 'save-recipe':
                         $input = file_get_contents('php://input');
                         $jsonData = json_decode($input, true) ?: [];
