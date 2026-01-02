@@ -634,7 +634,7 @@ class Navigation_Controller extends Controller
                                 $imageFile = str_replace(ASTERION_BASE_URL, ASTERION_BASE_FILE, $imageUrl);
                                 $imageSize = @getimagesize($imageFile);
                                 $width = (isset($imageSize[0])) ? $imageSize[0] : 0;
-                                if ($width < 600) {
+                                if ($width < 500) {
                                     $recipeImages['imagesSmall'][] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url(), 'width' => $width];
                                 }
                             }
