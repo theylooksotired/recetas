@@ -111,7 +111,7 @@ class Adsense {
             $adSlot = $adSlotVenezuela;
         } elseif (Parameter::code('country_code') == 'argentina') {
             $adSlot = $adSlotArgentina;
-        } elseif (Parameter::code('country_code') == 'dominicana') {
+        } elseif (Parameter::code('country_code') == 'republicadominicana') {
             $adSlot = $adSlotDominicana;
         } elseif (Parameter::code('country_code') == 'espana') {
             $adSlot = $adSlotEspana;

@@ -629,17 +629,33 @@ class Navigation_Controller extends Controller
                         foreach ($recipes as $recipe) {
                             $imageUrl = $recipe->getImageUrl('image', 'web');
                             if ($imageUrl == '') {
-                                $recipeImages['imagesMissing'][] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url()];
+                                $recipeImages['imagesMissing'][] = [
+                                    'id' => $recipe->id(),
+                                    'title' => $recipe->getBasicInfo(),
+                                    'url' => $recipe->url(),
+                                    'image_url' => $imageUrl
+                                ];
                             } else {
                                 $imageFile = str_replace(ASTERION_BASE_URL, ASTERION_BASE_FILE, $imageUrl);
                                 $imageSize = @getimagesize($imageFile);
                                 $width = (isset($imageSize[0])) ? $imageSize[0] : 0;
                                 if ($width < 500) {
-                                    $recipeImages['imagesSmall'][] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url(), 'width' => $width];
+                                    $recipeImages['imagesSmall'][] = [
+                                        'id' => $recipe->id(),
+                                        'title' => $recipe->getBasicInfo(),
+                                        'url' => $recipe->url(),
+                                        'image_url' => $imageUrl,
+                                        'width' => $width
+                                    ];
                                 }
                             }
                         }
                         return json_encode($recipeImages);
+                        break;
+                    case 'save-image':
+                        $input = file_get_contents('php://input');
+                        $jsonData = json_decode($input, true) ?: [];
+                        dd($jsonData, 111);
                         break;
                     case 'save-recipe':
                         $input = file_get_contents('php://input');
