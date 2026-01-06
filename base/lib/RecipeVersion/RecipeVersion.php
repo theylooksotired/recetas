@@ -11,8 +11,28 @@
 class RecipeVersion extends Db_Object
 {
 
+    public function getPrepTime()
+    {
+        $cookTime = $this->get('cook_time');
+        $values = [
+            '5_minutes' => 'PT5M',
+            '15_minutes' => 'PT5M',
+            '30_minutes' => 'PT10M',
+            '45_minutes' => 'PT10M',
+            '1_hour' => 'PT30M',
+            '2_hours' => 'PT30M',
+            '3_hours' => 'PT30M',
+            '4_hours' => 'PT30M',
+            '5_hours' => 'PT30M',
+            '1_day' => 'PT30M',
+            '2_days' => 'PT30M',
+        ];
+        return (isset($values[$cookTime])) ? $values[$cookTime] : 'PT10M';
+    }
+
     public function getCookTime()
     {
+        $default = 'PT1H';
         $values = [
             '5_minutes' => 'PT5M',
             '15_minutes' => 'PT15M',
@@ -26,11 +46,37 @@ class RecipeVersion extends Db_Object
             '1_day' => 'P1D',
             '2_days' => 'P2D',
         ];
-        return (isset($values[$this->get('cook_time')])) ? $values[$this->get('cook_time')] : '';
+        return (isset($values[$this->get('cook_time')])) ? $values[$this->get('cook_time')] : $default;
+    }
+
+    public function getTotalTime()
+    {
+        $default = 'PT1H10M';
+        $values = [
+            '5_minutes' => 'PT10M',
+            '15_minutes' => 'PT20M',
+            '30_minutes' => 'PT40M',
+            '45_minutes' => 'PT55M',
+            '1_hour' => 'PT1H10M',
+            '2_hours' => 'PT2H10M',
+            '3_hours' => 'PT3H10M',
+            '4_hours' => 'PT4H10M',
+            '5_hours' => 'PT5H10M',
+            '1_day' => 'P1DT10M',
+            '2_days' => 'P2DT10M',
+        ];
+        return (isset($values[$this->get('cook_time')])) ? $values[$this->get('cook_time')] : $default;        
+    }
+
+    public function getTotalTimeLabel()
+    {
+        $cookTime = $this->get('cook_time');
+        return (isset($values[$cookTime])) ? __[$cookTime] : __('1_hour');
     }
 
     public function getDiet()
     {
+        $default = 'low_fat';
         $values = [
             'diabetic' => 'DiabeticDiet',
             'gluten_free' => 'GlutenFreeDiet',
@@ -44,12 +90,13 @@ class RecipeVersion extends Db_Object
             'vegan' => 'VeganDiet',
             'vegetarian' => 'VegetarianDiet',
         ];
-        return (isset($values[$this->get('diet')])) ? $values[$this->get('diet')] : '';
+        return (isset($values[$this->get('diet')])) ? $values[$this->get('diet')] : $default;
     }
 
     public function getServings()
     {
-        return ($this->get('servings') > 0) ? $this->get('servings') . ' ' . __('servings') : '';
+        $servings = ($this->get('servings') > 0) ? $this->get('servings') : 4;
+        return $servings . ' ' . __('servings');
     }
 
     public function getPreparationChatGPT()

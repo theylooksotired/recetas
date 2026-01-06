@@ -164,7 +164,7 @@ class Recipe_Ui extends Ui
         foreach ($this->object->get('images') as $imagePreparation) {
             $imageAlt = $this->object->getBasicInfo() . ' - ' . __('preparation') . ' - ' . __('step') . ' ' . $i;
             $imagesPreparation .= '
-                <div class="recipe_inside_image recipe_ingredients_image">
+                <div class="recipe_inside_image recipe_ingredients_image" id="paso' . $i . '">
                     <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
                     <span class="preparation_step">' . $imagePreparation->get('label') . '</span>
                     ' . $imagePreparation->getImageWidth('image', 'web', '', false, $imageAlt) . '
@@ -268,12 +268,10 @@ class Recipe_Ui extends Ui
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
                 </div>
             ') . '
-            ' . (($this->object->get('cook_time') != '') ? '
             <div class="recipe_cook_time">
                 <i class="icon icon-time"></i>
-                <span>' . __($this->object->get('cook_time')) . '</span>
+                <span>' . $this->object->getTotalTimeLabel() . '</span>
             </div>
-            ' : '') . '
             ' . (($this->object->get('cooking_method') != '') ? '
             <div class="recipe_cooking_method">
                 <i class="icon icon-cutlery"></i>
@@ -308,12 +306,10 @@ class Recipe_Ui extends Ui
                     <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
                 </div>
             ') . '
-            ' . (($version->get('cook_time') != '') ? '
             <div class="recipe_cook_time">
                 <i class="icon icon-time"></i>
-                <span>' . __($version->get('cook_time')) . '</span>
+                <span>' . $version->getTotalTimeLabel() . '</span>
             </div>
-            ' : '') . '
             ' . (($version->get('cooking_method') != '') ? '
             <div class="recipe_cooking_method">
                 <i class="icon icon-cutlery"></i>
@@ -497,6 +493,13 @@ class Recipe_Ui extends Ui
             $count = rand(30, 90);
             $this->object->persistSimple('rating_count', $count);
         }
+        $ratingValue = $this->object->get('rating');
+        $oldRatings = ['', '0', '1', '2', '3', '4', '5'];
+        if (in_array($ratingValue, $oldRatings)) {
+            $ratingValue = round(mt_rand(39, 50) / 10, 1);
+            $this->object->persistSimple('rating', $ratingValue);
+        }
+        $ratingValueCeil = ceil($ratingValue);
         $ratingHtml = '
             <div class="rating_ins">
                 <i class="icon icon-star"></i>
@@ -507,9 +510,9 @@ class Recipe_Ui extends Ui
             </div>';
         if ($layout == 'complete') {
             return '
-                <div class="rating rating_complete rating_' . $this->object->get('rating') . '" data-url="' . $this->object->urlRatingModal() . '">
+                <div class="rating rating_complete rating_' . $ratingValueCeil . '" data-url="' . $this->object->urlRatingModal() . '">
                     ' . $ratingHtml . '
-                    <div class="rating_label">' . __('rating') . ' : ' . $this->object->get('rating') . '/5 (' . $this->object->get('rating_count') . ')</div>
+                    <div class="rating_label">' . __('rating') . ' : ' . $ratingValue . '/5 (' . $this->object->get('rating_count') . ')</div>
                     <div class="rating_votes">
                         <div class="rating_vote rating_vote_1" data-rating="1">
                             <i class="icon icon-vote_1"></i>
@@ -534,7 +537,7 @@ class Recipe_Ui extends Ui
                     </div>
                 </div>';
         } else {
-            return '<div class="rating rating_' . $this->object->get('rating') . '">' . $ratingHtml . '</div>';
+            return '<div class="rating rating_' . $ratingValueCeil . '">' . $ratingHtml . '</div>';
         }
     }
 
@@ -738,8 +741,22 @@ class Recipe_Ui extends Ui
             $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
         }
         $instructions = [];
-        foreach ($this->object->get('preparation') as $preparation) {
-            $instructions[] = ['@type' => 'HowToStep', 'text' => $preparation->get('step')];
+        if (is_array($this->object->get('images')) && count($this->object->get('images')) > 0) {
+            $i = 1;
+            foreach ($this->object->get('images') as $imagePreparation) {
+                $instructions[] = [
+                    '@type' => 'HowToStep',
+                    'name' => __('step') . ' ' . $i,
+                    'text' => $imagePreparation->get('label'),
+                    'image' => $imagePreparation->getImageUrl('image', 'web'),
+                    'url' => $this->object->url() . '#paso' . $i
+                ];
+                $i++;
+            }
+        } else {
+            foreach ($this->object->get('preparation') as $preparation) {
+                $instructions[] = ['@type' => 'HowToStep', 'text' => $preparation->get('step')];
+            }
         }
         $info = [
             '@context' => 'http://schema.org/',
@@ -751,6 +768,8 @@ class Recipe_Ui extends Ui
                 '@type' => 'AggregateRating',
                 'ratingValue' => $this->object->get('rating'),
                 'ratingCount' => $this->object->get('rating_count'),
+                'bestRating' => '5',
+                'worstRating' => '1',
             ],
             'author' => [
                 '@type' => 'Organization',
@@ -769,9 +788,9 @@ class Recipe_Ui extends Ui
             'recipeIngredient' => $ingredients,
             'recipeInstructions' => $instructions,
         ];
-        if ($this->object->getCookTime() != '') {
-            $info['cookTime'] = $this->object->getCookTime();
-        }
+        $info['cookTime'] = $this->object->getCookTime();
+        $info['prepTime'] = $this->object->getPrepTime();
+        $info['totalTime'] = $this->object->getTotalTime();
         if ($this->object->get('cooking_method') != '') {
             $info['cookingMethod'] = $this->object->get('cooking_method');
         }
