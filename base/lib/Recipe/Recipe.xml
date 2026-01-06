@@ -230,6 +230,14 @@
             <onDelete>cascade</onDelete>
         </attribute>
         <attribute>
+            <name>reviews</name>
+            <label>reviews</label>
+            <type>multiple_object</type>
+            <refObject>RecipeReview</refObject>
+            <linkAttribute>id_recipe</linkAttribute>
+            <onDelete>cascade</onDelete>
+        </attribute>
+        <attribute>
             <name>friend_links</name>
             <label>friend_links</label>
             <type>hidden_total</type>

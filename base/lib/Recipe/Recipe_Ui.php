@@ -153,11 +153,6 @@ class Recipe_Ui extends Ui
                 </div>';
         }
         $otherVersions = ($otherVersions != '') ? '<div class="other_versions_wrapper">' . $otherVersions . '</div>' : '';
-        $lastAnswer = '';
-        if (Session::get('answered_recipe') == $this->object->id() ) {
-            $question = (new Question)->read(Session::get('answered_question'));
-            $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
-        }
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
         $i = 1;
@@ -174,11 +169,27 @@ class Recipe_Ui extends Ui
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
         $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
-            <div class="questions_recipe">
-                <h2 class="questions_recipe_title">' . __('questions_about_recipe') . '</h2>
-                <div class="questions_recipe_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
+            <div class="questions_recipe_list">
+                <div class="questions_recipe_list_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
                 ' . (($questions->count() > 10) ? '<div class="button questions_recipe_more">' . __('view_more_questions') . '</div>' : '') . '
             </div>';
+        $lastAnswer = '';
+        if (Session::get('answered_recipe') == $this->object->id() ) {
+            $question = (new Question)->read(Session::get('answered_question'));
+            $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
+        }
+        $reviewsHtml = '';
+        $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
+        if (!$reviews->isEmpty()) {
+            $reviewsHtml = '
+                <div class="reviews_recipe_list">
+                    <div class="reviews_recipe_list_items">' . $reviews->showList(['function' => 'Recipe']) . '</div>
+                </div>';
+        }
+        $reviewsThanks = '';
+        if (Session::get('reviewed_recipe') == $this->object->id() ) {
+            $reviewsThanks = '<div class="message message_info">' . __('thank_you_for_your_review') . '</div>';
+        }
         $videoHtml = ($this->object->get('youtube_url') != '') ? '
             <div class="recipe_video">
                 ' . VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) . '
@@ -226,6 +237,12 @@ class Recipe_Ui extends Ui
                             <div class="rating_wrapper">
                                 <h2>' . __('rating_of_recipe') . '</h2>
                                 <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
+                            </div>
+                            <div class="review_wrapper" id="review_' . $this->object->id() . '">
+                                <h2>' . __('reviews_recipe') . '</h2>
+                                ' . $reviewsThanks . '
+                                ' . RecipeReview_Form::showPublic() . '
+                                ' . $reviewsHtml . '
                             </div>
                             <div class="question_wrapper" id="question_' . $this->object->id() . '">
                                 <h2>' . __('questions_recipe') . '</h2>
@@ -359,7 +376,7 @@ class Recipe_Ui extends Ui
         $i = 1;
         foreach ($this->object->get('preparation') as $preparation) {
             $html .= '
-                <p class="preparation">
+                <p class="preparation" id="paso' . $i . '">
                     <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
                     <span class="preparation_step">' . $preparation->get('step') . '</span>
                     ' . $preparation->getImageAmpWebp('image', 'web') . '
@@ -726,16 +743,12 @@ class Recipe_Ui extends Ui
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
-            // ' . (($this->object->get('adsense_earnings') != '') ? '<div class="tiny">Adsense (ultimos ' . $adsenseNumberDays . ' dias) - <strong>' . $this->object->get('adsense_earnings') . '$USD</strong> ' . $htmlEarnings . ' | ' . $this->object->get('adsense_visits') . ' ' . $htmlVisits . '</div>' : '') . '
-            //  . '
-            // <button class="button_social" data-url="' . url('recipe/facebook-post/' . $this->object->id(), true) . '">Publicar en Facebook</button>
-            // <button class="button_social" data-url="' . url('recipe/instagram-post/' . $this->object->id(), true) . '">Publicar en Instagram</button>';
     }
 
     public function renderJsonHeader()
     {
-        $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') : date('Y-m-d');
-        $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') : $dateModified;
+        $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') . 'T00:00:00-03:00' : date('Y-m-d\TH:i:sP');
+        $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') . 'T00:00:00-03:00' : $dateModified;
         $ingredients = [];
         foreach ($this->object->get('ingredients') as $ingredient) {
             $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
@@ -754,8 +767,41 @@ class Recipe_Ui extends Ui
                 $i++;
             }
         } else {
+            $i = 1;
             foreach ($this->object->get('preparation') as $preparation) {
-                $instructions[] = ['@type' => 'HowToStep', 'text' => $preparation->get('step')];
+                $instructions[] = [
+                    '@type' => 'HowToStep',
+                    'name' => __('step') . ' ' . $i,
+                    'text' => $preparation->get('step'),
+                    'url' => $this->object->url() . '#paso' . $i
+                ];
+                $i++;
+            }
+        }
+        $reviews = [];
+        if (is_array($this->object->get('reviews')) && count($this->object->get('reviews')) > 0) {
+            $reviewsActive = [];
+            foreach ($this->object->get('reviews') as $review) {
+                if ($review->get('active') == '1') {
+                    $reviewsActive[] = $review;
+                }
+            }
+            foreach ($reviewsActive as $review) {
+                $reviews[] = [
+                    '@type' => 'Review',
+                    'author' => [
+                        '@type' => 'Person',
+                        'name' => $review->get('author'),
+                    ],
+                    'datePublished' => $review->get('created'),
+                    'reviewBody' => $review->get('review'),
+                    'reviewRating' => [
+                        '@type' => 'Rating',
+                        'ratingValue' => $review->get('rating'),
+                        'bestRating' => '5',
+                        'worstRating' => '1',
+                    ],
+                ];
             }
         }
         $info = [
@@ -794,6 +840,9 @@ class Recipe_Ui extends Ui
         if ($this->object->get('cooking_method') != '') {
             $info['cookingMethod'] = $this->object->get('cooking_method');
         }
+        if (count($reviews) > 0) {
+            $info['review'] = $reviews;
+        }
         $idYoutube = VideoHelper::idYoutube($this->object->get('youtube_url'));
         if ($idYoutube != '') {
             $info['video'] = [
@@ -808,11 +857,6 @@ class Recipe_Ui extends Ui
                 'uploadDate' => $dateCreated
             ];
         }
-        // $versionsJson = '';
-        // $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        // foreach ($versions as $version) {
-        //     $versionsJson .= $version->showUi('JsonHeader', ['recipe' => $this->object, 'category' => $this->object->get('id_category_object')]);
-        // }
         return '<script type="application/ld+json">' . json_encode($info) . '</script>';
     }
 

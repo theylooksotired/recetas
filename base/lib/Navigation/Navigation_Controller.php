@@ -147,7 +147,9 @@ class Navigation_Controller extends Controller
                         $this->hide_side_recipes = true;
                         $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage') . $item->showUi('AlternateUrl') . Recaptcha::head();
                         $this->content_bottom = $this->recipe->showUi('Related');
-                        if (isset($this->values['question']) && strlen($this->values['question']) > 10) {
+                        // Question handling
+                        $typeForm = (isset($this->values['type'])) ? $this->values['type'] : '';
+                        if ($typeForm == 'question' && isset($this->values['question']) && strlen($this->values['question']) > 10) {
                             $question = 'Usando un lenguaje cordial, sencillo, directo, claro, corto y evitando mencionar el sexo de la persona pues no sabemos si es hombre o mujer. Escribe un archivo JSON que tenga tres campos: "original_question" que es el texto original de la pregunta, "formatted_question" que es la pregunta reformulada, corta y bien escrita, "answer" que es una respuesta corta a la pregunta: "' . $this->values['question'] . '" que ha formulado una persona que acaba de leer la siguiente receta de cocina: "' . $this->recipe->showUi('Text') . '"';
                             $answerChatGPT = ChatGPT::answer($question);
                             preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
@@ -170,6 +172,25 @@ class Navigation_Controller extends Controller
                                     header('Location: ' . $this->recipe->url() . '#question_' . $this->recipe->id());
                                     exit();
                                 }
+                            }
+                        }
+                        // Review handling
+                        if ($typeForm == 'review' && isset($this->values['review']) && strlen($this->values['review']) > 20) {
+                            $values = $this->values;
+                            $values['id_recipe'] = $this->recipe->id();
+                            $values['published'] = false;
+                            $values['name'] = (isset($this->values['name']) && $this->values['name'] != '') ? $this->values['name'] : '';
+                            $values['title'] = (isset($this->values['title']) && $this->values['title'] != '') ? $this->values['title'] : '';
+                            $values['rating'] = number_format(rand(32, 50) / 10, 1);
+                            $review = new RecipeReview($values);
+                            $review->validate();
+                            $review->validateReCaptchaV3();
+                            if (count($review->errors) == 0) {
+                                $review->persist();
+                                Session::set('reviewed_recipe', $this->recipe->id());
+                                Session::set('reviewed_review', $review->id());
+                                header('Location: ' . $this->recipe->url() . '#review_' . $this->recipe->id());
+                                exit();
                             }
                         }
                     }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure RecipeReview
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>RecipeReview</name>
+	<table>recipe_review</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+            <order>true</order>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>id_recipe</name>
+			<type>linkid_autoincrement</type>
+			<refObject>Recipe</refObject>
+		</attribute>
+        <attribute>
+            <name>author</name>
+            <label>author</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <label>title</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>rating</name>
+            <label>rating</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
+            <name>review</name>
+            <label>review</label>
+            <type>textarea_small</type>
+        </attribute>
+        <attribute>
+            <name>active</name>
+            <label>active</label>
+            <type>checkbox</type>
+        </attribute>
+	</attributes>
+    <indexes>
+        <index>
+            <name>id_recipe</name>
+            <fields>id_recipe</fields>
+        </index>
+        <index>
+            <name>id_rating</name>
+            <fields>id_rating</fields>
+        </index>
+    </indexes>
+</object>
