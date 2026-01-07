@@ -613,6 +613,7 @@ class Navigation_Controller extends Controller
                 switch ($this->id) {
                     default:
                         $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
+                        $reviews = (new RecipeReview)->readList(['where' => 'active!="1" OR active IS NULL', 'order' => 'created DESC']);
                         $recipesCount = (new Recipe)->countResults();
                         $info = [
                             'country_code' => Parameter::code('country_code'),
@@ -621,10 +622,14 @@ class Navigation_Controller extends Controller
                             'description' => Parameter::code('meta_description'),
                             'recipes_count' => $recipesCount,
                             'questions' => [],
+                            'reviews' => [],
                             'url' => url(''),
                         ];
                         foreach ($questions as $question) {
                             $info['questions'][] = $question->toJson();
+                        }
+                        foreach ($reviews as $review) {
+                            $info['reviews'][] = $review->toJson();
                         }
                         return json_encode($info, JSON_PRETTY_PRINT);
                     break;
@@ -719,6 +724,17 @@ class Navigation_Controller extends Controller
                         if ($question->id() != '') {
                             if ($this->id == 'publish-question') $question->persistSimple('published', 1);
                             if ($this->id == 'delete-question') $question->delete();
+                            return json_encode(['status' => 'OK']);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                    break;
+                    case 'publish-review':
+                    case 'delete-review':
+                        $review = (new RecipeReview)->read($this->extraId);
+                        if ($review->id() != '') {
+                            if ($this->id == 'publish-review') $review->persistSimple('active', 1);
+                            if ($this->id == 'delete-review') $review->delete();
                             return json_encode(['status' => 'OK']);
                         } else {
                             return json_encode(['status' => 'NOK']);

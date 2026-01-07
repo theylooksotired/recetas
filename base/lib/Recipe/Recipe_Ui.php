@@ -194,6 +194,9 @@ class Recipe_Ui extends Ui
             <div class="recipe_video">
                 ' . VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) . '
             </div>' : '';
+        Session::delete('reviewed_recipe');
+        Session::delete('answered_recipe');
+        Session::delete('answered_question');
         return '
             ' . $otherVersionsTop . '
             <main>
