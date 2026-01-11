@@ -45,6 +45,7 @@ class Adsense {
         $typesGuatemala = ['top' => '1320098677', 'middle' => '5200274565', 'ingredients' => '8951176683'];
         $typesPanama = ['top' => '9007017007', 'middle' => '5118908739', 'ingredients' => '3531329040'];
         $typesSalvador = ['top' => '2218247370', 'middle' => '3805827060', 'ingredients' => '7638095012'];
+        $typesJudias = ['top' => '2991255061', 'middle' => '9692394782', 'ingredients' => '6577284464'];
 
         $adSlotPeru = (isset($typesPeru[$type])) ? $typesPeru[$type] : '2090660201';
         $adSlotHonduras = (isset($typesHonduras[$type])) ? $typesHonduras[$type] : '2090660201';
@@ -78,6 +79,7 @@ class Adsense {
         $adSlotGuatemala = (isset($typesGuatemala[$type])) ? $typesGuatemala[$type] : '2090660201';
         $adSlotPanama = (isset($typesPanama[$type])) ? $typesPanama[$type] : '2090660201';
         $adSlotSalvador = (isset($typesSalvador[$type])) ? $typesSalvador[$type] : '2090660201';
+        $adSlotJudias = (isset($typesJudias[$type])) ? $typesJudias[$type] : '2090660201';
 
         if (Parameter::code('country_code') == 'honduras') {
             $adSlot = $adSlotHonduras;
@@ -143,6 +145,8 @@ class Adsense {
             $adSlot = $adSlotPanama;
         } elseif (Parameter::code('country_code') == 'salvador') {
             $adSlot = $adSlotSalvador;
+        } elseif (Parameter::code('country_code') == 'judias') {
+            $adSlot = $adSlotJudias;
         } else {
             $adSlot = '2090660201';
         }

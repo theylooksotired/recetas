@@ -662,18 +662,26 @@ class Navigation_Controller extends Controller
                                     'image_url' => $imageUrl
                                 ];
                             } else {
-                                $imageFile = str_replace(ASTERION_BASE_URL, ASTERION_BASE_FILE, $imageUrl);
-                                $imageSize = @getimagesize($imageFile);
-                                $width = (isset($imageSize[0])) ? $imageSize[0] : 0;
-                                if ($width < 500) {
+                                if (strpos($imageUrl, $recipe->get('title_url')) === false) {
                                     $recipeImages['imagesSmall'][] = [
                                         'id' => $recipe->id(),
                                         'title' => $recipe->get('title'),
                                         'url' => $recipe->url(),
-                                        'image_url' => $imageUrl,
-                                        'width' => $width
+                                        'image_url' => $imageUrl
                                     ];
                                 }
+                                // $imageFile = str_replace(ASTERION_BASE_URL, ASTERION_BASE_FILE, $imageUrl);
+                                // $imageSize = @getimagesize($imageFile);
+                                // $width = (isset($imageSize[0])) ? $imageSize[0] : 0;
+                                // if ($width < 500) {
+                                //     $recipeImages['imagesSmall'][] = [
+                                //         'id' => $recipe->id(),
+                                //         'title' => $recipe->get('title'),
+                                //         'url' => $recipe->url(),
+                                //         'image_url' => $imageUrl,
+                                //         'width' => $width
+                                //     ];
+                                // }
                             }
                         }
                         return json_encode($recipeImages);
