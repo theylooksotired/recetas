@@ -657,7 +657,7 @@ class Navigation_Controller extends Controller
                             if ($imageUrl == '') {
                                 $recipeImages['imagesMissing'][] = [
                                     'id' => $recipe->id(),
-                                    'title' => $recipe->getBasicInfo(),
+                                    'title' => $recipe->get('title'),
                                     'url' => $recipe->url(),
                                     'image_url' => $imageUrl
                                 ];
@@ -668,7 +668,7 @@ class Navigation_Controller extends Controller
                                 if ($width < 500) {
                                     $recipeImages['imagesSmall'][] = [
                                         'id' => $recipe->id(),
-                                        'title' => $recipe->getBasicInfo(),
+                                        'title' => $recipe->get('title'),
                                         'url' => $recipe->url(),
                                         'image_url' => $imageUrl,
                                         'width' => $width
@@ -679,9 +679,21 @@ class Navigation_Controller extends Controller
                         return json_encode($recipeImages);
                         break;
                     case 'save-image':
+                        $response = ['status' => 'NOK'];
                         $input = file_get_contents('php://input');
                         $jsonData = json_decode($input, true) ?: [];
-                        dd($jsonData, 111);
+                        $id = isset($jsonData['id']) ? $jsonData['id'] : '';
+                        $recipe = (new Recipe)->read($id);
+                        if ($recipe->id() != '') {
+                            $base64Image = $jsonData['response']['data'][0]['b64_json'];
+                            $fileName = $recipe->get('title_url') . '.jpg';
+                            $response = ['status' => 'OK'];
+                            if (Image_File::savePngBase64Image($base64Image, 'Recipe', $fileName)) {
+                                $recipe->persistSimple('image', Text::simpleUrlFileBase($fileName));
+                                $response = ['status' => 'OK', 'file' => $fileName];
+                            }
+                        }
+                        return json_encode($response);
                         break;
                     case 'save-recipe':
                         $input = file_get_contents('php://input');
