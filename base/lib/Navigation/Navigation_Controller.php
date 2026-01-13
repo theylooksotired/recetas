@@ -615,12 +615,14 @@ class Navigation_Controller extends Controller
                         $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
                         $reviews = (new RecipeReview)->readList(['where' => 'active!="1" OR active IS NULL', 'order' => 'created DESC']);
                         $recipesCount = (new Recipe)->countResults();
+                        $recipesCountNoContent = (new Recipe)->countResults(['where' => 'title_page="" OR title_page IS NULL']);
                         $info = [
                             'country_code' => Parameter::code('country_code'),
                             'language' => ASTERION_LANGUAGE_ID,
                             'title' => Parameter::code('meta_title_page'),
                             'description' => Parameter::code('meta_description'),
                             'recipes_count' => $recipesCount,
+                            'recipes_count_no_content' => $recipesCountNoContent,
                             'questions' => [],
                             'reviews' => [],
                             'url' => url(''),

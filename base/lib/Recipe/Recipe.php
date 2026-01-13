@@ -190,6 +190,9 @@ class Recipe extends Db_Object
     {
         $response = [];
         $titleTest = $this->titleTest($this->getBasicInfo());
+        $question = 'Crea un archivo JSON con los campos "title_page" (que debe ser una correccion de la frase: ' . $titleTest . ' , "description" (que son tres lineas sobre la receta, puede ser historia o anectodas, debe ser diferente de la short_description y de la meta_description), "meta_description" (que son 140 caracteres para la pagina de la receta) y "short_description" (que deben ser 250 caracteres con una descripcion corta) para una receta de cocina llamada "' . $this->getBasicInfo() . '". Usa un lenguaje atractivo y persuasivo para invitar a los lectores a probar la receta. No uses signos de admiracion ni emoticons. El contenido debe estar en español. La receta es: "' . $this->showUi('PreparationParagraph') . '"';
+        $question = (ASTERION_LANGUAGE_ID == 'pt') ? 'Crie um arquivo JSON com os campos "title_page" (que deve ser uma correção da frase: ' . $titleTest . ' , "description" (que são cinco linhas sobre a receita, pode ser história ou anedotas), "meta_description" (que são 140 caracteres para a página da receita) e "short_description" (que devem ser 250 caracteres com uma descrição curta) para uma receita de cozinha chamada "' . $this->getBasicInfo() . '". Use uma linguagem atraente e persuasiva para convidar os leitores a experimentar a receita. Não use sinais de exclamação ou emoticons. O conteúdo deve estar em português. A receita é: "' . $this->showUi('PreparationParagraph') . '"' : $question;
+        return ChatGPT::answerJson($question);
         $questionTitle = 'Corrige la sintaxis y ortografia de esta frase, sin usar comillas, sin poner punto final: "' . $titleTest . '"';
         $questionTitle = (ASTERION_LANGUAGE_ID == 'pt') ? 'Corrija a sintaxe e a ortografia desta frase, sem usar aspas, sem colocar ponto final: "' . $titleTest . '"' : $questionTitle;
         $response['title_page'] = str_replace('"', '', str_replace('.', '', ChatGPT::answer($questionTitle)));
@@ -331,10 +334,12 @@ class Recipe extends Db_Object
     public function fixContent()
     {
         $content = $this->getContentChatGPT();
-        $this->persistSimple('title_page', $content['title_page']);
-        $this->persistSimple('description', $content['description']);
-        $this->persistSimple('meta_description', $content['meta_description']);
-        $this->persistSimple('short_description', $content['short_description']);
+        if (isset($content['title_page']) && $content['title_page'] != '') {
+            $this->persistSimple('title_page', $content['title_page']);
+            $this->persistSimple('description', $content['description']);
+            $this->persistSimple('meta_description', $content['meta_description']);
+            $this->persistSimple('short_description', $content['short_description']);
+        }
     }
 
     public function toJson()
