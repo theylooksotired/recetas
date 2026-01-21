@@ -1,0 +1,10 @@
+{
+    "require": {
+        "geoip2/geoip2": "^2.13"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.33"
+        }
+    }
+}

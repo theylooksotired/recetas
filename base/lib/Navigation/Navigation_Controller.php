@@ -607,6 +607,16 @@ class Navigation_Controller extends Controller
                 }
                 return json_encode($info, JSON_PRETTY_PRINT);
             break;
+            case 'country':
+                $this->mode = 'json';
+                try {
+                    require_once ASTERION_BASE_FILE . 'geo/get_country.php';
+                    $geoCountry = new GeoCountry();
+                    return $geoCountry->getCountryCodeOrEmpty();
+                } catch (Exception $e) {
+                    return '';
+                }
+                break;
             case 'info-json':
                 $this->mode = 'json';
                 $this->checkAuthorization();

@@ -109,8 +109,6 @@ class Adsense {
             $adSlot = $adSlotCostaRica;
         } elseif (Parameter::code('country_code') == 'nicaragua') {
             $adSlot = $adSlotNicaragua;
-        } elseif (Parameter::code('country_code') == 'venezuela') {
-            $adSlot = $adSlotVenezuela;
         } elseif (Parameter::code('country_code') == 'argentina') {
             $adSlot = $adSlotArgentina;
         } elseif (Parameter::code('country_code') == 'republicadominicana') {
@@ -137,8 +135,6 @@ class Adsense {
             $adSlot = $adSlotVeganas;
         } elseif (Parameter::code('country_code') == 'india') {
             $adSlot = $adSlotIndias;
-        } elseif (Parameter::code('country_code') == 'cuba') {
-            $adSlot = $adSlotCuba;
         } elseif (Parameter::code('country_code') == 'guatemala') {
             $adSlot = $adSlotGuatemala;
         } elseif (Parameter::code('country_code') == 'panama') {
@@ -147,6 +143,17 @@ class Adsense {
             $adSlot = $adSlotSalvador;
         } elseif (Parameter::code('country_code') == 'judias') {
             $adSlot = $adSlotJudias;
+        } elseif (Parameter::code('country_code') == 'cuba') {
+            try {
+                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
+                $geoCountry = new GeoCountry();
+                if ($geoCountry->getCountryCodeOrEmpty() == 'CU') {
+                    return '';
+                }
+            } catch (Exception $e) {}
+            $adSlot = $adSlotCuba;
+        } elseif (Parameter::code('country_code') == 'venezuela') {
+            $adSlot = $adSlotVenezuela;
         } else {
             $adSlot = '2090660201';
         }
