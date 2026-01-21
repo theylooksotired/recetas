@@ -10,6 +10,22 @@
 */
 class Adsense {
 
+    static public function header()
+    {
+        $header = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>';
+        if (Parameter::code('country_code') == 'cuba') {
+            try {
+                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
+                $geoCountry = new GeoCountry();
+                return ($geoCountry->getCountryCodeOrEmpty() == 'CU') ? '' : $header;
+            } catch (Exception $e) {
+                return $header;
+            }
+        } else {
+            return $header;
+        }
+    }
+
     static public function responsive($type = '') {
         if ($type == 'bottom') return ''; // Disable bottom ads for now
         if ($type == 'preparation') return ''; // Disable preparation ads for now

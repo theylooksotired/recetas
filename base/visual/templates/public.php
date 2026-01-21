@@ -74,7 +74,6 @@
             });
         }
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389"
-     crossorigin="anonymous"></script>
+    <?php echo Adsense::header();?>
 </body>
 </html>
