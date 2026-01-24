@@ -13,20 +13,11 @@ class Adsense {
     static public function header()
     {
         $header = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>';
-        if (Parameter::code('country_code') == 'cuba') {
-            try {
-                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
-                $geoCountry = new GeoCountry();
-                return ($geoCountry->getCountryCodeOrEmpty() == 'CU') ? '' : $header;
-            } catch (Exception $e) {
-                return $header;
-            }
-        } else {
-            return $header;
-        }
+        return (Adsense::checkHidden()) ? '' : $header;
     }
 
     static public function responsive($type = '') {
+        if (Adsense::checkHidden()) return ''; // Check if ads should be hidden for this country
         if ($type == 'bottom') return ''; // Disable bottom ads for now
         if ($type == 'preparation') return ''; // Disable preparation ads for now
         $typesHonduras = ['top'=>'4617928436', 'ingredients' => '5820147704', 'middle' => '4673768758'];
@@ -160,13 +151,6 @@ class Adsense {
         } elseif (Parameter::code('country_code') == 'judias') {
             $adSlot = $adSlotJudias;
         } elseif (Parameter::code('country_code') == 'cuba') {
-            try {
-                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
-                $geoCountry = new GeoCountry();
-                if ($geoCountry->getCountryCodeOrEmpty() == 'CU') {
-                    return '';
-                }
-            } catch (Exception $e) {}
             $adSlot = $adSlotCuba;
         } elseif (Parameter::code('country_code') == 'venezuela') {
             $adSlot = $adSlotVenezuela;
@@ -186,6 +170,27 @@ class Adsense {
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>';
+    }
+
+    static public function checkHidden()
+    {
+        if (isset($GLOBALS['adsense_hidden'])) {
+            return $GLOBALS['adsense_hidden'];
+        }
+        $hiddenCountries = ['cuba', 'venezuela'];
+        $hiddenCodes = ['CU', 'VE'];
+        if (in_array(Parameter::code('country_code'), $hiddenCountries)) {
+            try {
+                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
+                $geoCountry = new GeoCountry();
+                $GLOBALS['adsense_hidden'] = (in_array($geoCountry->getCountryCodeOrEmpty(), $hiddenCodes)) ? true : false;
+            } catch (Exception $e) {
+                $GLOBALS['adsense_hidden'] = false;
+            }
+        } else {
+            $GLOBALS['adsense_hidden'] = false;
+        }
+        return $GLOBALS['adsense_hidden'];
     }
 
 }

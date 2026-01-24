@@ -114,6 +114,9 @@ class Navigation_Controller extends Controller
                 $item = ($this->subcategory->id() != '') ? $this->subcategory : new SubCategory();
                 $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
+                if ($item instanceof SubCategory || $item instanceof Category) {
+                    $GLOBALS['adsense_hidden'] = true;
+                }
                 if ($item->id() != '') {
                     if ($item->get('redirect_force_url') != '') {
                         header("HTTP/1.1 301 Moved Permanently");
@@ -196,6 +199,7 @@ class Navigation_Controller extends Controller
                     }
                     return $this->ui->render();
                 } else {
+                    $GLOBALS['adsense_hidden'] = true;
                     $this->title_page = __('recipes_list');
                     $this->layout_page = 'recipe_category';
                     $this->bread_crumbs = [url($this->action) => __('recipes')];
@@ -256,6 +260,7 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'top-10':
+                $GLOBALS['adsense_hidden'] = true;
                 $top10s = new ListObjects('Top10', ['order' => 'ord']);
                 $recipesMostViewed = new ListObjects('Recipe', ['order' => 'views DESC', 'limit' => '10']);
                 $this->title_page = Parameter::code('meta_title_page_top10');
@@ -280,6 +285,7 @@ class Navigation_Controller extends Controller
                 break;
             case 'buscar':
             case 'pesquisar':
+                $GLOBALS['adsense_hidden'] = true;
                 if (isset($_GET['search']) && $_GET['search'] != '') {
                     $search = Text::simpleUrl($_GET['search']);
                     header("HTTP/1.1 301 Moved Permanently");
