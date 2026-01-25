@@ -26,8 +26,14 @@ class Navigation_Controller extends Controller
         $this->login = User_Login::getInstance();
         $this->ui = new Navigation_Ui($this);
         $this->mode = (Parameter::code('mode')!='') ? Parameter::code('mode') : 'amp';
+        if (strpos($_SERVER['HTTP_HOST'], 'recetaspizzas.com') !== false) {
+            $url = $_SERVER['REQUEST_URI'];
+            header("HTTP/1.1 301 Moved Permanently");
+            header('Location: https://www.recetas-italia.com' . $url);
+            exit();
+        }
         if (strpos($_SERVER['HTTP_HOST'], 'recetas-simples.com') !== false) {
-            $url = str_replace('platos-principales', 'plato-principal', $_SERVER['REQUEST_URI']);
+            $url = $_SERVER['REQUEST_URI'];
             header("HTTP/1.1 301 Moved Permanently");
             header('Location: https://www.recetas-puertorico.com' . $url);
             exit();
