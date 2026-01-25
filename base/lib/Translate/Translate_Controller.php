@@ -79,10 +79,13 @@ class Translate_Controller extends Controller
             break;
             case 'recipes':
                 $this->mode = 'json';
-                $this->checkAuthorization();
                 $result = ['status' => 'NOK'];
                 $itemsProcessed = [];
-                $recipes = (new Recipe)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                if ($this->id != '') {
+                    $recipes = [(new Recipe)->read($this->id)];
+                } else {
+                    $recipes = (new Recipe)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                }
                 foreach ($recipes as $recipe) {
                     $recipeJson = $recipe->toJson();
                     $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
@@ -111,7 +114,11 @@ class Translate_Controller extends Controller
                 $this->checkAuthorization();
                 $result = ['status' => 'NOK'];
                 $itemsProcessed = [];
-                $recipes = (new RecipeVersion)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                if ($this->id != '') {
+                    $recipes = [(new RecipeVersion)->read($this->id)];
+                } else {
+                    $recipes = (new RecipeVersion)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                }
                 foreach ($recipes as $recipe) {
                     $recipeJson = $recipe->toJson();
                     $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
@@ -185,6 +192,25 @@ class Translate_Controller extends Controller
                     $result['post_' . $item->id()] = $item->url();
                 }
                 return json_encode($result, JSON_PRETTY_PRINT);
+                break;
+            case 'check-missing':
+                $this->mode = 'json';
+                $directory = ASTERION_BASE_FILE . 'data/';
+                $files = ['costarica', 'cuba', 'guatemala', 'honduras', 'nicaragua', 'panama', 'salvador', 'peru', 'ecuador'];
+                $result = [];
+                foreach ($files as $file) {
+                    $filesEs = json_decode(file_get_contents($directory . $file . '_es.json'), true);
+                    $filesEn = json_decode(file_get_contents($directory . $file . '_en.json'), true);
+                    $keysEs = array_keys($filesEs);
+                    $keysEn = array_keys($filesEn);
+                    $diff = array_diff($keysEs, $keysEn);
+                    $diffResult = [];
+                    foreach ($diff as $keyMissing) {
+                        $diffResult[$keyMissing] = $filesEs[$keyMissing];
+                    }
+                    $result[$file] = ['missing' => $diffResult];
+                }
+                dd($result);
                 break;
             }
     }
