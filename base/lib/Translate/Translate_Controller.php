@@ -99,8 +99,7 @@ class Translate_Controller extends Controller
                         if ($persist['status'] == 'OK') {
                             $itemsProcessed[] = 'OK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
                         } else {
-                            $itemsProcessed[] = 'NOK DELETED - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                            $recipe->delete();
+                            $itemsProcessed[] = 'NOK ERROR - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
                         }
                     } else {
                         $itemsProcessed[] = 'NOK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
