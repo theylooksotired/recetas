@@ -194,6 +194,7 @@ class Translate_Controller extends Controller
                 break;
             case 'check-missing':
                 $this->mode = 'json';
+                $this->checkAuthorization();
                 $directory = ASTERION_BASE_FILE . 'data/';
                 $files = ['costarica', 'cuba', 'guatemala', 'honduras', 'nicaragua', 'panama', 'salvador', 'peru', 'ecuador'];
                 $result = [];
