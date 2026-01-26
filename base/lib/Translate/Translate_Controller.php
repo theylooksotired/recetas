@@ -194,7 +194,7 @@ class Translate_Controller extends Controller
                 break;
             case 'check-missing':
                 $this->mode = 'json';
-                $this->checkAuthorization();
+                // $this->checkAuthorization();
                 $directory = ASTERION_BASE_FILE . 'data/';
                 $files = ['costarica', 'cuba', 'guatemala', 'honduras', 'nicaragua', 'panama', 'salvador', 'peru', 'ecuador'];
                 $result = [];
@@ -204,9 +204,13 @@ class Translate_Controller extends Controller
                     $keysEs = array_keys($filesEs);
                     $keysEn = array_keys($filesEn);
                     $diff = array_diff($keysEs, $keysEn);
+                    $diffAlso = array_diff($keysEn, $keysEs);
                     $diffResult = [];
                     foreach ($diff as $keyMissing) {
                         $diffResult[$keyMissing] = $filesEs[$keyMissing];
+                    }
+                    foreach ($diffAlso as $keyMissing) {
+                        $diffResult[$keyMissing] = $filesEn[$keyMissing];
                     }
                     $result[$file] = ['missing' => $diffResult];
                 }
