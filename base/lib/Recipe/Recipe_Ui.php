@@ -220,7 +220,7 @@ class Recipe_Ui extends Ui
                                     ['key' => 'print', 'icon' => '<i class="icon icon-print"></i>'],
                                 ]]) . '
                             </div>
-                            ' . Adsense::responsive('ingredients') . '
+                            ' . (($imagesPreparation != '') ? '' : Adsense::responsive('ingredients')) . '
                             <div class="recipe_wrapper_ins">                            
                                 <div class="recipe_ingredients">
                                     <h3>' . __('ingredients') . '</h3>
@@ -229,8 +229,9 @@ class Recipe_Ui extends Ui
                                 </div>
                                 <div class="recipe_preparation">
                                     ' . (($imagesPreparation != '') ? '
-                                    <h3>' . __('preparation_simple') . '</h3>
-                                    ' . $imagesPreparation . '
+                                        <h3>' . __('preparation_simple') . '</h3>
+                                        ' . $imagesPreparation . '
+                                        ' . Adsense::responsive('ingredients') . '
                                     ' : '') . '
                                     <h3>' . __('preparation') . '</h3>
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
