@@ -592,6 +592,14 @@ class Navigation_Controller extends Controller
                             return json_encode(['status' => 'NOK']);
                         }
                     break;
+                    case 'recipe-prompts':
+                        $recipe = (new Recipe)->read($this->extraId);
+                        if ($recipe->id() != '') {
+                            return json_encode($recipe->promptImages());
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                        break;
                     case 'missing-images':
                         $recipes = (new Recipe)->readList(['order' => 'id']);
                         $recipeImages = ['imagesAll' => [], 'imagesMissing' => [], 'imagesSmall' => []];

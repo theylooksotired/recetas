@@ -40,30 +40,10 @@ class Recipe_Controller extends Controller
                 $recipe = (new Recipe)->read($this->id);
                 $response = [];
                 if ($recipe->id() != '') {
-                    $recipe->loadMultipleValues();
-                    $newSteps = (count($recipe->get('preparation')) > 4) ? 4 : 3;
-                    $question = 'Haz un archivo JSON que tenga el "titulo", "descripcion", "ingredientes" y "pasos" que resume los pasos a tan solo ' . $newSteps . ' de la receta: ' . $recipe->showUi('Text');
-                    $answer = ChatGPT::answerJson($question);
-                    if (isset($answer['pasos'])) {
-                        $quoteSpanish = "PROMPT 0<br/><br/>Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $recipe->showUi('Text');
-                        echo $quoteSpanish;
-                        echo "<br/><br/><br/><br/>===========<br/><br/><br/><br/>";                        $ingredients = [];
-                        foreach ($recipe->get('ingredients') as $ingredient) {
-                            if ($ingredient->get('amount') != '') {
-                                $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
-                                $ingredients[] = $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient');
-                            } else {
-                                $ingredients[] = $ingredient->get('ingredient');
-                            }
-                        }
-                        $pasosSimple = '';
-                        for ($i = 0; $i < count($answer['pasos']); $i++) {
-                            $pasosSimple .= 'Paso ' . ($i + 1) . ': ' . $answer['pasos'][$i] . '<br/>';
-                        }
-                        $recipeSimple = $recipe->getBasicInfo('') . '<br/>Ingredientes:<br/>' . implode('<br/>', $ingredients) . '<br/>Preparacion:<br/>' . $pasosSimple;
-                        $quoteSpanish = "PROMPT PASOS<br/><br/>Haz cuatro imágenes diferentes y separadas, una por cada uno de los cuatro pasos de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
-                        echo $quoteSpanish;
-                    }
+                    $response = $recipe->promptImages();
+                }
+                foreach ($response as $key => $prompt) {
+                    echo '<strong>' . $key . '</strong><br/>' . $prompt . '<br/><br/>';
                 }
                 return '';
                 break;

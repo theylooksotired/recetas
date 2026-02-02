@@ -425,4 +425,34 @@ class Recipe extends Db_Object
         return $this->translation_url;
     }
 
+    public function promptImages()
+    {
+        $this->loadMultipleValues();
+        $newSteps = (count($this->get('preparation')) > 4) ? 4 : 3;
+        $question = 'Haz un archivo JSON que tenga el "titulo", "descripcion", "ingredientes" y "pasos" que resume los pasos a tan solo ' . $newSteps . ' de la receta: ' . $this->showUi('Text');
+        $answer = ChatGPT::answerJson($question);
+        $response = [];
+        if (isset($answer['pasos'])) {
+            $response['prompt_ingredientes'] = "Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $this->showUi('Text');
+            $ingredients = [];
+            foreach ($this->get('ingredients') as $ingredient) {
+                if ($ingredient->get('amount') != '') {
+                    $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
+                    $ingredients[] = $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient');
+                } else {
+                    $ingredients[] = $ingredient->get('ingredient');
+                }
+            }
+            $pasosSimple = '';
+            for ($i = 0; $i < count($answer['pasos']); $i++) {
+                $pasosSimple .= 'Paso ' . ($i + 1) . ': ' . $answer['pasos'][$i] . '<br/>';
+            }
+            $recipeSimple = $this->getBasicInfo('') . '<br/>Ingredientes:<br/>' . implode('<br/>', $ingredients) . '<br/>Preparacion:<br/>' . $pasosSimple;
+            for ($i = 0; $i < count($answer['pasos']); $i++) {
+                $response['prompt_paso_' . ($i + 1)] = "Haz una imagen diferente y separada, para el paso " . ($i + 1) . " de esta receta, no uses textos ni leyendas. La receta es: " . $recipeSimple;
+            }
+        }
+        return $response;
+    }
+
 }
