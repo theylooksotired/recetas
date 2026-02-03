@@ -136,7 +136,7 @@ class Recipe_Ui extends Ui
                             </div>
                             <div class="recipe_preparation">
                                 <h3>' . __('preparation') . '</h3>
-                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
+                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation(true) . '</div>
                             </div>
                         </div>
                     </div>';
@@ -164,6 +164,9 @@ class Recipe_Ui extends Ui
                     <span class="preparation_step">' . $imagePreparation->get('label') . '</span>
                     ' . $imagePreparation->getImageWidth('image', 'web', '', false, $imageAlt) . '
                 </div>';
+            if ($i == 2) {
+                $imagesPreparation .= Adsense::responsive('ingredients');
+            }
             $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
@@ -207,7 +210,6 @@ class Recipe_Ui extends Ui
                             <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                         </div>
                         ' . $videoHtml . '
-                        ' . Adsense::responsive('middle') . '
                         ' . $this->object->get('description') . '
                         <div class="recipe_wrapper">
                             <h2 id="' . $nameLinkBase .'" name="' . $nameLinkBase .'" class="anchor_top">' . $this->object->getBasicInfo() . '</h2>
@@ -220,7 +222,6 @@ class Recipe_Ui extends Ui
                                     ['key' => 'print', 'icon' => '<i class="icon icon-print"></i>'],
                                 ]]) . '
                             </div>
-                            ' . Adsense::responsive('ingredients') . '
                             <div class="recipe_wrapper_ins">                            
                                 <div class="recipe_ingredients">
                                     <h3>' . __('ingredients') . '</h3>
@@ -234,7 +235,6 @@ class Recipe_Ui extends Ui
                                     ' : '') . '
                                     <h3>' . __('preparation') . '</h3>
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
-                                    ' . Adsense::responsive('preparation') . '
                                 </div>
                             </div>
                             <div class="rating_wrapper">
@@ -373,7 +373,7 @@ class Recipe_Ui extends Ui
         return $html;
     }
 
-    public function renderPreparation()
+    public function renderPreparation($noads = false)
     {
         $html = '';
         $i = 1;
@@ -385,6 +385,9 @@ class Recipe_Ui extends Ui
                     ' . $preparation->getImageAmpWebp('image', 'web') . '
                 </p>';
             $i++;
+            if ($i == 3 && !$noads) {
+                $html .= Adsense::responsive('preparation');
+            }
         }
         return $html;
     }

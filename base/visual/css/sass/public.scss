@@ -567,6 +567,8 @@ body {
     margin: 0 auto 20px 0;
     border: 1px solid rgba($black, 0.1);
     min-height: 280px;
+    background: darken($white, 2%);
+    padding: 10px 0;
     @include mobile {
         margin: 20px -10px 20px -10px;
         border: 0;
