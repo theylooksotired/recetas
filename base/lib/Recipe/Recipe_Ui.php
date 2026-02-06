@@ -136,7 +136,7 @@ class Recipe_Ui extends Ui
                             </div>
                             <div class="recipe_preparation">
                                 <h3>' . __('preparation') . '</h3>
-                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation(true) . '</div>
+                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
                             </div>
                         </div>
                     </div>';

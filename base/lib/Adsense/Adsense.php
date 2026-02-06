@@ -19,7 +19,6 @@ class Adsense {
     static public function responsive($type = '') {
         if (Adsense::checkHidden()) return ''; // Check if ads should be hidden for this country
         if ($type == 'bottom') return ''; // Disable bottom ads for now
-        if ($type == 'middle' && Parameter::code('country_code') == 'guatemala') return ''; // Disable middle ads for guatemala
         $typesHonduras = ['top'=>'4617928436', 'ingredients' => '5820147704', 'middle' => '4673768758'];
         $typesPeru = ['top'=>'2176577868', 'ingredients' => '1193850444', 'middle' => '8023994431'];
         $typesBolivia = ['top' => '2620490486', 'middle' => '2737052319', 'ingredients' => '1423970647'];
