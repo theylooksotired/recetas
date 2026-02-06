@@ -27,7 +27,7 @@ class Adsense {
         $typesParaguay = ['top' => '7422402789', 'middle' => '5055082130', 'ingredients' => '1942845397'];
         $typesChile = ['top' => '2428918795', 'middle' => '6096701069', 'ingredients' => '8240660430'];
         $typesMexico = ['top' => '1232398958', 'middle' => '6927578765', 'ingredients' => '5614497098'];
-        $typesPuertoRico = ['top' => '2756221854', 'middle' => '8531292718', 'ingredients' => '4301415425', 'preparation' => '1022100603'];
+        $typesPuertoRico = ['top' => '2756221854', 'middle' => '8531292718', 'ingredients' => '4301415425'];
         $typesBrasil = ['top' => '4796239447', 'middle' => '3483157779', 'ingredients' => '5363856284'];
         $typesArabes = ['top' => '1751914337', 'middle' => '2737692947', 'ingredients' => '1424611273'];
         $typesEcuador = ['top' => '7347855944', 'middle' => '5108064787', 'ingredients' => '9641194404'];
@@ -48,7 +48,7 @@ class Adsense {
         $typesVeganas = ['top' => '9067491094', 'middle' => '2932315823', 'ingredients' => '4213607902'];
         $typesIndias = ['top' => '4732482658', 'middle' => '4146977537', 'ingredients' => '7203745089'];
         $typesCuba = ['top' => '2011004445', 'middle' => '7657264556', 'ingredients' => '8018009593'];
-        $typesGuatemala = ['top' => '1320098677', 'middle' => '5200274565', 'ingredients' => '8951176683', 'preparation' => '8900590625'];
+        $typesGuatemala = ['top' => '1320098677', 'middle' => '5200274565', 'ingredients' => '8951176683'];
         $typesPanama = ['top' => '9007017007', 'middle' => '5118908739', 'ingredients' => '3531329040'];
         $typesSalvador = ['top' => '2218247370', 'middle' => '3805827060', 'ingredients' => '7638095012'];
         $typesJudias = ['top' => '2991255061', 'middle' => '9692394782', 'ingredients' => '6577284464'];

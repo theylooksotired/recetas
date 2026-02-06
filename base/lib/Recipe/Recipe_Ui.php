@@ -165,7 +165,7 @@ class Recipe_Ui extends Ui
                     ' . $imagePreparation->getImageWidth('image', 'web', '', false, $imageAlt) . '
                 </div>';
             if ($i == 2) {
-                $imagesPreparation .= Adsense::responsive('ingredients');
+                $imagesPreparation .= Adsense::responsive('middle');
             }
             $i++;
         }
@@ -386,7 +386,7 @@ class Recipe_Ui extends Ui
                 </p>';
             $i++;
             if ($i == 3 && !$noads) {
-                $html .= Adsense::responsive('preparation');
+                $html .= Adsense::responsive('ingredients');
             }
         }
         return $html;
