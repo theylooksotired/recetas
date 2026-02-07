@@ -219,7 +219,6 @@ class Post_Ui extends Ui
                     </div>
                 </div>
             </article>
-            ' . Adsense::responsive('bottom') . '
             <div class="item_complete_share">
                 <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
                 ' . $share . '
