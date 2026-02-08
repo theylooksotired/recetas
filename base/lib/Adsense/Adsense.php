@@ -12,6 +12,17 @@ class Adsense {
 
     static public function header()
     {
+        $hiddenCountries = ['cuba', 'venezuela'];
+        $hiddenCodes = ['CU', 'VE'];
+        if (in_array(Parameter::code('country_code'), $hiddenCountries)) {
+            try {
+                require_once ASTERION_BASE_FILE . 'geo/get_country.php';
+                $geoCountry = new GeoCountry();
+                if (in_array($geoCountry->getCountryCodeOrEmpty(), $hiddenCodes)) {
+                    return '';
+                }
+            } catch (Exception $e) {}
+        }
         return '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>';
     }
 
