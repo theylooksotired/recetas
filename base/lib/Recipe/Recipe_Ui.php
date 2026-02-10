@@ -442,6 +442,10 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
+        $simpleCountries = ['guatemala', 'puertorico'];
+        if (in_array(Parameter::code('country_code'), $simpleCountries)) {
+            return $this->renderRelatedSimple();
+        }
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
         $recipesBefore = new ListObjects('Recipe', ['where' => 'id > :id AND id_category=:id_category AND active="1"', 'limit' => 16, 'order' => 'id'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
@@ -458,16 +462,61 @@ class Recipe_Ui extends Ui
                     ' . ((!$recipesSearch->isEmpty()) ? '
                     <div class="related_block">
                         <h2 class="related_title">' . __('similar_recipes') . '</h2>
-                        <div class="recipes_minimal">' . $recipesSearch->showList(['function' => 'Minimal']) . '</div>
+                        <div class="recipes_minimal">
+                            ' . $recipesSearch->showList(['function' => 'Minimal']) . '
+                        </div>
                     </div>
                     ' : '') . '
                     <div class="related_block">
                         <h2 class="related_title">' . __('other_recipes') . '</h2>
                         <div class="recipes_minimal">
-                        ' . ((isset($recipesAfter)) ? $recipesAfter->showList(['function' => 'Minimal']) : '') . '
                         ' . $recipesBefore->showList(['function' => 'Minimal']) . '
                         </div>
                     </div>
+                    <div class="related_block">
+                        <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
+                        <div class="posts">
+                            ' . $posts->showList(['function' => 'PublicSimple']) . '
+                            ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
+                        </div>
+                    </div>
+                </div>';
+    }
+
+    public function renderRelatedSimple()
+    {
+        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
+        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
+        $recipesSearch = new ListObjects('Recipe', [
+            'where' => 'id!="' . $this->object->id() . '" AND active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
+            'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
+            'limit' => '8',
+        ]);
+        $recipesSearchMore = null;
+        if ($recipesSearch->count() < 8) {
+            $idsNotIn = [$this->object->id()];
+            foreach ($recipesSearch->list as $recipeSearch) {
+                $idsNotIn[] = $recipeSearch->id();
+            }
+            $recipesSearchMore = new ListObjects('Recipe', [
+                'where' => 'id_category=:id_category AND active="1" AND id NOT IN (' . implode(',', $idsNotIn) . ')',
+                'limit' => (8 - $recipesSearch->count()),
+                'order' => 'id'
+            ], [
+                'id_category' => $this->object->get('id_category')
+            ]);
+        }
+        return '<div class="related">
+                    ' . ((!$recipesSearch->isEmpty()) ? '
+                    <div class="related_block">
+                        <h2 class="related_title">' . __('similar_recipes') . '</h2>
+                        <div class="recipes_minimal">
+                            ' . $recipesSearch->showList(['function' => 'Minimal']) . '
+                            ' . (($recipesSearchMore) ? $recipesSearchMore->showList(['function' => 'Minimal']) : '') . '
+                        </div>
+                    </div>
+                    ' : '') . '
                     <div class="related_block">
                         <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
                         <div class="posts">
