@@ -99,23 +99,45 @@ class Recipe_Ui extends Ui
         $this->object->loadMultipleValuesSingleAttribute('preparation');
         $this->object->loadMultipleValuesSingleAttribute('images');
         $this->object->loadTranslation();
-        $otherVersionsTop = '';
-        $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
-        $newFormat = false;
         // Translation
         $translationLink = '';
         if (isset($this->object->translation_url) && $this->object->translation_url != '') {
             $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
         }
         // Versions
+        $otherVersionsTop = '';
+        $otherVersions = '';
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         if ((count($versions) > 0) || $translationLink != '') {
-            $newFormat = true;
+            $versionsIds = [];
+            foreach ($versions as $version) {
+                $versionsIds[] = $version->id();
+            }
+            // Load all ingredients and preparation
+            $queryIngredients = 'SELECT ri.* FROM ' . (new RecipeVersionIngredient)->tableName . ' ri WHERE ri.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
+            $queryPreparation = 'SELECT rp.* FROM ' . (new RecipeVersionPreparation)->tableName . ' rp WHERE rp.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
+            $allIngredients = (new RecipeVersionIngredient)->readListQuery($queryIngredients);
+            $allPreparation = (new RecipeVersionPreparation)->readListQuery($queryPreparation);
+            foreach ($versions as $version) {
+                $ingredients = [];
+                $preparations = [];
+                foreach ($allIngredients as $ingredient) {
+                    if ($ingredient->get('id_recipe_version') == $version->id()) {
+                        $ingredients[] = $ingredient;
+                    }
+                }
+                foreach ($allPreparation as $preparation) {
+                    if ($preparation->get('id_recipe_version') == $version->id()) {
+                        $preparations[] = $preparation;
+                    }
+                }
+                $version->set('ingredients', $ingredients);
+                $version->set('preparation', $preparations);
+            }
+
             $i = ($translationLink != '') ? 2 : 1;
             foreach ($versions as $version) {
-                $version->loadMultipleValuesSingleAttribute('ingredients');
-                $version->loadMultipleValuesSingleAttribute('preparation');
                 $versionUi = new Recipe_Ui($version);
                 $nameLink = Text::simpleUrl($version->getBasicInfo());
                 $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
@@ -457,7 +479,7 @@ class Recipe_Ui extends Ui
             return $this->renderRelatedSimple();
         }
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
-        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', ['order' => 'views DESC', 'limit' => 6 - $posts->count()]) : null;
         $categoriesIds = Category::arrayCategories();
         $recipesBefore = new ListObjects('Recipe', ['where' => 'id > :id AND id_category=:id_category AND active="1"', 'limit' => 16, 'order' => 'id'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
         $recipesBeforeHtml = '';
@@ -501,7 +523,7 @@ class Recipe_Ui extends Ui
     public function renderRelatedSimple()
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
-        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', ['order' => 'views DESC', 'limit' => 6 - $posts->count()]) : null;
         $categoriesIds = Category::arrayCategories();
         // First search for related
         $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
@@ -752,7 +774,7 @@ class Recipe_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => 3]);
+        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'limit' => 3]);
         return '
             ' . Adsense::responsive('middle') . '
             <div class="items_side">

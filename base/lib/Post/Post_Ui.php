@@ -290,7 +290,7 @@ class Post_Ui extends Ui
 
     public static function menuSide($options = [])
     {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'RAND()', 'limit' => 3]);
+        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'views DESC', 'limit' => 3]);
         return '
             ' . Adsense::responsive('middle') . '
             <div class="items_side">

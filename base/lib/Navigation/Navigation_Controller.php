@@ -349,7 +349,7 @@ class Navigation_Controller extends Controller
                         $this->title_page = __('no_search_results');
                         $this->content = '<div class="message message_error">' . __('no_search_results_disclaimer') . '</div>';
                         $titleRecipes = __('recipes_might_like');
-                        $recipes = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
+                        $recipes = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'views DESC', 'limit' => '20']);
                     }
                     $this->head = '<meta name="robots" content="noindex">';
                     $categoriesIds = Category::arrayCategories();
