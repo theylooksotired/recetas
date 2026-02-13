@@ -370,6 +370,34 @@ class Navigation_Controller extends Controller
                     exit();
                 }
                 break;
+            case 'newsletter':
+                $email = (isset($this->values['email'])) ? $this->values['email'] : '';
+                $urlRedirect = url('');
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $name = (isset($this->values['name'])) ? $this->values['name'] : '';
+                    $idRecipe = (isset($this->values['id_recipe'])) ? $this->values['id_recipe'] : '';
+                    $recipe = (new Recipe)->read($idRecipe);
+                    $urlRedirect = ($recipe->id() != '') ? $recipe->url() : $urlRedirect;
+                    Session::flashInfo(__('newsletter_subscribed'));
+                    try {
+                        $curl = curl_init();
+                        curl_setopt_array($curl, [
+                            CURLOPT_URL => 'https://www.recetario-de-cocina.com/api/subscribe-newsletter',
+                            CURLOPT_POST => true,
+                            CURLOPT_HTTPHEADER => ['Authorization: plastic'],
+                            CURLOPT_POSTFIELDS => ['email' => $email, 'name' => $name],
+                            CURLOPT_RETURNTRANSFER => false,
+                            CURLOPT_HEADER => false,
+                            CURLOPT_NOSIGNAL => true,
+                            CURLOPT_CONNECTTIMEOUT => 10,
+                            CURLOPT_TIMEOUT => 10,
+                        ]);
+                        curl_exec($curl);
+                        curl_close($curl);
+                    } catch (Exception $e) {}
+                }
+                return header('Location: ' . $urlRedirect);
+                break;
             case 'politicas-privacidad':
             case 'terminos-condiciones':
                 $this->redirecLastSlash();

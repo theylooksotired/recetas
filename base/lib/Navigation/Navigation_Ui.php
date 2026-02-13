@@ -35,7 +35,7 @@ class Navigation_Ui extends Ui
                                 ' . Adsense::responsive('top') . '
                                 <div class="content_ins">' . $content . '</div>
                                 ' . $content_bottom . '
-                                ' . Navigation_Ui::ad() . '
+                                ' . $this->ad() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -55,7 +55,7 @@ class Navigation_Ui extends Ui
                                 ' . $message . '
                                 ' . $content . '
                                 ' . $content_bottom . '
-                                ' . Navigation_Ui::ad() . '
+                                ' . $this->ad() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -77,7 +77,7 @@ class Navigation_Ui extends Ui
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '
-                                    ' . Navigation_Ui::ad() . '
+                                    ' . $this->ad() . '
                                 </div>
                             </div>
                         </div>
@@ -253,30 +253,58 @@ class Navigation_Ui extends Ui
             </div>';
     }
 
-    public static function ad()
+    public function ad()
     {
-        $simpleCountries = ['guatemala', 'puertorico'];
-        if (in_array(Parameter::code('country_code'), $simpleCountries)) {
-            return '
-                <div class="ad_app">
-                    <div class="ad_app_left">
-                        <p><a href="https://whatsapp.com/channel/0029Vb2gbns7YSd5Vf9Jaj0r" target="_blank" title="WhatsApp" rel="nofollow">' . __('whatsapp_ad_title') . '</a></p>
-                        <p>' . __('whatsapp_ad_message') . '</p>
-                    </div>
-                    <div class="ad_app_right">
-                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_whatsapp.svg" loading="lazy" alt="WhatsApp"/>
-                    </div>
+        return '
+            <div class="ad_app">
+                <div class="ad_app_left">
+                    <p><a href="https://whatsapp.com/channel/0029Vb2gbns7YSd5Vf9Jaj0r" target="_blank" title="WhatsApp" rel="nofollow">' . __('whatsapp_ad_title') . '</a></p>
+                    <p>' . __('whatsapp_ad_message') . '</p>
                 </div>
-                <div class="ad_app">
-                    <div class="ad_app_left">
-                        <p><a href="https://www.recetario-de-cocina.com/newsletter">' . __('newsletter_ad_title') . '</a></p>
-                        <p>' . __('newsletter_ad_message') . '</p>
+                <div class="ad_app_right">
+                    <img src="' . ASTERION_BASE_URL . 'visual/img/button_whatsapp.svg" loading="lazy" alt="WhatsApp"/>
+                </div>
+            </div>
+            <div class="ad_app ad_app_newsletter trigger_newsletter">
+                <div class="ad_app_left">
+                    <p><strong>' . __('newsletter_ad_title') . '</strong></p>
+                    <p>' . __('newsletter_ad_message') . '</p>
+                </div>
+                <div class="ad_app_right">
+                    <img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/>
+                </div>
+            </div>
+            ' . $this->modalNewsletter();
+    }
+
+    public function modalNewsletter()
+    {
+        $idRecipe = (isset($this->object->recipe)) ? $this->object->recipe->id() : null;
+        return '
+            <div class="modal modal_newsletter">
+                <div class="modal_background"></div>
+                <div class="modal_inside">
+                    <div class="modal_close">
+                        <i class="icon icon-close"></i>
                     </div>
-                    <div class="ad_app_right">
-                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/>
-                    </div>
-                </div>';
-        }
+                    <p><img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/></p>
+                    <p>' . __('newsletter_form') . '</p>
+                    <form accept-charset="UTF-8" class="form_newsletter" action="' . url('newsletter') . '" method="POST">
+                        <fieldset>
+                            <div class="text form_field ">
+                                <label for="name">' . __('name') . '</label>
+                                <input type="text" size="50" name="name">
+                            </div>
+                            <div class="text form_field required">
+                                <label for="email">' . __('email') . '</label>
+                                <input type="email" size="50" name="email" required="required">
+                            </div>
+                            ' . ($idRecipe ? '<input type="hidden" name="id_recipe" value="' . $idRecipe . '">' : '') . '
+                            <button type="submit" class="button form_submit" role="button" aria-label="' . __('subscribe') . '">' . __('subscribe') . '</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>';
     }
 
 }

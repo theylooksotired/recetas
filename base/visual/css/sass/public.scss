@@ -590,16 +590,16 @@ body {
 .message {
     margin: 0 auto 20px auto;
     padding: 20px;
-    color: $colorMain;
-    background: rgba($colorMain, 0.05);
-    border: 2px solid rgba($colorMain, 0.1);
+    color: $colorGreen;
+    background: rgba($colorGreen, 0.05);
+    border: 2px solid rgba($colorGreen, 0.1);
     font-weight: bold;
     text-align: center;
     @include borderRadius(10px);
     &.message_info {
-        color: $colorAccent;
-        background: rgba($colorAccent, 0.05);
-        border: 2px solid rgba($colorAccent, 0.1);
+        color: $colorBlue;
+        background: rgba($colorBlue, 0.05);
+        border: 2px solid rgba($colorBlue, 0.1);
     }
     &.message_error {
         color: $colorError;
@@ -3114,7 +3114,8 @@ body {
 }
 
 .question_wrapper,
-.review_wrapper {
+.review_wrapper,
+.modal {
     fieldset {
         margin: 0;
         padding: 0;
@@ -3138,6 +3139,15 @@ body {
                 background: $white;
                 color: $black;
                 @include borderRadius(3px);
+            }
+            &.required {
+                label {
+                    &:after {
+                        content: ' *';
+                        color: $colorError;
+                        font-weight: normal;
+                    }
+                }
             }
         }
         .form_submit_wrapper {
@@ -3373,5 +3383,148 @@ body {
                 font-size: $fontSizeNormal;
             }
         }
+    }
+}
+
+.recipe_wrapper {
+    .newsletter_recipe {
+        padding: 40px 0 0 0;
+        margin: 40px 0 0 0;
+        border-top: 3px solid rgba($colorAccent, 0.1);
+        text-align: center;
+        strong {
+            display: block;
+            color: $colorAccent;
+            padding: 0 0 10px;
+            color: rgba($black, 0.8);
+            font-weight: normal;
+        }
+        img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            display: block;
+            margin: 0 0 5px;
+            margin: auto;
+        }
+        a,
+        .trigger_newsletter {
+            font-weight: bold;
+            display: block;
+            margin: 10px auto 0 auto;
+            padding: 10px 20px;
+            max-width: 300px;
+            background: $white;
+            border: 1px solid rgba($colorAccent, 0.3);
+            color: lighten($colorAccent, 10%);
+            font-size: $fontSizeSmall;
+            @include borderRadius(5px);
+            &:hover {
+                color: $colorAccent;
+                border: 1px solid rgba($colorAccent, 0.5);
+            }
+        }
+        p {
+            padding: 0;
+            margin: 0;
+        }
+    }
+    .newsletter_recipe_ins {
+        p {
+            width: 300px;
+            display: inline-block;
+            margin: 0 5px;
+            padding: 0;
+        }
+        @include mobile() {
+            p {
+                width: auto;
+                display: block;
+                margin: 0 0 5px 0;
+            }
+        }
+    }
+}
+
+.trigger_newsletter {
+    cursor: pointer;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 99997;
+    display: none;
+    .modal_background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 99998;
+        background: rgba(0,0,0,0.9);
+        cursor: pointer;
+    }
+    .modal_inside {
+        background: white;
+        border: 1px solid rgba($black, 0.3);
+        box-sizing: border-box;
+        padding: 20px;
+        position: absolute;
+        z-index: 99999;
+        max-width: $sizeTablet - 40px;
+        left: 20px;
+        right: 20px;
+        margin: 20px auto;
+        max-height: calc(100vh - 50px);
+        overflow: auto;
+        @include borderRadius(5px);
+        .simple_form {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+    }
+    .modal_close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 40px;
+        height: 40px;
+        color: $colorRed;
+        font-weight: bold;
+        text-align: center;
+        line-height: 40px;
+        font-size: 30px;
+        cursor: pointer;
+        @include animate();
+        &:hover {
+            color: $black;
+        }
+    }
+    &.modal_open {
+        display: block;
+    }
+}
+
+.modal_newsletter {
+    p {
+        color: $colorAccent;
+        font-size: $fontSizeMedium;
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+        padding: 0 0 10px;
+    }
+    img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        display: block;
+        margin: 0 0 5px;
+        margin: auto;
     }
 }

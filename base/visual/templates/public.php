@@ -73,6 +73,25 @@
                 });
             });
         }
+        var triggerNewsletter = document.querySelector('.trigger_newsletter');
+        if (triggerNewsletter) {
+            triggerNewsletter.addEventListener('click', function(evt) {
+                document.querySelector('.modal_newsletter').classList.add('modal_open');
+            });
+        }
+
+        var modalBackground = document.querySelector('.modal_background');
+        if (modalBackground) {
+            modalBackground.addEventListener('click', function(evt) {
+                document.querySelector('.modal').classList.remove('modal_open');
+            });
+        }
+        var modalClose = document.querySelector('.modal_close');
+        if (modalClose) {
+            modalClose.addEventListener('click', function(evt) {
+                document.querySelector('.modal').classList.remove('modal_open');
+            });
+        }
     </script>
     <?php echo Adsense::header();?>
 </body>

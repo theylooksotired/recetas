@@ -267,6 +267,7 @@ class Recipe_Ui extends Ui
                                     ' : '') . '
                                     <h3>' . __('preparation') . '</h3>
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                    ' . $this->renderNewsletter() . '
                                 </div>
                             </div>
                             <div class="rating_wrapper">
@@ -291,6 +292,28 @@ class Recipe_Ui extends Ui
                 ' . $otherVersions . '
                 ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '') . '
             </main>';
+    }
+
+    public function renderNewsletter()
+    {
+        return '
+            <div class="newsletter_recipe">
+                <p><strong>' . __('recipe_newsletter_title') . '</strong></p>
+                <div class="newsletter_recipe_ins">
+                    <p>
+                        <a href="https://whatsapp.com/channel/0029Vb2gbns7YSd5Vf9Jaj0r" target="_blank" title="WhatsApp" rel="nofollow">
+                            <img src="' . ASTERION_BASE_URL . 'visual/img/button_whatsapp.svg" loading="lazy" alt="WhatsApp"/>
+                            <span>' . __('recipe_whatsapp_ad') . '</span>
+                        </a>
+                    </p>
+                    <p>
+                        <span class="trigger_newsletter">
+                            <img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/>
+                            <span>' . __('recipe_newsletter_ad') . '</span>
+                        </span>
+                    </p>
+                </div>
+            </div>';
     }
 
     public function renderPreloadImage()
