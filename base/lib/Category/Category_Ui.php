@@ -10,6 +10,11 @@ class Category_Ui extends Ui
     public function renderPublic()
     {
         $recipes = new ListObjects('Recipe', ['where' => 'id_category=:id_category AND active="1"', 'order' => 'rating DESC', 'limit' => '3'], ['id_category' => $this->object->id()]);
+        $recipesHtml = '';
+        foreach ($recipes->list as $recipe) {
+            $recipe->category = $this->object;
+            $recipesHtml .= $recipe->showUi('Link');
+        }
         $recipeInit = (count($recipes->list) > 0) ? $recipes->list[0] : new Recipe();
         return '
             <div class="category">
@@ -17,7 +22,7 @@ class Category_Ui extends Ui
                     <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                     <div class="category_title">' . $this->object->get('name') . '</div>
                 </a>
-                <div class="category_recipes">' . $recipes->showList(['function' => 'Link']) . '</div>
+                <div class="category_recipes">' . $recipesHtml . '</div>
             </div>';
     }
 
@@ -39,6 +44,10 @@ class Category_Ui extends Ui
             JOIN ' . (new CategoryRecipe)->tableName . ' rc ON r.id=rc.id_recipe
             WHERE rc.id_category=' . $this->object->id() . ' AND r.active="1" ORDER BY r.title_url';
         $recipes = (new Recipe)->readListQuery($query);
+        $categoriesIds = Category::arrayCategories();
+        foreach ($recipes as $recipe) {
+            $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+        }
         if (count($recipes) > 2) {
             $recipesTop = '';
             $recipesBottom = '';
@@ -75,23 +84,39 @@ class Category_Ui extends Ui
                 $bestRecipesIds[] = $bestRecipe->get('id_recipe');
             }
         }
+        $categoriesIds = Category::arrayCategories();
         if (count($bestRecipesIds) > 0) {
             $bestRecipes = new ListObjects('Recipe', ['where' => 'id IN (' . implode(',', $bestRecipesIds) . ') AND active="1"', 'order' => 'title_url']);
             $restRecipes = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND id NOT IN (' . implode(',', $bestRecipesIds) . ') AND active="1"', 'order' => 'title_url']);
+            $bestRecipesHtml = '';
+            foreach ($bestRecipes->list as $bestRecipe) {
+                $bestRecipe->category = (isset($categoriesIds[$bestRecipe->get('id_category')])) ? $categoriesIds[$bestRecipe->get('id_category')] : new Category();
+                $bestRecipesHtml .= $bestRecipe->showUi('Best');
+            }
+            $restRecipesHtml = '';
+            foreach ($restRecipes->list as $restRecipe) {
+                $restRecipe->category = $this->object;
+                $restRecipesHtml .= $restRecipe->showUi('Minimal');
+            }
             return '
                 <h1>' . $this->object->get('title') . '</h1>
                 <div class="recipes_description">'.$this->object->get('description').'</div>
                 <h2>' . $titleBestRecipes . '</h2>
-                <div class="recipes recipes_category">' . $bestRecipes->showList(['function' => 'Best']) . '</div>
+                <div class="recipes recipes_category">' . $bestRecipesHtml . '</div>
                 ' . Adsense::responsive('middle') . '
                 <h2>' . $titleRestRecipes . '</h2>
-                <div class="recipes_minimal">' . $restRecipes->showList(['function' => 'Minimal']) . '</div>';
+                <div class="recipes_minimal">' . $restRecipesHtml . '</div>';
         } else {
             $restRecipes = new ListObjects('Recipe', ['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'order' => 'title_url']);
+            $restRecipesHtml = '';
+            foreach ($restRecipes->list as $restRecipe) {
+                $restRecipe->category = $this->object;
+                $restRecipesHtml .= $restRecipe->showUi('Minimal');
+            }
             return '
                 <div class="recipes_description">'.$this->object->get('description').'</div>
                 <h2>' . $titleRestRecipes . '</h2>
-                <div class="recipes_minimal">' . $restRecipes->showList(['function' => 'Minimal']) . '</div>';
+                <div class="recipes_minimal">' . $restRecipesHtml . '</div>';
         }
     }
 

@@ -222,7 +222,6 @@ class Post_Ui extends Ui
             <div class="item_complete_share">
                 <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
                 ' . $share . '
-                ' . Navigation_Ui::facebookComments($this->object->url()) . '
             </div>';
     }
 

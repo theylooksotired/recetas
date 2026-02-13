@@ -95,16 +95,20 @@ class Recipe_Ui extends Ui
 
     public function renderComplete()
     {
-        $this->object->loadMultipleValues();
+        $this->object->loadMultipleValuesSingleAttribute('ingredients');
+        $this->object->loadMultipleValuesSingleAttribute('preparation');
+        $this->object->loadMultipleValuesSingleAttribute('images');
         $this->object->loadTranslation();
         $otherVersionsTop = '';
         $otherVersions = '';
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
         $newFormat = false;
+        // Translation
         $translationLink = '';
         if (isset($this->object->translation_url) && $this->object->translation_url != '') {
             $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
         }
+        // Versions
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         if ((count($versions) > 0) || $translationLink != '') {
             $newFormat = true;
@@ -153,6 +157,7 @@ class Recipe_Ui extends Ui
                 </div>';
         }
         $otherVersions = ($otherVersions != '') ? '<div class="other_versions_wrapper">' . $otherVersions . '</div>' : '';
+        // Images
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
         $i = 1;
@@ -170,6 +175,7 @@ class Recipe_Ui extends Ui
             $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
+        // Questions
         $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
             <div class="questions_recipe_list">
@@ -182,6 +188,7 @@ class Recipe_Ui extends Ui
             $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
         }
         $reviewsHtml = '';
+        // Reviews
         $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
         if (!$reviews->isEmpty()) {
             $reviewsHtml = '
@@ -193,6 +200,7 @@ class Recipe_Ui extends Ui
         if (Session::get('reviewed_recipe') == $this->object->id() ) {
             $reviewsThanks = '<div class="message message_info">' . __('thank_you_for_your_review') . '</div>';
         }
+        // Video
         $videoHtml = ($this->object->get('youtube_url') != '') ? '
             <div class="recipe_video">
                 ' . VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) . '
@@ -278,16 +286,17 @@ class Recipe_Ui extends Ui
 
     public function renderInfo($complete = false)
     {
+        $this->object->loadCategory();
         return '
             ' . (($complete) ? '
-                <a class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                <a class="recipe_cook_category" href="' . $this->object->category->url() . '">
                     <i class="icon icon-cutlery"></i>
-                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                    <span>' . $this->object->category->getBasicInfo() . '</span>
                 </a>
             ' : '
                 <div class="recipe_cook_category">
                     <i class="icon icon-cutlery"></i>
-                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                    <span>' . $this->object->category->getBasicInfo() . '</span>
                 </div>
             ') . '
             <div class="recipe_cook_time">
@@ -316,16 +325,17 @@ class Recipe_Ui extends Ui
 
     public function renderInfoVersion($version, $complete = false)
     {
+        $this->object->loadCategory();
         return '
             ' . (($complete) ? '
-                <a class="recipe_cook_category" href="' . $this->object->get('id_category_object')->url() . '">
+                <a class="recipe_cook_category" href="' . $this->object->category->url() . '">
                     <i class="icon icon-cutlery"></i>
-                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                    <span>' . $this->object->category->getBasicInfo() . '</span>
                 </a>
             ' : '
                 <div class="recipe_cook_category">
                     <i class="icon icon-cutlery"></i>
-                    <span>' . $this->object->get('id_category_object')->getBasicInfo() . '</span>
+                    <span>' . $this->object->category->getBasicInfo() . '</span>
                 </div>
             ') . '
             <div class="recipe_cook_time">
@@ -448,9 +458,12 @@ class Recipe_Ui extends Ui
         }
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $categoriesIds = Category::arrayCategories();
         $recipesBefore = new ListObjects('Recipe', ['where' => 'id > :id AND id_category=:id_category AND active="1"', 'limit' => 16, 'order' => 'id'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
-        if ($recipesBefore->count() < 16) {
-            $recipesAfter = new ListObjects('Recipe', ['where' => 'id < :id AND id_category=:id_category AND active="1"', 'limit' => (16 - $recipesBefore->count()), 'order' => 'id DESC'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
+        $recipesBeforeHtml = '';
+        foreach ($recipesBefore->list as $recipeBefore) {
+            $recipeBefore->category = (isset($categoriesIds[$recipeBefore->get('id_category')])) ? $categoriesIds[$recipeBefore->get('id_category')] : null;
+            $recipesBeforeHtml .= $recipeBefore->showUi('Minimal');
         }
         $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
         $recipesSearch = new ListObjects('Recipe', [
@@ -458,42 +471,52 @@ class Recipe_Ui extends Ui
             'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
             'limit' => '8',
         ]);
-        return '<div class="related">
-                    ' . ((!$recipesSearch->isEmpty()) ? '
-                    <div class="related_block">
-                        <h2 class="related_title">' . __('similar_recipes') . '</h2>
-                        <div class="recipes_minimal">
-                            ' . $recipesSearch->showList(['function' => 'Minimal']) . '
-                        </div>
+        $recipesSearchHtml = '';
+        foreach ($recipesSearch->list as $recipeSearch) {
+            $recipeSearch->category = (isset($categoriesIds[$recipeSearch->get('id_category')])) ? $categoriesIds[$recipeSearch->get('id_category')] : null;
+            $recipesSearchHtml .= $recipeSearch->showUi('Minimal');
+        }
+        return '
+            <div class="related">
+                ' . (($recipesSearchHtml != '') ? '
+                <div class="related_block">
+                    <h2 class="related_title">' . __('similar_recipes') . '</h2>
+                    <div class="recipes_minimal">' . $recipesSearchHtml . '</div>
+                </div>
+                ' : '') . '
+                <div class="related_block">
+                    <h2 class="related_title">' . __('other_recipes') . '</h2>
+                    <div class="recipes_minimal">' . $recipesBeforeHtml . '</div>
+                </div>
+                <div class="related_block">
+                    <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
+                    <div class="posts">
+                        ' . $posts->showList(['function' => 'PublicSimple']) . '
+                        ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
                     </div>
-                    ' : '') . '
-                    <div class="related_block">
-                        <h2 class="related_title">' . __('other_recipes') . '</h2>
-                        <div class="recipes_minimal">
-                        ' . $recipesBefore->showList(['function' => 'Minimal']) . '
-                        </div>
-                    </div>
-                    <div class="related_block">
-                        <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
-                        <div class="posts">
-                            ' . $posts->showList(['function' => 'PublicSimple']) . '
-                            ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
-                        </div>
-                    </div>
-                </div>';
+                </div>
+            </div>';
     }
 
     public function renderRelatedSimple()
     {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', array('order' => 'RAND()', 'limit' => 6 - $posts->count())) : null;
+        $categoriesIds = Category::arrayCategories();
+        // First search for related
         $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
         $recipesSearch = new ListObjects('Recipe', [
             'where' => 'id!="' . $this->object->id() . '" AND active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
             'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
             'limit' => '8',
         ]);
-        $recipesSearchMore = null;
+        $recipesSearchHtml = '';
+        foreach ($recipesSearch->list as $recipeSearch) {
+            $recipeSearch->category = (isset($categoriesIds[$recipeSearch->get('id_category')])) ? $categoriesIds[$recipeSearch->get('id_category')] : null;
+            $recipesSearchHtml .= $recipeSearch->showUi('Minimal');
+        }
+        // Search more if there are less than 8
+        $recipesSearchMoreHtml = '';
         if ($recipesSearch->count() < 8) {
             $idsNotIn = [$this->object->id()];
             foreach ($recipesSearch->list as $recipeSearch) {
@@ -506,14 +529,18 @@ class Recipe_Ui extends Ui
             ], [
                 'id_category' => $this->object->get('id_category')
             ]);
+            foreach ($recipesSearchMore->list as $recipeSearchMore) {
+                $recipeSearchMore->category = (isset($categoriesIds[$recipeSearchMore->get('id_category')])) ? $categoriesIds[$recipeSearchMore->get('id_category')] : null;
+                $recipesSearchMoreHtml .= $recipeSearchMore->showUi('Minimal');
+            }
         }
         return '<div class="related">
                     ' . ((!$recipesSearch->isEmpty()) ? '
                     <div class="related_block">
                         <h2 class="related_title">' . __('similar_recipes') . '</h2>
                         <div class="recipes_minimal">
-                            ' . $recipesSearch->showList(['function' => 'Minimal']) . '
-                            ' . (($recipesSearchMore) ? $recipesSearchMore->showList(['function' => 'Minimal']) : '') . '
+                            ' . $recipesSearchHtml . '
+                            ' . $recipesSearchMoreHtml . '
                         </div>
                     </div>
                     ' : '') . '
@@ -804,6 +831,7 @@ class Recipe_Ui extends Ui
 
     public function renderJsonHeader()
     {
+        $this->object->loadCategory();
         $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') . 'T00:00:00-03:00' : date('Y-m-d\TH:i:sP');
         $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') . 'T00:00:00-03:00' : $dateModified;
         $ingredients = [];
@@ -886,7 +914,7 @@ class Recipe_Ui extends Ui
             'datePublished' => $dateCreated,
             'dateModified' => $dateModified,
             'recipeCuisine' => $this->object->label('diet'),
-            'recipeCategory' => $this->object->get('id_category_object')->getBasicInfo(),
+            'recipeCategory' => $this->object->category->getBasicInfo(),
             'recipeYield' => $this->object->getServings(),
             'recipeIngredient' => $ingredients,
             'recipeInstructions' => $instructions,

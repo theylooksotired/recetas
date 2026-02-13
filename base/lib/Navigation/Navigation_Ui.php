@@ -35,7 +35,7 @@ class Navigation_Ui extends Ui
                                 ' . Adsense::responsive('top') . '
                                 <div class="content_ins">' . $content . '</div>
                                 ' . $content_bottom . '
-                                ' . $this->adApp() . '
+                                ' . Navigation_Ui::ad() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -55,7 +55,7 @@ class Navigation_Ui extends Ui
                                 ' . $message . '
                                 ' . $content . '
                                 ' . $content_bottom . '
-                                ' . $this->adApp() . '
+                                ' . Navigation_Ui::ad() . '
                             </div>
                         </div>
                         ' . $this->footer() . '
@@ -77,7 +77,7 @@ class Navigation_Ui extends Ui
                                 <div class="content_ins">
                                     ' . $content . '
                                     ' . $content_bottom . '
-                                    ' . $this->adApp() . '
+                                    ' . Navigation_Ui::ad() . '
                                 </div>
                             </div>
                         </div>
@@ -125,27 +125,9 @@ class Navigation_Ui extends Ui
             </header>';
     }
 
-    public function adApp($extraClass = '')
-    {
-        return '';
-        return '
-            <div class="ad_app ' . $extraClass . '">
-                <div class="ad_app_left">' . HtmlSection::showFromCode('ad-app') . '</div>
-                <div class="ad_app_right">
-                    <a href="https://apps.apple.com/app/recetario-de-cocina/id6526489470" target="_blank" title="App Store">
-                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_app_store.png" loading="lazy" alt="App Store">
-                    </a>
-                    <a href="https://play.google.com/store/apps/details?id=com.plasticwebs.recetario" target="_blank" title="Google Play">
-                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_google_play.png" loading="lazy" alt="Google Play">
-                    </a>
-                </div>
-            </div>';
-    }
-
     public function footer()
     {
         // <a href="https://www.recetario-de-cocina.com/publicar-articulos">Publicar en nuestro sitio web</a>
-        $facebookCommentsHtml = (isset($this->object->facebookCommentsFooter) && $this->object->facebookCommentsFooter && Parameter::code('facebook_comments') == 'true') ? '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v19.0&appId=168728593755836" nonce="aPczU4ie"></script>' : '';
         return '
             <footer class="footer">
                 <div class="footer_ins">
@@ -202,8 +184,7 @@ class Navigation_Ui extends Ui
                         </div>
                     </div>
                 </div>
-            </footer>
-            ' . $facebookCommentsHtml;
+            </footer>';
     }
 
     public function menu()
@@ -272,10 +253,29 @@ class Navigation_Ui extends Ui
             </div>';
     }
 
-    public static function facebookComments($url)
+    public static function ad()
     {
-        if (Parameter::code('facebook_comments') == 'true') {
-            return '<div class="fb-comments" data-href="' . $url . '" data-width="100%" data-numposts="5" data-lazy="true" data-colorscheme="light" data-order-by="reverse_time"></div>';
+        $simpleCountries = ['guatemala', 'puertorico'];
+        if (in_array(Parameter::code('country_code'), $simpleCountries)) {
+            return '
+                <div class="ad_app">
+                    <div class="ad_app_left">
+                        <p><a href="https://whatsapp.com/channel/0029Vb2gbns7YSd5Vf9Jaj0r" target="_blank" title="WhatsApp" rel="nofollow">' . __('whatsapp_ad_title') . '</a></p>
+                        <p>' . __('whatsapp_ad_message') . '</p>
+                    </div>
+                    <div class="ad_app_right">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_whatsapp.svg" loading="lazy" alt="WhatsApp"/>
+                    </div>
+                </div>
+                <div class="ad_app">
+                    <div class="ad_app_left">
+                        <p><a href="https://www.recetario-de-cocina.com/newsletter">' . __('newsletter_ad_title') . '</a></p>
+                        <p>' . __('newsletter_ad_message') . '</p>
+                    </div>
+                    <div class="ad_app_right">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/>
+                    </div>
+                </div>';
         }
     }
 

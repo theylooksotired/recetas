@@ -2914,18 +2914,44 @@ body {
 }
 
 .ad_app {
+    display: block;
+    font-weight: normal;
     background: rgba($colorAccent, 0.05);
     border: 3px solid rgba($colorAccent, 0.2);
     padding: 10px;
-    margin: 40px 0 0 0;
+    margin: 20px auto 0 auto;
+    max-width: $sizeTablet;
+    position: relative;
     @include borderRadius(10px);
     @include clearer();
+    a {
+        display: block;
+        color: $colorAccent;
+        &:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            content: "";
+            display: block;
+        }
+    }
+    &:hover {
+        background: rgba($colorAccent, 0.1);
+        border-color: rgba($colorAccent, 0.3);
+    }
     .ad_app_left {
         width: calc(100% - 220px);
         float: left;
         color: $colorAccent;
         p {
             font-size: $fontSizeMedium;
+            margin: 0;
+            padding: 0;
+            strong {
+                font-size: $fontSizeBig;
+            }
         }
     }
     .ad_app_right {
@@ -2941,6 +2967,7 @@ body {
         }
         img {
             max-width: 100%;
+            max-height: 80px;
         }
     }
     @include mobile() {
@@ -2949,12 +2976,16 @@ body {
             width: auto;
             float: none;
         }
-        .ad_app_right {
-            text-align: center;
+        .ad_app_left {
+            margin: 0 0 20px;
         }
-    }
-    &.ad_intro {
-        margin: 20px 0;
+        .ad_app_right {
+            img {
+                display: block;
+                max-width: 200px;
+                margin: auto;
+            }
+        }
     }
 }
 

@@ -33,4 +33,14 @@ class Category extends Db_Object
         return $categories;
     }
 
+    static public function arrayCategories()
+    {
+        $categories = (new Category)->readList();
+        $categoriesIds = [];
+        foreach ($categories as $category) {
+            $categoriesIds[$category->id()] = $category;
+        }
+        return $categoriesIds;
+    }
+
 }

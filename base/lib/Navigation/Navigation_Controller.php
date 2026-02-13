@@ -78,12 +78,10 @@ class Navigation_Controller extends Controller
                 $this->content = '
                     ' . Category_Ui::introTop() . '
                     ' . HtmlSection::show('intro_top') . '
-                    ' . $this->ui->adApp('ad_intro') . '
                     <h1>' . $this->title_page . '</h1>
                     ' . Category_Ui::intro() .'
                     ' . HtmlSection::show('intro') . '
-                    ' . Post_Ui::intro() . '
-                    ' . SearchPage_Ui::tags();
+                    ' . Post_Ui::intro();
                 return $this->ui->render();
                 break;
             case 'recetas':
@@ -91,9 +89,6 @@ class Navigation_Controller extends Controller
                 $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
-                if ($this->recipe->id() != '') {
-                    $this->recipe->loadCategoryManually($this->category);
-                }
                 if ($this->id != '' && $this->category->id() == '' && $this->subcategory->id() == '') {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . url('recetas'));
@@ -259,8 +254,23 @@ class Navigation_Controller extends Controller
                 break;
             case 'top-10':
                 $GLOBALS['adsense_hidden'] = true;
+                $categoriesIds = Category::arrayCategories();
                 $top10s = new ListObjects('Top10', ['order' => 'ord']);
                 $recipesMostViewed = new ListObjects('Recipe', ['order' => 'views DESC', 'limit' => '10']);
+                $top10sHtml = '';
+                $i = 1;
+                foreach ($top10s->list as $top10) {
+                    $top10->category = (isset($categoriesIds[$top10->get('id_category')])) ? $categoriesIds[$top10->get('id_category')] : new Category();
+                    $top10sHtml .= $top10->showUi('Public', ['counter' => $i]);
+                    $i++;
+                }
+                $recipesMostViewedHtml = '';
+                $i = 1;
+                foreach ($recipesMostViewed->list as $recipeMostViewed) {
+                    $recipeMostViewed->category = (isset($categoriesIds[$recipeMostViewed->get('id_category')])) ? $categoriesIds[$recipeMostViewed->get('id_category')] : new Category();
+                    $recipesMostViewedHtml .= $recipeMostViewed->showUi('Top10', ['counter' => $i]);
+                    $i++;
+                }
                 $this->title_page = Parameter::code('meta_title_page_top10');
                 $this->meta_url = url($this->action);
                 preg_match('/<p>(.*?)<\/p>/', HtmlSection::show('top_10_intro'), $matches);
@@ -271,14 +281,13 @@ class Navigation_Controller extends Controller
                     ' . HtmlSection::show('top_10_intro') . '
                     <div class="top10_wrapper">
                         <h2>' . __('top10_recipes') . '</h2>
-                        ' . $top10s->showList() . '
+                        ' . $top10sHtml . '
                     </div>
                     <div class="top10_wrapper">
                         <h2>' . __('most_viewed_recipes') . '</h2>
                         <p>' . __('most_viewed_recipes_disclaimer') . '</p>
-                        ' . $recipesMostViewed->showList(['function' => 'Top10']) . '
-                    </div>
-                    ' . SearchPage_Ui::tags();
+                        ' . $recipesMostViewedHtml . '
+                    </div>';
                 return $this->ui->render();
                 break;
             case 'buscar':
@@ -294,13 +303,13 @@ class Navigation_Controller extends Controller
                     $this->content = '';
                     $titleRecipes = __('recipes');
                     $search = str_replace('-', ' ', Text::simpleUrl($this->id));
-                    $items = new ListObjects('Recipe', [
+                    $recipes = new ListObjects('Recipe', [
                         'where' => 'active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
                         'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
                         'limit' => '20',
                     ]);
-                    if ($items->isEmpty()) {
-                        $items = new ListObjects('Recipe', [
+                    if ($recipes->isEmpty()) {
+                        $recipes = new ListObjects('Recipe', [
                             'where' => 'active="1" AND CONCAT(title," ",title_url," ",short_description) LIKE ("%' . $search . '%")',
                             'order' => 'title_url',
                             'limit' => '20',
@@ -336,16 +345,24 @@ class Navigation_Controller extends Controller
                         $this->meta_image = $searchPage->getImageUrl('image', 'web');
                         $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
                     }
-                    if ($items->isEmpty()) {
+                    if ($recipes->isEmpty()) {
                         $this->title_page = __('no_search_results');
                         $this->content = '<div class="message message_error">' . __('no_search_results_disclaimer') . '</div>';
                         $titleRecipes = __('recipes_might_like');
-                        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
+                        $recipes = new ListObjects('Recipe', ['where' => 'active="1"', 'order' => 'RAND()', 'limit' => '20']);
                     }
                     $this->head = '<meta name="robots" content="noindex">';
+                    $categoriesIds = Category::arrayCategories();
+                    foreach ($recipes->list as $recipe) {
+                        $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+                    }
+                    $recipesHtml = '';
+                    foreach ($recipes->list as $recipe) {
+                        $recipesHtml .= $recipe->showUi();
+                    }                    
                     $this->content .= '
                         <h2>' . $titleRecipes . '</h2>
-                        <div class="recipes recipes_category">' . $items->showList(['middle' => Adsense::responsive('middle'), 'middleRepetitions' => 2]) . '</div>';
+                        <div class="recipes recipes_category">' . $recipesHtml . '</div>';
                     return $this->ui->render();
                 } else {
                     header("HTTP/1.1 301 Moved Permanently");

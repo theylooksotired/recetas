@@ -116,10 +116,8 @@ class Recipe extends Db_Object
 
     public function url()
     {
-        if (!is_object($this->get('id_category_object'))) {
-            $this->loadMultipleValuesSingleAttribute('id_category');
-        }
-        return url('recetas/' . $this->get('id_category_object')->get('name_url') . '/' . $this->get('title_url'));
+        $this->loadCategory();
+        return url('recetas/' . $this->category->get('name_url') . '/' . $this->get('title_url'));
     }
 
     public function urlFixSteps()
@@ -137,9 +135,12 @@ class Recipe extends Db_Object
         return url('rating/' . $this->id());
     }
 
-    public function loadCategoryManually($category)
+    public function loadCategory()
     {
-        $this->set('id_category_object', $category);
+        if (!isset($this->category)) {
+            $this->category = (new Category)->read($this->get('id_category'));
+        }
+        return $this->category;
     }
 
     public function persist($persistMultiple = true)
