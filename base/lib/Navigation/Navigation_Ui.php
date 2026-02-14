@@ -255,6 +255,7 @@ class Navigation_Ui extends Ui
 
     public function ad()
     {
+        return $this->modalNewsletter();
         return '
             <div class="ad_app">
                 <div class="ad_app_left">
