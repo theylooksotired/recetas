@@ -216,6 +216,9 @@ class Navigation_Ui extends Ui
 
     public function breadCrumbs()
     {
+        if (isset($this->object->bread_crumbs_hide) && $this->object->bread_crumbs_hide) {
+            return '';
+        }
         $html = '';
         if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
             $html .= '

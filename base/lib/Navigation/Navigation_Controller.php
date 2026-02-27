@@ -17,6 +17,7 @@ class Navigation_Controller extends Controller
     public $subcategory;
     public $category;
     public $recipe;
+    public $bread_crumbs_hide;
 
     /**
      * Main function to control the public actions.
@@ -235,6 +236,8 @@ class Navigation_Controller extends Controller
                     $this->meta_description = ($post->get('meta_description') != '') ? $post->get('meta_description') : $post->get('short_description');
                     $this->meta_url = $post->url();
                     $this->meta_image = $post->getImageUrl('image', 'web');
+                    $this->bread_crumbs = [url($this->action) => __('posts'), $post->url() => $post->getBasicInfo()];
+                    $this->bread_crumbs_hide = true;
                     $this->head = $this->ui->breadCrumbsJsonLd() . $post->showUi('JsonHeader') . $post->showUi('AlternateUrl');
                     $this->content = $post->showUi('Complete');
                     $this->content_bottom = $post->showUi('Related');
