@@ -66,51 +66,38 @@ body {
 
 .logo a {
     width: 200px;
-    height: 40px;
+    height: 30px;
     display: block;
     position: relative;
-    .logo_image {
-        position: absolute;
-        top: -25px;
-        left: 0;
-        width: 80px;
-        height: 70px;
-        background-image: url(../../img/logo_table_red.svg);
-        background-repeat: no-repeat;
-        background-position: left center;
-        background-size: contain;
-        text-indent: -5000px;
-        overflow: hidden;
-    }
     .logo_title {
         display: block;
-        height: 40px;
+        height: 30px;
     }
     .logo_title_top {
         position: absolute;
         top: 0;
-        left: 40px;
+        left: 20px;
         display: block;
         color: $white;
-        height: 13px;
-        font-size: 13px;
+        height: 10px;
+        font-size: 10px;
         margin: 0 0 2px;
         line-height: 1em;
         font-weight: bold;
         color: $colorMain;
-        text-shadow: 1px 1px 3px rgba($black, 0.7);
+        text-shadow: 1px 1px 2px rgba($black, 0.7);
         z-index: 3;
     }
     .logo_title_bottom {
         position: absolute;
-        bottom: 0;
-        left: 5px;
+        top: 5px;
+        left: 0;
         display: block;
         color: $white;
-        height: 35px;
-        font-size: 30px;
+        height: 25px;
+        font-size: 25px;
         line-height: 1em;
-        text-shadow: 1px 1px 5px rgba($black, 0.8);
+        text-shadow: 1px 1px 2px rgba($black, 0.8);
         z-index: 2;
         overflow: hidden;
     }
@@ -972,7 +959,6 @@ body {
         }
         .post_date {
             font-size: $fontSizeSmall;
-            padding: 0 0 10px;
             @include animate();
             i {
                 display: inline-block;
@@ -1042,7 +1028,7 @@ body {
         color: $colorAccent;
         @include animate();
         .post_title {
-            font-size: $fontSizeMedium;
+            font-size: $fontSizeBig;
             font-weight: bold;
             padding: 0 0 10px;
             line-height: 1.2em;
@@ -1066,7 +1052,7 @@ body {
         }
         a {
             display: block;
-            font-size: $fontSizeMedium;
+            font-size: calc($fontSizeBig * 8 / 10) ;
             color: $colorAccent;
             &::before {
                 inset: 0px;
@@ -1079,8 +1065,8 @@ body {
         }
     }
     @include mobile {
-        padding: 0 0 20px;
-        margin: 0 0 20px;
+        padding: 0 0 10px;
+        margin: 0 0 10px;
         border-bottom: 1px solid rgba($black, 0.1);
         &:last-child {
             padding: 0;
@@ -1088,6 +1074,8 @@ body {
             border-bottom: 0;
         }
         .post_information {
+            font-family: $fontFamilyAlt;
+
             .post_short_description {
                 padding: 0;
                 font-size: $fontSizeSmall;
@@ -1257,10 +1245,11 @@ body {
     margin: auto;
     .post_short_description {
         color: darken($colorAccentAlt, 20%);
-        font-size: $fontSizeBig * 0.9;
+        font-size: $fontSizeMedium;
         margin: 0 0 50px;
         padding: 0;
         font-weight: 400;
+        padding: 0 0 30px;
     }
     .post_short_info {
         margin: 0 0 50px;
@@ -1307,11 +1296,13 @@ body {
     .post_date {
         font-size: $fontSizeSmall;
         color: rgba($colorAccent, 0.9);
+        padding: 0 0 10px;
     }
     .post_reading_time {
         font-size: $fontSizeSmall;
         color: rgba($colorAccent, 0.9);
         padding: 5px 0 0 0;
+        padding: 0 0 10px;
     }
     .share_options {
         padding: 0;
@@ -1346,7 +1337,7 @@ body {
     }
     @include mobile {
         .post_short_description {
-            font-size: $fontSizeNormal;
+            font-size: $fontSizeMedium;
             margin: 0 0 10px;
         }
         .post_short_info {
@@ -1364,7 +1355,6 @@ body {
         font-weight: bold;
         position: relative;
         text-align: center;
-        border-top: 5px solid rgba($colorAccent, 0.1);
         &:after {
             display: none;
         }
@@ -1389,7 +1379,7 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     @include mobile {
-        grid-template-columns: 1fr;
+        display: block;
     }
 }
 
@@ -1906,7 +1896,7 @@ body {
             grid-template-columns: 1fr 1fr 1fr;
         }
         @include mobile {
-            grid-template-columns: 1fr;
+            display: block;
         }
     }
     .category {
@@ -2128,6 +2118,7 @@ body {
         line-height: normal;
         margin: 0;
         max-width: 100%;
+        font-family: $fontFamily;
         &:after {
             display: none;
         }
@@ -2599,6 +2590,7 @@ body {
         padding: 10px;
         text-shadow: 1px 1px 2px rgba($black, 0.5);
         background: rgba($black, 0.7);
+        font-family: $fontFamily;
         @include animate();
     }
     .post_image {
@@ -2816,6 +2808,7 @@ body {
             h3 {
                 margin: 0;
                 padding: 0;
+                font-family: $fontFamily;
             }
             a {
                 display: block;
@@ -2901,8 +2894,7 @@ body {
             margin: 0;
         }
         @include mobile {
-            grid-template-columns: 1fr;
-            gap: 10px;
+            display: block;
         }
     }
     .recipes_minimal {
@@ -3172,26 +3164,29 @@ body {
 .question_wrapper {
     form {
         .form_field {
-            label {
-                display: block;
-                margin: 0 0 5px;
-                padding: 0 0 0 50px;
-                color: $colorMessage;
-                font-weight: bold;
-                position: relative;
-                line-height: 1.1em;
-                max-width: 500px;
-                &::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 40px;
-                    width: 40px;
-                    background-image: url(../../img/question.svg);
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    background-size: contain;
+            &,
+            &.required {
+                label {
+                    display: block;
+                    margin: 0 0 10px;
+                    padding: 0 0 0 50px;
+                    color: $colorMessage;
+                    font-weight: bold;
+                    position: relative;
+                    line-height: 1.1em;
+                    max-width: 500px;
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 40px;
+                        width: 40px;
+                        background-image: url(../../img/question.svg);
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                    }
                 }
             }
         }
@@ -3422,6 +3417,9 @@ body {
             &:hover {
                 color: $colorAccent;
                 border: 1px solid rgba($colorAccent, 0.5);
+            }
+            @include mobile() {
+                padding: 10px 50px;
             }
         }
         p {

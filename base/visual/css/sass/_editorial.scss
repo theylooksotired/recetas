@@ -10,8 +10,8 @@ html {
 p,
 li {
     font-size: $fontSizeMedium;
-    line-height: 1.2em;
-    padding: 0 0 0.8em;
+    line-height: 1.4em;
+    padding: 0 0 10px;
     margin: 0;
     @include mobile {
         font-size: $fontSizeNormal
@@ -23,24 +23,21 @@ img {
 h1 {
     font-weight: bold;
     font-size: calc($fontSizeHuge * 8 / 10);
-    padding: 0 0 15px;
-    margin: 0 0 15px;
+    padding: 20px 0;
+    margin: 0 0 20px;
     color: $colorAccent;
     position: relative;
-    font-family: $fontFamily;
-    line-height: 1em;
+    line-height: 1.2em;
+    font-family: $fontFamilyAlt;
     &:after {
         width: 200px;
-        height: 4px;
+        height: 5px;
         background: rgba($colorMainAlt, 0.5);
         position: absolute;
         bottom: 0;
         left: 0;
         content: '';
         border-top: 1px solid $colorMainAlt;
-    }
-    @include mobile {
-        font-size: $fontSizeBig;
     }
 }
 
@@ -50,11 +47,8 @@ h2 {
     padding: 0 0 10px;
     margin: 0 0 10px;
     color: $black;
-    font-family: $fontFamily;
-    line-height: 1em;
-    @include mobile {
-        font-size: calc($fontSizeBig * 8 / 10);
-    }
+    font-family: $fontFamilyAlt;
+    line-height: 1.2em;
     a {
         color: $colorAccent;
     }
@@ -65,13 +59,10 @@ h3 {
     font-size: $fontSizeHuge * 5 / 10;
     margin: 0 0 20px;
     color: $black;
-    font-family: $fontFamily;
     line-height: 1em;
+    font-family: $fontFamilyAlt;
     a {
         color: $colorAccent;
-    }
-    @include mobile {
-        font-size: calc($fontSizeBig * 8 / 10);
     }
 }
 blockquote {

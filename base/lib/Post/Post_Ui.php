@@ -70,7 +70,6 @@ class Post_Ui extends Ui
                         <h3 class="post_title">
                             <a title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">' . $this->object->getBasicInfo() . '</a>
                         </h3>
-                        <div class="post_short_description">' . $shortDescription . '</div>
                     </div>
                 </div>
             </div>';
@@ -196,6 +195,10 @@ class Post_Ui extends Ui
                 </p>';
         }
         return '
+            <figure class="post_image">
+                ' . $this->object->getImageWidth('image', 'web') . '
+                <figcaption>' . $this->object->getBasicInfo() . '</figcaption>
+            </figure>
             ' . $translationLink . '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
@@ -211,10 +214,6 @@ class Post_Ui extends Ui
                     </div>
                     <div class="post_short_description">' . nl2br($this->object->get('short_description')) . '</div>
                     <div class="editorial">
-                        <figure class="post_image">
-                            ' . $this->object->getImageWidth('image', 'web') . '
-                            <figcaption>' . $this->object->getBasicInfo() . '</figcaption>
-                        </figure>
                         ' . $text . '
                     </div>
                 </div>

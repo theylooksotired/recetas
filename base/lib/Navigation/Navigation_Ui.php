@@ -224,16 +224,51 @@ class Navigation_Ui extends Ui
                     <meta itemprop="position" content="1" />
                 </span> &raquo;';
             $i = 2;
-            foreach ($this->object->bread_crumbs as $url => $title) {
+            $breadCrumbs = $this->object->bread_crumbs;
+            $lastKey = array_key_last($breadCrumbs);
+            foreach ($breadCrumbs as $url => $title) {
+                $itemProp = '<span itemprop="name">' . $title . '</span>';
+                $label = ($url != $lastKey) ? '<a href="' . $url . '" itemprop="item">' . $itemProp . '</a>' : $itemProp;
+                $itemUrl = ($url == $lastKey) ? '<meta itemprop="item" content="' . $url . '" />' : '';
                 $html .= '
                     <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                        <a href="' . $url . '" itemprop="item"><span itemprop="name">' . $title . '</span></a>
+                        ' . $label . '
+                        ' . $itemUrl . '
                         <meta itemprop="position" content="' . $i . '" />
                     </span> &raquo;';
                 $i++;
             }
             return '<div class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">' . substr($html, 0, -8) . '</div>';
         }
+    }
+
+    public function breadCrumbsJsonLd()
+    {
+        $breadcrumbs = [];
+        if (isset($this->object->bread_crumbs) && is_array($this->object->bread_crumbs)) {
+            $breadcrumbs[] = [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => __('home'),
+                'item' => url('')
+            ];
+            $i = 2;
+            $breadCrumbs = $this->object->bread_crumbs;
+            foreach ($breadCrumbs as $url => $title) {
+                $breadcrumbs[] = [
+                    '@type' => 'ListItem',
+                    'position' => $i,
+                    'name' => $title,
+                    'item' => $url
+                ];
+                $i++;
+            }
+        }
+        return '<script type="application/ld+json">' . json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $breadcrumbs
+        ]) . '</script>';
     }
 
     public static function search()
