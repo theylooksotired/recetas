@@ -94,14 +94,8 @@ class Navigation_Ui extends Ui
                 <div class="header_top">
                     <div class="header_ins">
                         <div class="header_left">
-                            <div class="logo">
-                                <a href="' . url('') . '">
-                                    <span class="logo_image"></span>
-                                    <span class="logo_title">
-                                        <span class="logo_title_top">' . Parameter::code('meta_title_header_top') . '</span>
-                                        <span class="logo_title_bottom">' . Parameter::code('meta_title_header_bottom') . '</span>
-                                    </span>
-                                </a>
+                            <div class="logo logo_' . Parameter::code('country_code') . '">
+                                <a href="' . url('') . '">' . Parameter::code('meta_title_page') . '</a>
                             </div>
                         </div>
                         <div class="header_right">
@@ -110,18 +104,6 @@ class Navigation_Ui extends Ui
                     </div>
                 </div>
                 <div class="header_menu">' . $this->menu() . '</div>
-            </header>';
-    }
-
-    public function header_simple()
-    {
-        return '
-            <header class="header header_simple">
-                <div class="header_ins">
-                    <div class="logo">
-                        <a href="' . url('') . '">' . Parameter::code('meta_title_page') . '</a>
-                    </div>
-                </div>
             </header>';
     }
 

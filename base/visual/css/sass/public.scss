@@ -29,77 +29,174 @@ body {
     .header_ins {
         max-width: $sizeDesktop;
         margin: auto;
-        padding: 5px 0px;
-        height: 30px;
+        padding: 0;
+        height: 40px;
         @include clearer();
         @include tablet {
-            padding: 5px 10px;
+            padding: 0 10px;
         }
     }
     .header_left {
         width: 200px;
-        height: 35px;
+        height: 40px;
         float: left;
     }
     .header_right {
         width: calc(100% - 210px);
         float: right;
         text-align: right;
+        padding: 5px 0 0 0;
         .header_rightIns {
             @include clearer();
         }
     }
-    &.header_simple {
-        &:before {
-            display: none;
-        }
-        .header_ins {
-            height: 30px;
-        }
-        .logo a {
-            margin: auto;
-            width: 120px;
-            height: 30px;
-        }
-    }
 }
 
-.logo a {
-    width: 200px;
-    height: 30px;
-    display: block;
-    position: relative;
-    .logo_title {
-        display: block;
+.logo {
+    padding: 5px 0;
+    a {
+        width: 200px;
         height: 30px;
-    }
-    .logo_title_top {
-        position: absolute;
-        top: 0;
-        left: 20px;
         display: block;
-        color: $white;
-        height: 10px;
-        font-size: 10px;
-        margin: 0 0 2px;
-        line-height: 1em;
-        font-weight: bold;
-        color: $colorMain;
-        text-shadow: 1px 1px 2px rgba($black, 0.7);
-        z-index: 3;
-    }
-    .logo_title_bottom {
-        position: absolute;
-        top: 5px;
-        left: 0;
-        display: block;
-        color: $white;
-        height: 25px;
-        font-size: 25px;
-        line-height: 1em;
-        text-shadow: 1px 1px 2px rgba($black, 0.8);
-        z-index: 2;
+        position: relative;
+        background-image: url('../../img/logos/base.svg');
+        background-position: top left;
+        background-size: contain;
+        background-repeat: no-repeat;
+        text-indent: -5000px;
         overflow: hidden;
+    }
+    &.logo_argentina {
+        padding: 5px 0 0 0;
+        a {
+            height: 33px;
+        }
+    }
+    &.logo_argentina a {
+        background-image: url('../../img/logos/argentina.svg');
+    }
+    &.logo_bolivia a {
+        background-image: url('../../img/logos/bolivia.svg');
+    }
+    &.logo_brasil a {
+        background-image: url('../../img/logos/brasil.svg');
+    }
+    &.logo_chile a {
+        background-image: url('../../img/logos/chile.svg');
+    }
+    &.logo_china a {
+        background-image: url('../../img/logos/china.svg');
+    }
+    &.logo_colombia a {
+        background-image: url('../../img/logos/colombia.svg');
+    }
+    &.logo_costarica a {
+        background-image: url('../../img/logos/costarica.svg');
+    }
+    &.logo_cuba a {
+        background-image: url('../../img/logos/cuba.svg');
+    }
+    &.logo_ecuador a {
+        background-image: url('../../img/logos/ecuador.svg');
+    }
+    &.logo_espana a {
+        background-image: url('../../img/logos/espana.svg');
+    }
+    &.logo_salvador a {
+        background-image: url('../../img/logos/salvador.svg');
+    }
+    &.logo_francia a {
+        background-image: url('../../img/logos/francia.svg');
+    }
+    &.logo_guatemala a {
+        background-image: url('../../img/logos/guatemala.svg');
+    }
+    &.logo_haiti a {
+        background-image: url('../../img/logos/haiti.svg');
+    }
+    &.logo_honduras a {
+        background-image: url('../../img/logos/honduras.svg');
+    }
+    &.logo_india a {
+        background-image: url('../../img/logos/india.svg');
+    }
+    &.logo_italia a {
+        background-image: url('../../img/logos/italia.svg');
+    }
+    &.logo_japon a {
+        background-image: url('../../img/logos/japon.svg');
+    }
+    &.logo_mexico a {
+        background-image: url('../../img/logos/mexico.svg');
+    }
+    &.logo_nicaragua a {
+        background-image: url('../../img/logos/nicaragua.svg');
+    }
+    &.logo_panama a {
+        background-image: url('../../img/logos/panama.svg');
+    }
+    &.logo_paraguay a {
+        background-image: url('../../img/logos/paraguay.svg');
+    }
+    &.logo_peru a {
+        background-image: url('../../img/logos/peru.svg');
+    }
+    &.logo_puertorico a {
+        background-image: url('../../img/logos/puertorico.svg');
+    }
+    &.logo_republicadominicana a {
+        background-image: url('../../img/logos/republicadominicana.svg');
+    }
+    &.logo_uruguay a {
+        background-image: url('../../img/logos/uruguay.svg');
+    }
+    &.logo_venezuela a {
+        background-image: url('../../img/logos/venezuela.svg');
+    }
+    &.logo_arabes a {
+        background-image: url('../../img/logos/arabes.svg');
+    }
+    &.logo_diabetes a {
+        background-image: url('../../img/logos/diabetes.svg');
+    }
+    &.logo_judias a {
+        background-image: url('../../img/logos/judias.svg');
+    }
+    &.logo_vegetariana a {
+        background-image: url('../../img/logos/vegetarianas.svg');
+    }
+    &.logo_veganas a {
+        background-image: url('../../img/logos/veganas.svg');
+    }
+    &.logo_brasilpt a {
+        background-image: url('../../img/logos/brasilpt.svg');
+    }
+    &.logo_cubaen a {
+        background-image: url('../../img/logos/cubaen.svg');
+    }
+    &.logo_ecuadoren a {
+        background-image: url('../../img/logos/ecuadoren.svg');
+    }
+    &.logo_peruen a {
+        background-image: url('../../img/logos/peruen.svg');
+    }
+    &.logo_guatemalaen a {
+        background-image: url('../../img/logos/guatemalaen.svg');
+    }
+    &.logo_nicaraguaen a {
+        background-image: url('../../img/logos/nicaraguaen.svg');
+    }
+    &.logo_costaricaen a {
+        background-image: url('../../img/logos/costaricaen.svg');
+    }
+    &.logo_hondurasen a {
+        background-image: url('../../img/logos/hondurasen.svg');
+    }
+    &.logo_panamaen a {
+        background-image: url('../../img/logos/panamaen.svg');
+    }
+    &.logo_salvadoren a {
+        background-image: url('../../img/logos/salvadoren.svg');
     }
 }
 

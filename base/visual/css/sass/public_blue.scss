@@ -114,19 +114,6 @@ body {
             z-index: 2;
         }
     }
-    &.header_simple {
-        &:before {
-            display: none;
-        }
-        .header_ins {
-            height: 30px;
-        }
-        .logo a {
-            margin: auto;
-            width: 120px;
-            height: 30px;
-        }
-    }
 }
 
 .menuCategories {
