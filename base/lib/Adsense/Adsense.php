@@ -23,7 +23,33 @@ class Adsense {
                 }
             } catch (Exception $e) {}
         }
-        return '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>';
+        return '
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>
+            <script>
+            (function() {
+            function lazyLoadAds() {
+                var ads = document.querySelectorAll(".adsense-lazy");
+                if (!("IntersectionObserver" in window)) {
+                ads.forEach(function() { (adsbygoogle = window.adsbygoogle || []).push({}); });
+                return;
+                }
+                var observer = new IntersectionObserver(function(entries, obs) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                    obs.unobserve(entry.target);
+                    }
+                });
+                }, { rootMargin: "200px 0px" });
+                ads.forEach(function(el) { observer.observe(el); });
+            }
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", lazyLoadAds);
+            } else {
+                lazyLoadAds();
+            }
+            })();
+            </script>';
     }
 
     static public function responsive($type = '') {
@@ -167,16 +193,13 @@ class Adsense {
         }
         if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">Ad - ' . (($type!='') ? $type : 'default') . ' - ' . $adSlot . '</div>';
         return '
-            <div class="adsense">
+            <div class="adsense adsense-lazy">
                 <ins class="adsbygoogle"
                     style="display:block"
                     data-ad-client="ca-pub-7429223453905389"
                     data-ad-slot="' . $adSlot . '"
                     data-ad-format="auto"
                     data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
             </div>';
     }
 
