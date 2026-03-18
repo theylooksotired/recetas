@@ -307,7 +307,9 @@ class Recipe_Ui extends Ui
 
     public function renderPreloadImage()
     {
-        return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
+        $imageUrl = $this->object->getImageUrlWebp('image', 'web');
+        $imageUrl = ($imageUrl != '') ? $imageUrl : $this->object->getImageUrl('image', 'web');
+        return '<link rel="preload" as="image" href="' . $imageUrl . '">';
     }
 
     public function renderAlternateUrl()
