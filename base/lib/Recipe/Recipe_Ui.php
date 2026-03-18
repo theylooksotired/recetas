@@ -69,19 +69,6 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
-    public function renderSide($options = [])
-    {
-        return '
-            <div class="post_minimal">
-                <div class="post_minimal_ins">
-                    <div class="post_image">' . $this->object->getImageWidth('image', 'small') . '</div>
-                    <h3 class="post_title">
-                        <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitlePage() . '">' . $this->object->getBasicInfo() . '</a>
-                    </h3>
-                </div>
-            </div>';
-    }
-
     public function renderTop10($options = [])
     {
         $recipe = (isset($options['recipe'])) ? $options['recipe'] : $this->object;
@@ -115,25 +102,27 @@ class Recipe_Ui extends Ui
                 $versionsIds[] = $version->id();
             }
             // Load all ingredients and preparation
-            $queryIngredients = 'SELECT ri.* FROM ' . (new RecipeVersionIngredient)->tableName . ' ri WHERE ri.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
-            $queryPreparation = 'SELECT rp.* FROM ' . (new RecipeVersionPreparation)->tableName . ' rp WHERE rp.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
-            $allIngredients = (new RecipeVersionIngredient)->readListQuery($queryIngredients);
-            $allPreparation = (new RecipeVersionPreparation)->readListQuery($queryPreparation);
-            foreach ($versions as $version) {
-                $ingredients = [];
-                $preparations = [];
-                foreach ($allIngredients as $ingredient) {
-                    if ($ingredient->get('id_recipe_version') == $version->id()) {
-                        $ingredients[] = $ingredient;
+            if (count($versionsIds) > 0) {
+                $queryIngredients = 'SELECT ri.* FROM ' . (new RecipeVersionIngredient)->tableName . ' ri WHERE ri.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
+                $queryPreparation = 'SELECT rp.* FROM ' . (new RecipeVersionPreparation)->tableName . ' rp WHERE rp.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
+                $allIngredients = (new RecipeVersionIngredient)->readListQuery($queryIngredients);
+                $allPreparation = (new RecipeVersionPreparation)->readListQuery($queryPreparation);
+                foreach ($versions as $version) {
+                    $ingredients = [];
+                    $preparations = [];
+                    foreach ($allIngredients as $ingredient) {
+                        if ($ingredient->get('id_recipe_version') == $version->id()) {
+                            $ingredients[] = $ingredient;
+                        }
                     }
-                }
-                foreach ($allPreparation as $preparation) {
-                    if ($preparation->get('id_recipe_version') == $version->id()) {
-                        $preparations[] = $preparation;
+                    foreach ($allPreparation as $preparation) {
+                        if ($preparation->get('id_recipe_version') == $version->id()) {
+                            $preparations[] = $preparation;
+                        }
                     }
+                    $version->set('ingredients', $ingredients);
+                    $version->set('preparation', $preparations);
                 }
-                $version->set('ingredients', $ingredients);
-                $version->set('preparation', $preparations);
             }
 
             $i = ($translationLink != '') ? 2 : 1;
@@ -303,13 +292,13 @@ class Recipe_Ui extends Ui
                     <p>
                         <a href="https://whatsapp.com/channel/0029Vb2gbns7YSd5Vf9Jaj0r" target="_blank" title="WhatsApp" rel="nofollow">
                             <img src="' . ASTERION_BASE_URL . 'visual/img/button_whatsapp.svg" loading="lazy" alt="WhatsApp"/>
-                            <span>' . __('recipe_whatsapp_ad') . '</span>
+                            <span>' . __('recipe_whatsapp_ad_simple') . '</span>
                         </a>
                     </p>
                     <p>
                         <span class="trigger_newsletter">
                             <img src="' . ASTERION_BASE_URL . 'visual/img/button_newsletter.svg" loading="lazy" alt="Newsletter"/>
-                            <span>' . __('recipe_newsletter_ad') . '</span>
+                            <span>' . __('recipe_newsletter_ad_simple') . '</span>
                         </span>
                     </p>
                 </div>
@@ -579,56 +568,24 @@ class Recipe_Ui extends Ui
                 $recipesSearchMoreHtml .= $recipeSearchMore->showUi('Minimal');
             }
         }
-        return '<div class="related">
-                    ' . ((!$recipesSearch->isEmpty()) ? '
-                    <div class="related_block">
-                        <h2 class="related_title">' . __('similar_recipes') . '</h2>
-                        <div class="recipes_minimal">
-                            ' . $recipesSearchHtml . '
-                            ' . $recipesSearchMoreHtml . '
-                        </div>
-                    </div>
-                    ' : '') . '
-                    <div class="related_block">
-                        <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
-                        <div class="posts">
-                            ' . $posts->showList(['function' => 'PublicSimple']) . '
-                            ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
-                        </div>
-                    </div>
-                </div>';
-    }
-
-    public function renderEdit()
-    {
-        $html = '
-            <div class="itemEditInsWrapper">
-                <div class="itemEditImage">' . $this->object->getImageWidth('image', 'small') . '</div>
-                <div class="itemEditInformation">
-                    <div class="itemEditTitle">' . $this->object->getBasicInfo() . '</div>
-                    <div class="itemEditCreated">' . __('created') . ' : ' . Date::sqlText($this->object->get('created')) . '</div>
-                    <div class="itemEditModified">' . __('updated') . ' : ' . Date::sqlText($this->object->get('modified')) . '</div>
-                </div>
-            </div>';
-        if ($this->object->get('active') == '1') {
-            return '
-                <div class="itemEdit">
-                    <div class="itemEditIns">
-                        <a href="' . $this->object->url() . '" target="_blank">' . $html . '</a>
-                    </div>
-                </div>';
-        }
         return '
-            <div class="itemEdit">
-                <div class="itemEditIns">
-                    <a href="' . url('cuenta/editar-receta/' . $this->object->id()) . '">' . $html . '</a>
-                </div>
-                    <div class="itemEditDelete">
-                        <a href="' . url('cuenta/borrar-receta/' . $this->object->id()) . '" class="confirm" data-confirm="' . __('are_you_sure_delete') . '">
-                            <i class="icon icon-delete"></i>
-                            <span>' . __('delete') . '</span>
-                        </a>
+            <div class="related">
+                ' . ((!$recipesSearch->isEmpty()) ? '
+                <div class="related_block">
+                    <h2 class="related_title">' . __('similar_recipes') . '</h2>
+                    <div class="recipes_minimal">
+                        ' . $recipesSearchHtml . '
+                        ' . $recipesSearchMoreHtml . '
                     </div>
+                </div>
+                ' : '') . '
+                <div class="related_block">
+                    <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
+                    <div class="posts">
+                        ' . $posts->showList(['function' => 'PublicSimple']) . '
+                        ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
+                    </div>
+                </div>
             </div>';
     }
 
@@ -744,66 +701,6 @@ class Recipe_Ui extends Ui
         $content .= "\n";
         $content .= $this->object->url();
         return $content;
-    }
-
-    public static function introConnected()
-    {
-        $login = User_Login::getInstance();
-        $itemsNotActive = new ListObjects('Recipe', ['where' => 'id_user=:id_user AND (active!="1" OR active IS NULL)', 'order' => 'created DESC'], ['id_user' => $login->id()]);
-        $itemsActive = new ListObjects('Recipe', ['where' => 'id_user=:id_user AND active="1"', 'order' => 'created DESC'], ['id_user' => $login->id()]);
-        if ($itemsNotActive->isEmpty() && $itemsActive->isEmpty()) {
-            return '<div class="message">' . __('no_recipes_uploaded') . '</div>';
-        }
-        return '
-            <div class="group_connected_wrapper">
-
-                ' . ((!$itemsNotActive->isEmpty()) ? '
-                <div class="group_connected">
-                    <div class="group_connected_title">' . __('recipes_to_edit') . '</div>
-                    <div class="group_connected_items">
-                        ' . $itemsNotActive->showList(['function' => 'Edit']) . '
-                    </div>
-                </div>' : '') . '
-
-                ' . ((!$itemsActive->isEmpty()) ? '
-                <div class="group_connected">
-                    <div class="group_connected_title">' . __('recipes_approved') . '</div>
-                    <div class="group_connected_items">
-                        ' . $itemsActive->showList(['function' => 'Edit']) . '
-                    </div>
-                </div>' : '') . '
-
-            </div>';
-    }
-
-    public static function menuConnected($options = [])
-    {
-        return '
-            <div class="group_connected_top">
-                ' . ((in_array('upload', $options)) ? '
-                    <a href="' . url('cuenta/subir-receta') . '" class="group_connected_insert">
-                        <i class="icon icon-plus"></i>
-                        <span>' . __('add') . '</span>
-                    </a>
-                ' : '') . '
-                ' . ((in_array('list', $options)) ? '
-                    <a href="' . url('cuenta/recetas') . '">
-                        <i class="icon icon-list"></i>
-                        <span>' . __('view_list') . '</span>
-                    </a>
-                ' : '') . '
-            </div>';
-    }
-
-    public static function menuSide($options = [])
-    {
-        $items = new ListObjects('Recipe', ['where' => 'active="1"', 'limit' => 3]);
-        return '
-            ' . Adsense::responsive('middle') . '
-            <div class="items_side">
-                <h2 class="items_side_title">' . __('popular_recipes') . '</h2>
-                <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
-            </div>';
     }
 
     public static function sitemapUrls()

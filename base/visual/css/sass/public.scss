@@ -72,131 +72,55 @@ body {
             height: 33px;
         }
     }
-    &.logo_argentina a {
-        background-image: url('../../img/logos/argentina.svg');
-    }
-    &.logo_bolivia a {
-        background-image: url('../../img/logos/bolivia.svg');
-    }
-    &.logo_brasil a {
-        background-image: url('../../img/logos/brasil.svg');
-    }
-    &.logo_chile a {
-        background-image: url('../../img/logos/chile.svg');
-    }
-    &.logo_china a {
-        background-image: url('../../img/logos/china.svg');
-    }
-    &.logo_colombia a {
-        background-image: url('../../img/logos/colombia.svg');
-    }
-    &.logo_costarica a {
-        background-image: url('../../img/logos/costarica.svg');
-    }
-    &.logo_cuba a {
-        background-image: url('../../img/logos/cuba.svg');
-    }
-    &.logo_ecuador a {
-        background-image: url('../../img/logos/ecuador.svg');
-    }
-    &.logo_espana a {
-        background-image: url('../../img/logos/espana.svg');
-    }
-    &.logo_salvador a {
-        background-image: url('../../img/logos/salvador.svg');
-    }
-    &.logo_francia a {
-        background-image: url('../../img/logos/francia.svg');
-    }
-    &.logo_guatemala a {
-        background-image: url('../../img/logos/guatemala.svg');
-    }
-    &.logo_haiti a {
-        background-image: url('../../img/logos/haiti.svg');
-    }
-    &.logo_honduras a {
-        background-image: url('../../img/logos/honduras.svg');
-    }
-    &.logo_india a {
-        background-image: url('../../img/logos/india.svg');
-    }
-    &.logo_italia a {
-        background-image: url('../../img/logos/italia.svg');
-    }
-    &.logo_japon a {
-        background-image: url('../../img/logos/japon.svg');
-    }
-    &.logo_mexico a {
-        background-image: url('../../img/logos/mexico.svg');
-    }
-    &.logo_nicaragua a {
-        background-image: url('../../img/logos/nicaragua.svg');
-    }
-    &.logo_panama a {
-        background-image: url('../../img/logos/panama.svg');
-    }
-    &.logo_paraguay a {
-        background-image: url('../../img/logos/paraguay.svg');
-    }
-    &.logo_peru a {
-        background-image: url('../../img/logos/peru.svg');
-    }
-    &.logo_puertorico a {
-        background-image: url('../../img/logos/puertorico.svg');
-    }
-    &.logo_republicadominicana a {
-        background-image: url('../../img/logos/republicadominicana.svg');
-    }
-    &.logo_uruguay a {
-        background-image: url('../../img/logos/uruguay.svg');
-    }
-    &.logo_venezuela a {
-        background-image: url('../../img/logos/venezuela.svg');
-    }
-    &.logo_arabes a {
-        background-image: url('../../img/logos/arabes.svg');
-    }
-    &.logo_diabetes a {
-        background-image: url('../../img/logos/diabetes.svg');
-    }
-    &.logo_judias a {
-        background-image: url('../../img/logos/judias.svg');
-    }
-    &.logo_vegetariana a {
-        background-image: url('../../img/logos/vegetarianas.svg');
-    }
-    &.logo_veganas a {
-        background-image: url('../../img/logos/veganas.svg');
-    }
-    &.logo_brasilpt a {
-        background-image: url('../../img/logos/brasilpt.svg');
-    }
-    &.logo_cubaen a {
-        background-image: url('../../img/logos/cubaen.svg');
-    }
-    &.logo_ecuadoren a {
-        background-image: url('../../img/logos/ecuadoren.svg');
-    }
-    &.logo_peruen a {
-        background-image: url('../../img/logos/peruen.svg');
-    }
-    &.logo_guatemalaen a {
-        background-image: url('../../img/logos/guatemalaen.svg');
-    }
-    &.logo_nicaraguaen a {
-        background-image: url('../../img/logos/nicaraguaen.svg');
-    }
-    &.logo_costaricaen a {
-        background-image: url('../../img/logos/costaricaen.svg');
-    }
-    &.logo_hondurasen a {
-        background-image: url('../../img/logos/hondurasen.svg');
-    }
-    &.logo_panamaen a {
-        background-image: url('../../img/logos/panamaen.svg');
-    }
-    &.logo_salvadoren a {
-        background-image: url('../../img/logos/salvadoren.svg');
+    $logo-images: (
+        argentina: 'argentina.svg',
+        bolivia: 'bolivia.svg',
+        brasil: 'brasil.svg',
+        chile: 'chile.svg',
+        china: 'china.svg',
+        colombia: 'colombia.svg',
+        costarica: 'costarica.svg',
+        cuba: 'cuba.svg',
+        ecuador: 'ecuador.svg',
+        espana: 'espana.svg',
+        salvador: 'salvador.svg',
+        francia: 'francia.svg',
+        guatemala: 'guatemala.svg',
+        haiti: 'haiti.svg',
+        honduras: 'honduras.svg',
+        india: 'india.svg',
+        italia: 'italia.svg',
+        japon: 'japon.svg',
+        mexico: 'mexico.svg',
+        nicaragua: 'nicaragua.svg',
+        panama: 'panama.svg',
+        paraguay: 'paraguay.svg',
+        peru: 'peru.svg',
+        puertorico: 'puertorico.svg',
+        republicadominicana: 'republicadominicana.svg',
+        uruguay: 'uruguay.svg',
+        venezuela: 'venezuela.svg',
+        arabes: 'arabes.svg',
+        diabetes: 'diabetes.svg',
+        judias: 'judias.svg',
+        vegetariana: 'vegetarianas.svg',
+        veganas: 'veganas.svg',
+        brasilpt: 'brasilpt.svg',
+        cubaen: 'cubaen.svg',
+        ecuadoren: 'ecuadoren.svg',
+        peruen: 'peruen.svg',
+        guatemalaen: 'guatemalaen.svg',
+        nicaraguaen: 'nicaraguaen.svg',
+        costaricaen: 'costaricaen.svg',
+        hondurasen: 'hondurasen.svg',
+        panamaen: 'panamaen.svg',
+        salvadoren: 'salvadoren.svg'
+    );
+
+    @each $country, $file in $logo-images {
+        &.logo_#{$country} a {
+            background-image: url('../../img/logos/#{$file}');
+        }
     }
 }
 
@@ -432,16 +356,6 @@ body {
     }
 }
 
-.content_format_recipe_category,
-.content_format_posts {
-    .content_left {
-        float: right;
-    }
-    .content_right {
-        float: left;
-    }
-}
-
 .item_info {
     margin: 0 0 20px;
     .item_info_ins {
@@ -604,25 +518,6 @@ body {
     }
 }
 
-.itemEditInsWrapper {
-    @include clearer();
-    .itemEditImage {
-        width: 80px;
-        float: left;
-        img {
-            width: 100%;
-            border: 1px solid rgba($black, 0.1);
-            background: $white;
-            display: block;
-            padding: 3px;
-        }
-    }
-    .itemEditInformation {
-        width: calc(100% - 100px);
-        float: right;
-    }
-}
-
 .breadcrumbs {
     font-size: $fontSizeSmall;
     color: darken($white, 60%);
@@ -657,18 +552,10 @@ body {
         min-height: 300px;
         background: darken($white, 2%);
         padding: 10px 0;
-        border: 0;
     }
 }
 .google-auto-placed {
     margin: 20px 0;
-}
-
-.listAllSimple {
-    max-width: $sizeTablet;
-    padding: 0 10px;
-    margin: auto;
-    @include clearer();
 }
 
 .message {
@@ -689,45 +576,6 @@ body {
         color: $colorError;
         background: rgba($colorError, 0.05);
         border: 2px solid rgba($colorError, 0.1);
-    }
-}
-
-.itemMedium {
-    margin: 0 0 20px;
-    padding: 15px;
-    background: darken($white, 3%);
-    @include borderRadius(5px);
-    &:last-child {
-        margin: 0;
-    }
-    a {
-        display: block;
-        font-weight: normal;
-        color: $black;
-        @include animate();
-        @include clearer();
-        &:hover {
-            i,
-            .itemTitle {
-                color: lighten($colorText, 15%);
-            }
-        }
-    }
-    i {
-        width: 100px;
-        float: left;
-        text-align: center;
-        font-size: 50px;
-        @include animate();
-    }
-    .itemTitle {
-        color: $colorText;
-        font-weight: bold;
-        @include animate();
-    }
-    .itemInfo {
-        width: calc(100% - 120px);
-        float: right;
     }
 }
 
@@ -924,34 +772,6 @@ body {
     }
 }
 
-.buttonBig {
-    a {
-        display: block;
-        background: $colorMain;
-        border: 2px solid darken($colorMain, 15%);
-        color: $white;
-        padding: 10px 20px;
-        max-width: 200px;
-        margin: 10px auto;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: $fontSizeBig;
-        text-align: center;
-        box-shadow: 1px 1px 5px rgba($black, 0.5);
-        box-sizing: content-box;
-        text-shadow: 0 0 5px rgba($black, 0.5);
-        @include borderRadius(5px);
-        em {
-            display: block;
-            font-size: $fontSizeNormal;
-            font-style: normal;
-        }
-        &:hover {
-            background: darken($colorMain, 10%);
-        }
-    }
-}
-
 .pager_all {
     padding: 30px 10px;
     text-align: center;
@@ -979,10 +799,6 @@ body {
             color: $white;
         } 
     }
-}
-
-.captcha {
-    padding: 20px 0 0 0;
 }
 
 .posts {
@@ -1087,6 +903,10 @@ body {
     }
 }
 
+.grecaptcha-badge {
+  z-index: 9999;
+}
+
 .post_simple {
     position: relative;
     .post_ins {
@@ -1181,175 +1001,19 @@ body {
     }
 }
 
-.items_side {
-    margin: 20px 0;
-    .items_side_title {
-        padding: 10px;
-        font-size: $fontSizeSmall;
-        font-weight: bold;
-        text-align: center;
-        color: darken($colorMainAlt, 30%);
-    }
-    .items_side_items {
-        .post_minimal {
-            margin: 0 0 10px;
-        }
-    }
-    .items_side_button {
-        a {
-            max-width: 250px;
-            margin: auto;
-            display: block;
-            padding: 10px;
-            text-align: center;
-            background: darken($colorMainAlt, 30%);
-            color: $white;
-            font-weight: bold;
-            text-align: center;
-            @include borderRadius(5px);
-            @include animate();
-            &:hover {
-                background: darken($colorMainAlt, 40%);
-            }
-        }
-    }
-}
-
-.post_side {
-    margin: 0 0 20px;
-    padding: 0 0 20px;
-    border-bottom: 2px solid rgba($colorMain, 0.5);
-    position: relative;
-    &:last-child {
-        margin: 0;
-        padding: 0;
-        border: 0;
-    }
-    a {
-        display: block;
-        color: $white;
-        &::before {
-            inset: 0px;
-            content: "";
-            overflow: hidden;
-            position: absolute;
-            white-space: nowrap;
-            z-index: 1;
-        }
-    }
-    .post_image {
-        width: 70px;
-        float: left;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        padding: 3px;
-        background: $white;
-        box-shadow: 2px 2px 3px rgba($black, 0.2);
-        img {
-            display: block;
-        }
-    }
-    .post_information {
-        width: calc(100% - 90px);
-        float: right;
-        color: darken($colorAccentAlt, 20%);
-        font-size: $fontSizeSmall;
-        .post_title {
-            font-weight: bold;
-            font-size: $fontSizeNormal;
-            padding: 0 0 5px;
-            color: lighten($colorAccentAlt, 10%);
-            @include animate();
-        }
-        .post_description {
-            font-size: $fontSizeSmall * 9 / 10;
-        }
-        .post_date {
-            padding: 10px 0 0 0;
-            font-size: $fontSizeTiny;
-            i {
-                display: inline-block;
-                width: 20px;
-            }
-        }
-    }
-}
-
-.recipe_side {
-    margin: 0 0 20px;
-    padding: 0 0 20px;
-    border-bottom: 2px solid rgba($colorMain, 0.5);
-    &:last-child {
-        margin: 0;
-        padding: 0;
-        border: 0;
-    }
-    a {
-        font-weight: normal;
-        display: block;
-        @include clearer();
-        &:hover {
-            .recipe_information {
-                .recipe_title {
-                    color: lighten($colorAccent, 30%);
-                }
-            }
-        }
-    }
-    .recipe_image {
-        width: 70px;
-        float: left;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        padding: 3px;
-        background: $white;
-        box-shadow: 2px 2px 3px rgba($black, 0.2);
-        img {
-            display: block;
-        }
-    }
-    .recipe_information {
-        width: calc(100% - 90px);
-        float: right;
-        color: darken($colorAccentAlt, 20%);
-        font-size: $fontSizeSmall;
-        .recipe_title {
-            font-weight: bold;
-            font-size: $fontSizeNormal;
-            padding: 0 0 5px;
-            color: lighten($colorAccentAlt, 10%);
-            @include animate();
-        }
-        .recipe_description {
-            font-size: $fontSizeSmall * 9 / 10;
-        }
-        .recipe_date {
-            padding: 10px 0 0 0;
-            font-size: $fontSizeTiny;
-            opacity: 0.8;
-            i {
-                display: inline-block;
-                width: 20px;
-            }
-        }
-    }
-}
-
 .post_complete {
-    max-width: $sizeTablet;
-    margin: auto;
+    max-width: 650px;
+    h2, h3 {
+        margin: 20px 0;
+    }
     .post_short_description {
         color: darken($colorAccentAlt, 20%);
-        font-size: $fontSizeMedium;
-        margin: 0 0 50px;
-        padding: 0;
-        font-weight: 400;
+        font-size: calc($fontSizeBig * 9 / 10);
         padding: 0 0 30px;
+        font-weight: 400;
     }
     .post_short_info {
-        margin: 0 0 50px;
+        margin: 0 0 10px;
         @include clearer();
         .post_short_info_left {
             width: 50%;
@@ -1398,7 +1062,6 @@ body {
     .post_reading_time {
         font-size: $fontSizeSmall;
         color: rgba($colorAccent, 0.9);
-        padding: 5px 0 0 0;
         padding: 0 0 10px;
     }
     .share_options {
@@ -1430,15 +1093,6 @@ body {
                     color: $colorTwitter;
                 }
             }
-        }
-    }
-    @include mobile {
-        .post_short_description {
-            font-size: $fontSizeMedium;
-            margin: 0 0 10px;
-        }
-        .post_short_info {
-            margin: 0 0 10px;
         }
     }
 }
@@ -1480,12 +1134,6 @@ body {
     }
 }
 
-.form_site_border {
-    padding: 15px;
-    background: rgba($black, 0.02);
-    border: 2px solid rgba($black, 0.05);
-    @include borderRadius(10px);
-}
 .form_site {
     padding: 20px;
     margin: 0;
@@ -1708,272 +1356,6 @@ body {
     }
 }
 
-.buttons_icons {
-    .button {
-        width: 30px;
-        height: 30px;
-        line-height: 32px;
-        padding: 0;
-        text-align: center;
-        margin: 0 5px 0 0;
-        font-size: 20px;
-        border: 0;
-        display: inline-block;
-        @include borderRadius(3px);
-        &:last-child {
-            margin: 0;
-        }
-    }
-}
-
-.simple_form {
-    max-width: $sizeMobile - 40px;
-    margin: 40px auto;
-    padding: 20px;
-    border: 2px solid rgba($colorAccent, 0.2);
-    background: rgba($colorAccent, 0.02);
-    background: $white;
-    @include borderRadius(10px);
-    @include mobile {
-        max-width: 100%;
-        margin: 0;
-        border: 0;
-        padding: 0;
-    }
-    &.simple_form_medium {
-        max-width: $sizeTablet - 40px;
-    }
-    .form_site {
-        padding: 0;
-    }
-    p {
-        padding: 0 0 1.5em;
-        margin: 0;
-        color: rgba($black, 0.6);
-        &:last-child {
-            padding: 0;
-        }
-    }
-    .simple_form_actions {
-        margin: 20px 0 0 0;
-        a {
-            display: block;
-            margin: 0 0 10px;
-            font-weight: normal;
-            color: darken($colorMain, 20%);
-            text-align: center;
-            @include animate();
-            &:hover {
-                color: darken($colorMain, 40%);
-            }
-            &:last-child {
-                margin: 0;
-            }
-        }
-    }
-}
-
-.form_fields_image {
-    position: relative;
-    height: 130px;
-    max-width: 400px;
-    .form_fields_image_ins {
-        background: rgba($black, 0.05);
-        padding: 10px;
-        @include borderRadius(3px);
-    }
-    .form_fields_image_delete {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-        background: $colorError;
-        color: $white;
-        text-align: center;
-        font-size: 15px;
-        cursor: pointer;
-        @include borderRadius(3px);
-        &:hover {
-            background: darken($colorError, 20%);
-        }
-    }
-    img {
-        padding: 5px;
-        background: $white;
-        height: 100px;
-        @include darkShadow();
-    }
-}
-.form_fields_images {
-    @include clearer();
-    .form_fields_image {
-        float: left;
-    }
-}
-.form_fields_file {
-    padding-top: 3px;
-    font-size: $fontSizeSmall;
-    a,
-    .form_fields_file_delete {
-        background: $colorAccent;
-        color: $white;
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 3px 0 0 0;
-        font-weight: bold;
-        font-size: $fontSizeSmall;
-        cursor: pointer;
-        color: $white;
-        @include borderRadius(3px);
-        @include animate();
-        &:hover {
-            background: darken($colorAccent, 10%);
-        }
-    }
-    .form_fields_file_delete {
-        background: $colorError;
-        &:hover {
-            background: darken($colorError, 20%);
-        }
-    }
-}
-
-.drag_field_wrapper_all {
-    .drag_field_wrapper_file {
-        .form_fields_file {
-            padding: 0 0 10px;
-        }
-        a,
-        span {
-            margin: 0;
-        }
-    }
-    .drag_field_file_name {
-        display: none;
-        padding: 0 0 5px;
-        font-size: $fontSizeSmall;
-        color: rgba($black, 0.6);
-        em {
-            font-style: normal;
-            font-weight: bold;
-            color: rgba($black, 0.8);
-        }
-    }
-}
-.drag_field_wrapper {
-    position: relative;
-    height: 150px;
-    max-width: 400px;
-    .drag_field_wrapper_image {
-        display: none;
-    }
-    .drag_field_wrapper_input {
-        display: block;
-    }
-    &.drag_field_wrapper_has_image {
-        .drag_field_wrapper_image {
-            display: block;
-        }
-        .drag_field_wrapper_input {
-            display: none;
-        }
-    }
-}
-.drag_field_wrapper_input {
-    .drag_field_drag {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 20px;
-        padding: 10px;
-        border: 3px dashed rgba($colorAccent, 0.2);
-        background: rgba($white, 0.7);
-        text-align: center;
-        color: $colorAccent;
-        cursor: pointer;
-        box-sizing: border-box;
-        &.drag_field_drag_selected {
-            border: 3px dashed $colorPositive;
-        }
-    }
-    .drag_field_drag_message {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        transform: translateY(-50%);
-        padding: 10px;
-        .drag_field_drag_message_small {
-            display: block;
-            margin: 5px 0 0 0;
-            font-size: $fontSizeSmall * 0.9;
-        }
-    }
-    .drag_field_file {
-        width: 0;
-        height: 0;
-        overflow: hidden;
-    }
-    .drag_field_image {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 20px;
-        display: none;
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            overflow: hidden;
-        }
-    }
-    i {
-        font-size: 20px;
-        margin: 0 0 3px;
-        display: block;
-    }
-    span {
-        font-size: $fontSizeSmall;
-    }
-}
-
-.drag_field_loader {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    .drag_field_loader_message {
-        font-size: $fontSizeSmall * 0.9;
-        color: rgba($black, 0.4);
-        font-style: italic;
-        padding: 0 0 3px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .drag_field_loader_bar_wrapper {
-        background: $white;
-        width: 100%;
-        height: 3px;
-        position: relative;
-        .drag_field_loader_bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            background: $colorPositive;
-            width: 0;
-            &.drag_field_loader_bar_loaded {
-                background: $colorNeutral;
-            }
-        }
-    }
-}
-
 .categories {
     padding: 20px 0 20px 0;
     border-top: 5px solid rgba($colorAccent, 0.1);
@@ -2063,48 +1445,14 @@ body {
     .icon-star {
         color: rgba($black, 0.1);
     }
-    &.rating_1 {
-        .icon-star {
-            &:nth-child(1) {
-                color: $colorMain;
-            }
-        }
-    }
-    &.rating_2 {
-        .icon-star {
-            &:nth-child(1),
-            &:nth-child(2) {
-                color: $colorMain;
-            }
-        }
-    }
-    &.rating_3 {
-        .icon-star {
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3) {
-                color: $colorMain;
-            }
-        }
-    }
-    &.rating_4 {
-        .icon-star {
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3),
-            &:nth-child(4) {
-                color: $colorMain;
-            }
-        }
-    }
-    &.rating_5 {
-        .icon-star {
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3),
-            &:nth-child(4),
-            &:nth-child(5) {
-                color: $colorMain;
+    @for $i from 1 through 5 {
+        &.rating_#{$i} {
+            .icon-star {
+                @for $j from 1 through $i {
+                    &:nth-child(#{$j}) {
+                        color: $colorMain;
+                    }
+                }
             }
         }
     }
@@ -2190,7 +1538,6 @@ body {
     }
     .recipe_image {
         width: 140px;
-        float: right;
         float: left;
         padding: 5px;
         background: $white;
@@ -2402,26 +1749,6 @@ body {
     }
 }
 
-
-.recipe_wrapper_all {
-    margin: 0 0 20px;
-    @include clearer();
-    .recipe_wrapper_all_left {
-        width: 340px;
-        float: left;
-    }
-    .recipe_wrapper_all_right {
-        width: calc(100% - 350px);
-        float: right;
-    }
-    @include mobile() {
-        .recipe_wrapper_all_left,
-        .recipe_wrapper_all_right {
-            width: auto;
-            float: none;
-        }
-    }
-}
 .recipe_wrapper {
     padding: 15px;
     background: rgba($colorAccent, 0.01);
@@ -2855,17 +2182,6 @@ body {
     }
 }
 
-.recipe_complete_link_friend,
-.recipe_complete_link_friend_bottom {
-    font-size: $fontSizeMedium;
-    a {
-        color: $colorAccent;
-    }
-    @include mobile {
-        font-size: $fontSizeNormal;
-    }
-}
-
 .recipes_minimal {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -3079,19 +2395,22 @@ body {
 }
 
 .recipe_versions_top {
-    margin: 0 0 20px 20px;
-    padding: 10px 10px 10px 45px;
+    margin: 0 0 20px;
+    padding: 10px;
     border: 5px solid $colorMain;
     position: relative;
     @include borderRadius(10px);
+    p {
+        padding: 0 0 10px 30px;
+    }
     .recipe_versions_top_decoration {
         position: absolute;
-        width: 60px;
-        height: 60px;
-        top: -23px;
-        left: -27px;
+        width: 35px;
+        height: 35px;
+        top: -18px;
+        left: -13px;
         color: $colorMain;
-        font-size: 60px;
+        font-size: 35px;
         line-height: 1em;
         rotate: -25deg;
         text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
@@ -3106,7 +2425,7 @@ body {
         }
     }
     ol {
-        margin: 0 0 0 40px;
+        margin: 0 0 0 30px;
         padding: 0;
         li {
             padding: 0;
@@ -3125,9 +2444,6 @@ body {
             span {
                 display: block;
             }
-        }
-        ol {
-            margin: 0;
         }
     }
 }
@@ -3492,12 +2808,11 @@ body {
             font-weight: normal;
         }
         img {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             display: block;
-            margin: 0 0 5px;
-            margin: auto;
+            margin: 0 auto 10px auto;
         }
         a,
         .trigger_newsletter {
@@ -3509,7 +2824,7 @@ body {
             background: $white;
             border: 1px solid rgba($colorAccent, 0.3);
             color: lighten($colorAccent, 10%);
-            font-size: $fontSizeSmall;
+            font-size: $fontSizeMedium;
             @include borderRadius(5px);
             &:hover {
                 color: $colorAccent;
@@ -3522,6 +2837,7 @@ body {
         p {
             padding: 0;
             margin: 0;
+            line-height: 1.2em;
         }
     }
     .newsletter_recipe_ins {
@@ -3619,7 +2935,6 @@ body {
         height: 40px;
         object-fit: contain;
         display: block;
-        margin: 0 0 5px;
         margin: auto;
     }
 }

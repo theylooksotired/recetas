@@ -32,31 +32,6 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public function renderMedium()
-    {
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
-        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
-        return '
-            <div class="post">
-                <a class="post_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image">' . $image . '</div>
-                    <div class="post_information">
-                        <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="post_short_description">' . $shortDescription . '</div>
-                        <div class="post_date">
-                            <i class="icon icon-date"></i>
-                            <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
-                        </div>
-                        <div class="post_reading_time">
-                            <i class="icon icon-time"></i>
-                            <span>' . Text::readingTime($this->object->get('description')) . '</span>
-                        </div>
-                    </div>
-                </a>
-            </div>';
-    }
-
     public function renderPublicSimple()
     {
         $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
@@ -75,42 +50,6 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    public function renderIntro($options = [])
-    {
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
-        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
-        return '
-            <div class="post">
-                <div class="post_image post_image_simple">' . $image . '</div>
-                <div class="post_information">
-                    <h3 class="post_title">' . $this->object->link() . '</h3>
-                    <div class="post_date">
-                        <i class="icon icon-date"></i>
-                        <span>' . Date::sqlText($this->object->get('publish_date')) . '</span>
-                    </div>
-                    <div class="post_short_description">' . $shortDescription . '</div>
-                </div>
-            </div>';
-    }
-
-    public function renderIntroTop($options = [])
-    {
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'web') : $this->object->getImageWidth('image', 'web');
-        $shortDescription = ($this->object->get('meta_description') != '') ? $this->object->get('meta_description') : $this->object->get('short_description');
-        return '
-            <div class="post_top">
-                <a class="post_top_ins" title="' . $this->object->getBasicInfoTitle() . '" href="' . $this->object->url() . '">
-                    <div class="post_image post_image_simple">' . $image . '</div>
-                    <div class="post_information">
-                        <div class="post_title">' . $this->object->getBasicInfo() . '</div>
-                        <div class="post_short_description">' . $shortDescription . '</div>
-                    </div>
-                </a>
-            </div>';
-    }
-
     public function renderPreloadImage()
     {
         return '<link rel="preload" as="image" href="' . $this->object->getImageUrlWebp('image', 'web') . '">';
@@ -124,30 +63,9 @@ class Post_Ui extends Ui
         }
     }
 
-    public function renderSide($options = [])
-    {
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
-        $image = ($mode == 'amp') ? $this->object->getImageAmpWebp('image', 'small') : $this->object->getImageWidth('image', 'small');
-        return '
-            <div class="post_minimal">
-                <div class="post_minimal_ins">
-                    <div class="post_image">' . $image . '</div>
-                    <h3 class="post_title">
-                        <a href="' . $this->object->url() . '" title="' . $this->object->getBasicInfoTitle() . '">' . $this->object->getBasicInfo() . '</a>
-                    </h3>
-                </div>
-            </div>';
-    }
-
     public function renderComplete()
     {
         $this->object->loadMultipleValues();
-        $this->object->loadTranslation();
-        $share = $this->share(['share' => [
-            ['key' => 'facebook', 'icon' => '<i class="icon icon-facebook"></i>'],
-            ['key' => 'twitter', 'icon' => '<i class="icon icon-twitter"></i>'],
-        ]]);
-        $mode = (Parameter::code('mode') != '') ? Parameter::code('mode') : 'amp';
         // Images
         $images = [];
         foreach ($this->object->get('images') as $item) {
@@ -157,7 +75,7 @@ class Post_Ui extends Ui
             } else {
                 $images[] = '
                     <figure class="post_image">
-                        ' . $item->getImageWidth('image', 'web') . '
+                        ' . $item->getImageWidth('image', 'web', '', false, $item->get('title')) . '
                         ' . (($item->get('title') != '') ? '<figcaption>' . $item->get('title') . '</figcaption>' : '') . '
                     </figure>';
             }
@@ -187,19 +105,11 @@ class Post_Ui extends Ui
         }
         $paragraphsResult = array_merge($paragraphsResult, $images);
         $text = implode('', $paragraphsResult);
-        $translationLink = '';
-        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
-            $translationLink = '
-                <p class="recipe_complete_translation">
-                    <a href="' . $this->object->translation_url . '" target="_blank" class="button">' . __('view_in_' . Translate_Controller::translateTo()) . '</a>
-                </p>';
-        }
         return '
             <figure class="post_image">
                 ' . $this->object->getImageWidth('image', 'web') . '
                 <figcaption>' . $this->object->getBasicInfo() . '</figcaption>
             </figure>
-            ' . $translationLink . '
             <article class="post_complete">
                 <div class="post_complete_ins post-content" id="post-container">
                     <div class="post_short_info">
@@ -217,11 +127,7 @@ class Post_Ui extends Ui
                         ' . $text . '
                     </div>
                 </div>
-            </article>
-            <div class="item_complete_share">
-                <h2 class="item_complete_share_title">' . __('help_us_sharing') . '</h2>
-                ' . $share . '
-            </div>';
+            </article>';
     }
 
     public function renderRelated()
@@ -251,18 +157,6 @@ class Post_Ui extends Ui
             </div>';
     }
 
-    // Overwrite this function for the public form
-    public function linkDeleteImage($valueFile)
-    {
-        return url('cuenta/borrar-imagen-articulo/' . $this->object->id());
-    }
-
-    public static function introTop($options = [])
-    {
-        $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '3']);
-        return '<div class="posts_top_wrapper">' . $items->showList(['function' => 'IntroTop']) . '</div>';
-    }
-
     public static function intro($options = [])
     {
         $items = (isset($options['items'])) ? $options['items'] : new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'publish_date DESC', 'limit' => '6']);
@@ -285,100 +179,6 @@ class Post_Ui extends Ui
             ' . HtmlSection::show('intro_posts') .'
             <h2>' . __('posts_list') . '</h2>
             <div class="posts_grid">' . $items->showList(['function' => 'PublicSimple']) . '</div>';
-    }
-
-    public static function menuSide($options = [])
-    {
-        $items = new ListObjects('Post', ['where' => 'publish_date<=NOW() AND active="1"', 'order' => 'views DESC', 'limit' => 3]);
-        return '
-            ' . Adsense::responsive('middle') . '
-            <div class="items_side">
-                <h2 class="items_side_title">' . __('last_posts') . '</h2>
-                <div class="items_side_items">' . $items->showList(['function' => 'Side'], $options) . '</div>
-                <div class="items_side_button"><a href="' . url('articulos') . '">' . __('view_all_posts') . '</a></div>
-            </div>';
-    }
-
-    public function renderEdit()
-    {
-        $html = '
-            <div class="itemEditInsWrapper">
-                <div class="itemEditImage">' . $this->object->getImageWidth('image', 'small') . '</div>
-                <div class="itemEditInformation">
-                    <div class="itemEditTitle">' . $this->object->getBasicInfo() . '</div>
-                    <div class="itemEditCreated">' . __('created') . ' : ' . Date::sqlText($this->object->get('created')) . '</div>
-                    <div class="itemEditModified">' . __('updated') . ' : ' . Date::sqlText($this->object->get('modified')) . '</div>
-                </div>
-            </div>';
-        if ($this->object->get('active') == '1') {
-            return '
-                <div class="itemEdit">
-                    <div class="itemEditIns">
-                        <a href="' . $this->object->url() . '" target="_blank">' . $html . '</a>
-                    </div>
-                </div>';
-        }
-        return '
-            <div class="itemEdit">
-                <div class="itemEditIns">
-                    <a href="' . url('cuenta/editar-articulo/' . $this->object->id()) . '">' . $html . '</a>
-                </div>
-                    <div class="itemEditDelete">
-                        <a href="' . url('cuenta/borrar-articulo/' . $this->object->id()) . '" class="confirm" data-confirm="' . __('are_you_sure_delete') . '">
-                            <i class="icon icon-delete"></i>
-                            <span>' . __('delete') . '</span>
-                        </a>
-                    </div>
-            </div>';
-    }
-
-    public static function introConnected()
-    {
-        $login = User_Login::getInstance();
-        $itemsNotActive = new ListObjects('Post', ['where' => 'id_user=:id_user AND (active!="1" OR active IS NULL)', 'order' => 'created DESC'], ['id_user' => $login->id()]);
-        $itemsActive = new ListObjects('Post', ['where' => 'id_user=:id_user AND active="1"', 'order' => 'created DESC'], ['id_user' => $login->id()]);
-        if ($itemsNotActive->isEmpty() && $itemsActive->isEmpty()) {
-            return '<div class="message">' . __('no_posts_uploaded') . '</div>';
-        }
-        return '
-            <div class="group_connected_wrapper">
-
-                ' . ((!$itemsNotActive->isEmpty()) ? '
-                <div class="group_connected">
-                    <div class="group_connected_title">' . __('posts_to_edit') . '</div>
-                    <div class="group_connected_items">
-                        ' . $itemsNotActive->showList(['function' => 'Edit']) . '
-                    </div>
-                </div>' : '') . '
-
-                ' . ((!$itemsActive->isEmpty()) ? '
-                <div class="group_connected">
-                    <div class="group_connected_title">' . __('post_approved') . '</div>
-                    <div class="group_connected_items">
-                        ' . $itemsActive->showList(['function' => 'Edit']) . '
-                    </div>
-                </div>' : '') . '
-
-            </div>';
-    }
-
-    public static function menuConnected($options = [])
-    {
-        return '
-            <div class="group_connected_top">
-                ' . ((in_array('upload', $options)) ? '
-                    <a href="' . url('cuenta/subir-articulo') . '" class="group_connected_insert">
-                        <i class="icon icon-plus"></i>
-                        <span>' . __('add') . '</span>
-                    </a>
-                ' : '') . '
-                ' . ((in_array('list', $options)) ? '
-                    <a href="' . url('cuenta/articulos') . '">
-                        <i class="icon icon-list"></i>
-                        <span>' . __('view_list') . '</span>
-                    </a>
-                ' : '') . '
-            </div>';
     }
 
     public static function sitemapUrls()
