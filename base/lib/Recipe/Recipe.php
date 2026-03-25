@@ -434,6 +434,8 @@ class Recipe extends Db_Object
         $answer = ChatGPT::answerJson($question);
         $response = [];
         if (isset($answer['pasos'])) {
+            $response['prompt_receta'] = "Haz una imagen realista de esta receta, debe ser un plato central, de preferencia circular y cenital, con mucho aire al borde y un fondo tradicional, no uses textos ni leyendas. La receta es: " . $this->showUi('Text');
+            $response['prompt_final'] = "Haz una imagen realista de una persona que esta comiendo o bebiendo el plato de esta receta, debe ser un plato central. De preferencia usa elementos de " . Parameter::code('country_code') . " y dale mucho aire a los bordes de la imagen. La receta es: " . $this->showUi('Text');
             $response['prompt_ingredientes'] = "Haz una imagen solamente con los ingredientes de esta receta, no uses textos ni leyendas, la imagen debe contener solamente los ingredientes. La receta es: " . $this->showUi('Text');
             $ingredients = [];
             foreach ($this->get('ingredients') as $ingredient) {
