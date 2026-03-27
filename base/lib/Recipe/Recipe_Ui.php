@@ -510,9 +510,8 @@ class Recipe_Ui extends Ui
             foreach ($recipesSearch->list as $recipeSearch) {
                 $idsNotIn[] = $recipeSearch->id();
             }
-            $where = (count($idsNotIn) > 0) ? 'id NOT IN (' . implode(',', $idsNotIn) . ') AND ' : '';
             $recipesSearchMore = new ListObjects('Recipe', [
-                'where' => $where . 'id_category=:id_category AND active="1"',
+                'where' => 'id_category=:id_category AND active="1" AND id NOT IN (' . implode(',', $idsNotIn) . ')',
                 'limit' => (8 - $recipesSearch->count()),
                 'order' => 'id'
             ], [
@@ -525,7 +524,6 @@ class Recipe_Ui extends Ui
         }
         return '
             <div class="related">
-                ' . ((!$recipesSearch->isEmpty()) ? '
                 <div class="related_block">
                     <h2 class="related_title">' . __('similar_recipes') . '</h2>
                     <div class="recipes_minimal">
@@ -533,7 +531,6 @@ class Recipe_Ui extends Ui
                         ' . $recipesSearchMoreHtml . '
                     </div>
                 </div>
-                ' : '') . '
                 <div class="related_block">
                     <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
                     <div class="posts">
