@@ -488,54 +488,6 @@ class Recipe_Ui extends Ui
 
     public function renderRelated()
     {
-        $simpleCountries = ['guatemala', 'puertorico'];
-        if (in_array(Parameter::code('country_code'), $simpleCountries)) {
-            return $this->renderRelatedSimple();
-        }
-        $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
-        $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', ['order' => 'views DESC', 'limit' => 6 - $posts->count()]) : null;
-        $categoriesIds = Category::arrayCategories();
-        $recipesBefore = new ListObjects('Recipe', ['where' => 'id > :id AND id_category=:id_category AND active="1"', 'limit' => 16, 'order' => 'id'], ['id' => $this->object->id(), 'id_category' => $this->object->get('id_category')]);
-        $recipesBeforeHtml = '';
-        foreach ($recipesBefore->list as $recipeBefore) {
-            $recipeBefore->category = (isset($categoriesIds[$recipeBefore->get('id_category')])) ? $categoriesIds[$recipeBefore->get('id_category')] : null;
-            $recipesBeforeHtml .= $recipeBefore->showUi('Minimal');
-        }
-        $search = Text::simpleUrl($this->object->getBasicInfo(), ' ');
-        $recipesSearch = new ListObjects('Recipe', [
-            'where' => 'id!="' . $this->object->id() . '" AND active="1" AND MATCH (title, title_url, short_description) AGAINST ("' . $search . '" IN BOOLEAN MODE)',
-            'order' => 'MATCH (title, title_url) AGAINST ("' . $search . '") DESC',
-            'limit' => '8',
-        ]);
-        $recipesSearchHtml = '';
-        foreach ($recipesSearch->list as $recipeSearch) {
-            $recipeSearch->category = (isset($categoriesIds[$recipeSearch->get('id_category')])) ? $categoriesIds[$recipeSearch->get('id_category')] : null;
-            $recipesSearchHtml .= $recipeSearch->showUi('Minimal');
-        }
-        return '
-            <div class="related">
-                ' . (($recipesSearchHtml != '') ? '
-                <div class="related_block">
-                    <h2 class="related_title">' . __('similar_recipes') . '</h2>
-                    <div class="recipes_minimal">' . $recipesSearchHtml . '</div>
-                </div>
-                ' : '') . '
-                <div class="related_block">
-                    <h2 class="related_title">' . __('other_recipes') . '</h2>
-                    <div class="recipes_minimal">' . $recipesBeforeHtml . '</div>
-                </div>
-                <div class="related_block">
-                    <h2 class="related_title">' . str_replace('#TITLE#', strtolower($this->object->getBasicInfo()), __('posts_related_to')) . '</h2>
-                    <div class="posts">
-                        ' . $posts->showList(['function' => 'PublicSimple']) . '
-                        ' . (($postsExtra) ? $postsExtra->showList(['function' => 'PublicSimple']) : '') . '
-                    </div>
-                </div>
-            </div>';
-    }
-
-    public function renderRelatedSimple()
-    {
         $posts = new ListObjects('Post', ['where' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE)', 'order' => 'MATCH (title, title_url, short_description) AGAINST (:match IN BOOLEAN MODE) DESC', 'limit' => '6'], ['match' => $this->object->getBasicInfo()]);
         $postsExtra = ($posts->count() < 6) ? new ListObjects('Post', ['order' => 'views DESC', 'limit' => 6 - $posts->count()]) : null;
         $categoriesIds = Category::arrayCategories();
