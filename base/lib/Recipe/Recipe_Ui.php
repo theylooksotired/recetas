@@ -510,8 +510,9 @@ class Recipe_Ui extends Ui
             foreach ($recipesSearch->list as $recipeSearch) {
                 $idsNotIn[] = $recipeSearch->id();
             }
+            $where = (count($idsNotIn) > 0) ? 'id NOT IN (' . implode(',', $idsNotIn) . ') AND ' : '';
             $recipesSearchMore = new ListObjects('Recipe', [
-                'where' => 'id_category=:id_category AND active="1" AND id NOT IN (' . implode(',', $idsNotIn) . ')',
+                'where' => $where . 'id_category=:id_category AND active="1"',
                 'limit' => (8 - $recipesSearch->count()),
                 'order' => 'id'
             ], [
