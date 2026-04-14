@@ -343,7 +343,7 @@ class Recipe extends Db_Object
         }
     }
 
-    public function toJson()
+    public function toJson($simple = false)
     {
         $categories = Category::allToJson();
         $countryCode = Parameter::code('country_code');
@@ -359,6 +359,20 @@ class Recipe extends Db_Object
         unset($infoIns['id_user']);
         unset($infoIns['friend_links']);
         unset($infoIns['description_bottom']);
+        unset($infoIns['adsense_dates']);
+        unset($infoIns['adsense_earnings']);
+        unset($infoIns['adsense_visits']);
+        unset($infoIns['adsense_info']);
+        unset($infoIns['check_versions']);
+        unset($infoIns['ingredients_raw']);
+        unset($infoIns['preparation_raw']);
+        unset($infoIns['link_es']);
+        unset($infoIns['link_en']);
+        unset($infoIns['preparation']);
+        unset($infoIns['images']);
+        unset($infoIns['questions']);
+        unset($infoIns['reviews']);
+
         
         $infoIns['country'] = $countryCode;
         $infoIns['url'] = $this->url();
@@ -369,6 +383,16 @@ class Recipe extends Db_Object
         $infoIns['diet'] = $infoIns['diet'];
         $infoIns['diet_label'] = __($infoIns['diet']);
         $infoIns['id_category_name'] = $categories[$infoIns['id_category']];
+
+        if ($simple) {
+            $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
+            $ingredientsLabels = [];
+            foreach ($ingredients as $ingredient) {
+                $ingredientsLabels[] = $ingredient->labelSimple();
+            }
+            $infoIns['ingredients'] = $ingredientsLabels;
+            return $infoIns;
+        }
 
         $ingredients = (new RecipeIngredient)->readList(['where' => 'id_recipe=:id_recipe', 'order'=>'ord'], ['id_recipe' => $infoIns['id']]);
         $infoIns['ingredients'] = [];

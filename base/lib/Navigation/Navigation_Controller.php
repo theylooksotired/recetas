@@ -600,8 +600,6 @@ class Navigation_Controller extends Controller
                 $this->checkAuthorization();
                 switch ($this->id) {
                     default:
-                        $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
-                        $reviews = (new RecipeReview)->readList(['where' => 'active!="1" OR active IS NULL', 'order' => 'created DESC']);
                         $recipesCount = (new Recipe)->countResults();
                         $recipesCountNoContent = (new Recipe)->countResults(['where' => 'title_page="" OR title_page IS NULL']);
                         $info = [
@@ -615,19 +613,53 @@ class Navigation_Controller extends Controller
                             'reviews' => [],
                             'url' => url(''),
                         ];
-                        foreach ($questions as $question) {
-                            $info['questions'][] = $question->toJson();
+                        if (isset($this->parameters['questions'])) {
+                            $questions = (new Question)->readList(['where' => 'published!="1" OR published IS NULL', 'order' => 'created DESC']);
+                            foreach ($questions as $question) {
+                                $info['questions'][] = $question->toJson();
+                            }
                         }
-                        foreach ($reviews as $review) {
-                            $info['reviews'][] = $review->toJson();
+                        if (isset($this->parameters['reviews'])) {
+                            $reviews = (new RecipeReview)->readList(['where' => 'active!="1" OR active IS NULL', 'order' => 'created DESC']);
+                            foreach ($reviews as $review) {
+                                $info['reviews'][] = $review->toJson();
+                            }
                         }
                         return json_encode($info, JSON_PRETTY_PRINT);
                     break;
                     case 'list-recipes':
                         $recipes = (new Recipe)->readList(['order' => 'id']);
                         $recipesInfo = [];
-                        foreach ($recipes as $recipe) {
-                            $recipesInfo[] = ['id' => $recipe->id(), 'title' => $recipe->getBasicInfo(), 'url' => $recipe->url()];
+                        if (isset($this->parameters['complete'])) {
+                            $content = [
+                                'site' => [
+                                    'title' => Parameter::code('meta_title_page'),
+                                    'title_page' => Parameter::code('meta_title_page'),
+                                    'title_country' => Parameter::code('meta_title_header_bottom'),
+                                    'description' => Parameter::code('meta_description'),
+                                    'intro' => HtmlSection::show('intro'),
+                                    'country' => Parameter::code('country_code'),
+                                    'url' => url('')
+                                ],
+                                'categories' => [],
+                                'recipes' => []
+                            ];
+                            $categories = (new Category)->readList(['order' => 'ord']);
+                            foreach ($categories as $category) {
+                                $content['categories'][] = json_decode($category->toJson());
+                            }
+                            foreach ($recipes as $recipe) {
+                                $content['recipes'][] = $recipe->toJson(true);
+                            }
+                            return json_encode($content);
+                        } else {
+                            foreach ($recipes as $recipe) {
+                                $recipesInfo[] = [
+                                    'id' => $recipe->id(),
+                                    'title' => $recipe->getBasicInfo(),
+                                    'url' => $recipe->url()
+                                ];
+                            }
                         }
                         return json_encode($recipesInfo);
                     break;
