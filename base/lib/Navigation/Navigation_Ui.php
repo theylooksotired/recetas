@@ -109,13 +109,12 @@ class Navigation_Ui extends Ui
 
     public function footer()
     {
-        // <a href="https://www.recetario-de-cocina.com/publicar-articulos">Publicar en nuestro sitio web</a>
         return '
             <footer class="footer">
                 <div class="footer_ins">
                     <div class="footer_links_wrapper">
                         <div class="footer_links">
-                            <div class="footer_links_title">Otros sitios de cocina por países</div>
+                            <div class="footer_links_title">' . Parameter::code('footer_links_title_site') . '</div>
                             <a href="https://www.recetas-argentinas.com" rel="nofollow" title="Recetas de Argentina">Argentina</a>
                             <a href="https://www.cocina-boliviana.com" rel="nofollow" title="Recetas de Bolivia">Bolivia</a>
                             <a href="https://www.cocina-brasilena.com" rel="nofollow" title="Recetas de Brasil">Brasil</a>
@@ -146,7 +145,7 @@ class Navigation_Ui extends Ui
                             <a href="https://www.recetas-venezolanas.com" rel="nofollow" title="Recetas de Venezuela">Venezuela</a>
                         </div>
                         <div class="footer_links">
-                            <div class="footer_links_title">Otros sitios de cocina por tipos</div>
+                            <div class="footer_links_title">' . Parameter::code('footer_links_title_type') . '</div>
                             <a href="https://www.recetas-arabes.com" rel="nofollow" title="Recetas árabes">Árabes</a>
                             <a href="https://www.recetasdiabetes.com" rel="nofollow" title="Recetas para diabéticos">Diabetes</a>
                             <a href="https://www.recetas-judias.com" rel="nofollow" title="Recetas judías">Judías</a>
@@ -157,12 +156,12 @@ class Navigation_Ui extends Ui
                     <div class="footer_down">
                         <div class="footer_down_ins">
                             <p>
-                                <a href="' . url('politicas-privacidad') . '">Políticas de Privacidad</a> |
-                                <a href="' . url('terminos-condiciones') . '">Términos y condiciones</a>
+                                <a href="' . url('politicas-privacidad') . '">' . Parameter::code('privacy_policy') . '</a> |
+                                <a href="' . url('terminos-condiciones') . '">' . Parameter::code('terms_conditions') . '</a>
                             </p>
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
-                            <p>' . Parameter::code('meta_description') . ' Diviértete cocinando y no dudes en compartir tus preparaciones y críticas.</p>
-                            <p>Escríbenos a <a href="mailto:info@plasticwebs.com">info@plasticwebs.com</a></p>
+                            <p>' . Parameter::code('meta_description') . ' ' . Parameter::code('footer_additional_info') . '</p>
+                            <p>' . Parameter::code('footer_contact_info') . ' <a href="mailto:info@plasticwebs.com">info@plasticwebs.com</a></p>
                         </div>
                     </div>
                 </div>
