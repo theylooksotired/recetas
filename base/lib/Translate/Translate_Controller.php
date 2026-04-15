@@ -16,7 +16,7 @@ class Translate_Controller extends Controller
         switch ($this->action) {
             case 'all':
                 $this->mode = 'json';
-                //$this->checkAuthorization();
+                $this->checkAuthorization();
                 $result = ['status' => 'NOK'];
 
                 // Categories
@@ -78,25 +78,6 @@ class Translate_Controller extends Controller
         }
     }
 
-    static public function loadTranslations()
-    {
-        $translations = [];
-        if (Parameter::code('translated_site') == 'true') {
-            $countryCode = Parameter::code('country_code');
-            $siteLanguage = Language::active();
-            $directory = ASTERION_BASE_FILE . 'data/';
-            $files = glob($directory . '*.json');
-            foreach ($files as $file) {
-                if (strpos($file, $countryCode . '_') !== false) {
-                    $languageFile = str_replace($countryCode . '_', '', File::filename($file));
-                    $translations[$languageFile] = json_decode(file_get_contents($file), true);
-                }
-            }
-            $translations = (isset($translations[Translate_Controller::translateTo()])) ? $translations[Translate_Controller::translateTo()] : [];
-        }
-        return $translations;
-    }
-
     static public function translateTo()
     {
         return (Language::active() == 'es') ? 'en' : 'es';
@@ -104,10 +85,7 @@ class Translate_Controller extends Controller
 
     static public function alternateUrl($code = 'main')
     {
-        $translations = Translate_Controller::loadTranslations();
-        if (isset($translations[$code])) {
-            return '<link rel="alternate" hreflang="' . Translate_Controller::translateTo() . '" href="' . $translations[$code] . '"/>';
-        }
+        // return '<link rel="alternate" hreflang="' . Translate_Controller::translateTo() . '" href="' . $translations[$code] . '"/>';
     }
 
 }

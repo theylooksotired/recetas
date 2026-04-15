@@ -26,6 +26,16 @@ class Post extends Db_Object
         return url('articulos/' . $this->get('title_url'));
     }
 
+    public function urlEs()
+    {
+        return url('articulos/' . $this->values['title_url']);
+    }
+    
+    public function urlEn()
+    {
+        return url('articulos/' . $this->values['title_url_en']);
+    }
+
     public function urlUploadTempImagePublic()
     {
         return url('cuenta/subir-imagen-temporal');
@@ -98,8 +108,7 @@ class Post extends Db_Object
     public function loadTranslation()
     {
         if (!isset($this->translation_url)) {
-            $translations = Translate_Controller::loadTranslations();
-            $this->translation_url = (isset($translations['post_' . $this->id()])) ? $translations['post_' . $this->id()] : '';
+            $this->translation_url = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', $this->urlEs()) : str_replace('//www.', '//en.', $this->urlEn());
         }
         return $this->translation_url;
     }
