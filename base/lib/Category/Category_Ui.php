@@ -13,6 +13,7 @@ class Category_Ui extends Ui
         $recipesHtml = '';
         foreach ($recipes->list as $recipe) {
             $recipe->category = $this->object;
+            $recipe->loadTranslated(true);
             $recipesHtml .= $recipe->showUi('Link');
         }
         $recipeInit = (count($recipes->list) > 0) ? $recipes->list[0] : new Recipe();
@@ -47,6 +48,7 @@ class Category_Ui extends Ui
         $categoriesIds = Category::arrayCategories();
         foreach ($recipes as $recipe) {
             $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+            $recipe->loadTranslated(true);
         }
         if (count($recipes) > 2) {
             $recipesTop = '';
@@ -91,11 +93,13 @@ class Category_Ui extends Ui
             $bestRecipesHtml = '';
             foreach ($bestRecipes->list as $bestRecipe) {
                 $bestRecipe->category = (isset($categoriesIds[$bestRecipe->get('id_category')])) ? $categoriesIds[$bestRecipe->get('id_category')] : new Category();
+                $bestRecipe->loadTranslated(true);
                 $bestRecipesHtml .= $bestRecipe->showUi('Best');
             }
             $restRecipesHtml = '';
             foreach ($restRecipes->list as $restRecipe) {
                 $restRecipe->category = $this->object;
+                $restRecipe->loadTranslated(true);
                 $restRecipesHtml .= $restRecipe->showUi('Minimal');
             }
             return '
@@ -111,6 +115,7 @@ class Category_Ui extends Ui
             $restRecipesHtml = '';
             foreach ($restRecipes->list as $restRecipe) {
                 $restRecipe->category = $this->object;
+                $restRecipe->loadTranslated(true);
                 $restRecipesHtml .= $restRecipe->showUi('Minimal');
             }
             return '

@@ -41,9 +41,19 @@
 			<required>notEmpty</required>
 		</attribute>
 		<attribute>
+			<name>name_en</name>
+			<label>name_en</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
 			<name>name_url</name>
 			<type>hidden_url</type>
 			<refAttribute>name</refAttribute>
+		</attribute>
+		<attribute>
+			<name>name_url_en</name>
+			<type>hidden_url</type>
+			<refAttribute>name_en</refAttribute>
 		</attribute>
 		<attribute>
 			<name>icon</name>
@@ -56,13 +66,28 @@
 			<type>text_long</type>
 		</attribute>
 		<attribute>
+			<name>title_en</name>
+			<label>title_en</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
 			<name>best_recipes_title</name>
 			<label>best_recipes_title</label>
 			<type>text_long</type>
 		</attribute>
 		<attribute>
+			<name>best_recipes_title_en</name>
+			<label>best_recipes_title_en</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
 			<name>rest_recipes_title</name>
 			<label>rest_recipes_title</label>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>rest_recipes_title_en</name>
+			<label>rest_recipes_title_en</label>
 			<type>text_long</type>
 		</attribute>
 		<attribute>
@@ -74,9 +99,19 @@
             <minlength>110</minlength>
             <maxlength>160</maxlength>
         </attribute>
+        <attribute>
+            <name>meta_description_en</name>
+            <label>meta_description_en</label>
+            <type>textarea</type>
+        </attribute>
 		<attribute>
 			<name>short_description</name>
 			<label>short_description</label>
+			<type>textarea</type>
+		</attribute>
+		<attribute>
+			<name>short_description_en</name>
+			<label>short_description_en</label>
 			<type>textarea</type>
 		</attribute>
 		<attribute>
@@ -84,6 +119,12 @@
 			<label>description</label>
 			<type>textarea_ck</type>
 		</attribute>
+		<attribute>
+			<name>description_en</name>
+			<label>description_en</label>
+			<type>textarea_ck</type>
+		</attribute>
+
 		<attribute>
 			<name>recipes_query</name>
 			<label>recipes_query</label>

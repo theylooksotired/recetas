@@ -152,6 +152,11 @@
             <class>multiple_items_preparation</class>
         </attribute>
         <attribute>
+            <name>translation</name>
+            <label>translation</label>
+            <type>textarea</type>
+        </attribute>
+        <attribute>
             <name>active</name>
             <label>active</label>
             <type>checkbox</type>

@@ -47,5 +47,10 @@
 			<label>published</label>
 			<type>checkbox</type>
 		</attribute>
+		<attribute>
+            <name>language</name>
+            <label>language</label>
+            <type>hidden_language</type>
+        </attribute>
 	</attributes>
 </object>

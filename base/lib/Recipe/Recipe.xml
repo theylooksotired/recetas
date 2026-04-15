@@ -20,11 +20,11 @@
             <label>#title</label>
             <icon>utensils</icon>
             <pager>50</pager>
-            <orderBy>title,views,adsense_earnings,adsense_visits,active,created,modified</orderBy>
+            <orderBy>title,views,active,created,modified</orderBy>
             <viewPublic>true</viewPublic>
             <publicUrl>receta / #id _ #title_url</publicUrl>
-            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQuery>
-            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%" AND #FILTER_BY_USER</searchQueryCount>
+            <searchQuery>SELECT * FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQuery>
+            <searchQueryCount>SELECT COUNT(*) AS count_results FROM #TABLE WHERE title LIKE "%#SEARCH%"</searchQueryCount>
             <filterByUser>id_user</filterByUser>
             <multipleActions>
                 <action icon="times">delete</action>
@@ -243,21 +243,6 @@
             <type>hidden_total</type>
         </attribute>
         <attribute>
-            <name>adsense_info</name>
-            <label>adsense_info</label>
-            <type>hidden_total</type>
-        </attribute>
-        <attribute>
-            <name>adsense_earnings</name>
-            <label>adsense_earnings</label>
-            <type>hidden</type>
-        </attribute>
-        <attribute>
-            <name>adsense_visits</name>
-            <label>adsense_visits</label>
-            <type>hidden</type>
-        </attribute>
-        <attribute>
             <name>views</name>
             <label>views</label>
             <type>text_integer</type>
@@ -271,6 +256,16 @@
             <name>redirect_force_url</name>
             <label>redirect_force_url</label>
             <type>text_url</type>
+        </attribute>
+        <attribute>
+            <name>title_url_en</name>
+            <label>title_url_en</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>translation</name>
+            <label>translation</label>
+            <type>textarea</type>
         </attribute>
         <attribute>
             <name>active</name>

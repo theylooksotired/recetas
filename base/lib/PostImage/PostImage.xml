@@ -42,6 +42,11 @@
             <type>textarea_long</type>
         </attribute>
 		<attribute>
+            <name>title_en</name>
+            <label>title_en</label>
+            <type>textarea_long</type>
+        </attribute>
+		<attribute>
 			<name>id_recipe</name>
 			<type>select</type>
 			<refObject>Recipe</refObject>

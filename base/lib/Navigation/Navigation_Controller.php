@@ -55,7 +55,7 @@ class Navigation_Controller extends Controller
             default:
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
                 $subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
-                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
+                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : $recipe;
                 $item = ($subcategory->id() != '') ? $subcategory : new SubCategory();
                 $item = ($category->id() != '') ? $category : $item;
                 $item = ($recipe->id() != '') ? $recipe : $item;
@@ -87,9 +87,9 @@ class Navigation_Controller extends Controller
                 break;
             case 'recetas':
                 $this->redirecLastSlash();
-                $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
-                $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->id]);
-                $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
+                $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
+                $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
+                $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => '(title_url=:title_url OR title_url_en=:title_url) AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
                 if ($this->id != '' && $this->category->id() == '' && $this->subcategory->id() == '') {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . url('recetas'));
@@ -117,18 +117,23 @@ class Navigation_Controller extends Controller
                         header('Location: ' . $item->get('redirect_force_url'));
                         exit();
                     }
+                    if ($this->recipe->id() != '') {
+                        $this->layout_page = 'recipe';
+                        $item->persistSimple('views', $item->get('views') + 1);
+                        $item->loadMultipleValuesSingleAttribute('ingredients');
+                        $item->loadMultipleValuesSingleAttribute('preparation');
+                        $item->loadMultipleValuesSingleAttribute('images');
+                        $item->loadTranslation();
+                        $item->loadTranslated();
+                    } else {
+                        $this->layout_page = 'recipe_category';
+                        $this->hide_title_page_appendix = true;
+                    }
                     if ($item->get('title_page') != '') {
                         $this->title_page = $item->get('title_page');
                         $this->hide_title_page_appendix = true;
                     } else {
                         $this->title_page = $item->getTitlePage();
-                    }
-                    if ($this->recipe->id() != '') {
-                        $this->layout_page = 'recipe';
-                        $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
-                    } else {
-                        $this->layout_page = 'recipe_category';
-                        $this->hide_title_page_appendix = true;
                     }
                     $this->meta_url = $item->url();
                     $this->meta_image = $item->getImageUrl('image', 'web');
@@ -143,7 +148,7 @@ class Navigation_Controller extends Controller
                     if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
                         $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage') . $item->showUi('AlternateUrl') . Recaptcha::head();
-                        $this->content_bottom = $this->recipe->showUi('Related');
+                        $this->content_bottom = $item->showUi('Related');
                         // Question handling
                         $typeForm = (isset($this->values['type'])) ? $this->values['type'] : '';
                         if ($typeForm == 'question' && isset($this->values['question']) && strlen($this->values['question']) > 10) {
@@ -157,16 +162,16 @@ class Navigation_Controller extends Controller
                                 $values['question'] = (isset($json['original_question'])) ? $json['original_question'] : '';
                                 $values['question_formatted'] = (isset($json['formatted_question'])) ? $json['formatted_question'] : '';
                                 $values['answer'] = (isset($json['answer'])) ? $json['answer'] : '';
-                                $values['id_recipe'] = $this->recipe->id();
+                                $values['id_recipe'] = $item->id();
                                 $values['published'] = false;
                                 $question = new Question($values);
                                 $question->validate();
                                 $question->validateReCaptchaV3();
                                 if (count($question->errors) == 0) {
                                     $question->persist();
-                                    Session::set('answered_recipe', $this->recipe->id());
+                                    Session::set('answered_recipe', $item->id());
                                     Session::set('answered_question', $question->id());
-                                    header('Location: ' . $this->recipe->url() . '#question_' . $this->recipe->id());
+                                    header('Location: ' . $item->url() . '#question_' . $item->id());
                                     exit();
                                 }
                             }
@@ -174,7 +179,7 @@ class Navigation_Controller extends Controller
                         // Review handling
                         if ($typeForm == 'review' && isset($this->values['review']) && strlen($this->values['review']) > 20) {
                             $values = $this->values;
-                            $values['id_recipe'] = $this->recipe->id();
+                            $values['id_recipe'] = $item->id();
                             $values['published'] = false;
                             $values['name'] = (isset($this->values['name']) && $this->values['name'] != '') ? $this->values['name'] : '';
                             $values['title'] = (isset($this->values['title']) && $this->values['title'] != '') ? $this->values['title'] : '';
@@ -184,9 +189,9 @@ class Navigation_Controller extends Controller
                             $review->validateReCaptchaV3();
                             if (count($review->errors) == 0) {
                                 $review->persist();
-                                Session::set('reviewed_recipe', $this->recipe->id());
+                                Session::set('reviewed_recipe', $item->id());
                                 Session::set('reviewed_review', $review->id());
-                                header('Location: ' . $this->recipe->url() . '#review_' . $this->recipe->id());
+                                header('Location: ' . $item->url() . '#review_' . $item->id());
                                 exit();
                             }
                         }
@@ -223,7 +228,7 @@ class Navigation_Controller extends Controller
             case 'articulos':
                 $this->redirecLastSlash();
                 $this->layout_page = 'simple';
-                $post = (new Post)->readFirst(['where' => 'title_url="' . $this->id . '"']);
+                $post = (new Post)->readFirst(['where' => 'title_url=:title_url OR title_url_en=:title_url'], ['title_url' => $this->id]);
                 if ($post->id() != '') {
                     if ($this->extraId != '') {
                         header("HTTP/1.1 301 Moved Permanently");
@@ -270,6 +275,7 @@ class Navigation_Controller extends Controller
                 $i = 1;
                 foreach ($recipesMostViewed->list as $recipeMostViewed) {
                     $recipeMostViewed->category = (isset($categoriesIds[$recipeMostViewed->get('id_category')])) ? $categoriesIds[$recipeMostViewed->get('id_category')] : new Category();
+                    $recipeMostViewed->loadTranslated(true);
                     $recipesMostViewedHtml .= $recipeMostViewed->showUi('Top10', ['counter' => $i]);
                     $i++;
                 }
@@ -341,11 +347,16 @@ class Navigation_Controller extends Controller
                         } else {
                             $searchPage->persistSimple('views', $searchPage->get('views') + 1);
                         }
-                        $this->title_page = $searchPage->getBasicInfoTitlePage();
-                        $this->meta_description = $searchPage->get('meta_description');
-                        $this->meta_url = url($this->action . '/' . Text::simpleUrl($this->id));
+                        if (ASTERION_LANGUAGE_ID == 'en') {
+                            $this->title_page = __('search_results_for') . ' "' . $search . '"';
+                            $this->meta_description = $this->title_page;
+                        } else {
+                            $this->title_page = $searchPage->getBasicInfoTitlePage();
+                            $this->meta_description = $searchPage->get('meta_description');
+                            $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
+                        }
                         $this->meta_image = $searchPage->getImageUrl('image', 'web');
-                        $this->content .= ($searchPage->get('short_description') != '') ? '<p class="search_short_description">' . $searchPage->get('short_description') . '</p>' : '';
+                        $this->meta_url = url($this->action . '/' . Text::simpleUrl($this->id));
                     }
                     if ($recipes->isEmpty()) {
                         $this->title_page = __('no_search_results');
@@ -357,6 +368,7 @@ class Navigation_Controller extends Controller
                     $categoriesIds = Category::arrayCategories();
                     foreach ($recipes->list as $recipe) {
                         $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+                        $recipe->loadTranslated(true);
                     }
                     $recipesHtml = '';
                     foreach ($recipes->list as $recipe) {

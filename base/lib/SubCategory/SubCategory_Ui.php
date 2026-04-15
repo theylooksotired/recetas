@@ -44,9 +44,11 @@ class SubCategory_Ui extends Ui
         $recipesBest = array_slice($recipes, 0, 12);
         $recipesRest = array_slice($recipes, 8);
         foreach ($recipesBest as $recipe) {
+            $recipe->loadTranslated(true);
             $recipesBestHtml .= $recipe->showUi('Best');
         }
         foreach ($recipesRest as $recipe) {
+            $recipe->loadTranslated(true);
             $recipesRestHtml .= $recipe->showUi('minimal');
         }
         return '

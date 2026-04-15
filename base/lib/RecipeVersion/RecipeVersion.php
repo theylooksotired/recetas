@@ -106,6 +106,29 @@ class RecipeVersion extends Db_Object
         return str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
     }
 
+    public function loadTranslated()
+    {
+        if (ASTERION_LANGUAGE_ID == 'en') {
+            $translation = @json_decode($this->get('translation'), true);
+            if (isset($translation['title'])) {
+                $keys = ['title', 'short_description'];
+                foreach ($keys as $key) {
+                    $this->values[$key] = $translation[$key];
+                }
+                if (isset($translation['ingredients'])) {
+                    foreach ($this->values['ingredients'] as $valueIngredient) {
+                        $valueIngredient->values['ingredient'] = (isset($translation['ingredients'][$valueIngredient->id()])) ? $translation['ingredients'][$valueIngredient->id()] : '';
+                    }
+                }
+                if (isset($translation['preparation'])) {
+                    foreach ($this->values['preparation'] as $valuePreparation) {
+                        $valuePreparation->values['step'] = (isset($translation['preparation'][$valuePreparation->id()])) ? $translation['preparation'][$valuePreparation->id()] : '';
+                    }
+                }
+            }
+        }
+    }
+
     public function persist($persistMultiple = true)
     {
         $persist = parent::persist($persistMultiple);
@@ -158,7 +181,6 @@ class RecipeVersion extends Db_Object
         $infoIns['ingredients'] = [];
         foreach ($ingredients as $ingredient) {
             $infoIngredient = (array)$ingredient->values;
-            unset($infoIngredient['id']);
             unset($infoIngredient['created']);
             unset($infoIngredient['modified']);
             unset($infoIngredient['id_recipe_version']);
@@ -171,7 +193,6 @@ class RecipeVersion extends Db_Object
         $infoIns['preparation'] = [];
         foreach ($preparation as $step) {
             $infoStep = (array)$step->values;
-            unset($infoStep['id']);
             unset($infoStep['created']);
             unset($infoStep['modified']);
             unset($infoStep['id_recipe_version']);
@@ -184,6 +205,40 @@ class RecipeVersion extends Db_Object
         }
 
         return $infoIns;
+    }
+
+    public function translate()
+    {
+        $recipeInfo = $this->toJson();
+        $itemsToUnset = ['id', 'ord', 'created', 'modified', 'id_recipe', 'ingredients_raw', 'preparation_raw', 'active', 'id_user', 'id_category', 'image', 'title_url', 'rating', 'rating_count', 'cook_time', 'cooking_method', 'servings', 'diet', 'image_ingredients', 'views', 'youtube_url', 'redirect_force_url', 'title_url_en', 'translation', 'translated', 'most_searched', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info', 'image_small', 'country', 'url', 'cook_time_label', 'cooking_method_label', 'diet_label', 'id_category_name'];
+        foreach ($itemsToUnset as $item) {
+            unset($recipeInfo[$item]);
+        }
+
+        $cleanIngredients = [];
+        foreach ($recipeInfo['ingredients'] as $key => $ingredient) {
+            $cleanIngredients[$ingredient['id']] = $ingredient['ingredient'];
+        }
+        $recipeInfo['ingredients'] = $cleanIngredients;
+
+        $cleanPreparation = [];
+        foreach ($recipeInfo['preparation'] as $key => $step) {
+            $cleanPreparation[$step['id']] = $step['step'];
+        }
+        $recipeInfo['preparation'] = $cleanPreparation;
+
+        $recipeJson = json_encode($recipeInfo);
+        $questionVersion = 'Translate this JSON file to english respecting all the key names and the same order, just translate the values: "' . $recipeJson . '"';
+        $response = [];
+        $maxAttempts = 3;
+        $attempts = 0;
+        while (empty($response['title']) && $attempts < $maxAttempts) {
+            $response = ChatGPT::answerJson($questionVersion);
+            $attempts++;
+        }
+        if (isset($response['title'])) {
+            $this->persistSimple('translation', json_encode($response));
+        }
     }
 
 }

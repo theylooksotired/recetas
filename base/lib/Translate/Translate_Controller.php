@@ -14,207 +14,57 @@ class Translate_Controller extends Controller
     public function getContent()
     {
         switch ($this->action) {
-            case 'categories':
+            case 'all':
                 $this->mode = 'json';
-                $this->checkAuthorization();
+                //$this->checkAuthorization();
                 $result = ['status' => 'NOK'];
+
+                // Categories
                 $itemsProcessed = [];
-                $categories = (new Category)->readList();
+                $categories = (new Category)->readList(['where' => 'name_url_en IS NULL OR name_url_en=""']);
                 foreach ($categories as $category) {
-                    $question = 'Traduci el archivo JSON que contiene la categoria de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $category->toJson() . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        $categoryTranslated = new Category($response);
-                        $categoryTranslated->persist();
-                        $itemsProcessed[] = 'OK - ' . $categoryTranslated->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $category->getBasicInfo();
-                    }
+                    $category->translate();
+                    $itemsProcessed[] = 'OK - ' . $category->getBasicInfo();
                 }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-            break;
-            case 'subcategories':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['status' => 'NOK'];
+                $result['categories'] = $itemsProcessed;
+
+                // Subcategories
                 $itemsProcessed = [];
-                $subCategories = (new SubCategory)->readList();
+                $subCategories = (new SubCategory)->readList(['where' => 'name_url_en IS NULL OR name_url_en=""']);
                 foreach ($subCategories as $subCategory) {
-                    $question = 'Traduci el archivo JSON que contiene la subCategoria de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $subCategory->toJson() . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        $subCategoryTranslated = new SubCategory($response);
-                        $subCategoryTranslated->persist();
-                        $itemsProcessed[] = 'OK - ' . $subCategoryTranslated->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $subCategory->getBasicInfo();
-                    }
+                    $subCategory->translate();
+                    $itemsProcessed[] = 'OK - ' . $subCategory->getBasicInfo();
                 }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-            break;
-            case 'info':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['status' => 'NOK'];
+                $result['subcategories'] = $itemsProcessed;
+
+                // Posts
                 $itemsProcessed = [];
-                $htmlSections = (new HtmlSection)->readList();
-                foreach ($htmlSections as $htmlSection) {
-                    $question = 'Traduci el archivo JSON que contiene una pagina de un sitio de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $htmlSection->toJson() . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        $response['title_en'] = $response['title_es'];
-                        $response['title_url_en'] = $response['title_url_es'];
-                        $response['section_en'] = $response['section_es'];
-                        $htmlSectionTranslated = new HtmlSection($response);
-                        $htmlSectionTranslated->persist();
-                        $itemsProcessed[] = 'OK - ' . $htmlSectionTranslated->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $htmlSection->getBasicInfo();
-                    }
-                }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-            break;
-            case 'recipes':
-                $this->mode = 'json';
-                $result = ['status' => 'NOK'];
-                $itemsProcessed = [];
-                if ($this->id != '') {
-                    $recipes = [(new Recipe)->read($this->id)];
-                } else {
-                    $recipes = (new Recipe)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
-                }
-                foreach ($recipes as $recipe) {
-                    $recipeJson = $recipe->toJson();
-                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        Db::execute('DELETE FROM ' . (new RecipeIngredient)->tableName . ' WHERE id_recipe=' . $recipe->id());
-                        Db::execute('DELETE FROM ' . (new RecipePreparation)->tableName . ' WHERE id_recipe=' . $recipe->id());
-                        $recipe->setValues($response);
-                        $recipe->set('translated', 1);
-                        $persist = $recipe->persist();
-                        if ($persist['status'] == 'OK') {
-                            $itemsProcessed[] = 'OK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                        } else {
-                            $itemsProcessed[] = 'NOK ERROR - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                        }
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                    }
-                }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-                break;
-            case 'recipes-versions':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['status' => 'NOK'];
-                $itemsProcessed = [];
-                if ($this->id != '') {
-                    $recipes = [(new RecipeVersion)->read($this->id)];
-                } else {
-                    $recipes = (new RecipeVersion)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
-                }
-                foreach ($recipes as $recipe) {
-                    $recipeJson = $recipe->toJson();
-                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($recipeJson) . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        Db::execute('DELETE FROM ' . (new RecipeVersionIngredient)->tableName . ' WHERE id_recipe_version=' . $recipe->id());
-                        Db::execute('DELETE FROM ' . (new RecipeVersionPreparation)->tableName . ' WHERE id_recipe_version=' . $recipe->id());
-                        $recipe->setValues($response);
-                        $recipe->set('translated', 1);
-                        $recipe->persist();
-                        $itemsProcessed[] = 'OK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $recipe->id() . ' - ' . $recipe->getBasicInfo();
-                    }
-                }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-                break;
-            case 'post-images':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['status' => 'NOK'];
-                $itemsProcessed = [];
-                $postImages = (new PostImage)->readList();
-                foreach ($postImages as $postImage) {
-                    $question = 'Traduci el archivo JSON que contiene la image de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . $postImage->toJson() . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        $postImageTranslated = new PostImage($response);
-                        $postImageTranslated->persist();
-                        $itemsProcessed[] = 'OK - ' . $postImageTranslated->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $postImage->getBasicInfo();
-                    }
-                }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
-                return json_encode($result, JSON_PRETTY_PRINT);
-            break;
-            case 'posts':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['status' => 'NOK'];
-                $itemsProcessed = [];
-                $posts = (new Post)->readList(['where' => 'translated IS NULL OR translated=""', 'limit' => '10']);
+                $posts = (new Post)->readList(['where' => 'title_url_en IS NULL OR title_url_en=""', 'limit' => '10']);
                 foreach ($posts as $post) {
-                    $postJson = $post->toJson();
-                    $question = 'Traduci el archivo JSON que contiene la receta de cocina al ingles, sin ningun texto adicional, el archivo JSON es: "' . json_encode($postJson) . '"';
-                    $response = ChatGPT::answerJson($question);
-                    if (isset($response['id'])) {
-                        $post->setValues($response);
-                        $post->set('translated', 1);
-                        $post->persist();
-                        $itemsProcessed[] = 'OK - ' . $post->id() . ' - ' . $post->getBasicInfo();
-                    } else {
-                        $itemsProcessed[] = 'NOK - ' . $post->id() . ' - ' . $post->getBasicInfo();
-                    }
+                    $post->translate();
+                    $itemsProcessed[] = 'OK - ' . $post->getBasicInfo();
                 }
-                $result = ['status' => 'OK', 'items' => $itemsProcessed];
+                $result['posts'] = $itemsProcessed;
+
+                // Recipes
+                $itemsProcessed = [];
+                $recipes = (new Recipe)->readList(['where' => 'translation IS NULL OR translation=""', 'limit' => '10']);
+                foreach ($recipes as $recipe) {
+                    $recipe->translate();
+                    $itemsProcessed[] = 'OK - ' . $recipe->getBasicInfo();
+                }
+                $result['recipes'] = $itemsProcessed;
+
+                // HtmlSections
+                $itemsProcessed = [];
+                $htmlSections = (new HtmlSection)->readList(['where' => 'title_url_en IS NULL OR title_url_en=""']);
+                foreach ($htmlSections as $htmlSection) {
+                    $htmlSection->translate();
+                    $itemsProcessed[] = 'OK - ' . $htmlSection->getBasicInfo();
+                }
+                $result['html_sections'] = $itemsProcessed;
+
                 return json_encode($result, JSON_PRETTY_PRINT);
-                break;
-            case 'save-urls':
-                $this->mode = 'json';
-                $this->checkAuthorization();
-                $result = ['main' => url('')];
-                $items = (new Recipe)->readList();
-                foreach ($items as $item) {
-                    $result['recipe_' . $item->id()] = $item->url();
-                }
-                $items = (new Post)->readList();
-                foreach ($items as $item) {
-                    $result['post_' . $item->id()] = $item->url();
-                }
-                return json_encode($result, JSON_PRETTY_PRINT);
-                break;
-            case 'check-missing':
-                $this->mode = 'json';
-                // $this->checkAuthorization();
-                $directory = ASTERION_BASE_FILE . 'data/';
-                $files = ['costarica', 'cuba', 'guatemala', 'honduras', 'nicaragua', 'panama', 'salvador', 'peru', 'ecuador'];
-                $result = [];
-                foreach ($files as $file) {
-                    $filesEs = json_decode(file_get_contents($directory . $file . '_es.json'), true);
-                    $filesEn = json_decode(file_get_contents($directory . $file . '_en.json'), true);
-                    $keysEs = array_keys($filesEs);
-                    $keysEn = array_keys($filesEn);
-                    $diff = array_diff($keysEs, $keysEn);
-                    $diffAlso = array_diff($keysEn, $keysEs);
-                    $diffResult = [];
-                    foreach ($diff as $keyMissing) {
-                        $diffResult[$keyMissing] = $filesEs[$keyMissing];
-                    }
-                    foreach ($diffAlso as $keyMissing) {
-                        $diffResult[$keyMissing] = $filesEn[$keyMissing];
-                    }
-                    $result[$file] = ['missing' => $diffResult];
-                }
-                dd($result);
                 break;
             }
     }

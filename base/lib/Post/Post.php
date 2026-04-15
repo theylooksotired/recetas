@@ -104,4 +104,70 @@ class Post extends Db_Object
         return $this->translation_url;
     }
 
+    public function toJson()
+    {
+        $infoIns = (array)$this->values;
+        unset($infoIns['created']);
+        unset($infoIns['modified']);
+        unset($infoIns['ord']);
+
+        $images = (new PostImage)->readList(['where' => 'id_post=:id_post', 'order'=>'ord'], ['id_post' => $infoIns['id']]);
+        $infoIns['images'] = [];
+        foreach ($images as $image) {
+            $infoImage = (array)$image->values;
+            unset($infoImage['created']);
+            unset($infoImage['modified']);
+            unset($infoImage['id_post']);
+            unset($infoImage['ord']);
+            $infoImage['image'] = $image->getImageUrl('image', 'web');
+            $infoImage['image_small'] = $image->getImageUrl('image', 'small');
+            $infoIns['images'][] = $infoImage;
+        }
+
+        return json_encode($infoIns);
+    }
+
+    public function translate()
+    {
+        $postInfoRaw = json_decode($this->toJson(), true);
+        $postInfo = [];
+        $itemsToSet = ['title', 'title_page', 'meta_description', 'short_description', 'description', 'images'];
+        foreach ($itemsToSet as $item) {
+            $postInfo[$item] = (isset($postInfoRaw[$item])) ? $postInfoRaw[$item] : '';
+        }
+
+        $cleanImages = [];
+        foreach ($postInfo['images'] as $key => $image) {
+            $cleanImages[$image['id']] = $image['title'];
+        }
+        $postInfo['images'] = $cleanImages;
+
+        $postJson = json_encode($postInfo);
+        $questionVersion = 'Translate this JSON file to english respecting all the key names and the same order, just translate the values: "' . $postJson . '"';
+        $response = [];
+        $maxAttempts = 3;
+        $attempts = 0;
+        while (empty($response['title']) && $attempts < $maxAttempts) {
+            $response = ChatGPT::answerJson($questionVersion);
+            $attempts++;
+        }
+        if (isset($response['title'])) {
+            foreach ($itemsToSet as $item) {
+                if ($item == 'images') {
+                    continue;
+                }
+                $value = (isset($response[$item])) ? $response[$item] : '';
+                $this->persistSimple($item . '_en', $value);
+            }
+            $titleUrlEn = Text::simpleUrl($response['title']);
+            $this->persistSimple('title_url_en', $titleUrlEn);
+
+            $images = (new PostImage)->readList(['where' => 'id_post=:id_post', 'order'=>'ord'], ['id_post' => $this->id()]);
+            foreach ($images as $image) {
+                $label = (isset($response['images'][$image->id()])) ? $response['images'][$image->id()] : '';
+                $image->persistSimple('title_en', $label);
+            }
+        }
+    }
+
 }

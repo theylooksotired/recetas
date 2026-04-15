@@ -58,6 +58,16 @@ class RecipeVersion_Controller extends Controller
                 }
                 return '';
                 break;
+            case 'translate':
+                $this->mode = 'json';
+                $recipe = (new RecipeVersion)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '') {
+                    $recipe->translate();
+                }
+                header('Location:' . $recipe->urlAdmin());
+                exit();
+                break;
         }
     }
 

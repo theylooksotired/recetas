@@ -76,13 +76,28 @@
             <required>not_empty</required>
         </attribute>
         <attribute>
+            <name>title_en</name>
+            <label>title_en</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
             <name>title_url</name>
             <type>hidden_url</type>
             <refAttribute>title</refAttribute>
         </attribute>
         <attribute>
+            <name>title_url_en</name>
+            <type>hidden_url</type>
+            <refAttribute>title_en</refAttribute>
+        </attribute>
+        <attribute>
             <name>title_page</name>
             <label>title_page</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
+            <name>title_page_en</name>
+            <label>title_page_en</label>
             <type>text_long</type>
         </attribute>
         <attribute>
@@ -95,16 +110,31 @@
             <maxlength>160</maxlength>
         </attribute>
         <attribute>
+            <name>meta_description_en</name>
+            <label>meta_description_en</label>
+            <type>textarea</type>
+        </attribute>
+        <attribute>
             <name>short_description</name>
             <label>short_description</label>
             <type>textarea_long</type>
             <required>not_empty</required>
         </attribute>
         <attribute>
+            <name>short_description_en</name>
+            <label>short_description_en</label>
+            <type>textarea_long</type>
+        </attribute>
+        <attribute>
             <name>description</name>
             <label>description</label>
             <type>textarea_ck</type>
             <required>not_empty</required>
+        </attribute>
+        <attribute>
+            <name>description_en</name>
+            <label>description_en</label>
+            <type>textarea_ck</type>
         </attribute>
         <attribute>
             <name>images</name>

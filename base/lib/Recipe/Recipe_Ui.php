@@ -82,10 +82,6 @@ class Recipe_Ui extends Ui
 
     public function renderComplete()
     {
-        $this->object->loadMultipleValuesSingleAttribute('ingredients');
-        $this->object->loadMultipleValuesSingleAttribute('preparation');
-        $this->object->loadMultipleValuesSingleAttribute('images');
-        $this->object->loadTranslation();
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
         // Translation
         $translationLink = '';
@@ -124,6 +120,10 @@ class Recipe_Ui extends Ui
                     $version->set('preparation', $preparations);
                 }
             }
+
+            foreach ($versions as $version) {
+                $version->loadTranslated();
+            }    
 
             $i = ($translationLink != '') ? 2 : 1;
             foreach ($versions as $version) {
@@ -187,7 +187,7 @@ class Recipe_Ui extends Ui
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
         // Questions
-        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
+        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
             <div class="questions_recipe_list">
                 <div class="questions_recipe_list_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
@@ -200,7 +200,7 @@ class Recipe_Ui extends Ui
         }
         $reviewsHtml = '';
         // Reviews
-        $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id()]);
+        $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         if (!$reviews->isEmpty()) {
             $reviewsHtml = '
                 <div class="reviews_recipe_list">
@@ -501,6 +501,7 @@ class Recipe_Ui extends Ui
         $recipesSearchHtml = '';
         foreach ($recipesSearch->list as $recipeSearch) {
             $recipeSearch->category = (isset($categoriesIds[$recipeSearch->get('id_category')])) ? $categoriesIds[$recipeSearch->get('id_category')] : null;
+            $recipeSearch->loadTranslated(true);
             $recipesSearchHtml .= $recipeSearch->showUi('Minimal');
         }
         // Search more if there are less than 8
@@ -519,6 +520,7 @@ class Recipe_Ui extends Ui
             ]);
             foreach ($recipesSearchMore->list as $recipeSearchMore) {
                 $recipeSearchMore->category = (isset($categoriesIds[$recipeSearchMore->get('id_category')])) ? $categoriesIds[$recipeSearchMore->get('id_category')] : null;
+                $recipeSearchMore->loadTranslated(true);
                 $recipesSearchMoreHtml .= $recipeSearchMore->showUi('Minimal');
             }
         }
@@ -665,56 +667,6 @@ class Recipe_Ui extends Ui
     {
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
-        $adsenseInfo = json_decode($this->object->get('adsense_info'), true);
-        $adsenseNumberDays = count($adsenseInfo);
-        if (is_array($adsenseInfo)) {
-            if ($adsenseNumberDays < 28) {
-                $adsenseInfo = array_merge(array_fill(0, 28 - $adsenseNumberDays, [0, 0]), $adsenseInfo);
-            }
-            $blocks = [
-                'block1' => ['data' => array_slice($adsenseInfo, 0, 7), 'earnings' => 0, 'visits' => 0],
-                'block2' => ['data' => array_slice($adsenseInfo, 7, 7), 'earnings' => 0, 'visits' => 0],
-                'block3' => ['data' => array_slice($adsenseInfo, 14, 7), 'earnings' => 0, 'visits' => 0],
-                'block4' => ['data' => array_slice($adsenseInfo, 21, 7), 'earnings' => 0, 'visits' => 0],
-            ];
-            $totalEarnings = 0;
-            $totalVisits = 0;
-            $maxEarnings = 0;
-            $maxVisits = 0;
-            foreach ($blocks as $key => $block) {
-                foreach ($block['data'] as $dateInfo) {
-                    $blocks[$key]['visits'] += $dateInfo[0];
-                    $blocks[$key]['earnings'] += $dateInfo[1];
-                    $totalVisits += $dateInfo[0];
-                    $totalEarnings += $dateInfo[1];
-                }
-                if ($blocks[$key]['earnings'] > $maxEarnings) {
-                    $maxEarnings = $blocks[$key]['earnings'];
-                }
-                if ($blocks[$key]['visits'] > $maxVisits) {
-                    $maxVisits = $blocks[$key]['visits'];
-                }
-            }
-            foreach ($blocks as $key => $block) {
-                $blocks[$key]['earnings_average_per_max'] = ($maxEarnings > 0) ? round(($block['earnings'] * 100) / $maxEarnings) : 0;
-                $blocks[$key]['visits_average_per_max'] = ($maxVisits > 0) ? round(($block['visits'] * 100) / $maxVisits) : 0;
-            }
-            $htmlEarnings = '';
-            $htmlVisits = '';
-            $colorEarnings = '#999999';
-            $colorVisits = '#999999';
-            foreach ($blocks as $key => $block) {
-                if ($key != 'block1') {
-                    $previousKey = 'block' . (intval(substr($key, -1)) - 1);
-                    $colorEarnings = ($blocks[$key]['earnings'] < $blocks[$previousKey]['earnings']) ? '#FF0000' : '#00AA00';
-                    $colorVisits = ($blocks[$key]['visits'] < $blocks[$previousKey]['visits']) ? '#FF0000' : '#00AA00';
-                }
-                $htmlEarnings .= '<span style="display:inline-block;vertical-align:bottom;background:' . $colorEarnings . ';width:10px; height:' . round($blocks[$key]['earnings_average_per_max']/8) . 'px" title="' . __('earnings') . ': ' . $blocks[$key]['earnings'] . '$USD">&nbsp;</span>';
-                $htmlVisits .= '<span style="display:inline-block;vertical-align:bottom;background:' . $colorVisits . ';width:10px; height:' . round($blocks[$key]['visits_average_per_max']/8) . 'px" title="' . __('visits') . ': ' . $blocks[$key]['visits'] . '">&nbsp;</span>';
-            }
-            $htmlEarnings = ($htmlEarnings != '') ? '<span class="adsense_earnings_chart">' . $htmlEarnings . '</span>' : '';
-            $htmlVisits = ($htmlVisits != '') ? '<span class="adsense_visits_chart">' . $htmlVisits . '</span>' : '';
-        }
         return '
             ' . parent::label($canModify) . '
             ' . (($this->object->get('redirect_force_url') != '') ? '<div class="error tiny"><strong>Redirigido a ' . $this->object->get('redirect_force_url') . '</strong></div>' : '')  . '

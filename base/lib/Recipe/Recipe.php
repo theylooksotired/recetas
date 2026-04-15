@@ -120,6 +120,18 @@ class Recipe extends Db_Object
         return url('recetas/' . $this->category->get('name_url') . '/' . $this->get('title_url'));
     }
 
+    public function urlEs()
+    {
+        $this->loadCategory();
+        return url('recetas/' . $this->category->values['name_url'] . '/' . $this->values['title_url']);
+    }
+    
+    public function urlEn()
+    {
+        $this->loadCategory();
+        return url('recetas/' . $this->category->values['name_url_en'] . '/' . $this->values['title_url_en']);
+    }
+
     public function urlFixSteps()
     {
         return url('recipes-fix-steps/' . $this->id());
@@ -141,6 +153,44 @@ class Recipe extends Db_Object
             $this->category = (new Category)->read($this->get('id_category'));
         }
         return $this->category;
+    }
+
+    public function loadTranslation()
+    {
+        if (!isset($this->translation_url)) {
+            $this->translation_url = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', $this->urlEs()) : str_replace('//www.', '//en.', $this->urlEn());
+        }
+        return $this->translation_url;
+    }
+
+    public function loadTranslated($simple = false)
+    {
+        if (ASTERION_LANGUAGE_ID == 'en') {
+            $translation = @json_decode($this->get('translation'), true);
+            if (isset($translation['title'])) {
+                $keys = ['title', 'title_page', 'short_description', 'description', 'meta_description'];
+                foreach ($keys as $key) {
+                    $this->values[$key] = $translation[$key];
+                }
+                if (!$simple) {
+                    if (isset($translation['ingredients'])) {
+                        foreach ($this->values['ingredients'] as $valueIngredient) {
+                            $valueIngredient->values['ingredient'] = (isset($translation['ingredients'][$valueIngredient->id()])) ? $translation['ingredients'][$valueIngredient->id()] : '';
+                        }
+                    }
+                    if (isset($translation['preparation'])) {
+                        foreach ($this->values['preparation'] as $valuePreparation) {
+                            $valuePreparation->values['step'] = (isset($translation['preparation'][$valuePreparation->id()])) ? $translation['preparation'][$valuePreparation->id()] : '';
+                        }
+                    }
+                    if (isset($translation['images'])) {
+                        foreach ($this->values['images'] as $valueImage) {
+                            $valueImage->values['label'] = (isset($translation['images'][$valueImage->id()])) ? $translation['images'][$valueImage->id()] : '';
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function persist($persistMultiple = true)
@@ -351,29 +401,11 @@ class Recipe extends Db_Object
         $infoIns['image'] = $this->getImageUrl('image', 'web');
         $infoIns['image_small'] = $this->getImageUrl('image', 'small');
         $infoIns['image_ingredients'] = $this->getImageUrl('image_ingredients', 'web');
-        unset($infoIns['created']);
-        unset($infoIns['modified']);
-        unset($infoIns['active']);
-        unset($infoIns['ord']);
-        unset($infoIns['preparation_old']);
-        unset($infoIns['id_user']);
-        unset($infoIns['friend_links']);
-        unset($infoIns['description_bottom']);
-        unset($infoIns['adsense_dates']);
-        unset($infoIns['adsense_earnings']);
-        unset($infoIns['adsense_visits']);
-        unset($infoIns['adsense_info']);
-        unset($infoIns['check_versions']);
-        unset($infoIns['ingredients_raw']);
-        unset($infoIns['preparation_raw']);
-        unset($infoIns['link_es']);
-        unset($infoIns['link_en']);
-        unset($infoIns['preparation']);
-        unset($infoIns['images']);
-        unset($infoIns['questions']);
-        unset($infoIns['reviews']);
+        $unsetItems = ['created', 'modified', 'id_user', 'ord', 'preparation_old', 'friend_links', 'description_bottom', 'check_versions', 'ingredients_raw', 'preparation_raw', 'link_es', 'link_en', 'preparation', 'images', 'questions', 'reviews', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info'];
+        foreach ($unsetItems as $item) {
+            unset($infoIns[$item]);
+        }
 
-        
         $infoIns['country'] = $countryCode;
         $infoIns['url'] = $this->url();
         $infoIns['cook_time'] = $infoIns['cook_time'];
@@ -398,7 +430,6 @@ class Recipe extends Db_Object
         $infoIns['ingredients'] = [];
         foreach ($ingredients as $ingredient) {
             $infoIngredient = (array)$ingredient->values;
-            unset($infoIngredient['id']);
             unset($infoIngredient['created']);
             unset($infoIngredient['modified']);
             unset($infoIngredient['id_recipe']);
@@ -412,7 +443,6 @@ class Recipe extends Db_Object
         $infoIns['preparation'] = [];
         foreach ($preparation as $step) {
             $infoStep = (array)$step->values;
-            unset($infoStep['id']);
             unset($infoStep['created']);
             unset($infoStep['modified']);
             unset($infoStep['id_recipe']);
@@ -428,7 +458,6 @@ class Recipe extends Db_Object
         $infoIns['images'] = [];
         foreach ($images as $image) {
             $infoImage = (array)$image->values;
-            unset($infoImage['id']);
             unset($infoImage['created']);
             unset($infoImage['modified']);
             unset($infoImage['id_recipe']);
@@ -439,15 +468,6 @@ class Recipe extends Db_Object
         }
 
         return $infoIns;
-    }
-
-    public function loadTranslation()
-    {
-        if (!isset($this->translation_url)) {
-            $translations = Translate_Controller::loadTranslations();
-            $this->translation_url = (isset($translations['recipe_' . $this->id()])) ? $translations['recipe_' . $this->id()] : '';
-        }
-        return $this->translation_url;
     }
 
     public function promptImages()
@@ -480,6 +500,50 @@ class Recipe extends Db_Object
             }
         }
         return $response;
+    }
+
+    public function translate()
+    {
+        $recipeInfo = $this->toJson();
+        $itemsToUnset = ['ingredients_raw', 'preparation_raw', 'id', 'id_category', 'image', 'title_url', 'rating', 'rating_count', 'cook_time', 'cooking_method', 'servings', 'diet', 'image_ingredients', 'views', 'youtube_url', 'redirect_force_url', 'title_url_en', 'translation', 'translated', 'most_searched', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info', 'image_small', 'country', 'url', 'cook_time_label', 'cooking_method_label', 'diet_label', 'id_category_name', 'title_url_en', 'translation', 'active'];
+        foreach ($itemsToUnset as $item) {
+            unset($recipeInfo[$item]);
+        }
+
+        $cleanIngredients = [];
+        foreach ($recipeInfo['ingredients'] as $key => $ingredient) {
+            $cleanIngredients[$ingredient['id']] = $ingredient['ingredient'];
+        }
+        $recipeInfo['ingredients'] = $cleanIngredients;
+
+        $cleanPreparation = [];
+        foreach ($recipeInfo['preparation'] as $key => $step) {
+            $cleanPreparation[$step['id']] = $step['step'];
+        }
+        $recipeInfo['preparation'] = $cleanPreparation;
+
+        $cleanImages = [];
+        foreach ($recipeInfo['images'] as $key => $image) {
+            $cleanImages[$image['id']] = $image['label'];
+        }
+        $recipeInfo['images'] = $cleanImages;
+
+        $recipeJson = json_encode($recipeInfo);
+        $questionVersion = 'Translate this JSON file to english respecting all the key names and the same order, just translate the values: "' . $recipeJson . '"';
+        $response = [];
+        $maxAttempts = 3;
+        $attempts = 0;
+        while (empty($response['title']) && $attempts < $maxAttempts) {
+            $response = ChatGPT::answerJson($questionVersion);
+            $attempts++;
+        }
+        if (isset($response['title'])) {
+            $titleUrl = Text::simpleUrl($response['title']);
+            $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url_en=:title_url_en AND id != :id'], ['title_url_en' => $titleUrl, 'id' => $this->id()]);
+            $titleUrl .= ($oldRecipe->id() != '') ? '-' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 6)  : '';
+            $this->persistSimple('title_url_en', $titleUrl);
+            $this->persistSimple('translation', json_encode($response));
+        }
     }
 
 }

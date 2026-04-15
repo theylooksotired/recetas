@@ -15,6 +15,7 @@ class RecipeVersion_Form extends Form
     {
         $buttonApi = ($this->object->id() != '') ? '
             <div class="button button_small button_api_steps" data-url="' . url('recipe_version/steps-ai-data/' . $this->object->id(), true) . '">Corregir preparación con ChatGPT</div>
+            <a class="button button_small" href="' . url('recipe_version/translate/' . $this->object->id(), true) . '">Traducir</a>
             <hr/>
             ' : '
             <div class="textarea_resizable form_field  form_field_short_description required ">

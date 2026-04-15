@@ -37,6 +37,11 @@
             <required>unique</required>
         </attribute>
         <attribute>
+            <name>code_en</name>
+            <label>code_en</label>
+            <type>text</type>
+        </attribute>
+        <attribute>
             <name>title</name>
             <label>title</label>
             <language>true</language>
@@ -44,16 +49,31 @@
             <type>text</type>
         </attribute>
         <attribute>
+            <name>title_en</name>
+            <label>title_en</label>
+            <type>text</type>
+            <language>true</language>
+        </attribute>
+        <attribute>
             <name>title_url</name>
             <type>hidden_url</type>
-            <language>true</language>
             <refAttribute>title</refAttribute>
+        </attribute>
+        <attribute>
+            <name>title_url_en</name>
+            <type>hidden_url</type>
+            <refAttribute>title_en</refAttribute>
         </attribute>
         <attribute>
             <name>section</name>
             <label>section</label>
             <language>true</language>
             <required>not_empty</required>
+            <type>textarea_ck</type>
+        </attribute>
+        <attribute>
+            <name>section_en</name>
+            <label>section_en</label>
             <type>textarea_ck</type>
         </attribute>
     </attributes>

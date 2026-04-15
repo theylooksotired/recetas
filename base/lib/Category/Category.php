@@ -43,4 +43,32 @@ class Category extends Db_Object
         return $categoriesIds;
     }
 
+    public function translate()
+    {
+        $categoryInfoRaw = json_decode($this->toJson(), true);
+        $categoryInfo = [];
+        $itemsToSet = ['name', 'short_description', 'description', 'title', 'meta_description', 'best_recipes_title', 'rest_recipes_title'];
+        foreach ($itemsToSet as $item) {
+            $categoryInfo[$item] = (isset($categoryInfoRaw[$item])) ? $categoryInfoRaw[$item] : '';
+        }
+
+        $categoryJson = json_encode($categoryInfo);
+        $questionVersion = 'Translate this JSON file to english respecting all the key names and the same order, just translate the values: "' . $categoryJson . '"';
+        $response = [];
+        $maxAttempts = 3;
+        $attempts = 0;
+        while (empty($response['name']) && $attempts < $maxAttempts) {
+            $response = ChatGPT::answerJson($questionVersion);
+            $attempts++;
+        }
+        if (isset($response['name'])) {
+            foreach ($itemsToSet as $item) {
+                $value = (isset($response[$item])) ? $response[$item] : '';
+                $this->persistSimple($item . '_en', $value);
+            }
+            $nameUrlEn = Text::simpleUrl($response['name']);
+            $this->persistSimple('name_url_en', $nameUrlEn);
+        }
+    }
+
 }
