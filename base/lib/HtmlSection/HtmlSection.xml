@@ -52,7 +52,6 @@
             <name>title_en</name>
             <label>title_en</label>
             <type>text</type>
-            <language>true</language>
         </attribute>
         <attribute>
             <name>title_url</name>

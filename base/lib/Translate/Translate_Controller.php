@@ -55,17 +55,17 @@ class Translate_Controller extends Controller
                 }
                 $result['recipes'] = $itemsProcessed;
 
-                // // HtmlSections
-                // $itemsProcessed = [];
-                // $htmlSections = (new HtmlSection)->readList(['where' => 'title_url_en IS NULL OR title_url_en=""']);
-                // foreach ($htmlSections as $htmlSection) {
-                //     $htmlSection->translate();
-                //     $itemsProcessed[] = 'OK - ' . $htmlSection->getBasicInfo();
-                // }
-                // $result['html_sections'] = $itemsProcessed;
+                // HtmlSections
+                $itemsProcessed = [];
+                $htmlSections = (new HtmlSection)->readList(['where' => 'title_url_en IS NULL OR title_url_en=""']);
+                foreach ($htmlSections as $htmlSection) {
+                    $htmlSection->translate();
+                    $itemsProcessed[] = 'OK - ' . $htmlSection->getBasicInfo();
+                }
+                $result['html_sections'] = $itemsProcessed;
 
-                // return json_encode($result, JSON_PRETTY_PRINT);
-                // break;
+                return json_encode($result, JSON_PRETTY_PRINT);
+                break;
             }
     }
 
