@@ -66,7 +66,48 @@ class Translate_Controller extends Controller
 
                 return json_encode($result, JSON_PRETTY_PRINT);
                 break;
-            }
+            case 'info':
+                $this->mode = 'json';
+                // $this->checkAuthorization();
+                $result = ['status' => 'NOK'];
+
+                // Main info
+                $itemsProcessed = [];
+                $site = [
+                    'meta_description' => Parameter::code('meta_description'),
+                    'meta_keywords' => Parameter::code('meta_keywords'),
+                    'meta_title_page' => Parameter::code('meta_title_page'),
+                    'meta_title_page_intro' => Parameter::code('meta_title_page_intro'),
+                    'meta_title_page_posts' => Parameter::code('meta_title_page_posts'),
+                    'meta_title_page_top10' => Parameter::code('meta_title_page_top10'),
+                ];
+                $questionVersion = 'Translate this JSON file to english respecting all the key names and the same order, just translate the values: "' . json_encode($site) . '"';
+                $response = [];
+                $maxAttempts = 3;
+                $attempts = 0;
+                while (empty($response['meta_title_page']) && $attempts < $maxAttempts) {
+                    $response = ChatGPT::answerJson($questionVersion);
+                    $attempts++;
+                }
+                if (isset($response['meta_title_page'])) {
+                    foreach ($site as $key => $value) {
+                        $valueParameter = (isset($response[$key])) ? $response[$key] : $value;
+                        $keyEn = $key . '_en';
+                        $newParameter = (new Parameter)->readFirst(['where' => 'code=:code', 'values' => ['code' => $key]]);
+                        if ($newParameter->id() != '') {
+                            $newParameter->persistSimple('information', $valueParameter);
+                        } else {
+                            $newParameter->set('code', $keyEn);
+                            $newParameter->set('name', $keyEn);
+                            $newParameter->set('information', $valueParameter);
+                            $newParameter->persist();
+                        }
+                        $itemsProcessed[] = 'OK - ' . $newParameter->get('code');
+                    }
+                }
+                return json_encode(['status' => 'OK', 'site' => $itemsProcessed], JSON_PRETTY_PRINT);
+                break;
+        }
     }
 
     public function checkAuthorization()
