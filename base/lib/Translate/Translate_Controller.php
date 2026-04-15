@@ -93,7 +93,7 @@ class Translate_Controller extends Controller
                     foreach ($site as $key => $value) {
                         $valueParameter = (isset($response[$key])) ? $response[$key] : $value;
                         $keyEn = $key . '_en';
-                        $newParameter = (new Parameter)->readFirst(['where' => 'code=:code', 'values' => ['code' => $key]]);
+                        $newParameter = (new Parameter)->readFirst(['where' => 'code=:code', 'values' => ['code' => $keyEn]]);
                         if ($newParameter->id() != '') {
                             $newParameter->persistSimple('information', $valueParameter);
                         } else {
