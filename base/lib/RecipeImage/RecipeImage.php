@@ -11,4 +11,15 @@
 class RecipeImage extends Db_Object
 {
 
+    public function getImageUrl($attributeName, $version = '', $modified = false)
+    {
+        $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrec', '/rec', ASTERION_STOCK_FILE) : ASTERION_STOCK_FILE;
+        $stockUrl = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', ASTERION_STOCK_URL) : ASTERION_STOCK_URL;
+        $version = ($version != '') ? '_' . strtolower($version) : '';
+        $file = $stockFile . $this->className . '/' . $this->get($attributeName) . '/' . $this->get($attributeName) . $version . '.jpg';
+        if (is_file($file)) {
+            return str_replace($stockFile, $stockUrl, $file) . ($modified && ($this->get('modified') != '') ? '?v=' . Date::sqlInt($this->get('modified')) : '');
+        }
+    }
+
 }
