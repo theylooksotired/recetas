@@ -55,7 +55,7 @@ class Navigation_Controller extends Controller
             default:
                 $category = (new Category)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
                 $subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url'], ['name_url' => $this->action]);
-                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : $recipe;
+                $recipe = ($this->id != '' && $category->id() != '') ? (new Recipe)->readFirst(['where' => 'title_url=:title_url AND id_category=:id_category AND active="1"'], ['title_url' => $this->id, 'id_category' => $category->id()]) : new Recipe();
                 $item = ($subcategory->id() != '') ? $subcategory : new SubCategory();
                 $item = ($category->id() != '') ? $category : $item;
                 $item = ($recipe->id() != '') ? $recipe : $item;
