@@ -473,7 +473,7 @@ class Recipe extends Db_Object
     public function promptImages()
     {
         $this->loadMultipleValues();
-        $newSteps = (count($this->get('preparation')) > 4) ? 4 : 3;
+        $newSteps = (isset($_GET['steps'])) ? intval($_GET['steps']) : 4;
         $question = 'Haz un archivo JSON que tenga el "titulo", "descripcion", "ingredientes" y "pasos" que resume los pasos a tan solo ' . $newSteps . ' de la receta: ' . $this->showUi('Text');
         $answer = ChatGPT::answerJson($question);
         $response = [];
