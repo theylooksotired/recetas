@@ -69,8 +69,8 @@ class Post_Ui extends Ui
         // Images
         $images = [];
         foreach ($this->object->get('images') as $item) {
-            if ($item->get('id_recipe') != '') {
-                $recipe = (new Recipe)->read($item->get('id_recipe'));
+            $recipe = (new Recipe)->read($item->get('id_recipe'));
+            if ($recipe->id() != '') {
                 $images[] = $recipe->showUi();
             } else {
                 $images[] = '
