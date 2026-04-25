@@ -55,6 +55,15 @@ class Translate_Controller extends Controller
                 }
                 $result['recipes'] = $itemsProcessed;
 
+                // Recipes versions
+                $itemsProcessed = [];
+                $recipes = (new RecipeVersion)->readList(['where' => 'translation IS NULL OR translation=""', 'limit' => '10']);
+                foreach ($recipes as $recipe) {
+                    $recipe->translate();
+                    $itemsProcessed[] = 'OK - ' . $recipe->getBasicInfo();
+                }
+                $result['recipes_versions'] = $itemsProcessed;
+
                 // HtmlSections
                 $itemsProcessed = [];
                 $htmlSections = (new HtmlSection)->readList(['where' => 'title_url_en IS NULL OR title_url_en=""']);
