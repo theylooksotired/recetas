@@ -14,6 +14,7 @@ class PostImage extends Db_Object
     public function getImageUrl($attributeName, $version = '', $modified = false)
     {
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrechaiti', '', ASTERION_STOCK_FILE) : ASTERION_STOCK_FILE;
+        $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrecvegetariana', '', ASTERION_STOCK_FILE) : $stockFile;
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrec', '/rec', $stockFile) : $stockFile;
         $stockUrl = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', ASTERION_STOCK_URL) : ASTERION_STOCK_URL;
         $version = ($version != '') ? '_' . strtolower($version) : '';
