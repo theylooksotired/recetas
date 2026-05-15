@@ -11,6 +11,8 @@
 class Recipe extends Db_Object
 {
 
+    public $category;
+
     public function getTitlePage()
     {
         return $this->getBasicInfo();

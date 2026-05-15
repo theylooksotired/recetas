@@ -20,7 +20,7 @@ class Category_Ui extends Ui
         return '
             <div class="category">
                 <a href="' . $this->object->url() . '">
-                    <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                    <img src="' . $this->object->iconUrl() . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                     <div class="category_title">' . $this->object->get('name') . '</div>
                 </a>
                 <div class="category_recipes">' . $recipesHtml . '</div>
@@ -29,10 +29,9 @@ class Category_Ui extends Ui
 
     public function renderIntroLink()
     {
-        $image = ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg';
         return '
             <div class="category_intro_link">
-                <img src="' . $image . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                <img src="' . $this->object->iconUrl() . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                 <a href="' . $this->object->url() . '">' . $this->object->get('name') . '</a>
             </div>';
     }
@@ -44,6 +43,9 @@ class Category_Ui extends Ui
             FROM ' . (new Recipe)->tableName . ' r
             JOIN ' . (new CategoryRecipe)->tableName . ' rc ON r.id=rc.id_recipe
             WHERE rc.id_category=' . $this->object->id() . ' AND r.active="1" ORDER BY r.title_url';
+        $query = 'SELECT r.*
+            FROM ' . (new Recipe)->tableName . ' r
+            WHERE r.id_category=' . $this->object->id() . ' AND r.active="1" ORDER BY r.views LIMIT 6';
         $recipes = (new Recipe)->readListQuery($query);
         $categoriesIds = Category::arrayCategories();
         foreach ($recipes as $recipe) {
@@ -63,7 +65,7 @@ class Category_Ui extends Ui
             return '
                 <div class="category_intro">
                     <div class="category_intro_title">
-                        <img src="' . ASTERION_BASE_URL . 'visual/img/icon_' . $this->object->get('name_url') . '.svg" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
+                        <img src="' . $this->object->iconUrl() . '" alt="Recetas de '.$this->object->getBasicInfo().'" width="60" height="60"/>
                         <h2 class="category_title">
                             <a href="' . $this->object->url() . '">' . $this->object->get('name') . '</a>
                         </h2>
@@ -131,10 +133,40 @@ class Category_Ui extends Ui
         return '<div class="recipes">' . $items->showListPager(['middle'=>Adsense::responsive('middle'), 'middleRepetitions'=>2]) . '</div>';
     }
 
-    public static function intro()
+    public static function intro($recipesAvoidIds = [])
     {
-        $categories = new ListObjects('Category', ['order' => 'ord']);
-        return $categories->showList(['function' => 'Intro']);
+        $html = '';
+        $categories = (new Category)->readList(['order' => 'ord']);
+        $categoriesIds = Category::arrayCategories();
+        foreach ($categories as $category) {
+            $query = 'SELECT r.*
+                FROM ' . (new Recipe)->tableName . ' r
+                WHERE r.id_category=' . $category->id() . '
+                AND r.active="1"
+                AND r.id NOT IN (' . implode(',', $recipesAvoidIds) . ')
+                ORDER BY r.views LIMIT 4';
+            $recipes = (new Recipe)->readListQuery($query);
+            foreach ($recipes as $recipe) {
+                $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+                $recipe->loadTranslated(true);
+            }
+            $htmlRecipes = '';
+            foreach ($recipes as $key => $recipe) {
+                $htmlRecipes .= $recipe->showUi('Minimal');
+            }
+            $html .= '
+                <div class="category_intro">
+                    <div class="category_intro_title">
+                        <img src="' . $category->iconUrl() . '" alt="Recetas de '.$category->getBasicInfo().'" width="60" height="60"/>
+                        <h2 class="category_title">
+                            <a href="' . $category->url() . '">' . $category->get('name') . '</a>
+                        </h2>
+                    </div>
+                    <p class="category_intro_description">' . $category->get('short_description') . '</p>
+                    <div class="recipes_minimal">' . $htmlRecipes . '</div>
+                </div>';
+        }
+        return $html;
     }
 
     /**

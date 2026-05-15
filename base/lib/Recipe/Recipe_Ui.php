@@ -657,6 +657,26 @@ class Recipe_Ui extends Ui
         return $content;
     }
 
+    public static function introTop10()
+    {
+        $categoriesIds = Category::arrayCategories();
+        $recipes = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'views DESC', 'limit' => '10']);
+        $recipesAvoidIds = [];
+        $htmlRecipes = '';
+        foreach ($recipes as $recipe) {
+            $recipesAvoidIds[] = $recipe->id();
+            $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : null;
+            $htmlRecipes .= $recipe->showUi('Best');
+        }
+        $titleTop10 = (Parameter::code('meta_title_top10') != '') ? Parameter::code('meta_title_top10') : __('top10');
+        return '
+            <h2>' . $titleTop10 . '</h2>
+            <div class="category_intro">
+                <div class="recipes">' . $htmlRecipes . '</div>
+            </div>
+            ' . Category_Ui::intro($recipesAvoidIds);
+    }
+
     public static function sitemapUrls()
     {
         $items = (new Recipe)->readList(['where' => 'active="1"']);

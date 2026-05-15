@@ -112,47 +112,7 @@ class Navigation_Ui extends Ui
         return '
             <footer class="footer">
                 <div class="footer_ins">
-                    <div class="footer_links_wrapper">
-                        <div class="footer_links">
-                            <div class="footer_links_title">' . __('footer_links_title_site') . '</div>
-                            <a href="https://www.recetas-argentinas.com" rel="nofollow" title="Recetas de Argentina">Argentina</a>
-                            <a href="https://www.cocina-boliviana.com" rel="nofollow" title="Recetas de Bolivia">Bolivia</a>
-                            <a href="https://www.cocina-brasilena.com" rel="nofollow" title="Recetas de Brasil">Brasil</a>
-                            <a href="https://www.receitas-brasil.com" rel="nofollow" title="Receitas do Brasil">Brasil [PT]</a>
-                            <a href="https://www.cocina-chilena.com" rel="nofollow" title="Recetas de Chile">Chile</a>
-                            <a href="https://www.recetas-chinas.com" rel="nofollow" title="Recetas de China">China</a>
-                            <a href="https://www.cocina-colombiana.com" rel="nofollow" title="Recetas de Colombia">Colombia</a>
-                            <a href="https://www.recetascostarica.com" rel="nofollow" title="Recetas de Costa Rica">Costa Rica</a>
-                            <a href="https://www.cocina-cubana.com" rel="nofollow" title="Recetas de Cuba">Cuba</a>
-                            <a href="https://www.cocina-ecuatoriana.com" rel="nofollow" title="Recetas de Ecuador">Ecuador</a>
-                            <a href="https://www.recetas-espana.com" rel="nofollow" title="Recetas de España">España</a>
-                            <a href="https://www.recetassalvador.com" rel="nofollow" title="Recetas del Salvador">El Salvador</a>
-                            <a href="https://www.recetas-francesas.com" rel="nofollow" title="Recetas de Francia">Francia</a>
-                            <a href="https://www.recetas-guatemala.com" rel="nofollow" title="Recetas de Guatemala">Guatemala</a>
-                            <a href="https://www.recetas-haitianas.com" rel="nofollow" title="Recetas de Haití">Haití</a>
-                            <a href="https://www.recetashonduras.com" rel="nofollow" title="Recetas de Honduras">Honduras</a>
-                            <a href="https://www.recetas-indias.com" rel="nofollow" title="Recetas de India">India</a>
-                            <a href="https://www.recetas-italia.com" rel="nofollow" title="Recetas de Italia">Italia</a>
-                            <a href="https://www.recetas-japonesas.com" rel="nofollow" title="Recetas de Japón">Japón</a>
-                            <a href="https://www.la-cocina-mexicana.com" rel="nofollow" title="Recetas de México">México</a>
-                            <a href="https://www.recetas-nicaragua.com" rel="nofollow" title="Recetas de Nicaragua">Nicaragua</a>
-                            <a href="https://www.recetaspanama.com/" rel="nofollow" title="Recetas de Panamá">Panamá</a>
-                            <a href="https://www.recetasparaguay.com/" rel="nofollow" title="Recetas de Paraguay">Paraguay</a>
-                            <a href="https://www.comida-peruana.com" rel="nofollow" title="Recetas de Peru">Peru</a>
-                            <a href="https://www.recetas-puertorico.com" rel="nofollow" title="Recetas de Puerto Rico">Puerto Rico</a>
-                            <a href="https://www.recetas-dominicanas.com" rel="nofollow" title="Recetas de República Dominicana">República Dominicana</a>
-                            <a href="https://www.cocina-uruguaya.com" rel="nofollow" title="Recetas de Uruguay">Uruguay</a>
-                            <a href="https://www.recetas-venezolanas.com" rel="nofollow" title="Recetas de Venezuela">Venezuela</a>
-                        </div>
-                        <div class="footer_links">
-                            <div class="footer_links_title">' . __('footer_links_title_type') . '</div>
-                            <a href="https://www.recetas-arabes.com" rel="nofollow" title="Recetas árabes">Árabes</a>
-                            <a href="https://www.recetasdiabetes.com" rel="nofollow" title="Recetas para diabéticos">Diabetes</a>
-                            <a href="https://www.recetas-judias.com" rel="nofollow" title="Recetas judías">Judías</a>
-                            <a href="https://www.receta-vegetariana.com" rel="nofollow" title="Recetas vegetariana">Vegetariana</a>
-                            <a href="https://www.recetas-veganas.com" rel="nofollow" title="Recetas veganas">Veganas</a>
-                        </div>
-                    </div>
+                    ' . $this->footerLinks() . '
                     <div class="footer_down">
                         <div class="footer_down_ins">
                             <p>
@@ -166,6 +126,53 @@ class Navigation_Ui extends Ui
                     </div>
                 </div>
             </footer>';
+    }
+
+    public function footerLinks()
+    {
+        return '';
+        return '
+            <div class="footer_links_wrapper">
+                <div class="footer_links">
+                    <div class="footer_links_title">' . __('footer_links_title_site') . '</div>
+                    <a href="https://www.recetas-argentinas.com" rel="nofollow" title="Recetas de Argentina">Argentina</a>
+                    <a href="https://www.cocina-boliviana.com" rel="nofollow" title="Recetas de Bolivia">Bolivia</a>
+                    <a href="https://www.cocina-brasilena.com" rel="nofollow" title="Recetas de Brasil">Brasil</a>
+                    <a href="https://www.receitas-brasil.com" rel="nofollow" title="Receitas do Brasil">Brasil [PT]</a>
+                    <a href="https://www.cocina-chilena.com" rel="nofollow" title="Recetas de Chile">Chile</a>
+                    <a href="https://www.recetas-chinas.com" rel="nofollow" title="Recetas de China">China</a>
+                    <a href="https://www.cocina-colombiana.com" rel="nofollow" title="Recetas de Colombia">Colombia</a>
+                    <a href="https://www.recetascostarica.com" rel="nofollow" title="Recetas de Costa Rica">Costa Rica</a>
+                    <a href="https://www.cocina-cubana.com" rel="nofollow" title="Recetas de Cuba">Cuba</a>
+                    <a href="https://www.cocina-ecuatoriana.com" rel="nofollow" title="Recetas de Ecuador">Ecuador</a>
+                    <a href="https://www.recetas-espana.com" rel="nofollow" title="Recetas de España">España</a>
+                    <a href="https://www.recetassalvador.com" rel="nofollow" title="Recetas del Salvador">El Salvador</a>
+                    <a href="https://www.recetas-francesas.com" rel="nofollow" title="Recetas de Francia">Francia</a>
+                    <a href="https://www.recetas-guatemala.com" rel="nofollow" title="Recetas de Guatemala">Guatemala</a>
+                    <a href="https://www.recetas-haitianas.com" rel="nofollow" title="Recetas de Haití">Haití</a>
+                    <a href="https://www.recetashonduras.com" rel="nofollow" title="Recetas de Honduras">Honduras</a>
+                    <a href="https://www.recetas-indias.com" rel="nofollow" title="Recetas de India">India</a>
+                    <a href="https://www.recetas-italia.com" rel="nofollow" title="Recetas de Italia">Italia</a>
+                    <a href="https://www.recetas-japonesas.com" rel="nofollow" title="Recetas de Japón">Japón</a>
+                    <a href="https://www.la-cocina-mexicana.com" rel="nofollow" title="Recetas de México">México</a>
+                    <a href="https://www.recetas-nicaragua.com" rel="nofollow" title="Recetas de Nicaragua">Nicaragua</a>
+                    <a href="https://www.recetaspanama.com/" rel="nofollow" title="Recetas de Panamá">Panamá</a>
+                    <a href="https://www.recetasparaguay.com/" rel="nofollow" title="Recetas de Paraguay">Paraguay</a>
+                    <a href="https://www.comida-peruana.com" rel="nofollow" title="Recetas de Peru">Peru</a>
+                    <a href="https://www.recetas-puertorico.com" rel="nofollow" title="Recetas de Puerto Rico">Puerto Rico</a>
+                    <a href="https://www.recetas-dominicanas.com" rel="nofollow" title="Recetas de República Dominicana">República Dominicana</a>
+                    <a href="https://www.cocina-uruguaya.com" rel="nofollow" title="Recetas de Uruguay">Uruguay</a>
+                    <a href="https://www.recetas-venezolanas.com" rel="nofollow" title="Recetas de Venezuela">Venezuela</a>
+                </div>
+                <div class="footer_links">
+                    <div class="footer_links_title">' . __('footer_links_title_type') . '</div>
+                    <a href="https://www.recetas-arabes.com" rel="nofollow" title="Recetas árabes">Árabes</a>
+                    <a href="https://www.recetasdiabetes.com" rel="nofollow" title="Recetas para diabéticos">Diabetes</a>
+                    <a href="https://www.recetas-judias.com" rel="nofollow" title="Recetas judías">Judías</a>
+                    <a href="https://www.receta-vegetariana.com" rel="nofollow" title="Recetas vegetariana">Vegetariana</a>
+                    <a href="https://www.recetas-veganas.com" rel="nofollow" title="Recetas veganas">Veganas</a>
+                </div>
+            </div>';
     }
 
     public function menu()

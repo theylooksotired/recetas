@@ -71,4 +71,11 @@ class Category extends Db_Object
         }
     }
 
+    public function iconUrl()
+    {
+        $iconUrl = ASTERION_BASE_FILE . 'visual/img/icon_' . $this->get('name_url') . '.svg';
+        $iconDefault = ASTERION_BASE_URL . 'visual/img/icon_default.svg';
+        return (file_exists($iconUrl)) ? str_replace(ASTERION_BASE_FILE, ASTERION_BASE_URL, $iconUrl) : $iconDefault;
+    }
+
 }

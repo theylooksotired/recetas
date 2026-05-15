@@ -76,12 +76,12 @@ class Navigation_Controller extends Controller
                 $this->meta_url = url('');
                 $this->layout_page = 'simple';
                 $this->head = Translate_Controller::alternateUrl('main');
+                    // ' . Category_Ui::introTop() . '
+                    // ' . HtmlSection::show('intro') . '
                 $this->content = '
-                    ' . Category_Ui::introTop() . '
-                    ' . HtmlSection::show('intro_top') . '
                     <h1>' . $this->title_page . '</h1>
-                    ' . Category_Ui::intro() .'
-                    ' . HtmlSection::show('intro') . '
+                    ' . HtmlSection::show('intro_top') . '
+                    ' . Recipe_Ui::introTop10() . '
                     ' . Post_Ui::intro();
                 return $this->ui->render();
                 break;

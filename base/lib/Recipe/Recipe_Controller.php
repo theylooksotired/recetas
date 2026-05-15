@@ -151,12 +151,24 @@ class Recipe_Controller extends Controller
                 $response = [];
                 $content = (isset($this->values['content'])) ? $this->values['content'] : '';
                 if ($content != '') {
+                    if (substr($content, 0, 4) == 'http') {
+                        $content = file_get_contents($content);
+                        $questionRecipe = 'Encuentra en este codigo HTML una receta y traducila al español. Dame un archivo JSON con "titulo", "descripcion", "ingredientes" y "preparacion". El contenido es: "' . $content . '"';
+                        $responseJson = [];
+                        $maxAttempts = 3;
+                        $attempts = 0;
+                        while (empty($responseJson['titulo']) && $attempts < $maxAttempts) {
+                            $responseJson = ChatGPT::answerJson($questionRecipe);
+                            $attempts++;
+                        }
+                        $content = json_encode($responseJson);
+                    }
                     $categories = (new Category)->readList();
                     $categoriesInfo = [];
                     foreach ($categories as $category) {
                         $categoriesInfo[] = $category->id() . ':' . $category->get('name');
                     }
-                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del plato, debe ser distinta a la descripcion y debe contener mejor informacion sobre la receta, de maximo 1000 caracteres en codigo HTML), idCategory (' . implode($categoriesInfo, ',') . '), tiempoPreparacion (5_minutes,15_minutes,30_minutes,45_minutes,1_hour,2_hours,3_hours,4_hours,5_hours,1_day,2_days), numeroPorciones, ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
+                    $questionRecipe = 'Escribe un archivo JSON, sin ningun texto adicional, con los campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descripcion sencilla del plato, debe ser distinta a la descripcion y debe contener mejor informacion sobre la receta, de maximo 1000 caracteres en codigo HTML), idCategory (' . implode(',', $categoriesInfo) . '), tiempoPreparacion (5_minutes,15_minutes,30_minutes,45_minutes,1_hour,2_hours,3_hours,4_hours,5_hours,1_day,2_days), numeroPorciones, ingredientes (lista, separar cada ingrediente si una linea tiene varios), pasos (lista, que incluya a todos los ingredientes, siempre en tercera persona y con un lenguaje muy amigable, se debe tener una sola linea por paso). La receta es: "' . $content . '"';
                     $questionRecipes = (ASTERION_LANGUAGE_ID == 'pt') ? 'Escreva um arquivo JSON, sem texto adicional, com os campos titulo, metaDescripcion (140 caracteres), descripcion (350 caracteres), descripcionHtml (descrição simples do prato, deve ser diferente da descrição e deve conter informações melhores sobre a receita, com no máximo 1000 caracteres em HTML), ingredientes (lista, separar cada ingrediente se uma linha tiver vários), pasos (lista, que inclua todos os ingredientes, sempre em terceira pessoa e com uma linguagem muito amigável, deve haver apenas uma linha por passo). A receita é: "' . $content . '"' : $questionRecipe;
                     $answerChatGPT = ChatGPT::answer($questionRecipe);
                     preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
