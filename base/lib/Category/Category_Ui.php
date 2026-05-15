@@ -117,7 +117,7 @@ class Category_Ui extends Ui
     public function renderIndex()
     {
         $categoriesIds = Category::arrayCategories();
-        $recipes = (new Recipe)->readList(['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'order' => 'title_url', 'limit' => '34']);
+        $recipes = (new Recipe)->readList(['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'order' => 'title_url']);
         $letters = [];
         foreach ($recipes as $recipe) {
             $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
