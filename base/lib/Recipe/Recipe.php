@@ -12,6 +12,7 @@ class Recipe extends Db_Object
 {
 
     public $category;
+    public $translation_url;
 
     public function getTitlePage()
     {

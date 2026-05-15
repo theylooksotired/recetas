@@ -2,6 +2,11 @@
 class Category extends Db_Object
 {
 
+    public function urlIndex()
+    {
+        return url('indice/' . $this->get('name_url'));
+    }
+
 	public function getTitlePage()
     {
         return ($this->get('title')!='') ? $this->get('title') : $this->get('name');

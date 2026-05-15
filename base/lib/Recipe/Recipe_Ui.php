@@ -670,6 +670,7 @@ class Recipe_Ui extends Ui
         }
         $titleTop10 = (Parameter::code('meta_title_top10') != '') ? Parameter::code('meta_title_top10') : __('top10');
         return '
+            <div class="top_line"></div>
             <h2>' . $titleTop10 . '</h2>
             <div class="category_intro">
                 <div class="recipes">' . $htmlRecipes . '</div>

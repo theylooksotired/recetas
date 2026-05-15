@@ -207,6 +207,25 @@ class Navigation_Controller extends Controller
                 }
                 return $this->ui->render();
                 break;
+            case 'indice':
+                $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
+                if ($this->category->id() != '') {
+                    $totalRecipes = (new Recipe)->countResults(['where' => 'id_category="' . $this->category->id() . '" AND active="1"']);
+                    if ($totalRecipes > 34) {
+                        $this->title_page = ($this->category->get('title_page') != '') ? $this->category->get('title_page') : $this->category->getTitlePage();  
+                        $this->meta_url = $this->category->urlIndex();
+                        $this->content = $this->category->showUi('Index');
+                        return $this->ui->render();
+                    } else {
+                        header("HTTP/1.1 301 Moved Permanently");
+                        header('Location: ' . $this->category->url());
+                        exit();
+                    }
+                }
+                header("HTTP/1.1 301 Moved Permanently");
+                header('Location: ' . url(''));
+                exit();
+                break;
             case 'rating':
                 $this->mode = 'json';
                 $response = ['status' => 'NOK'];

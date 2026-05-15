@@ -79,6 +79,70 @@ class Category_Ui extends Ui
 
     public function renderComplete()
     {
+        $titleBestRecipes = ($this->object->get('best_recipes_title') != '') ? $this->object->get('best_recipes_title') : __('best_recipes');
+        $titleRestRecipes = ($this->object->get('rest_recipes_title') != '') ? $this->object->get('rest_recipes_title') : __('rest_recipes');
+        $categoriesIds = Category::arrayCategories();
+        $recipes = (new Recipe)->readList(['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'order' => 'views DESC', 'limit' => '34']);
+        $bestRecipesHtml = '';
+        $restRecipesHtml = '';
+        $i = 0;
+        foreach ($recipes as $recipe) {
+            $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+            $recipe->loadTranslated(true);
+            if ($i < 6) {
+                $bestRecipesHtml .= $recipe->showUi('Best');
+            } else {
+                $restRecipesHtml .= $recipe->showUi('Minimal');
+            }
+            $i++;
+        }
+        $totalRecipes = (new Recipe)->countResults(['where' => 'id_category="' . $this->object->id() . '" AND active="1"']);
+        $htmlIndex = ($totalRecipes > 34) ? '
+            <div class="top_line">
+                <a class="button" href="' . $this->object->urlIndex() . '">' . __('view_all_recipes_az') . '</a>
+            </div>' : '';
+        return '
+            <h1>' . $this->object->get('title') . '</h1>
+            <div class="recipes_description">'.$this->object->get('description').'</div>
+            <h2>' . $titleBestRecipes . '</h2>
+            <div class="recipes recipes_category">' . $bestRecipesHtml . '</div>
+            ' . Adsense::responsive('middle') . '
+            ' . (($restRecipesHtml != '') ? '
+                <h2>' . $titleRestRecipes . '</h2>
+                <div class="recipes_minimal">' . $restRecipesHtml . '</div>
+            ' : '') . '
+            ' . $htmlIndex;
+    }
+
+    public function renderIndex()
+    {
+        $categoriesIds = Category::arrayCategories();
+        $recipes = (new Recipe)->readList(['where' => 'id_category="' . $this->object->id() . '" AND active="1"', 'order' => 'title_url', 'limit' => '34']);
+        $letters = [];
+        foreach ($recipes as $recipe) {
+            $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : new Category();
+            $recipe->loadTranslated(true);
+            $letter = strtoupper(substr($recipe->get('title'), 0, 1));
+            if (!isset($letters[$letter])) {
+                $letters[$letter] = '';
+            }
+            $letters[$letter] .= '<li>' . $recipe->showUi('Link') . '</li>';
+        }
+        $html = '';
+        foreach ($letters as $letter => $recipesHtml) {
+            $html .= '
+                <div class="recipes_letter">
+                    <h2>' . $letter . '</h2>
+                    <div class="recipes_links_grid">
+                        <ul>' . $recipesHtml . '</ul>
+                    </div>
+                </div>';
+        }
+        return $html;
+    }
+
+    public function renderCompleteAll()
+    {
         $this->object->loadMultipleValues();
         $titleBestRecipes = ($this->object->get('best_recipes_title') != '') ? $this->object->get('best_recipes_title') : __('best_recipes');
         $titleRestRecipes = ($this->object->get('rest_recipes_title') != '') ? $this->object->get('rest_recipes_title') : __('rest_recipes');
