@@ -148,7 +148,7 @@ class Navigation_Controller extends Controller
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
                     $this->bread_crumbs = ($this->recipe->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
-                    $this->bread_crumbs = ($this->recipeversion->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $this->recipe->url() => $this->recipe->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($this->recipeversion->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $this->recipe->url() => $this->recipe->getBasicInfo(), $item->url() => $item->getBasicInfo()] : $this->bread_crumbs;
                     $this->content = $item->showUi('Complete');
                     if ($this->content == '') {
                         header("HTTP/1.1 301 Moved Permanently");
