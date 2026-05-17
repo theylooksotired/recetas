@@ -1870,6 +1870,11 @@ body {
         }
     }
     
+    .recipe_video {
+        margin: 20px 0 0 0;
+        padding: 20px 0 0 0;
+        border-top: 10px solid rgba($colorAccent, 0.1);
+    }
     .recipe_inside_images {
         margin: 0 0 20px;
         padding: 0 0 10px;
@@ -2840,7 +2845,7 @@ body {
                 border: 1px solid rgba($colorAccent, 0.5);
             }
             @include mobile() {
-                padding: 10px 50px;
+                padding: 10px 20px;
             }
         }
         p {

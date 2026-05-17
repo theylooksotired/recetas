@@ -88,86 +88,20 @@ class Recipe_Ui extends Ui
         if (isset($this->object->translation_url) && $this->object->translation_url != '') {
             $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
         }
+
         // Versions
-        $otherVersionsTop = '';
-        $otherVersions = '';
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        if ((count($versions) > 0) || $translationLink != '') {
-            $versionsIds = [];
-            foreach ($versions as $version) {
-                $versionsIds[] = $version->id();
-            }
-            // Load all ingredients and preparation
-            if (count($versionsIds) > 0) {
-                $queryIngredients = 'SELECT ri.* FROM ' . (new RecipeVersionIngredient)->tableName . ' ri WHERE ri.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
-                $queryPreparation = 'SELECT rp.* FROM ' . (new RecipeVersionPreparation)->tableName . ' rp WHERE rp.id_recipe_version IN (' . implode(',', $versionsIds) . ') ORDER BY ord';
-                $allIngredients = (new RecipeVersionIngredient)->readListQuery($queryIngredients);
-                $allPreparation = (new RecipeVersionPreparation)->readListQuery($queryPreparation);
-                foreach ($versions as $version) {
-                    $ingredients = [];
-                    $preparations = [];
-                    foreach ($allIngredients as $ingredient) {
-                        if ($ingredient->get('id_recipe_version') == $version->id()) {
-                            $ingredients[] = $ingredient;
-                        }
-                    }
-                    foreach ($allPreparation as $preparation) {
-                        if ($preparation->get('id_recipe_version') == $version->id()) {
-                            $preparations[] = $preparation;
-                        }
-                    }
-                    $version->set('ingredients', $ingredients);
-                    $version->set('preparation', $preparations);
-                }
-            }
-
-            foreach ($versions as $version) {
-                $version->loadTranslated();
-            }    
-
-            $i = ($translationLink != '') ? 2 : 1;
-            foreach ($versions as $version) {
-                $versionUi = new Recipe_Ui($version);
-                $nameLink = Text::simpleUrl($version->getBasicInfo());
-                $labelIngredientsSteps = str_replace("#COUNT_INGREDIENTS#", count($version->get('ingredients')), __('version_alternative_ingredients_steps'));
-                $labelIngredientsSteps = str_replace("#COUNT_STEPS#", count($version->get('preparation')), $labelIngredientsSteps);
-                $versionImage = $version->getImageWidth('image', 'web');
-                $otherVersions .= '
-                    <div class="recipe_wrapper">
-                        <h2 id="' . $nameLink . '" name="' . $nameLink . '" class="anchor_top">' . $version->getBasicInfo() . '</h2>
-                        ' . (($versionImage != '') ? '
-                            <div class="recipe_version_image_wrapper">
-                                <div class="recipe_version_image">' . $versionImage . '</div>
-                                ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
-                            </div>
-                        ' : '
-                            ' . (($version->get('short_description') != '') ? '<p>' . $version->get('short_description') . '</p>' : '') . '
-                        ') . '
-                        <div class="recipe_extra_info">' . $this->renderInfoVersion($version) . '</div>
-                        <div class="recipe_wrapper_ins">
-                            <div class="recipe_ingredients">
-                                <h3>' . __('ingredients') . '</h3>
-                                <div class="recipe_ingredients_ins">' . $versionUi->renderIngredients() . '</div>
-                            </div>
-                            <div class="recipe_preparation">
-                                <h3>' . __('preparation') . '</h3>
-                                <div class="recipe_preparation_ins">' . $versionUi->renderPreparation() . '</div>
-                            </div>
-                        </div>
-                    </div>';
-                $otherVersionsTop .= '<li><a href="#' . $nameLink . '">' . $version->getBasicInfo() . ' <span>(' . $labelIngredientsSteps . ')</span></a></li> ';
-                $i++;
-            }
-            $otherVersionsTop .= ($translationLink != '') ? $translationLink : '';
-            $otherVersionsTop = '<li><a href="#' . $nameLinkBase . '">' . $this->object->getBasicInfo() . ' <span>(' . __('original_version') . ')</span></a></li> ' . $otherVersionsTop;
-            $otherVersionsTop = '
-                <div class="recipe_versions_top">
-                    <div class="recipe_versions_top_decoration"><i class="icon icon-star"></i></div>
-                    <p>' . str_replace('#COUNT#', $i, __('recipe_versions_menu')) . '</p>
-                    <ol>' . $otherVersionsTop . '</ol>
-                </div>';
+        $versionsHtml = '';
+        foreach ($versions as $version) {
+            $version->category = $this->object->category;
+            $versionsHtml .= $version->showUi('Best', ['recipe' => $this->object]);
         }
-        $otherVersions = ($otherVersions != '') ? '<div class="other_versions_wrapper">' . $otherVersions . '</div>' : '';
+        $versionsHtml = ($versionsHtml != '') ? '
+            <div class="versions_list">
+                <h2>' . __('other_versions_recipe') . '</h2>
+                <div class="versions_list_items">' . $versionsHtml . '</div>
+            </div>' : '';
+
         // Images
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
@@ -186,6 +120,7 @@ class Recipe_Ui extends Ui
             $i++;
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
+
         // Questions
         $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
@@ -199,6 +134,7 @@ class Recipe_Ui extends Ui
             $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
         }
         $reviewsHtml = '';
+
         // Reviews
         $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         if (!$reviews->isEmpty()) {
@@ -214,13 +150,16 @@ class Recipe_Ui extends Ui
         // Video
         $videoHtml = ($this->object->get('youtube_url') != '') ? '
             <div class="recipe_video">
+                <h3>' . __('video') . '</h3>
                 ' . VideoHelper::show($this->object->get('youtube_url'), ['width' => '100%', 'height' => '300']) . '
             </div>' : '';
+        
+        // Sessions
         Session::delete('reviewed_recipe');
         Session::delete('answered_recipe');
         Session::delete('answered_question');
+
         return '
-            ' . $otherVersionsTop . '
             <main>
                 <article class="recipe_complete">
                     <div class="recipe_complete_ins post-content" id="post-container">
@@ -228,7 +167,6 @@ class Recipe_Ui extends Ui
                             ' . $this->object->getImageWidth('image', 'web') . '
                             <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
                         </div>
-                        ' . $videoHtml . '
                         ' . Adsense::responsive('middle') . '
                         ' . $this->object->get('description') . '
                         <div class="recipe_wrapper">
@@ -256,6 +194,7 @@ class Recipe_Ui extends Ui
                                     ' : '') . '
                                     <h3>' . __('preparation') . '</h3>
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
+                                    ' . $videoHtml . '
                                     ' . $this->renderNewsletter() . '
                                 </div>
                             </div>
@@ -278,8 +217,7 @@ class Recipe_Ui extends Ui
                         </div>
                     </div>
                 </article>
-                ' . $otherVersions . '
-                ' . (($this->object->get('description_bottom')!='') ? '<div class="recipe_complete_bottom">' . $this->object->get('description_bottom') . '</div>' : '') . '
+                ' . $versionsHtml . '
             </main>';
     }
 

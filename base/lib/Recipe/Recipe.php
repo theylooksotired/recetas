@@ -404,7 +404,7 @@ class Recipe extends Db_Object
         $infoIns['image'] = $this->getImageUrl('image', 'web');
         $infoIns['image_small'] = $this->getImageUrl('image', 'small');
         $infoIns['image_ingredients'] = $this->getImageUrl('image_ingredients', 'web');
-        $unsetItems = ['created', 'modified', 'id_user', 'ord', 'preparation_old', 'friend_links', 'description_bottom', 'check_versions', 'ingredients_raw', 'preparation_raw', 'link_es', 'link_en', 'preparation', 'images', 'questions', 'reviews', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info'];
+        $unsetItems = ['created', 'modified', 'id_user', 'ord', 'preparation_old', 'friend_links', 'check_versions', 'ingredients_raw', 'preparation_raw', 'link_es', 'link_en', 'preparation', 'images', 'questions', 'reviews', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info'];
         foreach ($unsetItems as $item) {
             unset($infoIns[$item]);
         }

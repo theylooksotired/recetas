@@ -11,6 +11,56 @@
 class RecipeVersion extends Db_Object
 {
 
+    public function getTitlePage()
+    {
+        return $this->getBasicInfo();
+    }
+
+    public function getBasicInfoTitle()
+    {
+        return str_replace('"', '', $this->getBasicInfo());
+    }
+
+    public function getBasicInfoTitlePage()
+    {
+        return ($this->get('title_page') != '') ? $this->get('title_page') : $this->getBasicInfoTitle();
+    }
+
+    public function url()
+    {
+        $this->loadRecipe();
+        return $this->recipe->url() . '/' . $this->get('title_url');
+    }
+
+    public function urlEs()
+    {
+        $this->loadRecipe();
+        return $this->recipe->url() . '/' . $this->get('title_url');
+    }
+    
+    public function urlEn()
+    {
+        $this->loadRecipe();
+        return $this->recipe->urlEn() . '/' . $this->get('title_url_en');
+    }
+
+    public function loadRecipe()
+    {
+        if (!isset($this->recipe)) {
+            $this->recipe = (new Recipe)->read($this->get('id_recipe'));
+        }
+        return $this->recipe;
+    }
+    
+    public function loadCategory()
+    {
+        if (!isset($this->category)) {
+            $this->loadRecipe();
+            $this->category = $this->recipe->loadCategory();
+        }
+        return $this->category;
+    }
+
     public function getPrepTime()
     {
         $cookTime = $this->get('cook_time');
@@ -104,6 +154,14 @@ class RecipeVersion extends Db_Object
         $steps = $this->showUi('PreparationParagraph');
         $questionSteps = 'Escribe estos pasos de forma mas clara, ordenada y en tercera persona. No uses titulos, ni la lista de ingredientes, ni ennumeres los pasos. No uses lineas como "Buen provecho" o "Listo para disfrutar". La preparacion es: "' . $steps . '"';
         return str_replace('. ', ".\n\n", ChatGPT::answer($questionSteps));
+    }
+
+    public function loadTranslation()
+    {
+        if (!isset($this->translation_url)) {
+            $this->translation_url = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', $this->urlEs()) : str_replace('//www.', '//en.', $this->urlEn());
+        }
+        return $this->translation_url;
     }
 
     public function loadTranslated()
@@ -245,11 +303,14 @@ class RecipeVersion extends Db_Object
     {
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrec', '/rec', ASTERION_STOCK_FILE) : ASTERION_STOCK_FILE;
         $stockUrl = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', ASTERION_STOCK_URL) : ASTERION_STOCK_URL;
+        $originalVersion = $version;
         $version = ($version != '') ? '_' . strtolower($version) : '';
         $file = $stockFile . $this->className . '/' . $this->get($attributeName) . '/' . $this->get($attributeName) . $version . '.jpg';
         if (is_file($file)) {
             return str_replace($stockFile, $stockUrl, $file) . ($modified && ($this->get('modified') != '') ? '?v=' . Date::sqlInt($this->get('modified')) : '');
         }
+        $this->loadRecipe();
+        return $this->recipe->getImageUrl($attributeName, $originalVersion);
     }
 
 }

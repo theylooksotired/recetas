@@ -100,11 +100,6 @@
             <type>textarea_ck_simple</type>
         </attribute>
         <attribute>
-            <name>description_bottom</name>
-            <label>description_bottom</label>
-            <type>textarea_ck_simple</type>
-        </attribute>
-        <attribute>
             <name>rating</name>
             <label>rating</label>
             <type>select</type>

@@ -90,6 +90,7 @@ class Navigation_Controller extends Controller
                 $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
                 $this->recipe = ($this->extraId != '' && $this->category->id() != '') ? (new Recipe)->readFirst(['where' => '(title_url=:title_url OR title_url_en=:title_url) AND id_category=:id_category AND active="1"'], ['title_url' => $this->extraId, 'id_category' => $this->category->id()]) : new Recipe();
+                $this->recipeversion = ($this->addId != '' && $this->recipe->id() != '') ? (new RecipeVersion)->readFirst(['where' => '(title_url=:title_url OR title_url_en=:title_url) AND active="1"'], ['title_url' => $this->addId]) : new RecipeVersion();
                 if ($this->id != '' && $this->category->id() == '' && $this->subcategory->id() == '') {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . url('recetas'));
@@ -100,6 +101,11 @@ class Navigation_Controller extends Controller
                     header('Location: ' . $this->category->url());
                     exit();
                 }
+                if ($this->addId != '' && $this->recipeversion->id() == '') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $this->recipe->url());
+                    exit();
+                }
                 if (isset($this->parameters['pagina']) && $this->parameters['pagina'] !='') {
                     header("HTTP/1.1 301 Moved Permanently");
                     header('Location: ' . $this->category->url());
@@ -108,6 +114,7 @@ class Navigation_Controller extends Controller
                 $item = ($this->subcategory->id() != '') ? $this->subcategory : new SubCategory();
                 $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
+                $item = ($this->recipeversion->id() != '') ? $this->recipeversion : $item;
                 if ($item instanceof SubCategory || $item instanceof Category) {
                     $GLOBALS['adsense_hidden'] = true;
                 }
@@ -119,12 +126,14 @@ class Navigation_Controller extends Controller
                     }
                     if ($this->recipe->id() != '') {
                         $this->layout_page = 'recipe';
-                        $item->persistSimple('views', $item->get('views') + 1);
-                        $item->loadMultipleValuesSingleAttribute('ingredients');
-                        $item->loadMultipleValuesSingleAttribute('preparation');
-                        $item->loadMultipleValuesSingleAttribute('images');
+                        $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
                         $item->loadTranslation();
                         $item->loadTranslated();
+                        $item->loadMultipleValuesSingleAttribute('ingredients');
+                        $item->loadMultipleValuesSingleAttribute('preparation');
+                        if ($this->recipeversion->id() == '') {
+                            $item->loadMultipleValuesSingleAttribute('images');
+                        }
                     } else {
                         $this->layout_page = 'recipe_category';
                         $this->hide_title_page_appendix = true;
@@ -139,6 +148,7 @@ class Navigation_Controller extends Controller
                     $this->meta_image = $item->getImageUrl('image', 'web');
                     $this->meta_description = ($item->get('meta_description') != '') ? $item->get('meta_description') : $item->get('short_description');
                     $this->bread_crumbs = ($this->recipe->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
+                    $this->bread_crumbs = ($this->recipeversion->id() != '') ? [$this->category->url() => $this->category->getBasicInfo(), $this->recipe->url() => $this->recipe->getBasicInfo(), $item->url() => $item->getBasicInfo()] : [$item->url() => $item->getBasicInfo()];
                     $this->content = $item->showUi('Complete');
                     if ($this->content == '') {
                         header("HTTP/1.1 301 Moved Permanently");

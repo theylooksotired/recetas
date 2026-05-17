@@ -63,6 +63,11 @@
             <refAttribute>title</refAttribute>
         </attribute>
         <attribute>
+            <name>title_page</name>
+            <label>title_page</label>
+            <type>text_long</type>
+        </attribute>
+        <attribute>
             <name>short_description</name>
             <label>short_description</label>
             <type>textarea_long</type>
@@ -150,6 +155,11 @@
             <linkAttribute>id_recipe_version</linkAttribute>
             <onDelete>cascade</onDelete>
             <class>multiple_items_preparation</class>
+        </attribute>
+        <attribute>
+            <name>title_url_en</name>
+            <label>title_url_en</label>
+            <type>text_long</type>
         </attribute>
         <attribute>
             <name>translation</name>
