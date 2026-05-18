@@ -2954,6 +2954,7 @@ body {
 }
 
 .language_link {
+    margin: 0 0 20px;
     a {
         padding: 5px 10px;
         font-weight: normal;
@@ -2972,5 +2973,8 @@ body {
          &:hover {
             border-color: rgba($colorAccent, 0.5);
         }
+    }
+    @include mobile {
+        margin: 0;
     }
 }
