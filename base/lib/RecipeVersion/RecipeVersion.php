@@ -169,7 +169,7 @@ class RecipeVersion extends Db_Object
         if (ASTERION_LANGUAGE_ID == 'en') {
             $translation = @json_decode($this->get('translation'), true);
             if (isset($translation['title'])) {
-                $keys = ['title', 'short_description'];
+                $keys = ['title', 'title_page', 'short_description', 'meta_description'];
                 foreach ($keys as $key) {
                     $this->values[$key] = $translation[$key];
                 }
