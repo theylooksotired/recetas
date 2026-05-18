@@ -18,6 +18,7 @@ class Navigation_Controller extends Controller
     public $category;
     public $recipe;
     public $bread_crumbs_hide;
+    public $after_title_page;
 
     /**
      * Main function to control the public actions.
@@ -131,6 +132,7 @@ class Navigation_Controller extends Controller
                         $item->loadTranslated();
                         $item->loadMultipleValuesSingleAttribute('ingredients');
                         $item->loadMultipleValuesSingleAttribute('preparation');
+                        $this->after_title_page = $item->showUi('TranslationLink');
                         if ($this->recipeversion->id() == '') {
                             $item->loadMultipleValuesSingleAttribute('images');
                         }
@@ -460,6 +462,7 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Category_Ui::sitemapUrls());
                 $urls = array_merge($urls, SubCategory_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
+                $urls = array_merge($urls, RecipeVersion_Ui::sitemapUrls());
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
@@ -820,6 +823,16 @@ class Navigation_Controller extends Controller
                             return json_encode(['status' => 'NOK']);
                         }
                     break;
+                    case 'fix-versions':
+                        $versions = (new RecipeVersion)->readList(['where' => 'title_page="" OR title_page IS NULL', 'limit' => 20]);
+                        $response = [];
+                        foreach ($versions as $version) {
+                            $version->fixTitleUrl();
+                            $version->translate();
+                            $response[] = ['id' => $version->id(), 'title' => $version->getBasicInfo()];
+                        }
+                        return json_encode(['status' => 'OK', 'versions' => $response]);
+                        break;
                 }
             break;
         }

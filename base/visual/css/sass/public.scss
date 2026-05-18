@@ -2952,3 +2952,25 @@ body {
         margin: auto;
     }
 }
+
+.language_link {
+    a {
+        padding: 5px 10px;
+        font-weight: normal;
+        border: 1px solid rgba($colorAccent, 0.3);
+        background: rgba($colorAccent, 0.05);
+        font-size: $fontSizeSmall;
+        @include borderRadius(5px);
+        img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 10px 0 0;
+        }
+         &:hover {
+            border-color: rgba($colorAccent, 0.5);
+        }
+    }
+}

@@ -82,24 +82,41 @@ class RecipeVersion_Ui extends Ui
             </div>';
     }
 
+    public function renderTranslationLink()
+    {
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            return '
+                <div class="language_link">
+                    <a href="' . $this->object->translation_url . '" target="_blank">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/flag_' . Translate_Controller::translateTo() . '.svg" loading="lazy" alt="' . __('read_in_' . Translate_Controller::translateTo()) . '"/>
+                        <span>' . __('read_in_' . Translate_Controller::translateTo()) . '</span>
+                    </a>
+                </div>';
+        }
+    }
+
+    public static function sitemapUrls()
+    {
+        $items = (new RecipeVersion)->readList(['where' => 'active="1"']);
+        return Sitemap::getUrls($items);
+    }
+
     public function renderComplete()
     {
         $this->object->loadRecipe();
         $this->object->loadCategory();
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
-        // Translation
-        $translationLink = '';
-        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
-            $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
-        }
-        
+
         return '
             <main>
                 <article class="recipe_complete">
                     <div class="recipe_complete_ins post-content" id="post-container">
                         <div class="recipe_complete_info">
                             ' . $this->object->getImageWidth('image', 'web') . '
-                            <p class="recipe_short_description">' . $this->object->get('short_description') . '</p>
+                            <p class="recipe_short_description">
+                                ' . $this->object->get('short_description') . '<br/><br/>
+                                ' . __('original_recipe_in') . ' ' . $this->object->recipe->link() . '
+                            </p>
                         </div>
                         ' . Adsense::responsive('middle') . '
                         ' . $this->object->get('description') . '
@@ -293,6 +310,89 @@ class RecipeVersion_Ui extends Ui
                     </div>
                 </div>
             </div>';
+    }
+
+    public function renderText()
+    {
+        $this->object->loadMultipleValues();
+        $ingredients = [];
+        foreach ($this->object->get('ingredients') as $ingredient) {
+            if ($ingredient->get('amount') != '') {
+                $ingredientType = (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') : '');
+                $ingredients[] = $ingredient->get('amount') . ' ' . $ingredientType . ' ' . $ingredient->get('ingredient');
+            } else {
+                $ingredients[] = $ingredient->get('ingredient');
+            }
+        }
+        $instructions = [];
+        foreach ($this->object->get('preparation') as $preparation) {
+            $instructions[] = $preparation->get('step') . "\n";
+        }
+        return $this->object->getBasicInfo() . '
+            ' . __('ingredients') . '
+            ' . implode("\n", $ingredients) . '
+            ' . __('preparation') . '
+            ' . implode("\n", $instructions);
+    }
+
+    public function renderJsonHeader()
+    {
+        $this->object->loadRecipe();
+        $this->object->loadCategory();
+        $dateModified = ($this->object->get('modified') != '') ? $this->object->get('modified') . 'T00:00:00-03:00' : date('Y-m-d\TH:i:sP');
+        $dateCreated = ($this->object->get('created') != '') ? $this->object->get('created') . 'T00:00:00-03:00' : $dateModified;
+        $ingredients = [];
+        foreach ($this->object->get('ingredients') as $ingredient) {
+            $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
+        }
+        $instructions = [];
+        $i = 1;
+        foreach ($this->object->get('preparation') as $preparation) {
+            $instructions[] = [
+                '@type' => 'HowToStep',
+                'name' => __('step') . ' ' . $i,
+                'text' => $preparation->get('step'),
+                'url' => $this->object->url() . '#paso' . $i
+            ];
+            $i++;
+        }
+        $info = [
+            '@context' => 'http://schema.org/',
+            '@type' => 'Recipe',
+            'name' => $this->object->getBasicInfo(),
+            'image' => $this->object->getImageUrl('image', 'web'),
+            'description' => $this->object->get('short_description'),
+            'aggregateRating' => [
+                '@type' => 'AggregateRating',
+                'ratingValue' => $this->object->get('rating'),
+                'ratingCount' => $this->object->get('rating_count'),
+                'bestRating' => '5',
+                'worstRating' => '1',
+            ],
+            'author' => [
+                '@type' => 'Organization',
+                'name' => Parameter::code('meta_title_page'),
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => Parameter::code('meta_title_page'),
+                'logo' => Parameter::code('meta_image'),
+            ],
+            'datePublished' => $dateCreated,
+            'dateModified' => $dateModified,
+            'recipeCuisine' => $this->object->label('diet'),
+            'recipeCategory' => $this->object->category->getBasicInfo(),
+            'recipeYield' => $this->object->getServings(),
+            'recipeIngredient' => $ingredients,
+            'recipeInstructions' => $instructions,
+        ];
+        $info['cookTime'] = $this->object->getCookTime();
+        $info['prepTime'] = $this->object->getPrepTime();
+        $info['totalTime'] = $this->object->getTotalTime();
+        if ($this->object->get('cooking_method') != '') {
+            $info['cookingMethod'] = $this->object->get('cooking_method');
+        }
+        return '<script type="application/ld+json">' . json_encode($info) . '</script>';
     }
 
 }

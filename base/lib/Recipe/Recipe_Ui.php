@@ -80,14 +80,22 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderTranslationLink()
+    {
+        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
+            return '
+                <div class="language_link">
+                    <a href="' . $this->object->translation_url . '" target="_blank">
+                        <img src="' . ASTERION_BASE_URL . 'visual/img/flag_' . Translate_Controller::translateTo() . '.svg" loading="lazy" alt="' . __('read_in_' . Translate_Controller::translateTo()) . '"/>
+                        <span>' . __('read_in_' . Translate_Controller::translateTo()) . '</span>
+                    </a>
+                </div>';
+        }
+    }
+
     public function renderComplete()
     {
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
-        // Translation
-        $translationLink = '';
-        if (isset($this->object->translation_url) && $this->object->translation_url != '') {
-            $translationLink = '<li><a href="' . $this->object->translation_url . '" target="_blank">' . __('version_in_' . Translate_Controller::translateTo()) . '</a></li> ';
-        }
 
         // Versions
         $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);

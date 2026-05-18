@@ -8,6 +8,7 @@ class Navigation_Ui extends Ui
         $title_page = (isset($this->object->title_page)) ? '<h1>' . $this->object->title_page . '</h1>' : '';
         $title_page = (isset($this->object->hide_title_page)) ? '' : $title_page;
         $title_page = (isset($this->object->title_page_content)) ? '<h1>' . $this->object->title_page_content . '</h1>' : $title_page;
+        $title_page .= (isset($this->object->after_title_page)) ? $this->object->after_title_page : '';
         $message = (isset($this->object->message) && $this->object->message != '') ? $this->object->message : Session::getFlashInfo();
         $message_alert = (isset($this->object->message_alert) && $this->object->message_alert != '') ? $this->object->message_alert : Session::getFlashAlert();
         $message_error = (isset($this->object->message_error) && $this->object->message_error != '') ? $this->object->message_error : Session::getFlashError();

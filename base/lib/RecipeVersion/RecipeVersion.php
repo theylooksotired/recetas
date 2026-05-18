@@ -265,6 +265,22 @@ class RecipeVersion extends Db_Object
         return $infoIns;
     }
 
+    public function fixTitleUrl()
+    {
+        $question = 'Dame un archivo JSON con "name_recipe" (un nombre de la receta sencillo), "title_page" (un titulo SEO friendly para esta receta) y "description" (Un parrafo sobre la misma), "meta_description" (Una meta descripcion para SEO). La receta es: "' . $this->showUi('Text') . '"';
+        $maxAttempts = 3;
+        $attempts = 0;
+        while (empty($response['name_recipe']) && $attempts < $maxAttempts) {
+            $response = ChatGPT::answerJson($question);
+            $attempts++;
+        }
+        $this->persistSimple('title', $response['name_recipe']);
+        $this->persistSimple('title_url', Text::simpleUrl($response['name_recipe']));
+        $this->persistSimple('title_page', $response['title_page']);
+        $this->persistSimple('short_description', $response['description']);
+        $this->persistSimple('meta_description', $response['meta_description']);
+    }
+
     public function translate()
     {
         $recipeInfo = $this->toJson();
@@ -295,6 +311,10 @@ class RecipeVersion extends Db_Object
             $attempts++;
         }
         if (isset($response['title'])) {
+            $titleUrl = Text::simpleUrl($response['title']);
+            $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url_en=:title_url_en AND id != :id'], ['title_url_en' => $titleUrl, 'id' => $this->id()]);
+            $titleUrl .= ($oldRecipe->id() != '') ? '-' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 6)  : '';
+            $this->persistSimple('title_url_en', $titleUrl);
             $this->persistSimple('translation', json_encode($response));
         }
     }
