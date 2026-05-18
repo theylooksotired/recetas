@@ -102,6 +102,7 @@ class Recipe_Ui extends Ui
         $versionsHtml = '';
         foreach ($versions as $version) {
             $version->category = $this->object->category;
+            $version->loadTranslated(true);
             $versionsHtml .= $version->showUi('Best', ['recipe' => $this->object]);
         }
         $versionsHtml = ($versionsHtml != '') ? '
