@@ -48,6 +48,7 @@ class RecipeVersion extends Db_Object
     {
         if (!isset($this->recipe)) {
             $this->recipe = (new Recipe)->read($this->get('id_recipe'));
+            $this->recipe->loadTranslated();
         }
         return $this->recipe;
     }
