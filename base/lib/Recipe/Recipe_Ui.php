@@ -95,6 +95,7 @@ class Recipe_Ui extends Ui
 
     public function renderComplete()
     {
+        $this->object->loadTranslated();
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
 
         // Versions
