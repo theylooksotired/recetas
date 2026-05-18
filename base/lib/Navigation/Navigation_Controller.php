@@ -128,12 +128,14 @@ class Navigation_Controller extends Controller
                     if ($this->recipe->id() != '') {
                         $this->layout_page = 'recipe';
                         $this->recipe->persistSimple('views', $this->recipe->get('views') + 1);
-                        $item->loadTranslation();
-                        $item->loadTranslated();
+                        $this->recipe->loadTranslation();
+                        $this->recipe->loadTranslated();
                         $item->loadMultipleValuesSingleAttribute('ingredients');
                         $item->loadMultipleValuesSingleAttribute('preparation');
                         $this->after_title_page = $item->showUi('TranslationLink');
                         if ($this->recipeversion->id() == '') {
+                            $item->loadTranslation();
+                            $item->loadTranslated();
                             $item->loadMultipleValuesSingleAttribute('images');
                         }
                     } else {
