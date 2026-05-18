@@ -707,6 +707,19 @@ class Navigation_Controller extends Controller
                         }
                         return json_encode($recipesInfo);
                     break;
+                    case 'list-versions':
+                        $recipes = (new RecipeVersion)->readList(['order' => 'id']);
+                        $recipesInfo = [];
+                        foreach ($recipes as $recipe) {
+                            $recipesInfo[] = [
+                                'id' => $recipe->id(),
+                                'title' => $recipe->getBasicInfo(),
+                                'image_name' => $recipe->get('image'),
+                                'url' => $recipe->url()
+                            ];
+                        }
+                        return json_encode($recipesInfo);
+                    break;
                     case 'recipe-info':
                         $recipe = (new Recipe)->read($this->extraId);
                         if ($recipe->id() != '') {
@@ -800,6 +813,23 @@ class Navigation_Controller extends Controller
                         } else {
                             return json_encode(['status' => 'NOK', 'errors' => 'Data missing']);
                         }
+                        break;
+                    case 'save-image-version':
+                        $response = ['status' => 'NOK'];
+                        $input = file_get_contents('php://input');
+                        $jsonData = json_decode($input, true) ?: [];
+                        $id = isset($jsonData['id']) ? $jsonData['id'] : '';
+                        $recipe = (new RecipeVersion)->read($id);
+                        if ($recipe->id() != '') {
+                            $base64Image = $jsonData['response']['data'][0]['b64_json'];
+                            $fileName = $recipe->get('title_url') . '.jpg';
+                            $response = ['status' => 'OK'];
+                            if (Image_File::savePngBase64Image($base64Image, 'Recipe', $fileName)) {
+                                $recipe->persistSimple('image', Text::simpleUrlFileBase($fileName));
+                                $response = ['status' => 'OK', 'file' => $fileName];
+                            }
+                        }
+                        return json_encode($response);
                         break;
                     case 'publish-question':
                     case 'delete-question':
