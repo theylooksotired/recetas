@@ -134,9 +134,10 @@ class Navigation_Controller extends Controller
                         $item->loadMultipleValuesSingleAttribute('preparation');
                         $this->after_title_page = $item->showUi('TranslationLink');
                         if ($this->recipeversion->id() == '') {
+                            $item->loadMultipleValuesSingleAttribute('images');
+                        } else {
                             $item->loadTranslation();
                             $item->loadTranslated();
-                            $item->loadMultipleValuesSingleAttribute('images');
                         }
                     } else {
                         $this->layout_page = 'recipe_category';
