@@ -739,6 +739,14 @@ class Navigation_Controller extends Controller
                             return json_encode(['status' => 'NOK']);
                         }
                         break;
+                    case 'recipe-version-prompts':
+                        $recipe = (new RecipeVersion)->read($this->extraId);
+                        if ($recipe->id() != '') {
+                            return json_encode($recipe->promptImages());
+                        } else {
+                            return json_encode(['status' => 'NOK']);
+                        }
+                        break;
                     case 'missing-images':
                         $recipes = (new Recipe)->readList(['order' => 'id']);
                         $recipeImages = ['imagesAll' => [], 'imagesMissing' => [], 'imagesSmall' => []];
@@ -818,21 +826,21 @@ class Navigation_Controller extends Controller
                         }
                         break;
                     case 'save-image-version':
-                        $response = ['status' => 'NOK'];
-                        $input = file_get_contents('php://input');
-                        $jsonData = json_decode($input, true) ?: [];
-                        $id = isset($jsonData['id']) ? $jsonData['id'] : '';
-                        $recipe = (new RecipeVersion)->read($id);
+                        $recipe = (new RecipeVersion)->read($this->extraId);
                         if ($recipe->id() != '') {
-                            $base64Image = $jsonData['response']['data'][0]['b64_json'];
+                            $input = file_get_contents('php://input');
+                            $jsonData = json_decode($input, true) ?: [];
+                            $base64Image = $jsonData['image_base64'] ?? '';
                             $fileName = $recipe->get('title_url') . '.jpg';
-                            $response = ['status' => 'OK'];
-                            if (Image_File::savePngBase64Image($base64Image, 'Recipe', $fileName)) {
+                            $response = ['status' => 'NOK'];
+                            if ($base64Image && Image_File::savePngBase64Image($base64Image, 'RecipeVersion', $fileName)) {
                                 $recipe->persistSimple('image', Text::simpleUrlFileBase($fileName));
                                 $response = ['status' => 'OK', 'file' => $fileName];
                             }
+                            return json_encode($response);
+                        } else {
+                            return json_encode(['status' => 'NOK']);
                         }
-                        return json_encode($response);
                         break;
                     case 'publish-question':
                     case 'delete-question':
