@@ -491,6 +491,11 @@ class Recipe_Ui extends Ui
             </div>';
     }
 
+    public function renderRatingComplete()
+    {
+        return $this->renderRating('complete');
+    }
+
     public function renderRating($layout = 'simple')
     {
         $count = $this->object->get('rating_count');

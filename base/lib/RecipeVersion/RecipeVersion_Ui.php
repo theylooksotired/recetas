@@ -143,6 +143,10 @@ class RecipeVersion_Ui extends Ui
                                     ' . $this->object->recipe->showUi('Newsletter') . '
                                 </div>
                             </div>
+                            <div class="rating_wrapper">
+                                <h2>' . __('rating_of_recipe') . '</h2>
+                                <div class="recipe_rating">' . $this->object->recipe->showUi('RatingComplete') . '</div>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -285,7 +289,7 @@ class RecipeVersion_Ui extends Ui
                 'limit' => (8 - $recipesSearch->count()),
                 'order' => 'id'
             ], [
-                'id_category' => $this->object->get('id_category')
+                'id_category' => $this->object->recipe->get('id_category')
             ]);
             foreach ($recipesSearchMore->list as $recipeSearchMore) {
                 $recipeSearchMore->category = (isset($categoriesIds[$recipeSearchMore->get('id_category')])) ? $categoriesIds[$recipeSearchMore->get('id_category')] : null;
@@ -364,8 +368,8 @@ class RecipeVersion_Ui extends Ui
             'description' => $this->object->get('short_description'),
             'aggregateRating' => [
                 '@type' => 'AggregateRating',
-                'ratingValue' => $this->object->get('rating'),
-                'ratingCount' => $this->object->get('rating_count'),
+                'ratingValue' => $this->object->recipe->get('rating'),
+                'ratingCount' => $this->object->recipe->get('rating_count'),
                 'bestRating' => '5',
                 'worstRating' => '1',
             ],

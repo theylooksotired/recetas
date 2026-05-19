@@ -44,6 +44,12 @@ class RecipeVersion extends Db_Object
         return $this->recipe->urlEn() . '/' . $this->get('title_url_en');
     }
 
+    public function urlRatingModal()
+    {
+        $this->loadRecipe();
+        return $this->recipe->urlRatingModal();
+    }
+
     public function loadRecipe()
     {
         if (!isset($this->recipe)) {
