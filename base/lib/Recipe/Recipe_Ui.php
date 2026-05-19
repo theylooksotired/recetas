@@ -611,10 +611,12 @@ class Recipe_Ui extends Ui
         $recipes = (new Recipe)->readList(['where' => 'active="1"', 'order' => 'views DESC', 'limit' => '10']);
         $recipesAvoidIds = [];
         $htmlRecipes = '';
+        $counter = 1;
         foreach ($recipes as $recipe) {
             $recipesAvoidIds[] = $recipe->id();
             $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : null;
-            $htmlRecipes .= $recipe->showUi('Best');
+            $htmlRecipes .= $recipe->showUi('Top10', ['counter' => $counter]);
+            $counter++;
         }
         $titleTop10 = (Parameter::code('meta_title_top10') != '') ? Parameter::code('meta_title_top10') : __('top10');
         return '

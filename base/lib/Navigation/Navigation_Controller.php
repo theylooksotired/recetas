@@ -80,6 +80,7 @@ class Navigation_Controller extends Controller
                     // ' . Category_Ui::introTop() . '
                     // ' . HtmlSection::show('intro') . '
                 $this->content = '
+                    ' . $this->ui->translationHomeLink() . '
                     <h1>' . $this->title_page . '</h1>
                     ' . HtmlSection::show('intro_top') . '
                     ' . Recipe_Ui::introTop10() . '
@@ -322,13 +323,13 @@ class Navigation_Controller extends Controller
                 $this->content = '
                     ' . HtmlSection::show('top_10_intro') . '
                     <div class="top10_wrapper">
-                        <h2>' . __('top10_recipes') . '</h2>
-                        ' . $top10sHtml . '
-                    </div>
-                    <div class="top10_wrapper">
                         <h2>' . __('most_viewed_recipes') . '</h2>
                         <p>' . __('most_viewed_recipes_disclaimer') . '</p>
                         ' . $recipesMostViewedHtml . '
+                    </div>
+                    <div class="top10_wrapper">
+                        <h2>' . __('top10_recipes') . '</h2>
+                        ' . $top10sHtml . '
                     </div>';
                 return $this->ui->render();
                 break;
@@ -448,10 +449,15 @@ class Navigation_Controller extends Controller
                 break;
             case 'politicas-privacidad':
             case 'terminos-condiciones':
+            case 'nuestra-red':
+            case 'privacy-policy':
+            case 'terms-conditions':
+            case 'our-network':
+                $actionEn = str_replace(['politicas-privacidad', 'terminos-condiciones', 'nuestra-red'], ['privacy-policy', 'terms-conditions', 'our-network'], $this->action);
                 $this->redirecLastSlash();
                 $this->layout_page = 'simple';
                 $this->no_ads = true;
-                $this->title_page = ($this->action == 'politicas-privacidad') ? 'Políticas de Privacidad' : 'Términos y Condiciones';
+                $this->title_page = __(str_replace('-', '_', $actionEn));
                 $this->meta_description = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action . '-meta-description'));
                 $this->meta_url = url($this->action);
                 $this->content = str_replace('#SITE#', Parameter::code('meta_title_page'), HtmlSection::showFromCode($this->action));

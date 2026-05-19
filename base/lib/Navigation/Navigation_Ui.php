@@ -117,8 +117,9 @@ class Navigation_Ui extends Ui
                     <div class="footer_down">
                         <div class="footer_down_ins">
                             <p>
-                                <a href="' . url('politicas-privacidad') . '">' . __('privacy_policy') . '</a> |
-                                <a href="' . url('terminos-condiciones') . '">' . __('terms_conditions') . '</a>
+                                <a href="' . url(['en' => 'our-network', 'es' => 'nuestra-red']) . '">' . __('our_network') . '</a> |
+                                <a href="' . url(['en' => 'privacy-policy', 'es' => 'politicas-privacidad']) . '">' . __('privacy_policy') . '</a> |
+                                <a href="' . url(['en' => 'terms-conditions', 'es' => 'terminos-condiciones']) . '">' . __('terms_conditions') . '</a>
                             </p>
                             <p><strong>© ' . date('Y') . ' ' . Parameter::code('meta_title_page') . '</strong></p>
                             <p>' . Parameter::code('meta_description') . ' ' . __('footer_additional_info') . '</p>
@@ -332,6 +333,18 @@ class Navigation_Ui extends Ui
                         </fieldset>
                     </form>
                 </div>
+            </div>';
+    }
+
+    public function translationHomeLink()
+    {
+        $url = (Language::active() == 'es') ? str_replace('www.', 'en.', url('')) : str_replace('en.', 'www.', url(''));
+        return '
+            <div class="language_link">
+                <a href="' . $url . '" target="_blank">
+                    <img src="' . ASTERION_BASE_URL . 'visual/img/flag_' . Translate_Controller::translateTo() . '.svg" loading="lazy" alt="' . __('read_in_' . Translate_Controller::translateTo()) . '"/>
+                    <span>' . __('read_in_' . Translate_Controller::translateTo()) . '</span>
+                </a>
             </div>';
     }
 
