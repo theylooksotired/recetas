@@ -229,7 +229,10 @@ class Navigation_Controller extends Controller
                     $totalRecipes = (new Recipe)->countResults(['where' => 'id_category="' . $this->category->id() . '" AND active="1"']);
                     if ($totalRecipes > 34) {
                         $this->title_page = ($this->category->get('title_page') != '') ? $this->category->get('title_page') : $this->category->getTitlePage();  
+                        $this->title_page .= ' - ' . __('index_a_z');
                         $this->meta_url = $this->category->urlIndex();
+                        $this->meta_description = ($this->category->get('meta_description') != '') ? $this->category->get('meta_description') : $this->category->get('short_description'); 
+                        $this->meta_description .= '. ' . __('index_a_z');
                         $this->content = $this->category->showUi('Index');
                         return $this->ui->render();
                     } else {
