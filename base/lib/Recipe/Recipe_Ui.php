@@ -620,6 +620,7 @@ class Recipe_Ui extends Ui
         foreach ($recipes as $recipe) {
             $recipesAvoidIds[] = $recipe->id();
             $recipe->category = (isset($categoriesIds[$recipe->get('id_category')])) ? $categoriesIds[$recipe->get('id_category')] : null;
+            $recipe->loadTranslated(true);
             $htmlRecipes .= $recipe->showUi('Top10', ['counter' => $counter]);
             $counter++;
         }

@@ -554,6 +554,8 @@ class Recipe extends Db_Object
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrechaiti', '', ASTERION_STOCK_FILE) : ASTERION_STOCK_FILE;
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrecvegetariana', '', ASTERION_STOCK_FILE) : $stockFile;
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrec', '/rec', $stockFile) : $stockFile;
+        $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/rechaiti', '', $stockFile) : $stockFile;
+        $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/recvegetariana', '', $stockFile) : $stockFile;
         $stockUrl = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('//en.', '//www.', ASTERION_STOCK_URL) : ASTERION_STOCK_URL;
         $version = ($version != '') ? '_' . strtolower($version) : '';
         $file = $stockFile . $this->className . '/' . $this->get($attributeName) . '/' . $this->get($attributeName) . $version . '.jpg';
