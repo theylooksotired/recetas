@@ -14,6 +14,8 @@ class Adsense {
     {
         $hiddenCountries = ['cuba', 'venezuela'];
         $hiddenCodes = ['CU', 'VE'];
+        $hiddenCountries = [];
+        $hiddenCodes = [];
         if (in_array(Parameter::code('country_code'), $hiddenCountries)) {
             try {
                 require_once ASTERION_BASE_FILE . 'geo/get_country.php';
@@ -210,6 +212,8 @@ class Adsense {
         }
         $hiddenCountries = ['cuba', 'venezuela'];
         $hiddenCodes = ['CU', 'VE'];
+        $hiddenCountries = [];
+        $hiddenCodes = [];
         if (in_array(Parameter::code('country_code'), $hiddenCountries)) {
             try {
                 require_once ASTERION_BASE_FILE . 'geo/get_country.php';
