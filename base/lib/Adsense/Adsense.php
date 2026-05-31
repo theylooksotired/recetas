@@ -207,6 +207,7 @@ class Adsense {
 
     static public function checkHidden()
     {
+        return false;
         if (isset($GLOBALS['adsense_hidden'])) {
             return $GLOBALS['adsense_hidden'];
         }
