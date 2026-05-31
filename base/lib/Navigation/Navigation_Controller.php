@@ -25,7 +25,6 @@ class Navigation_Controller extends Controller
      */
     public function getContent()
     {
-        Stat::log();
         $this->login = User_Login::getInstance();
         $this->ui = new Navigation_Ui($this);
         $this->mode = (Parameter::code('mode')!='') ? Parameter::code('mode') : 'amp';
@@ -70,6 +69,7 @@ class Navigation_Controller extends Controller
                 }
                 break;
             case 'intro':
+                Stat::log();
                 if (Parameter::code('meta_title_page_intro') != '') {
                     $this->title_page = Parameter::code('meta_title_page_intro');
                     $this->hide_title_page = true;
@@ -89,6 +89,7 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'recetas':
+                Stat::log();
                 $this->redirecLastSlash();
                 $this->subcategory = (new SubCategory)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
@@ -118,9 +119,6 @@ class Navigation_Controller extends Controller
                 $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
                 $item = ($this->recipeversion->id() != '') ? $this->recipeversion : $item;
-                if ($item instanceof SubCategory || $item instanceof Category) {
-                    $GLOBALS['adsense_hidden'] = true;
-                }
                 if ($item->id() != '') {
                     if ($item->get('redirect_force_url') != '') {
                         header("HTTP/1.1 301 Moved Permanently");
@@ -215,7 +213,6 @@ class Navigation_Controller extends Controller
                     }
                     return $this->ui->render();
                 } else {
-                    $GLOBALS['adsense_hidden'] = true;
                     $this->title_page = __('recipes_list');
                     $this->layout_page = 'recipe_category';
                     $this->bread_crumbs = [url($this->action) => __('recipes')];
@@ -225,6 +222,7 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'indice':
+                Stat::log();
                 $this->category = (new Category)->readFirst(['where' => 'name_url=:name_url OR name_url_en=:name_url'], ['name_url' => $this->id]);
                 if ($this->category->id() != '') {
                     $totalRecipes = (new Recipe)->countResults(['where' => 'id_category="' . $this->category->id() . '" AND active="1"']);
@@ -265,6 +263,7 @@ class Navigation_Controller extends Controller
                 return json_encode($response);
                 break;
             case 'articulos':
+                Stat::log();
                 $this->redirecLastSlash();
                 $this->layout_page = 'simple';
                 $post = (new Post)->readFirst(['where' => 'title_url=:title_url OR title_url_en=:title_url'], ['title_url' => $this->id]);
@@ -299,7 +298,7 @@ class Navigation_Controller extends Controller
                 return $this->ui->render();
                 break;
             case 'top-10':
-                $GLOBALS['adsense_hidden'] = true;
+                Stat::log();
                 $categoriesIds = Category::arrayCategories();
                 $top10s = new ListObjects('Top10', ['order' => 'ord']);
                 $recipesMostViewed = new ListObjects('Recipe', ['order' => 'views DESC', 'limit' => '10']);
@@ -339,7 +338,7 @@ class Navigation_Controller extends Controller
                 break;
             case 'buscar':
             case 'pesquisar':
-                $GLOBALS['adsense_hidden'] = true;
+                Stat::log();
                 if (isset($_GET['search']) && $_GET['search'] != '') {
                     $search = Text::simpleUrl($_GET['search']);
                     header("HTTP/1.1 301 Moved Permanently");
