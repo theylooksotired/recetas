@@ -25,6 +25,7 @@ class Navigation_Controller extends Controller
      */
     public function getContent()
     {
+        Stat::log();
         $this->login = User_Login::getInstance();
         $this->ui = new Navigation_Ui($this);
         $this->mode = (Parameter::code('mode')!='') ? Parameter::code('mode') : 'amp';

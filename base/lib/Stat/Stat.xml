@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @structure Stat
+*
+* @author Leano Martinet <info@asterion-cms.com>
+* @package Asterion\Base
+* @version 4.0.0
+-->
+<object>
+	<name>Stat</name>
+	<table>stat</table>
+	<info>
+		<sql>
+            <primary>id</primary>
+            <created>true</created>
+        </sql>
+		<form>
+			<hiddenAdminMenu>true</hiddenAdminMenu>
+		</form>
+	</info>
+	<attributes>
+		<attribute>
+            <name>id</name>
+            <type>id_autoincrement</type>
+        </attribute>
+		<attribute>
+			<name>url</name>
+			<type>text_long</type>
+		</attribute>
+		<attribute>
+			<name>ip</name>
+			<type>text</type>
+		</attribute>
+        <attribute>
+            <name>robot</name>
+            <label>robot</label>
+            <type>checkbox</type>
+        </attribute>
+	</attributes>
+</object>
