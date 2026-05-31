@@ -12,10 +12,13 @@ class Stat extends Db_Object
 {
 
     public static function log() {
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $isRobot = preg_match('/(facebookexternalhit|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|crawler)/i', $userAgent) > 0;
+        
         $stat = new Stat([
-            'url' => $_SERVER['REQUEST_URI'],
+            'url' => $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'robot' => (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'robot' => $isRobot,
         ]);
         $stat->persist();
     }
