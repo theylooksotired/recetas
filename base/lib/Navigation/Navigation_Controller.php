@@ -115,6 +115,11 @@ class Navigation_Controller extends Controller
                     header('Location: ' . $this->category->url());
                     exit();
                 }
+                if ($this->recipeversion->id() != '') {
+                    header("HTTP/1.1 301 Moved Permanently");
+                    header('Location: ' . $this->recipe->url());
+                    exit();
+                }
                 $item = ($this->subcategory->id() != '') ? $this->subcategory : new SubCategory();
                 $item = ($this->category->id() != '') ? $this->category : $item;
                 $item = ($this->recipe->id() != '') ? $this->recipe : $item;
@@ -474,7 +479,6 @@ class Navigation_Controller extends Controller
                 $urls = array_merge($urls, Category_Ui::sitemapUrls());
                 $urls = array_merge($urls, SubCategory_Ui::sitemapUrls());
                 $urls = array_merge($urls, Recipe_Ui::sitemapUrls());
-                $urls = array_merge($urls, RecipeVersion_Ui::sitemapUrls());
                 $urls = array_merge($urls, Post_Ui::sitemapUrls());
                 return Sitemap::generate($urls);
                 break;
