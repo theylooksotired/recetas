@@ -687,6 +687,14 @@ class Navigation_Controller extends Controller
                         }
                         return json_encode($info, JSON_PRETTY_PRINT);
                     break;
+                    case 'stats-most-viewed-urls':
+                        $mostViewedUrls = '
+                            SELECT url, COUNT(url) AS views
+                            FROM ' . (new Stat)->tableName . '
+                            GROUP BY url ORDER BY views DESC LIMIT 50';
+                        $stats = Db::returnAll($mostViewedUrls);
+                        return json_encode($stats);
+                        break;
                     case 'list-recipes':
                         $recipes = (new Recipe)->readList(['order' => 'id']);
                         $recipesInfo = [];
