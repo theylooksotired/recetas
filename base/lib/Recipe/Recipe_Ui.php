@@ -131,15 +131,8 @@ class Recipe_Ui extends Ui
         }
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
 
-        // Questions
-        $lastAnswer = '';
-        if (Session::get('answered_recipe') == $this->object->id() ) {
-            $question = (new Question)->read(Session::get('answered_question'));
-            $lastAnswer = ($question->id() != '') ? $question->showUi() : '';
-        }
-        $reviewsHtml = '';
-
         // Reviews
+        $reviewsHtml = '';
         $reviews = new ListObjects('RecipeReview', ['where' => 'active="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '5', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         if (!$reviews->isEmpty()) {
             $reviewsHtml = '
@@ -213,11 +206,6 @@ class Recipe_Ui extends Ui
                                 ' . $reviewsThanks . '
                                 ' . RecipeReview_Form::showPublic() . '
                                 ' . $reviewsHtml . '
-                            </div>
-                            <div class="question_wrapper" id="question_' . $this->object->id() . '">
-                                <h2>' . __('questions_recipe') . '</h2>
-                                ' . Question_Form::showPublic() . '
-                                ' . $lastAnswer . '
                             </div>
                         </div>
                     </div>
