@@ -1870,7 +1870,8 @@ body {
         }
     }
     
-    .recipe_video {
+    .recipe_video,
+    .recipe_simple_version {
         margin: 20px 0 0 0;
         padding: 20px 0 0 0;
         border-top: 10px solid rgba($colorAccent, 0.1);

@@ -132,11 +132,10 @@ class Recipe_Ui extends Ui
         $imagesPreparation = ($imagesPreparation != '') ? '<div class="recipe_inside_images">' . $imagesPreparation . '</div>' : '';
 
         // Questions
-        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '30', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
+        $questions = new ListObjects('Question', ['where' => 'published="1" AND id_recipe=:id_recipe AND language=:language', 'limit' => '3', 'order' => 'created DESC'], ['id_recipe' => $this->object->id(), 'language' => Language::active()]);
         $questionsHtml = ($questions->isEmpty()) ? '' : '
             <div class="questions_recipe_list">
                 <div class="questions_recipe_list_items">' . $questions->showList(['function' => 'Recipe']) . '</div>
-                ' . (($questions->count() > 10) ? '<div class="button questions_recipe_more">' . __('view_more_questions') . '</div>' : '') . '
             </div>';
         $lastAnswer = '';
         if (Session::get('answered_recipe') == $this->object->id() ) {
@@ -198,13 +197,15 @@ class Recipe_Ui extends Ui
                                     <div class="recipe_ingredients_ins">' . $this->renderIngredients() . '</div>
                                 </div>
                                 <div class="recipe_preparation">
-                                    ' . (($imagesPreparation != '') ? '
-                                        <h3>' . __('preparation_simple') . '</h3>
-                                        ' . $imagesPreparation . '
-                                    ' : '') . '
                                     <h3>' . __('preparation') . '</h3>
                                     <div class="recipe_preparation_ins">' . $this->renderPreparation() . '</div>
                                     ' . $videoHtml . '
+                                    ' . (($imagesPreparation != '') ? '
+                                        <div class="recipe_simple_version">
+                                            <h3>' . __('preparation_simple') . '</h3>
+                                            ' . $imagesPreparation . '
+                                        </div>
+                                    ' : '') . '
                                     ' . $this->renderNewsletter() . '
                                 </div>
                             </div>
@@ -227,7 +228,6 @@ class Recipe_Ui extends Ui
                         </div>
                     </div>
                 </article>
-                ' . $versionsHtml . '
             </main>';
     }
 
@@ -663,29 +663,15 @@ class Recipe_Ui extends Ui
             $ingredients[] = $ingredient->get('amount') . ' ' . __($ingredient->get('type')) . ' ' . $ingredient->get('ingredient');
         }
         $instructions = [];
-        if (is_array($this->object->get('images')) && count($this->object->get('images')) > 0) {
-            $i = 1;
-            foreach ($this->object->get('images') as $imagePreparation) {
-                $instructions[] = [
-                    '@type' => 'HowToStep',
-                    'name' => __('step') . ' ' . $i,
-                    'text' => $imagePreparation->get('label'),
-                    'image' => $imagePreparation->getImageUrl('image', 'web'),
-                    'url' => $this->object->url() . '#paso' . $i
-                ];
-                $i++;
-            }
-        } else {
-            $i = 1;
-            foreach ($this->object->get('preparation') as $preparation) {
-                $instructions[] = [
-                    '@type' => 'HowToStep',
-                    'name' => __('step') . ' ' . $i,
-                    'text' => $preparation->get('step'),
-                    'url' => $this->object->url() . '#paso' . $i
-                ];
-                $i++;
-            }
+        $i = 1;
+        foreach ($this->object->get('preparation') as $preparation) {
+            $instructions[] = [
+                '@type' => 'HowToStep',
+                'name' => __('step') . ' ' . $i,
+                'text' => $preparation->get('step'),
+                'url' => $this->object->url() . '#paso' . $i
+            ];
+            $i++;
         }
         $reviews = [];
         if (is_array($this->object->get('reviews')) && count($this->object->get('reviews')) > 0) {
