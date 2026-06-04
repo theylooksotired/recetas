@@ -78,8 +78,6 @@ class Navigation_Controller extends Controller
                 $this->meta_url = url('');
                 $this->layout_page = 'simple';
                 $this->head = Translate_Controller::alternateUrl('main');
-                    // ' . Category_Ui::introTop() . '
-                    // ' . HtmlSection::show('intro') . '
                 $this->content = '
                     ' . $this->ui->translationHomeLink() . '
                     <h1>' . $this->title_page . '</h1>
@@ -167,51 +165,23 @@ class Navigation_Controller extends Controller
                     }
                     if ($this->recipe->id() != '') {
                         $this->hide_side_recipes = true;
-                        $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage') . $item->showUi('AlternateUrl') . Recaptcha::head();
+                        $this->head = $item->showUi('JsonHeader') . $item->showUi('PreloadImage') . $item->showUi('AlternateUrl');
                         $this->content_bottom = $item->showUi('Related');
-                        // Question handling
-                        $typeForm = (isset($this->values['type'])) ? $this->values['type'] : '';
-                        if ($typeForm == 'question' && isset($this->values['question']) && strlen($this->values['question']) > 10) {
-                            $question = 'Usando un lenguaje cordial, sencillo, directo, claro, corto y evitando mencionar el sexo de la persona pues no sabemos si es hombre o mujer. Escribe un archivo JSON que tenga tres campos: "original_question" que es el texto original de la pregunta, "formatted_question" que es la pregunta reformulada, corta y bien escrita, "answer" que es una respuesta corta a la pregunta: "' . $this->values['question'] . '" que ha formulado una persona que acaba de leer la siguiente receta de cocina: "' . $this->recipe->showUi('Text') . '"';
-                            $answerChatGPT = ChatGPT::answer($question);
-                            preg_match('/\{(?:[^{}]|(?R))*\}/', $answerChatGPT, $matches);
-                            $jsonString = (isset($matches[0])) ? $matches[0] : '';
-                            if ($jsonString != '') {
-                                $json = json_decode($jsonString, true);
-                                $values = $this->values;
-                                $values['question'] = (isset($json['original_question'])) ? $json['original_question'] : '';
-                                $values['question_formatted'] = (isset($json['formatted_question'])) ? $json['formatted_question'] : '';
-                                $values['answer'] = (isset($json['answer'])) ? $json['answer'] : '';
-                                $values['id_recipe'] = $item->id();
-                                $values['published'] = false;
-                                $question = new Question($values);
-                                $question->validate();
-                                $question->validateReCaptchaV3();
-                                if (count($question->errors) == 0) {
-                                    $question->persist();
-                                    Session::set('answered_recipe', $item->id());
-                                    Session::set('answered_question', $question->id());
-                                    header('Location: ' . $item->url() . '#question_' . $item->id());
-                                    exit();
-                                }
-                            }
-                        }
                         // Review handling
-                        if ($typeForm == 'review' && isset($this->values['review']) && strlen($this->values['review']) > 20) {
-                            $values = $this->values;
+                        if (isset($this->values['review']) && strlen($this->values['review']) > 10) {
+                            $values = [];
                             $values['id_recipe'] = $item->id();
                             $values['published'] = false;
-                            $values['name'] = (isset($this->values['name']) && $this->values['name'] != '') ? $this->values['name'] : '';
-                            $values['title'] = (isset($this->values['title']) && $this->values['title'] != '') ? $this->values['title'] : '';
+                            $values['name'] = (isset($this->values['name']) && $this->values['name'] != '') ? htmlspecialchars(strip_tags($this->values['name']), ENT_QUOTES, 'UTF-8') : '';
+                            $values['title'] = (isset($this->values['title']) && $this->values['title'] != '') ? htmlspecialchars(strip_tags($this->values['title']), ENT_QUOTES, 'UTF-8') : '';
+                            $values['review'] = (isset($this->values['review'])) ? htmlspecialchars(strip_tags($this->values['review']), ENT_QUOTES, 'UTF-8') : '';
                             $values['rating'] = number_format(rand(32, 50) / 10, 1);
                             $review = new RecipeReview($values);
                             $review->validate();
-                            $review->validateReCaptchaV3();
                             if (count($review->errors) == 0) {
                                 $review->persist();
-                                Session::set('reviewed_recipe', $item->id());
-                                Session::set('reviewed_review', $review->id());
-                                header('Location: ' . $item->url() . '#review_' . $item->id());
+                                Session::set('reviewed_recipe', $this->recipe->id());
+                                header('Location: ' . $this->recipe->url() . '#reviews');
                                 exit();
                             }
                         }
@@ -691,8 +661,18 @@ class Navigation_Controller extends Controller
                         $mostViewedUrls = '
                             SELECT url, COUNT(url) AS views
                             FROM ' . (new Stat)->tableName . '
+                            WHERE robot=0
                             GROUP BY url ORDER BY views DESC LIMIT 50';
                         $stats = Db::returnAll($mostViewedUrls);
+                        return json_encode($stats);
+                        break;
+                    case 'stats-complete':
+                        $dateStats = '
+                            SELECT url, DATE(created) AS date, COUNT(url) AS views
+                            FROM ' . (new Stat)->tableName . '
+                            WHERE robot=0
+                            GROUP BY DATE(created), url ORDER BY views DESC';
+                        $stats = Db::returnAll($dateStats);
                         return json_encode($stats);
                         break;
                     case 'list-recipes':

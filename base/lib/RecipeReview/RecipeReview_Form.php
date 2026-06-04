@@ -17,7 +17,7 @@ class RecipeReview_Form extends Form
         ' . FormField::show('text', ['name' => 'title', 'label' => __('title_review'), 'id' => 'title', 'required' => true]) . '
         ' . FormField::show('textarea', ['name' => 'review', 'label' => __('your_review'), 'id' => 'review', 'required' => true]) . '
         ' . FormField::show('hidden', ['name' => 'type', 'value' => 'review']);
-        return Form::createForm($fields, ['submit' => __('send'), 'id' => 'recipe_review_form', 'recaptchav3' => true]);
+        return Form::createForm($fields, ['submit' => __('send'), 'id' => 'recipe_review_form']);
     }
 
 

@@ -217,14 +217,6 @@
             <class>multiple_items</class>
         </attribute>
         <attribute>
-            <name>questions</name>
-            <label>questions</label>
-            <type>multiple_object</type>
-            <refObject>Question</refObject>
-            <linkAttribute>id_recipe</linkAttribute>
-            <onDelete>cascade</onDelete>
-        </attribute>
-        <attribute>
             <name>reviews</name>
             <label>reviews</label>
             <type>multiple_object</type>

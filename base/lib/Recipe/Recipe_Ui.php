@@ -98,20 +98,6 @@ class Recipe_Ui extends Ui
         $this->object->loadTranslated();
         $nameLinkBase = Text::simpleUrl($this->object->getBasicInfo());
 
-        // Versions
-        $versions = (new RecipeVersion)->readList(['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        $versionsHtml = '';
-        foreach ($versions as $version) {
-            $version->category = $this->object->category;
-            $version->loadTranslated(true);
-            $versionsHtml .= $version->showUi('Best', ['recipe' => $this->object]);
-        }
-        $versionsHtml = ($versionsHtml != '') ? '
-            <div class="versions_list">
-                <h2>' . __('other_versions_recipe') . '</h2>
-                <div class="versions_list_items">' . $versionsHtml . '</div>
-            </div>' : '';
-
         // Images
         $imageIngredients = $this->object->getImageWidth('image_ingredients', 'web');
         $imagesPreparation = '';
@@ -154,7 +140,6 @@ class Recipe_Ui extends Ui
         // Sessions
         Session::delete('reviewed_recipe');
         Session::delete('answered_recipe');
-        Session::delete('answered_question');
 
         return '
             <main>
@@ -201,7 +186,7 @@ class Recipe_Ui extends Ui
                                 <h2>' . __('rating_of_recipe') . '</h2>
                                 <div class="recipe_rating">' . $this->renderRating('complete') . '</div>
                             </div>
-                            <div class="review_wrapper" id="review_' . $this->object->id() . '">
+                            <div class="review_wrapper" id="reviews">
                                 <h2>' . __('reviews_recipe') . '</h2>
                                 ' . $reviewsThanks . '
                                 ' . RecipeReview_Form::showPublic() . '
@@ -625,13 +610,11 @@ class Recipe_Ui extends Ui
     public function label($canModify = false)
     {
         $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
-        $numberQuestions = (new Question)->countResults(['where' => 'id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
             ' . (($this->object->get('redirect_force_url') != '') ? '<div class="error tiny"><strong>Redirigido a ' . $this->object->get('redirect_force_url') . '</strong></div>' : '')  . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
             ' . (($this->object->get('youtube_url') != '') ? '<div class="error tiny">Tiene video</div>' : '')  . '
-            ' . (($numberQuestions > 0) ? '<div class="accent_alt tiny">' . $numberQuestions . ' preguntas</div>' : '') . '
             ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
     }
 
