@@ -169,6 +169,8 @@ class Recipe_Controller extends Controller
                         unset($answer['original_recipe']);
                         foreach ($answer as $key => $value) {
                             echo '<strong>' . $key . '</strong><br/>' . $value . '<br/><br/>';
+                            echo '<hr/><br/>';
+                            echo $table;
                         }
                     } else {
                         echo '<div class="message message_info">No hay datos de queries para los ultimos 30 dias en esta URL.</div>';
