@@ -158,15 +158,13 @@ class Recipe_Controller extends Controller
                             'short_description' => $recipe->get('short_description'),
                             'description' => $recipe->get('description'),
                             'original_recipe' => $recipe->simpleInfo(),
-                            'comments' => '',
-                            'comments_about_incoherences' => '',
-                            'comments_about_incoherences_in_the_original_recipe' => '',
                         ]);
                         $question = '
                             Este es el JSON de una receta de cocina "' . $jsonRecipe . '".
                             Ojo que short_description es un parrafo cortito que describe el plato, description es un poco mas largo y da mas detalles e incluso a veces alguna curiosidad o incentivo para preparar la receta.
                             Esta tabla con las queries de Google Search Console de los ultimos 30 dias para esta URL, es muy importante que analices las palabras clave: ' . $table . ' 
-                            Necesito que me devuelvas el mismo archivo JSON con mejoras SEO, no cambies la estructura, te deje unos campos de comentarios para que los llenes tu';
+                            Necesito que me devuelvas el mismo archivo JSON con mejoras SEO, usa un lenguaje bien humano que no parezca escrito por AI (no abuses de adjetivos ni adverbios, busca informacion en otras paginas, se natural).
+                            No cambies la estructura del JSON, solo mejora el contenido basandote tambien en los datos de Google Search Console.';
                         $answer = ChatGPT::answerJSON($question);
                         unset($answer['original_recipe']);
                         foreach ($answer as $key => $value) {
