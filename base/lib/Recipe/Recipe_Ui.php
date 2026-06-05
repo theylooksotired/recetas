@@ -609,13 +609,12 @@ class Recipe_Ui extends Ui
 
     public function label($canModify = false)
     {
-        $versions = new ListObjects('RecipeVersion', ['where' => 'active="1" AND id_recipe="' . $this->object->id() . '"']);
         return '
             ' . parent::label($canModify) . '
+            ' . $this->object->updatedSpan() . '
             ' . (($this->object->get('redirect_force_url') != '') ? '<div class="error tiny"><strong>Redirigido a ' . $this->object->get('redirect_force_url') . '</strong></div>' : '')  . '
             ' . (($this->object->getImageUrl('image_ingredients') != '') ? '<div class="error tiny">Tiene imagenes</div>' : '')  . '
-            ' . (($this->object->get('youtube_url') != '') ? '<div class="error tiny">Tiene video</div>' : '')  . '
-            ' . ((!$versions->isEmpty()) ? '<div class="recipe_versions">' . $versions->showList(['function' => 'LinkAdmin']) . '</div>' : '');
+            ' . (($this->object->get('youtube_url') != '') ? '<div class="error tiny">Tiene video</div>' : '');
     }
 
     public function renderJsonHeader()

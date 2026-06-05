@@ -134,6 +134,49 @@ class Recipe_Controller extends Controller
                     echo '<pre>' . $socialText . '</pre>';
                 }
                 break;
+            case 'seo-advice':
+                $this->mode = 'ajax';
+                $recipe = (new Recipe)->read($this->id);
+                if ($recipe->id() != '') {
+                    $url = $recipe->url();
+                    // $url = 'https://www.cocina-cubana.com/recetas/plato-principal/pescado-empanizado';
+                    $result = GoogleSearchConsole::loadRows($url);
+                    if (isset($result['error'])) {
+                        echo '<div class="message message_error">' . htmlspecialchars($result['error'], ENT_QUOTES, 'UTF-8') . '</div>';
+                        break;
+                    }
+                    $rows = $result['rows'];
+                    if (empty($rows)) {
+                        echo '<div class="message message_info">No hay datos de queries para los ultimos 30 dias en esta URL.</div>';
+                        break;
+                    }
+                    $table = GoogleSearchConsole::renderTable($rows, $url);
+                    if ($table != '') {
+                        $jsonRecipe = json_encode([
+                            'title_page' => $recipe->get('title_page'),
+                            'meta_description' => $recipe->get('meta_description'),
+                            'short_description' => $recipe->get('short_description'),
+                            'description' => $recipe->get('description'),
+                            'original_recipe' => $recipe->simpleInfo(),
+                            'comments' => '',
+                            'comments_about_incoherences' => '',
+                            'comments_about_incoherences_in_the_original_recipe' => '',
+                        ]);
+                        $question = '
+                            Este es el JSON de una receta de cocina "' . $jsonRecipe . '".
+                            Ojo que short_description es un parrafo cortito que describe el plato, description es un poco mas largo y da mas detalles e incluso a veces alguna curiosidad o incentivo para preparar la receta.
+                            Esta tabla con las queries de Google Search Console de los ultimos 30 dias para esta URL, es muy importante que analices las palabras clave: ' . $table . ' 
+                            Necesito que me devuelvas el mismo archivo JSON con mejoras SEO, no cambies la estructura, te deje unos campos de comentarios para que los llenes tu';
+                        $answer = ChatGPT::answerJSON($question);
+                        unset($answer['original_recipe']);
+                        foreach ($answer as $key => $value) {
+                            echo '<strong>' . $key . '</strong><br/>' . $value . '<br/><br/>';
+                        }
+                    } else {
+                        echo '<div class="message message_info">No hay datos de queries para los ultimos 30 dias en esta URL.</div>';
+                    }
+                }
+                break;
             case 'steps-ai-data':
                 $this->mode = 'json';
                 $recipe = (new Recipe)->read($this->id);
