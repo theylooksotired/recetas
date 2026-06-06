@@ -549,29 +549,6 @@ class Recipe extends Db_Object
         }
     }
 
-    public function simpleInfo()
-    {
-        $recipeInfo = $this->toJson();
-        $itemsToUnset = ['ingredients_raw', 'preparation_raw', 'id', 'id_category', 'image', 'title_url', 'rating', 'rating_count', 'cook_time', 'cooking_method', 'servings', 'diet', 'image_ingredients', 'views', 'youtube_url', 'redirect_force_url', 'title_url_en', 'translation', 'translated', 'most_searched', 'adsense_dates', 'adsense_earnings', 'adsense_visits', 'adsense_info', 'image_small', 'country', 'url', 'cook_time_label', 'cooking_method_label', 'diet_label', 'id_category_name', 'title_url_en', 'translation', 'active'];
-        foreach ($itemsToUnset as $item) {
-            unset($recipeInfo[$item]);
-        }
-
-        $cleanIngredients = [];
-        foreach ($recipeInfo['ingredients'] as $key => $ingredient) {
-            $cleanIngredients[$ingredient['id']] = $ingredient['ingredient'];
-        }
-        $recipeInfo['ingredients'] = $cleanIngredients;
-
-        $cleanPreparation = [];
-        foreach ($recipeInfo['preparation'] as $key => $step) {
-            $cleanPreparation[$step['id']] = $step['step'];
-        }
-        $recipeInfo['preparation'] = $cleanPreparation;
-
-        return $recipeInfo;
-    }
-
     public function getImageUrl($attributeName, $version = '', $modified = false)
     {
         $stockFile = (ASTERION_LANGUAGE_ID == 'en') ? str_replace('/enrechaiti', '', ASTERION_STOCK_FILE) : ASTERION_STOCK_FILE;

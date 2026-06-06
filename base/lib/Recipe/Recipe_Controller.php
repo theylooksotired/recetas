@@ -152,21 +152,22 @@ class Recipe_Controller extends Controller
                     }
                     $table = GoogleSearchConsole::renderTable($rows, $url);
                     if ($table != '') {
+                        $recipeInfo = $recipe->toJson();
                         $jsonRecipe = json_encode([
                             'title_page' => $recipe->get('title_page'),
                             'meta_description' => $recipe->get('meta_description'),
                             'short_description' => $recipe->get('short_description'),
                             'description' => $recipe->get('description'),
-                            'original_recipe' => $recipe->simpleInfo(),
+                            'ingredients' => $recipeInfo['ingredients'],
+                            'preparation' => $recipeInfo['preparation'],
                         ]);
                         $question = '
                             Este es el JSON de una receta de cocina "' . $jsonRecipe . '".
                             Ojo que short_description es un parrafo cortito que describe el plato, description es un poco mas largo y da mas detalles e incluso a veces alguna curiosidad o incentivo para preparar la receta.
                             Esta tabla con las queries de Google Search Console de los ultimos 30 dias para esta URL, es muy importante que analices las palabras clave: ' . $table . ' 
                             Necesito que me devuelvas el mismo archivo JSON con mejoras SEO, usa un lenguaje bien humano que no parezca escrito por AI (no abuses de adjetivos ni adverbios, busca informacion en otras paginas, tienes que investigar un monton, no me devuelvas la misma cosa con otras palabras, revisa en la red que cosas encuentras, se natural).
-                            No cambies la estructura del JSON, solo mejora el contenido basandote tambien en los datos de Google Search Console.';
+                            No cambies la estructura del JSON, solo mejora el contenido basandote tambien en los datos de Google Search Console y mejora tambien la preparacion, busca tips y consejos que sean utiles.';
                         $answer = ChatGPT::answerJSON($question);
-                        unset($answer['original_recipe']);
                         foreach ($answer as $key => $value) {
                             echo '<strong>' . $key . '</strong><br/>' . $value . '<br/><br/>';
                         }
