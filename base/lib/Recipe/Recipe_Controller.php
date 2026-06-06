@@ -169,6 +169,9 @@ class Recipe_Controller extends Controller
                             No cambies la estructura del JSON, solo mejora el contenido basandote tambien en los datos de Google Search Console y mejora tambien la preparacion, busca tips y consejos que sean utiles.';
                         $answer = ChatGPT::answerJSON($question);
                         foreach ($answer as $key => $value) {
+                            if (is_array($value)) {
+                                $value = implode("\n", $value);
+                            }
                             echo '<strong>' . $key . '</strong><br/>' . $value . '<br/><br/>';
                         }
                         echo '<hr/><br/>';
