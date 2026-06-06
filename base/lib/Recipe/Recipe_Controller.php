@@ -152,14 +152,12 @@ class Recipe_Controller extends Controller
                     }
                     $table = GoogleSearchConsole::renderTable($rows, $url);
                     if ($table != '') {
-                        $recipeInfo = $recipe->toJson();
                         $jsonRecipe = json_encode([
                             'title_page' => $recipe->get('title_page'),
                             'meta_description' => $recipe->get('meta_description'),
                             'short_description' => $recipe->get('short_description'),
                             'description' => $recipe->get('description'),
-                            'ingredients' => $recipeInfo['ingredients'],
-                            'preparation' => $recipeInfo['preparation'],
+                            'recipe' => $recipe->showUi('Text'),
                         ]);
                         $question = '
                             Este es el JSON de una receta de cocina "' . $jsonRecipe . '".
