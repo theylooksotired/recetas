@@ -1766,7 +1766,8 @@ body {
         @include clearer();
     }
     h2,
-    h3 {
+    h3,
+    h4 {
         margin-bottom: 10px;
         padding-bottom: 10px;
         font-size: $fontSizeMedium;
@@ -1781,8 +1782,8 @@ body {
         color: $colorAccent;
     }
     h4 {
-        font-size: $fontSizeMedium;
-        color: $black;
+        font-size: $fontSizeNormal;
+        color: $colorAccent;
         margin: 0 0 10px;
         padding: 0;
     }
@@ -1805,6 +1806,9 @@ body {
         }
         .ingredient_ingredient {
             color: $black;
+        }
+        @include mobile() {
+            margin: 0 0 40px;
         }
     }
     .recipe_preparation {

@@ -317,20 +317,24 @@ class Recipe_Ui extends Ui
     {
         $html = '';
         foreach ($this->object->get('ingredients') as $ingredient) {
-            if ($ingredient->get('amount') != '') {
-                $html .= '
-                    <p class="ingredient">
-                        <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
-                        ' . (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? '
-                        <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
-                        ' : '') . '
-                        <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
-                    </p>';
+            if (substr($ingredient->get('ingredient'), 0, 1) == '#') {
+                $html .= '<h4>' . ucfirst(substr($ingredient->get('ingredient'), 1)) . '</h4>';
             } else {
-                $html .= '
-                    <p class="ingredient">
-                        <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
-                    </p>';
+                if ($ingredient->get('amount') != '') {
+                    $html .= '
+                        <p class="ingredient">
+                            <span class="ingredient_amount">' . $ingredient->get('amount') . '</span>
+                            ' . (($ingredient->get('type') != 'unit' && $ingredient->get('type') != '') ? '
+                            <span class="ingredient_type">' . strtolower((intval($ingredient->get('amount')) > 1) ? __($ingredient->get('type') . '_plural') : __($ingredient->get('type'))) . ' ' . __('of') . '</span>
+                            ' : '') . '
+                            <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
+                        </p>';
+                } else {
+                    $html .= '
+                        <p class="ingredient">
+                            <span class="ingredient_ingredient">' . $ingredient->get('ingredient') . '</span>
+                        </p>';
+                }
             }
         }
         return $html;
@@ -341,13 +345,17 @@ class Recipe_Ui extends Ui
         $html = '';
         $i = 1;
         foreach ($this->object->get('preparation') as $preparation) {
-            $html .= '
-                <p class="preparation" id="paso' . $i . '">
-                    <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
-                    <span class="preparation_step">' . $preparation->get('step') . '</span>
-                    ' . $preparation->getImageAmpWebp('image', 'web') . '
-                </p>';
-            $i++;
+            if (substr($preparation->get('step'), 0, 1) == '#') {
+                $html .= '<h4>' . substr($preparation->get('step'), 1) . '</h4>';
+            } else {
+                $html .= '
+                    <p class="preparation" id="paso' . $i . '">
+                        <span class="preparation_step_number">' . __('step') . ' ' . $i . ' :</span>
+                        <span class="preparation_step">' . $preparation->get('step') . '</span>
+                        ' . $preparation->getImageAmpWebp('image', 'web') . '
+                    </p>';
+                $i++;
+            }
             if ($i == 3) {
                 $html .= Adsense::responsive('preparation');
             }
