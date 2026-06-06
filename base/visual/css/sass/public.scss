@@ -1782,10 +1782,21 @@ body {
         color: $colorAccent;
     }
     h4 {
-        font-size: $fontSizeNormal;
+        font-size: $fontSizeMedium;
         color: $colorAccent;
-        margin: 0 0 10px;
-        padding: 0;
+        margin: 10px 0 10px;
+        padding: 10px 0 0 0;
+        position: relative;
+        &:after {
+            display: block;
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 75px;
+            height: 2px;
+            background: rgba($colorAccent, 0.3);
+        }
     }
     .recipe_ingredients {
         width: 280px;
@@ -1798,7 +1809,8 @@ body {
             padding: 0 0 5px;
             position: relative;
             border-bottom: 1px solid rgba($colorAccent, 0.1);
-            &:last-child {
+            &:last-child,
+            &:not(:has(+ p)) {
                 margin: 0;
                 padding: 0;
                 border-bottom: 0;
@@ -1831,6 +1843,9 @@ body {
             display: block;
             padding: 0;
             line-height: 1em;
+        }
+        .preparation_step {
+            font-size: $fontSizeMedium;
         }
     }
     @include mobile() {
@@ -2822,7 +2837,7 @@ body {
             padding: 0;
             border-left: 0;
             p {
-                font-size: $fontSizeNormal;
+                font-size: $fontSizeSmall;
             }
         }
     }
