@@ -544,7 +544,9 @@ class Recipe extends Db_Object
             $titleUrl = Text::simpleUrl($response['title']);
             $oldRecipe = (new Recipe)->readFirst(['where' => 'title_url_en=:title_url_en AND id != :id'], ['title_url_en' => $titleUrl, 'id' => $this->id()]);
             $titleUrl .= ($oldRecipe->id() != '') ? '-' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 6)  : '';
-            $this->persistSimple('title_url_en', $titleUrl);
+            if ($this->get('title_url_en') == '') {
+                $this->persistSimple('title_url_en', $titleUrl);
+            }
             $this->persistSimple('translation', json_encode($response));
         }
     }
