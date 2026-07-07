@@ -183,13 +183,16 @@ class Adsense {
         }
         if (ASTERION_DEBUG) return '<div class="adsense adsenseInline adsenseTest">Ad - ' . (($type!='') ? $type : 'default') . ' - ' . $adSlot . '</div>';
         return '
-            <div class="adsense adsense-lazy">
+            <div class="adsense">
                 <ins class="adsbygoogle"
                     style="display:block"
                     data-ad-client="ca-pub-7429223453905389"
                     data-ad-slot="' . $adSlot . '"
                     data-ad-format="auto"
                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
             </div>';
     }
 
