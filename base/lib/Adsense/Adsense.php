@@ -12,6 +12,8 @@ class Adsense {
 
     static public function header()
     {
+        return '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>';
+        // We'll use lazy loading for ads, so we don't need to load the script in the header. The script will be loaded in the footer.
         return '
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7429223453905389" crossorigin="anonymous"></script>
             <script>
