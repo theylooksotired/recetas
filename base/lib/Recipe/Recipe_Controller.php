@@ -47,6 +47,15 @@ class Recipe_Controller extends Controller
                 }
                 return '';
                 break;
+            case 'script-video':
+                $this->mode = 'ajax';
+                $recipe = (new Recipe)->read($this->id);
+                $response = [];
+                if ($recipe->id() != '') {
+                    echo $recipe->scriptVideo();
+                }
+                return '';
+                break;
             case 'social-media':
                 $this->mode = 'ajax';
                 $recipe = (new Recipe)->read($this->id);

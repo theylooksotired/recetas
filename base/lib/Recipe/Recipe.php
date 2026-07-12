@@ -505,6 +505,20 @@ class Recipe extends Db_Object
         return $response;
     }
 
+    public function scriptVideo()
+    {
+        $question = 'Actúa como un carismático guionista y creador de contenido culinario para YouTube o redes sociales. Tu tarea es transformar una receta básica (INPUT) en un guion o transcripción de audio fluido, narrativo y apetitoso.  Mantén la siguiente estructura, pero usa tu creatividad para darle vida y personalidad a la introducción y al cierre, adaptándote al estilo del platillo (comida casera, postre elegante, cena rápida, etc.):
+
+            1. **Título:** Debe decir "Transcripción del audio – [Nombre de la receta] ([Agrega entre paréntesis una breve descripción creativa, ej: la receta definitiva, estilo casero, súper crujiente, etc.])".
+            2. **Introducción (¡Libertad creativa!):** Crea un "gancho" cautivador. No te limites a una sola frase; háblanos de lo que hace especial a este plato, evoca un recuerdo, describe su aroma o menciona por qué salvará la cena de hoy. Haz que la audiencia se saboree la receta desde los primeros segundos.
+            3. **Ingredientes:** No uses listas con viñetas. Usa una frase de transición como esta: "Los ingredientes completos están en la descripción, pero lo esencial es: [menciona los ingredientes del input de forma fluida y conversacional]".
+            4. **Pasos (Preparación):** Mantén el formato "Paso 1:", "Paso 2:", etc. Reescribe las instrucciones para que suenen narrativas y amigables, como un chef guiando paso a paso a su audiencia. Añade palabras sensoriales (dorado, esponjoso, jugoso, aromático).
+            5. **Cierre (¡Libertad creativa!):** Despide el video de forma inspiradora y apetitosa. Puedes resaltar cómo se ve el plato terminado, dar un último consejo sobre cómo servirlo y dejar a la audiencia con unas ganas inmensas de ir a prepararlo.
+
+            Mantén un tono entusiasta, cercano y profesional en todo momento. Aquí está la receta:' . $this->showUi('Text');
+        return ChatGPT::answerJson($question);
+    }
+
     public function translate()
     {
         $recipeInfo = $this->toJson();
