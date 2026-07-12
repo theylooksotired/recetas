@@ -512,11 +512,10 @@ class Recipe extends Db_Object
         $newSteps = (isset($_GET['steps'])) ? intval($_GET['steps']) : 4;
         $question = 'Actúa como un carismático guionista y creador de contenido culinario para YouTube o redes sociales. Tu tarea es transformar una receta básica en un guion o transcripción de audio fluido, narrativo y apetitoso.  Mantén la siguiente estructura, pero usa tu creatividad para darle vida y personalidad a la introducción y al cierre, adaptándote al estilo del platillo (comida casera, postre elegante, cena rápida, etc.). Reduce el numero de pasos de la receta a ' . $newSteps . ':
 
-            1. **Título:** Debe decir "Transcripción del audio – [Nombre de la receta] ([Agrega entre paréntesis una breve descripción creativa, ej: la receta definitiva, estilo casero, súper crujiente, etc.])".
-            2. **Introducción (¡Libertad creativa!):** Crea un "gancho" cautivador de un par de lineas cortas. No te limites a una sola frase; háblanos de lo que hace especial a este plato, evoca un recuerdo, describe su aroma o menciona por qué salvará la cena de hoy. Haz que la audiencia se saboree la receta desde los primeros segundos.
-            3. **Ingredientes:** No uses listas con viñetas. Usa una frase de transición como esta: "Los ingredientes completos están en la descripción, pero lo esencial es: [menciona solamente dos o maximo tres ingredientes de la receta de forma fluida y conversacional]".
-            4. **Pasos (Preparación):** Mantén el formato "Paso 1:", "Paso 2:", etc. Reescribe las instrucciones para que suenen narrativas y amigables pero al mismo tiempo sencillas, una linea basta pues sera acompañada de una imagen.
-            5. **Cierre (¡Libertad creativa!):** Despide el video de forma inspiradora y apetitosa con un par de lineas directas.
+            1. **Introducción (¡Libertad creativa!):** Crea un "gancho" cautivador de una sola linea. Háblanos de lo que hace especial a este plato, evoca un recuerdo, describe su aroma o menciona por qué salvará la cena de hoy. Haz que la audiencia se saboree la receta desde los primeros segundos.
+            2. **Ingredientes:** No uses listas con viñetas. Usa una frase de transición como esta: "Los ingredientes completos están en la descripción, pero lo esencial es: [menciona solamente dos o maximo tres ingredientes de la receta de forma fluida y conversacional]".
+            3. **Pasos (Preparación):** Mantén el formato "Paso 1:", "Paso 2:", etc. Reescribe las instrucciones para que suenen narrativas y amigables pero al mismo tiempo sencillas, una linea basta pues sera acompañada de una imagen.
+            4. **Cierre (¡Libertad creativa!):** Despide el video de forma inspiradora y apetitosa con una linea directa y encantadora.
 
             Mantén un tono entusiasta, cercano y profesional en todo momento. Aquí está la receta:' . $text;
         return ChatGPT::answer($question);
