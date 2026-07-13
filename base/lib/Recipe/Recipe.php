@@ -514,7 +514,7 @@ class Recipe extends Db_Object
 
             1. **Introducción (¡Libertad creativa!):** Crea un "gancho" cautivador de una sola linea. Háblanos de lo que hace especial a este plato, evoca un recuerdo, describe su aroma o menciona por qué salvará la cena de hoy. Haz que la audiencia se saboree la receta desde los primeros segundos.
             2. **Ingredientes:** No uses listas con viñetas. Usa una frase de transición como esta: "Los ingredientes completos están en la descripción, pero lo esencial es: [menciona solamente dos o maximo tres ingredientes de la receta de forma fluida y conversacional]".
-            3. **Pasos (Preparación):** Mantén el formato "Paso 1:", "Paso 2:", etc. Reescribe las instrucciones para que suenen narrativas y amigables pero al mismo tiempo sencillas, una linea basta pues sera acompañada de una imagen.
+            3. **Pasos (Preparación):** Mantén el formato "Paso 1:", "Paso 2:", etc. Reescribe las instrucciones para que suenen narrativas y amigables pero al mismo tiempo sencillas, una linea de unos 120 caracteres basta pues sera acompañada de una imagen.
             4. **Cierre (¡Libertad creativa!):** Despide el video de forma inspiradora y apetitosa con una linea directa y encantadora.
 
             Mantén un tono entusiasta, cercano y profesional en todo momento. Aquí está la receta:' . $text;
