@@ -123,7 +123,6 @@ class Recipe_Controller extends Controller
                     }
                     $question = 'Escribe un archivo JSON con los siguientes campos: "introduccion" que son dos lineas para introducir la receta en una publicacion de redes sociales, "despedida" que es una linea para despedir la publicacion. La receta es: "' . $recipe->showUi('Text') . '"';
                     $info = ChatGPT::answerJson($question, $options = []);
-                    $socialText = $recipe->get('title');
                     $socialText .= (isset($info['introduccion'])) ? "\n\n" . $info['introduccion'] : '';
                     $socialText .= "\n\n-- Ingredientes --\n\n";
                     foreach ($recipe->get('ingredients') as $ingredient) {
@@ -140,9 +139,8 @@ class Recipe_Controller extends Controller
                     $socialText .= "\n\nMás información:\n" . $recipe->url() . "\n\n#receta #cocina";
                     $content = '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
                     $content .= '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
-                    $content .= '<pre>' . $socialText . '</pre>';
                     $question = 'Escribe solamente un titulo que sea bien SEO para nuestro canal de youtube, tiktok y reels. El contenido es: "' . $socialText . '"';
-                    $content .= '-----' . "\n\n\n\n" . ChatGPT::answer($question);
+                    $content .= '<pre>' . ChatGPT::answer($question) . "\n\n" . $socialText . '</pre>';
                     echo $content;
                 }
                 break;
