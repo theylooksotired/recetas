@@ -140,7 +140,7 @@ class Recipe_Controller extends Controller
                     $content = '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
                     $content .= '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
                     $question = 'Escribe solamente un titulo que sea bien SEO para nuestro canal de youtube, tiktok y reels. El contenido es: "' . $socialText . '"';
-                    $content .= '<pre>' . ChatGPT::answer($question) . "\n\n" . $socialText . '</pre>';
+                    $content .= '<pre>' . ChatGPT::answer($question) . $socialText . '</pre>';
                     echo $content;
                 }
                 break;
