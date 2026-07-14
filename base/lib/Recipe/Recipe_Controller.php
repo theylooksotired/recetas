@@ -138,9 +138,12 @@ class Recipe_Controller extends Controller
                     $socialText .= $pasosText;
                     $socialText .= (isset($info['despedida'])) ? "\n" . $info['despedida'] : '';
                     $socialText .= "\n\nMás información:\n" . $recipe->url() . "\n\n#receta #cocina";
-                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
-                    echo '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
-                    echo '<pre>' . $socialText . '</pre>';
+                    $content = '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
+                    $content .= '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
+                    $content .= '<pre>' . $socialText . '</pre>';
+                    $question = 'Escribe un titulo y mejora la descripcion para nuestro canal de youtube, tiktok y reels. El contenido es: "' . $socialText . '"';
+                    $content .= '-----' . "\n\n\n\n" . ChatGPT::answer($question);
+                    echo $content;
                 }
                 break;
             case 'seo-advice':
