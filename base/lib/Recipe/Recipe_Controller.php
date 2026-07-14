@@ -141,7 +141,7 @@ class Recipe_Controller extends Controller
                     $content = '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileName) . '" target="_blank">Descargar para Post FB IG</a><br/><br/>';
                     $content .= '<a href="' . str_replace(ASTERION_LOCAL_FILE, ASTERION_LOCAL_URL, $zipFileNameBig) . '" target="_blank">Descargar para video</a><br/><br/>';
                     $content .= '<pre>' . $socialText . '</pre>';
-                    $question = 'Escribe un titulo y mejora la descripcion para nuestro canal de youtube, tiktok y reels. El contenido es: "' . $socialText . '"';
+                    $question = 'Escribe un titulo y mejora la descripcion para nuestro canal de youtube, tiktok y reels, no borres el enlace, los ingredientes ni los pasos, dame un formato HTML. El contenido es: "' . $socialText . '"';
                     $content .= '-----' . "\n\n\n\n" . ChatGPT::answer($question);
                     echo $content;
                 }
